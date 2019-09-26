@@ -1,0 +1,3 @@
+[submodule "terraria-world-parser"]
+	path = terraria-world-parser
+	url = https://github.com/cokolele/terraria-world-parser
