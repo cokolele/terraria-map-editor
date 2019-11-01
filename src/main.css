@@ -1,16 +1,13 @@
 * {
-    text-rendering: optimizeLegibility !important;
-    -webkit-font-smoothing: antialiased !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+html, body, #app {
+    height: 100%;
 }
 
 body {
     background-color: white;
 }
-/*
-::selection {
-    background: #ffb7b7;
-}
-
-::-moz-selection {
-    background: #ffb7b7;
-}*/

@@ -1,0 +1,15 @@
+.menu-container {
+    width: 100%;
+    padding-left: 46px;
+    box-sizing: border-box;
+    background-color: #535353;
+}
+
+.menu {
+    width: auto;
+    display: inline-flex;
+    height: 2.2rem;
+
+    user-select: none;
+    -moz-user-select: none;
+}
