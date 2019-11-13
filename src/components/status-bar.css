@@ -1,0 +1,24 @@
+.status-bar-container {
+    width: 100%;
+    height: 1.15rem;
+    background-color: #4a4a4a;
+}
+
+.status-bar, .status-bar > * {
+    border: 0 solid #424242;
+    box-sizing: border-box;
+}
+
+.status-bar {
+    border-width: 1px 0;
+    display: inline-flex;
+}
+
+.status-bar > * {
+    border-width: 0 1px 0 0;
+}
+
+.status-percentage {
+    width: 14rem;
+    background-color: #535353;
+}

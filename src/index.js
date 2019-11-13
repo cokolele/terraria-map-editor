@@ -22,6 +22,6 @@ import "/main.css";
 import React from "react";
 import { render } from "react-dom";
 
-import Editor from "/pages/Editor.jsx"
+import Editor from "/pages/editor.jsx"
 
 render( <Editor /> , document.querySelector("#app"));

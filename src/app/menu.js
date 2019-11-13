@@ -1,7 +1,22 @@
+import store from "/state/store.js";
+import { changeWorldFile } from "/state/modules/menu.js";
+
 const DIVIDER = "__DIVIDER__";
 
+const inputElHidden = document.createElement("input");
+inputElHidden.setAttribute("type", "file");
+inputElHidden.addEventListener("input", async () => {
+    onNewFileUploaded(inputElHidden.files[0]);
+});
+
 const onNewFile = () => {
-    console.log("clicked new file");
+    onCloseFile();
+
+    inputElHidden.click();
+}
+
+const onNewFileUploaded = (file) => {
+    store.dispatch(changeWorldFile(file));
 }
 
 const onSaveFile = () => {
@@ -9,7 +24,7 @@ const onSaveFile = () => {
 }
 
 const onCloseFile = () => {
-    console.log("clicked close file");
+    store.dispatch(changeWorldFile(null));
 }
 
 const menuOptionsConfig = {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import menuOptionsConfig from "/app/menu.js";
 
@@ -14,7 +14,7 @@ function Menu() {
          <div className="menu">
          {
             Object.keys(menuOptionsConfig).map((key, i) =>
-               <MenuOptions label={key} options={menuOptionsConfig[key]} tabOpened={tabOpened} setTabOpened={setTabOpened} index={i} key={i}/>
+               <MenuOptions label={key} options={menuOptionsConfig[key]} tabOpened={tabOpened} setTabOpened={setTabOpened} index={i+1} key={i+1}/>
             )
          }
          </div>

@@ -3,12 +3,14 @@
     padding-left: 46px;
     box-sizing: border-box;
     background-color: #535353;
+    border-width: 0 0 1px 0;
 }
 
 .menu {
     width: auto;
     display: inline-flex;
     height: 2.2rem;
+    border: 0 solid #383838;
 
     user-select: none;
     -moz-user-select: none;
