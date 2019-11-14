@@ -4,19 +4,20 @@ import store from "/state/store.js";
 import "./status-bar.css";
 
 function StatusBar() {
-   const [percentage, changePercentage] = useState(null);
+   const [description, changeDescription] = useState(null);
 
    useEffect(() => {
       store.subscribe(() => {
-         changePercentage(store.getState().status.percentage);
+         changeDescription(store.getState().status.description);
+         console.log(store.getState().status.description);
       });
    }, []);
 
    return (
       <div className="status-bar-container">
          <div className="status-bar">
-            <div className="status-zoom">ss</div>
-            <div className="status-percentage">{percentage}</div>
+            <div className="status-zoom">-</div>
+            <div className="status-percentage">{ description == null ? "-" : description }</div>
          </div>
       </div>
    )

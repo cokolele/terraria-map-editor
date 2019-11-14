@@ -1,21 +1,32 @@
-.status-bar-container {
-    width: 100%;
+.status-bar-container, .status-bar, .status-bar > * {
     height: 1.15rem;
+}
+
+.status-bar-container {
     background-color: #4a4a4a;
 }
 
-.status-bar, .status-bar > * {
-    border: 0 solid #424242;
-    box-sizing: border-box;
-}
-
 .status-bar {
-    border-width: 1px 0;
     display: inline-flex;
+    vertical-align: top;
 }
 
 .status-bar > * {
-    border-width: 0 1px 0 0;
+    border: 0 solid #424242;
+    box-sizing: border-box;
+    border-width: 1px 1px 0 0;
+
+    font-family: "Lato", sans-serif;
+    color: white;
+    font-size: 0.7rem;
+    text-align: center;
+    letter-spacing: 0.4px;
+    line-height: 1.08rem;
+}
+
+.status-zoom {
+    width: 3.5rem;
+    background-color: #454545;
 }
 
 .status-percentage {

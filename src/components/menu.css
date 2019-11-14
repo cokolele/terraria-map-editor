@@ -1,5 +1,6 @@
 .menu-container {
     width: 100%;
+    height: 2.2rem;
     padding-left: 46px;
     box-sizing: border-box;
     background-color: #535353;
@@ -7,9 +8,7 @@
 }
 
 .menu {
-    width: auto;
     display: inline-flex;
-    height: 2.2rem;
     border: 0 solid #383838;
 
     user-select: none;
