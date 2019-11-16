@@ -3,6 +3,8 @@
 }
 
 .status-bar-container {
+    user-select: none;
+    -moz-user-select: none;
     background-color: #4a4a4a;
 }
 
@@ -29,7 +31,7 @@
     background-color: #454545;
 }
 
-.status-percentage {
+.status-action {
     width: 14rem;
     background-color: #535353;
 }

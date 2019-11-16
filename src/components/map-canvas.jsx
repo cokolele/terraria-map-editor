@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 
-import init from "/app/canvas.js";
+import init from "/app/canvas/main.js";
 
 import "./map-canvas.css";
 

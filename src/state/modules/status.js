@@ -17,7 +17,7 @@ export default function status(state = default_state, action) {
         case DESCRIPTION_CHANGE:
             return {
                 ...state,
-                percentage: action.description
+                description: action.description
             };
         default:
             return state;

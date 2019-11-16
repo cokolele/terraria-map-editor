@@ -5,19 +5,21 @@ import "./status-bar.css";
 
 function StatusBar() {
    const [description, changeDescription] = useState(null);
+   const [percentage, changePercentage] = useState(null);
 
    useEffect(() => {
       store.subscribe(() => {
-         changeDescription(store.getState().status.description);
-         console.log(store.getState().status.description);
+         const state = store.getState();
+         changePercentage(state.status.percentage)
+         changeDescription(state.status.description);
       });
    }, []);
 
    return (
       <div className="status-bar-container">
          <div className="status-bar">
-            <div className="status-zoom">-</div>
-            <div className="status-percentage">{ description == null ? "-" : description }</div>
+            <div className="status-zoom">{ percentage == null ? "-" : percentage }</div>
+            <div className="status-action">{ description == null ? "-" : description }</div>
          </div>
       </div>
    )
