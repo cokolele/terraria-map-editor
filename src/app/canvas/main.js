@@ -7,7 +7,9 @@ let worldFile;
 let world;
 let canvasEl, ctx;
 let running = false;
-let renderImage;
+let image, renderImage;
+let width, height;
+let prevWidth, prevHeight;
 
 let previousValue;
 store.subscribe(() => {
@@ -27,29 +29,20 @@ store.subscribe(() => {
     }
 });
 
-if (!window.requestAnimationFrame) {
-    window.requestAnimationFrame = (function() {
-        return window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        window.oRequestAnimationFrame ||
-        window.msRequestAnimationFrame ||
-        function(callback, element) {
-            window.setTimeout(callback, 1000 / 60);
-        };
-    })();
-}
-
 const init = (_canvasEl) => {
     canvasEl = _canvasEl;
     ctx = canvasEl.getContext("2d");
+    ctx.imageSmoothingEnabled = false;
 
-    canvasEl.width = canvasEl.clientWidth;
-    canvasEl.height = canvasEl.clientHeight;
+    prevWidth = width = canvasEl.width = canvasEl.clientWidth;
+    prevHeight = height = canvasEl.height = canvasEl.clientHeight;
 
     window.addEventListener("resize", () => {
-        canvasEl.width = canvasEl.clientWidth;
-        canvasEl.height = canvasEl.clientHeight;
+        width = canvasEl.width = canvasEl.clientWidth;
+        height = canvasEl.height = canvasEl.clientHeight;
     });
+
+    canvasEl.addEventListener("wheel", onCanvasWheel);
 }
 
 const start = async () => {
@@ -83,10 +76,7 @@ const start = async () => {
                         store.dispatch(changeDescription("Copying 1/2"));
                         break;
                     case "RETURN_IMAGE":
-                        renderImage = data.image;
-                        ctx.putImageData( renderImage, 0, 0 );
-                        running = true;
-                        tick(0);
+                        image = data.image;
                         break;
                     case "RETURN_PARSED_MAP_INCOMING":
                         store.dispatch(changeDescription("Copying 2/2"));
@@ -94,6 +84,8 @@ const start = async () => {
                     case "RETURN_PARSED_MAP":
                         world = data.world;
                         store.dispatch(changeDescription("Finished"));
+                        running = true;
+                        tick(0);
                         resolve();
                         break;
                 }
@@ -106,13 +98,41 @@ const start = async () => {
         });
     }
     catch(e) {
-        console.log(e);
+        console.error(e);
         return;
     }
 }
 
+const onCanvasWheel = e => {
+    if (e.deltaY > 0) {
+        zoom(1);
+    } else {
+        zoom(-1)
+    }
+}
+
+const calculateRatioWidth = height => height * (world.header.maxTilesX / world.header.maxTilesY);
+const calculateRatioHeight = width => width * (world.header.maxTilesY / world.header.maxTilesX);
+
+const zoom = direction => {
+    const zoomFactor = world.header.maxTilesX / 10;
+
+    if (direction == 1) {
+        console.log("zooming");
+        canvasEl.width += zoomFactor;
+        canvasEl.height = calculateRatioHeight(canvasEl.width);
+    } else if (direction == -1) {
+        console.log("unzooming");
+        canvasEl.width -= zoomFactor;
+        canvasEl.height = calculateRatioHeight(canvasEl.width);
+    }
+
+}
+
+
 const tick = async (T) => {
-    ctx.putImageData( renderImage, 0, 0 );
+
+    ctx.putImageData( image, -1 * world.header.maxTilesX / 2 + width / 2, 0 );
 
     if (running)
         requestAnimationFrame(tick, canvasEl);

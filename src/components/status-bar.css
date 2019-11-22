@@ -32,6 +32,21 @@
 }
 
 .status-action {
+    position: relative;
     width: 14rem;
     background-color: #535353;
+}
+
+.status-action > span {
+    position: relative;
+    z-index: 1000;
+}
+
+.status-action-percentage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 900;
+    height: 100%;
+    background-color: #0f64d2;
 }
