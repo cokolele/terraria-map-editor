@@ -1,5 +1,6 @@
 import terrariaWorldParser from "/../terraria-world-parser/src/browser/terraria-world-parser.js";
 import tileColors from "/utils/tile-colors.json";
+import "./polyfill-imageData.js";
 
 self.onmessage = async ({ data }) => {
     switch(data.action) {

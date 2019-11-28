@@ -1,5 +1,5 @@
-
 import "./polyfill-requestAnimationFrame.js";
+//import "./polyfill-imageData.js";
 
 import store from "/state/store.js";
 import { changePercentage, changeDescription } from "/state/modules/status.js";
@@ -9,8 +9,6 @@ let world;
 let canvasEl, ctx;
 let running = false;
 let image, renderImage;
-let width, height;
-let prevWidth, prevHeight;
 
 let previousValue;
 store.subscribe(() => {
@@ -25,7 +23,7 @@ store.subscribe(() => {
         if (previousValue == undefined || (previousValue.name !== value.name && previousValue.size !== value.size && previousValue.lastModified !== value.lastModified)) {
             previousValue = value;
             worldFile = value;
-            load();
+            start();
         }
     }
 });
@@ -38,31 +36,27 @@ const init = (_canvasEl) => {
     ctx.webkitImageSmoothingEnabled = false;
     ctx.msImageSmoothingEnabled = false;
 
-    prevWidth = width = canvasEl.width = canvasEl.clientWidth;
-    prevHeight = height = canvasEl.height = canvasEl.clientHeight;
-
-    window.addEventListener("resize", () => {
-        width = canvasEl.width = canvasEl.clientWidth;
-        height = canvasEl.height = canvasEl.clientHeight;
-    });
+    canvasEl.width = canvasEl.clientWidth;
+    canvasEl.height = canvasEl.clientHeight;
+    /*window.addEventListener("resize", () => {
+        zoom(0);
+    });*/
 
     canvasEl.addEventListener("wheel", onCanvasWheel);
-    canvasEl.addEventListener("mouseup", onCanvasMouseUp);
-    document.addEventListener("mouseup", onCanvasMouseUp);
-    canvasEl.addEventListener("mousedown", onCanvasMouseDown);
-    canvasEl.addEventListener("mousemove", onCanvasMouseMove);
 }
 
-const load = async () => {
+const start = async () => {
     try {
         await new Promise((resolve, reject) => {
             const worker = new Worker("./web-worker-map-parsing.js");
 
             worker.onerror = ({ message }) => {
+                console.error(message);
                 reject(message);
             }
 
-            worker.onmessageerror =({ message }) => {
+            worker.onmessageerror = ({ message }) => {
+                console.error(message);
                 reject(message);
             }
 
@@ -91,8 +85,9 @@ const load = async () => {
                         break;
                     case "RETURN_PARSED_MAP":
                         world = data.world;
-                        start();
                         store.dispatch(changeDescription("Finished"));
+                        running = true;
+                        tick(0);
                         resolve();
                         break;
                 }
@@ -110,9 +105,6 @@ const load = async () => {
     }
 }
 
-const calculateRatioWidth = height => height * (world.header.maxTilesX / world.header.maxTilesY);
-const calculateRatioHeight = width => width * (world.header.maxTilesY / world.header.maxTilesX);
-
 const onCanvasWheel = e => {
     if (e.deltaY > 0) {
         zoom(1);
@@ -121,80 +113,75 @@ const onCanvasWheel = e => {
     }
 }
 
+const calculateRatioWidth = height => height * (world.header.maxTilesX / world.header.maxTilesY);
+const calculateRatioHeight = width => width * (world.header.maxTilesY / world.header.maxTilesX);
+
 const zoom = direction => {
-    const zoomFactorX = 200;
-    const zoomFactorY = 56.25;
+    const zoomFactor = world.header.maxTilesX / 10;
 
     if (direction == 1) {
         console.log("zooming");
-        canvasEl.width += zoomFactorX;
-        canvasEl.height += zoomFactorY;
+        zoomLevel++;
     } else if (direction == -1) {
         console.log("unzooming");
-        canvasEl.width -= zoomFactorX;
-        canvasEl.height -= zoomFactorY;
-    }
-}
-
-let isDragging = false;
-let deltaX = 0;
-let deltaY = 0;
-let prevDragX = null;
-let prevDragY = null;
-
-const onCanvasMouseDown = e => {
-    isDragging = true;
-    console.log(e);
-}
-
-const onCanvasMouseUp = e => {
-    isDragging = false;
-    deltaX = deltaY = 0;
-    prevDragX = prevDragY = null;
-    console.log(e);
-}
-
-const onCanvasMouseMove = e => {
-    if (!isDragging)
-        return;
-
-    const rect = e.target.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - Math.floor(rect.top);
-
-    if (prevDragX == null) {
-        prevDragX = x;
-        prevDragY = y;
-        return;
+        zoomLevel--;
     }
 
-    deltaX = x - prevDragX;
-    deltaY = y - prevDragY;
-
-    prevDragX = x;
-    prevDragY = y;
-
-    posX += deltaX;
-    posY += deltaY;
-    console.log(deltaX, deltaY);
 }
 
-let posX;
-let posY;
+let prevZoomLevel, zoomLevel = 1;
+let posX, posY;
+let width, height;
 
-const start = () => {
-    posX = -1 * world.header.maxTilesX / 2 + width / 2;
-    posY = 0;
-    running = true;
-    tick(0);
+function concatTypedArrays(array, length) {
+    const lengthSum = length * array.length;
+    let concatArray = new Uint8ClampedArray(lengthSum);
 
-    console.log(world);
+    for (let i = 0; i < array.length; i++) {
+        concatArray.set(array[i], i * length);
+    }
+
+    return concatArray;
 }
 
 const tick = async (T) => {
 
-    ctx.clearRect(0, 0, canvasEl.clientWidth, canvasEl.clientHeight);
-    ctx.putImageData( image, posX, posY );
+    if (prevZoomLevel != zoomLevel) {
+        if (zoomLevel == 0)
+            zoomLevel = prevZoomLevel == 1 ? -1 : 1;
+
+        const widthZoomFactor = 100;
+        const heightZoomFactor = widthZoomFactor * ( world.header.maxTilesY / world.header.maxTilesX );
+
+        if (prevZoomLevel == undefined) {
+            posX = world.header.maxTilesX / 2 - canvasEl.width / 2;
+            posY = 0;
+        }
+
+        width = canvasEl.width + zoomLevel * widthZoomFactor;
+        height = canvasEl.height + zoomLevel * heightZoomFactor;
+
+        renderImage = ctx.createImageData(width, height);
+
+console.log("rendering");
+        const start = posX * 4;
+        const end = start + renderImage.width * 4;
+        let cutDataArray = [];
+
+        for (let i = 0; i < renderImage.height; i++) {
+            const slice = image.data.slice( i * world.header.maxTilesY * 4 + start, i * world.header.maxTilesY * 4 + end);
+            cutDataArray.push(slice);
+        }
+
+        console.log(cutDataArray);
+        const cutData = concatTypedArrays(cutDataArray, renderImage.width * 4);
+
+        renderImage.data.set(cutData);
+
+        prevZoomLevel = zoomLevel;
+    }
+
+    ctx.putImageData( renderImage, 0, 0 );
 
     if (running)
         requestAnimationFrame(tick, canvasEl);
