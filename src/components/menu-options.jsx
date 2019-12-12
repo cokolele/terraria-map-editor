@@ -34,12 +34,11 @@ function MenuOptions({ label, options, tabOpened, setTabOpened, index }) {
    }, [tabOpened]);
 
    return (
-      <div className={showDropdown ? "menu-options--opened" : "menu-options"} onClick={onClick} onBlur={onBlur} onMouseEnter={onMouseEnter} tabIndex={index}>
+      <div className={showDropdown ? "menu-options-container--opened" : "menu-options-container"} onClick={onClick} onBlur={onBlur} onMouseEnter={onMouseEnter} tabIndex={index}>
          <span className="menu-options-label">{label}</span>
-         <div className="menu-options-fix">
          {
             showDropdown &&
-            <div className="menu-options-container">
+            <div className="menu-options">
             {
                options.map((option, i) => {
                   if (option == "__DIVIDER__")
@@ -50,7 +49,6 @@ function MenuOptions({ label, options, tabOpened, setTabOpened, index }) {
             }
             </div>
          }
-         </div>
       </div>
    )
 }

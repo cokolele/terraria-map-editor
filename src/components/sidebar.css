@@ -1,0 +1,8 @@
+.sidebar-container {
+    background-color: #222;
+    width: 300px;
+    min-width: 300px;
+
+    border: 0 solid #383838;
+    border-right-width: 1px;
+}

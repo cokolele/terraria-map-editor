@@ -1,0 +1,8 @@
+.toolbar-container {
+    background-color: #222;
+    width: 42px;
+    min-width: 42px;
+    box-sizing: border-box;
+    padding: 5px;
+    background-clip: content-box;
+}

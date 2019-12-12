@@ -1,9 +1,9 @@
-.menu-options, .menu-options--opened {
+.menu-options-container, .menu-options-container--opened {
     height: 1.42rem;
     margin: 0.395rem 0;
 }
 
-.menu-options:focus, .menu-options--opened:focus {
+.menu-options-container:focus, .menu-options-container--opened:focus {
     outline: 0;
     border-color: inherit;
     -webkit-box-shadow: none;
@@ -17,33 +17,27 @@
     border-radius: 4px;
 }
 
-.menu-options-label, .menu-options-container {
+.menu-options-label, .menu-options {
     font-family: "Lato", sans-serif;
     font-size: 0.95rem;
     text-shadow: rgba(0,0,0,.01) 0 0 1px;
 }
 
-.menu-options-label:hover, .menu-options--opened .menu-options-label {
+.menu-options-label:hover, .menu-options-container--opened .menu-options-label {
     background-color: #474747;
     border: 1px solid #636363;
     padding: 0 6px 2px;
 }
-.menu-options--opened .menu-options-label {
+.menu-options-container--opened .menu-options-label {
     background-color: #383838;
 }
 
-.menu-options-fix {
-    width: 0 !important;
-}
-
-.menu-options-container {
+.menu-options {
     min-width: 140px;
     max-width: 400px;
-
     padding: 2px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
+
+    position: absolute;
     z-index: 1000;
     background-color: #f0f0f0;
     border: solid 1px #a0a0a0;
@@ -51,7 +45,7 @@
 
 .menu-option {
     height: 1.35rem;
-    padding: 1px 0 2px 18px;
+    padding: 1px 4px 2px 18px;
     box-sizing: border-box;
     color: black;
     line-height: 1.15rem;

@@ -6,6 +6,9 @@
     user-select: none;
     -moz-user-select: none;
     background-color: #4a4a4a;
+
+    border: 0 solid #383838;
+    border-right-width: 1px;
 }
 
 .status-bar {

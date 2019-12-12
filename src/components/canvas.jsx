@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 
 import init from "/app/canvas/main.js";
 
-import "./map-canvas.css";
+import "./canvas.css";
 
 function Canvas() {
    const canvasEl = useRef(null);
@@ -13,7 +13,10 @@ function Canvas() {
 
    return (
       <div className="canvas-container">
-         <canvas ref={canvasEl}></canvas>
+         <div className="canvas-container-inner">
+            <div className="canvas-container-label">Canvas</div>
+            <canvas ref={canvasEl}></canvas>
+         </div>
       </div>
    )
 }

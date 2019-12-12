@@ -1,56 +1,80 @@
-
 import "./polyfill-requestAnimationFrame.js";
 
 import store from "/state/store.js";
 import { changePercentage, changeDescription } from "/state/modules/status.js";
 
-let worldFile;
-let world;
-let canvasEl, ctx;
+const _DEBUG_SAVE = false;
+
+let worldFile, world;
+let canvas, ctx;
+let image;
+
 let running = false;
-let image, renderImage;
-let width, height;
-let prevWidth, prevHeight;
 
-let previousValue;
+let isDragging = false;
+let deltaX = 0;
+let deltaY = 0;
+let prevDragX = null;
+let prevDragY = null;
+
+let zoomScale = 0;
+
+let posX;
+let posY;
+
+let prevFile;
 store.subscribe(() => {
-    const value = store.getState().menu.file;
+    const file = store.getState().menu.file;
 
-    if (value === null) {
-        previousValue = null;
+    if (file === null && running) {
+        prevFile = null;
         worldFile = null;
         running = false;
+        stop();
     }
-    else if (value instanceof File) {
-        if (previousValue == undefined || (previousValue.name !== value.name && previousValue.size !== value.size && previousValue.lastModified !== value.lastModified)) {
-            previousValue = value;
-            worldFile = value;
+    else if (file instanceof File) {
+        if (prevFile == undefined || (prevFile.name !== file.name && prevFile.size !== file.size && prevFile.lastModified !== file.lastModified)) {
+            prevFile = file;
+            worldFile = file;
             load();
         }
     }
 });
 
-const init = (_canvasEl) => {
-    canvasEl = _canvasEl;
-    ctx = canvasEl.getContext("2d");
-    ctx.imageSmoothingEnabled = false;
-    ctx.mozImageSmoothingEnabled = false;
-    ctx.webkitImageSmoothingEnabled = false;
-    ctx.msImageSmoothingEnabled = false;
+const init = (canvasEl) => {
+    canvas = canvasEl;
+    ctx = canvas.getContext("2d");
 
-    prevWidth = width = canvasEl.width = canvasEl.clientWidth;
-    prevHeight = height = canvasEl.height = canvasEl.clientHeight;
+    canvas.width = Math.floor(canvas.clientWidth);
+    canvas.height = Math.floor(canvas.clientHeight);
 
     window.addEventListener("resize", () => {
-        width = canvasEl.width = canvasEl.clientWidth;
-        height = canvasEl.height = canvasEl.clientHeight;
+        canvas.width = "auto";
+        canvas.height = "auto";
+
+        canvas.width = Math.floor(canvas.clientWidth);
+        canvas.height = Math.floor(canvas.clientHeight);
     });
 
-    canvasEl.addEventListener("wheel", onCanvasWheel);
-    canvasEl.addEventListener("mouseup", onCanvasMouseUp);
+    canvas.addEventListener("wheel", onCanvasWheel);
+    canvas.addEventListener("mouseup", onCanvasMouseUp);
     document.addEventListener("mouseup", onCanvasMouseUp);
-    canvasEl.addEventListener("mousedown", onCanvasMouseDown);
-    canvasEl.addEventListener("mousemove", onCanvasMouseMove);
+    canvas.addEventListener("mousedown", onCanvasMouseDown);
+    canvas.addEventListener("mousemove", onCanvasMouseMove);
+
+    if (_DEBUG_SAVE && localStorage.getItem("_DEBUG_SAVE_IMAGE") !== null) {
+        image = new Image();
+        image.src = JSON.parse(localStorage.getItem("_DEBUG_SAVE_IMAGE"));
+
+        world = {};
+        world.header = JSON.parse(localStorage.getItem("_DEBUG_SAVE_HEADER"));
+
+        posX = world.header.maxTilesX / 2 - canvas.clientWidth / 2;
+        posY = 500;
+
+        running = true;
+        tick(0);
+    }
 }
 
 const load = async () => {
@@ -58,14 +82,13 @@ const load = async () => {
         await new Promise((resolve, reject) => {
             const worker = new Worker("./web-worker-map-parsing.js");
 
-            worker.onerror = ({ message }) => {
+            const errorFn = ({ message }) => {
+                console.error(message);
                 reject(message);
             }
 
-            worker.onmessageerror =({ message }) => {
-                reject(message);
-            }
-
+            worker.onerror = errorFn;
+            worker.onmessageerror = errorFn;
             worker.onmessage = ({ data }) => {
                 switch(data.action) {
                     case "RETURN_PERCENTAGE_PARSING_INCOMING":
@@ -91,8 +114,8 @@ const load = async () => {
                         break;
                     case "RETURN_PARSED_MAP":
                         world = data.world;
-                        start();
                         store.dispatch(changeDescription("Finished"));
+                        start();
                         resolve();
                         break;
                 }
@@ -110,48 +133,52 @@ const load = async () => {
     }
 }
 
-const calculateRatioWidth = height => height * (world.header.maxTilesX / world.header.maxTilesY);
-const calculateRatioHeight = width => width * (world.header.maxTilesY / world.header.maxTilesX);
-
+let leftover = null;
 const onCanvasWheel = e => {
-    if (e.deltaY > 0) {
-        zoom(1);
-    } else {
-        zoom(-1)
+    const rect = e.target.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - Math.floor(rect.top);
+
+    const zoomFactor = Math.floor((canvas.clientWidth - zoomScale) / 6);
+
+    if (e.deltaY < 0) {
+        if (canvas.clientWidth - zoomScale > 32) {
+            zoomScale += zoomFactor;
+            posX += zoomFactor / 2;
+            posY += zoomFactor / 4;
+        } else {
+
+        }
+    } else if (e.deltaY > 0) {
+        if (canvas.clientWidth - zoomScale < world.header.maxTilesY) {
+            zoomScale -= zoomFactor;
+            posX -= zoomFactor / 2;
+            posY -= zoomFactor / 4;
+        } else {
+            leftover = world.header.maxTilesY - (canvas.clientWidth - zoomScale);
+            console.log(leftover);
+        }
     }
+
+    if (posX < 0)
+        posX = 0;
+
+    if (posY < 0)
+        posY = 0;
 }
-
-const zoom = direction => {
-    const zoomFactorX = 200;
-    const zoomFactorY = 56.25;
-
-    if (direction == 1) {
-        console.log("zooming");
-        canvasEl.width += zoomFactorX;
-        canvasEl.height += zoomFactorY;
-    } else if (direction == -1) {
-        console.log("unzooming");
-        canvasEl.width -= zoomFactorX;
-        canvasEl.height -= zoomFactorY;
-    }
-}
-
-let isDragging = false;
-let deltaX = 0;
-let deltaY = 0;
-let prevDragX = null;
-let prevDragY = null;
 
 const onCanvasMouseDown = e => {
-    isDragging = true;
-    console.log(e);
+    if (e.buttons == 1 || e.buttons == 4) {
+        isDragging = true;
+        canvas.classList.add("grabbed");
+    }
 }
 
 const onCanvasMouseUp = e => {
     isDragging = false;
     deltaX = deltaY = 0;
     prevDragX = prevDragY = null;
-    console.log(e);
+    canvas.classList.remove("grabbed");
 }
 
 const onCanvasMouseMove = e => {
@@ -174,30 +201,66 @@ const onCanvasMouseMove = e => {
     prevDragX = x;
     prevDragY = y;
 
-    posX += deltaX;
-    posY += deltaY;
-    console.log(deltaX, deltaY);
-}
+    // dragDelta * one real pixel to one map pixel ratio
+    posX -= deltaX * ( Math.round((canvas.clientWidth - zoomScale) / canvas.clientWidth * 100) / 100 );
+    posY -= deltaY * ( Math.round((canvas.clientWidth - zoomScale) / canvas.clientWidth * 100) / 100 );
 
-let posX;
-let posY;
+    if (posX < 0)
+        posX = 0;
+
+    if (posY < 0)
+        posY = 0;
+}
 
 const start = () => {
-    posX = -1 * world.header.maxTilesX / 2 + width / 2;
-    posY = 0;
+    const offscreen = {};
+    offscreen.canvas = document.createElement("canvas");
+    offscreen.ctx = offscreen.canvas.getContext("2d");
+    offscreen.canvas.width = world.header.maxTilesX;
+    offscreen.canvas.height = world.header.maxTilesY;
+    offscreen.ctx.putImageData(image, 0, 0);
+    image = new Image();
+    image.src = offscreen.canvas.toDataURL();
+
+    delete offscreen.canvas;
+    delete offscreen.ctx;
+
+    if (_DEBUG_SAVE && localStorage.getItem("_DEBUG_SAVE_IMAGE") === null) {
+        localStorage.setItem("_DEBUG_SAVE_IMAGE", JSON.stringify(image.src));
+        localStorage.setItem("_DEBUG_SAVE_HEADER", JSON.stringify(world.header));
+    }
+
+    posX = world.header.maxTilesX / 2 - canvas.clientWidth / 2;
+    posY = 500;
+
     running = true;
     tick(0);
-
-    console.log(world);
 }
 
-const tick = async (T) => {
+const stop = () => {
+    canvas.height++;
+    canvas.height--;
+}
 
-    ctx.clearRect(0, 0, canvasEl.clientWidth, canvasEl.clientHeight);
-    ctx.putImageData( image, posX, posY );
+let dimension;
+const tick = (T) => {
+    canvas.height++;
+    canvas.height--;
+
+    ctx.imageSmoothingEnabled = false;
+    ctx.mozImageSmoothingEnabled = false;
+    ctx.webkitImageSmoothingEnabled = false;
+    ctx.msImageSmoothingEnabled = false;
+
+    dimension = canvas.clientWidth > canvas.clientHeight ? canvas.clientWidth : canvas.clientHeight;
+    ctx.drawImage(image,
+        posX, posY,
+        dimension - zoomScale, dimension - zoomScale,
+        0, 0,
+        dimension, dimension);
 
     if (running)
-        requestAnimationFrame(tick, canvasEl);
+        requestAnimationFrame(tick, canvas);
 }
 
 export default init;
