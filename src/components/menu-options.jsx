@@ -7,18 +7,19 @@ function MenuOptions({ label, options, tabOpened, setTabOpened, index }) {
    const [showDropdown, toggleDropdown] = useToggle(false, true);
 
    const onClick = e => {
-      if (e.target.classList.contains("menu-options-container")) //click on divider or border
+      if (e.target.classList.contains("menu-options") || e.target.classList.contains("menu-option-divider")) //click on divider or border
          return;
 
       toggleDropdown();
       setTabOpened(tabOpened == index ? false : index);
    }
 
-   const onBlur = () => {
-      if (showDropdown) {
+   const onBlur = e => {
+      if (showDropdown)
          toggleDropdown();
+
+      if (e.relatedTarget === null)
          setTabOpened(false);
-      }
    }
 
    const onMouseEnter = () => {
@@ -29,7 +30,7 @@ function MenuOptions({ label, options, tabOpened, setTabOpened, index }) {
    }
 
    useEffect(() => {
-      if (tabOpened !== false && tabOpened != index && showDropdown)
+      if (tabOpened !== index && showDropdown)
          toggleDropdown();
    }, [tabOpened]);
 

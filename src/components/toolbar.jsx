@@ -8,7 +8,7 @@ function Toolbar() {
    return (
       <div className="toolbar-container">
          <div className="toolbar debug_rotated_text">
-         toolbar
+         _toolbar
          </div>
       </div>
    )

@@ -1,7 +1,8 @@
 import "./polyfill-requestAnimationFrame.js";
 
 import store from "/state/store.js";
-import { changePercentage, changeDescription } from "/state/modules/status.js";
+import { changeWorldFile } from "/state/modules/menu.js";
+import { changePercentage, changeDescription, changeError } from "/state/modules/status.js";
 
 const _DEBUG_SAVE = false;
 
@@ -78,6 +79,8 @@ const init = (canvasEl) => {
 }
 
 const load = async () => {
+    store.dispatch(changeError(null));
+
     try {
         await new Promise((resolve, reject) => {
             const worker = new Worker("./web-worker-map-parsing.js");
@@ -112,10 +115,22 @@ const load = async () => {
                         break;
                     case "RETURN_PARSED_MAP":
                         world = data.world;
-                        console.log(world);
                         store.dispatch(changeDescription("Re-rendering"));
                         start();
                         resolve();
+                        break;
+
+                    case "ERROR":
+                        store.dispatch(changeDescription("Failed"));
+                        store.dispatch(changePercentage(0));
+                        store.dispatch(changeWorldFile(null));
+
+                        if (data.error.name == "TerrariaWorldParserError") {
+                            store.dispatch(changeError(data.error.message));
+                        } else {
+                            store.dispatch(changeError("see more info in console (please report the error to developer)"));
+                            console.log("web worker error:", data.error);
+                        }
                         break;
                 }
             }

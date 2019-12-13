@@ -1,9 +1,11 @@
 const PERCENTAGE_CHANGE = "twe/status/PERCENTAGE_CHANGE";
 const DESCRIPTION_CHANGE = "twe/status/DESCRIPTION_CHANGE";
+const ERROR_CHANGE = "twe/status/ERROR_CHANGE";
 
 const default_state = {
     percentage: null,
-    description: null
+    description: null,
+    error: null
 }
 
 // Reducer
@@ -19,6 +21,11 @@ export default function status(state = default_state, action) {
                 ...state,
                 description: action.description
             };
+        case ERROR_CHANGE:
+            return {
+                ...state,
+                error: action.error
+            };
         default:
             return state;
     }
@@ -33,7 +40,12 @@ function changeDescription(description) {
     return { type: DESCRIPTION_CHANGE, description };
 }
 
+function changeError(error) {
+    return { type: ERROR_CHANGE, error };
+}
+
 export {
     changePercentage,
-    changeDescription
+    changeDescription,
+    changeError
 };

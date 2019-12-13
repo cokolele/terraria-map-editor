@@ -8,7 +8,7 @@ function Sidebar() {
    return (
       <div className="sidebar-container">
          <div className="sidebar debug_rotated_text">
-         sidebar
+         _sidebar
          </div>
       </div>
    )

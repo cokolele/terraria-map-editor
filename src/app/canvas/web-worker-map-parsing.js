@@ -3,34 +3,47 @@ import tileColors from "/utils/databases/tile-colors.json";
 import "./polyfill-imageData.js";
 
 self.onmessage = async ({ data }) => {
-    switch(data.action) {
-        case "PARSE_AND_RENDER_MAP_RETURN_WITHOUT_BLOCKS":
-            await parse(data.file);
-            render();
-            postMessage({
-                action: "RETURN_IMAGE_INCOMING",
-            });
-            postMessage({
-                action: "RETURN_IMAGE",
-                image,
-            });
-            postMessage({
-                action: "RETURN_PARSED_MAP_INCOMING",
-            });
-            postMessage({
-                action: "RETURN_PARSED_MAP",
-                world: {
-                    fileFormatHeader: world.fileFormatHeader,
-                    header: world.header,
-                    chests: world.chests,
-                    signs: world.signs,
-                    NPCs: world.NPCs,
-                    tileEntities: world.tileEntities,
-                    weightedPressurePlates: world.weightedPressurePlates,
-                    townManager: world.townManager
-                }
-            });
-            break;
+    try {
+        switch(data.action) {
+            case "PARSE_AND_RENDER_MAP_RETURN_WITHOUT_BLOCKS":
+                await parse(data.file);
+                render();
+                postMessage({
+                    action: "RETURN_IMAGE_INCOMING",
+                });
+                postMessage({
+                    action: "RETURN_IMAGE",
+                    image,
+                });
+                postMessage({
+                    action: "RETURN_PARSED_MAP_INCOMING",
+                });
+                postMessage({
+                    action: "RETURN_PARSED_MAP",
+                    world: {
+                        fileFormatHeader: world.fileFormatHeader,
+                        header: world.header,
+                        chests: world.chests,
+                        signs: world.signs,
+                        NPCs: world.NPCs,
+                        tileEntities: world.tileEntities,
+                        weightedPressurePlates: world.weightedPressurePlates,
+                        townManager: world.townManager
+                    }
+                });
+                break;
+        }
+    } catch (e) {
+        if (e.name == "TerrariaWorldParserError")
+            e.message = e.onlyMessage;
+
+        postMessage({
+            action: "ERROR",
+            error: {
+                name: e.name,
+                message: e.message
+            }
+        });
     }
 }
 
@@ -103,7 +116,6 @@ const render = () => {
             image.data[position + 3] = color.alpha;
 
             position += 4;
-
         }
     }
 }

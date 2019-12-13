@@ -5,7 +5,7 @@ import { changePercentage } from "/state/modules/status.js";
 
 import "./status-bar.css";
 
-function StatusBar({ percentage, description, changePercentage }) {
+function StatusBar({ percentage, description, error, changePercentage }) {
    useEffect(() => {
       if (percentage == 100) {
          changePercentage(null);
@@ -19,7 +19,9 @@ function StatusBar({ percentage, description, changePercentage }) {
             <div className="status-action">
                <span>{ description == null ? "-" : description }</span>
                <div className="status-action-percentage" style={{width: percentage == null ? 0 : percentage + "%"}}></div>
+               <div className="status-action-percentage" style={{width: percentage == null ? 0 : percentage + "%"}}></div>
             </div>
+            <div className="status-error">{error}</div>
          </div>
       </div>
    )
@@ -29,7 +31,8 @@ export default connect(
    state => {
       return {
          percentage: state.status.percentage,
-         description: state.status.description
+         description: state.status.description,
+         error: state.status.error
       };
    },
    { changePercentage }

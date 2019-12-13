@@ -6,7 +6,7 @@ import init from "/app/canvas/main.js";
 
 import "./canvas.css";
 
-function Canvas({ file }) {
+function Canvas({ file, statusDescription }) {
    const canvasEl = useRef(null);
 
    useEffect(() => {
@@ -15,20 +15,18 @@ function Canvas({ file }) {
    });
 
    return (
-      <div className="canvas-container">
-      {
-         file &&
+      <div className={"canvas-container" + (statusDescription == "Finished" ? "" : " hidden")}>
          <div className="canvas-container-inner">
-            <div className="canvas-container-label">{file.name}</div>
+            <div className="canvas-container-label">{file && file.name}</div>
             <canvas ref={canvasEl}></canvas>
          </div>
-      }
       </div>
    )
 }
 
 export default connect(state => {
    return {
-      file: state.menu.file
+      file: state.menu.file,
+      statusDescription: state.status.description
    }
 })(Canvas);
