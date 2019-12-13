@@ -40,11 +40,11 @@ function MenuOptions({ label, options, tabOpened, setTabOpened, index }) {
             showDropdown &&
             <div className="menu-options">
             {
-               options.map((option, i) => {
-                  if (option == "__DIVIDER__")
+               Object.keys(options).map((label, i) => {
+                  if (options[label] == "__DIVIDER__")
                      return <div className="menu-option-divider" key={i}></div>
                   else
-                     return <div className="menu-option" key={i} onClick={option.optionFunc}>{option.optionLabel}</div>
+                     return <div className="menu-option" key={i} onClick={options[label]}>{label}</div>
                })
             }
             </div>

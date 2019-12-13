@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import menuOptionsConfig from "/app/menu.js";
 
 import MenuOptions from "/components/menu-options.jsx";
-
 import "./menu.css";
 
 function Menu() {

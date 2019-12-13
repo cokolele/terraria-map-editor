@@ -1,24 +1,16 @@
 import React, { useEffect, useState } from "react";
-import store from "/state/store.js";
+
+import { connect } from "react-redux";
 import { changePercentage } from "/state/modules/status.js";
 
 import "./status-bar.css";
 
-function StatusBar() {
-   const [description, stateChangeDescription] = useState(null);
-   const [percentage, stateChangePercentage] = useState(null);
-
+function StatusBar({ percentage, description, changePercentage }) {
    useEffect(() => {
-      store.subscribe(() => {
-         const state = store.getState();
-         stateChangePercentage(state.status.percentage)
-         stateChangeDescription(state.status.description);
-
-         if (state.status.percentage == 100) {
-            store.dispatch(changePercentage(null));
-         }
-      });
-   }, []);
+      if (percentage == 100) {
+         changePercentage(null);
+      }
+   }, [percentage]);
 
    return (
       <div className="status-bar-container">
@@ -33,4 +25,12 @@ function StatusBar() {
    )
 }
 
-export default StatusBar;
+export default connect(
+   state => {
+      return {
+         percentage: state.status.percentage,
+         description: state.status.description
+      };
+   },
+   { changePercentage }
+)(StatusBar);

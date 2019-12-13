@@ -1,0 +1,11 @@
+{
+    "General": {
+        "world name": "$mapName",
+        "world id": "!$worldId",
+        "seed": "!$seedText",
+        "world size (blocks)": "!$maxTilesX x !$maxTilesY",
+        "world size (pixels)": "!$rightWorld x !$bottomWorld",
+        "spawn point": "X $spawnTileX Y $spawnTileY",
+        "dungeon point": "X $dungeonX Y $dungeonY",
+
+}

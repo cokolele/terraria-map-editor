@@ -5,7 +5,6 @@ import Toolbar from "/components/toolbar.jsx";
 import Canvas from "/components/canvas.jsx";
 import Sidebar from "/components/sidebar.jsx";
 import StatusBar from "/components/status-bar.jsx";
-
 import "./editor.css";
 
 function Editor() {

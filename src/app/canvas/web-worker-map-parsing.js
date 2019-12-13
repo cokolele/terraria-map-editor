@@ -1,31 +1,34 @@
 import terrariaWorldParser from "/../terraria-world-parser/src/browser/terraria-world-parser.js";
-import tileColors from "/utils/tile-colors.json";
+import tileColors from "/utils/databases/tile-colors.json";
 import "./polyfill-imageData.js";
 
 self.onmessage = async ({ data }) => {
     switch(data.action) {
-        case "PARSE_MAP":
-            parse(data.file, true);
-            break;
-        case "RENDER_MAP":
-            render(data.image, true)
-            break;
-        case "PARSE_AND_RENDER_MAP":
-            await parse(data.file, false);
-            render(new ImageData(world.header.maxTilesX, world.header.maxTilesY), false);
+        case "PARSE_AND_RENDER_MAP_RETURN_WITHOUT_BLOCKS":
+            await parse(data.file);
+            render();
             postMessage({
                 action: "RETURN_IMAGE_INCOMING",
             });
             postMessage({
                 action: "RETURN_IMAGE",
-                image
+                image,
             });
             postMessage({
                 action: "RETURN_PARSED_MAP_INCOMING",
             });
             postMessage({
                 action: "RETURN_PARSED_MAP",
-                world
+                world: {
+                    fileFormatHeader: world.fileFormatHeader,
+                    header: world.header,
+                    chests: world.chests,
+                    signs: world.signs,
+                    NPCs: world.NPCs,
+                    tileEntities: world.tileEntities,
+                    weightedPressurePlates: world.weightedPressurePlates,
+                    townManager: world.townManager
+                }
             });
             break;
     }
@@ -34,36 +37,26 @@ self.onmessage = async ({ data }) => {
 let world;
 let image;
 
-const parse = async (file, _return) => {
+const parse = async (file) => {
     postMessage({
         action: "RETURN_PERCENTAGE_PARSING_INCOMING",
     });
     world = await new terrariaWorldParser().loadFile(file);
-    world = await world.parse(["header", "worldtiles"], (percentVal) => {
+    world = await world.parse((percentVal) => {
         postMessage({
             action: "RETURN_PERCENTAGE_PARSING",
             percentage: percentVal
         });
     });
-
-    if (_return) {
-        postMessage({
-            action: "RETURN_PARSED_MAP_INCOMING",
-        });
-        postMessage({
-            action: "RETURN_PARSED_MAP",
-            world
-        });
-    }
 }
 
-const render = (_image, _return) => {
+const render = () => {
     if (!world) {
         console.error("Web-worker-map-parsing error: no world loaded");
         return;
     }
 
-    image = _image;
+    image = new ImageData(world.header.maxTilesX, world.header.maxTilesY)
 
     const layers = {
         space: 80, // below
@@ -112,15 +105,5 @@ const render = (_image, _return) => {
             position += 4;
 
         }
-    }
-
-    if (_return) {
-        postMessage({
-            action: "RETURN_IMAGE_INCOMING",
-        });
-        postMessage({
-            action: "RETURN_IMAGE",
-            image
-        });
     }
 }

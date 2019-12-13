@@ -7,7 +7,7 @@ const _DEBUG_SAVE = false;
 
 let worldFile, world;
 let canvas, ctx;
-let image;
+let image, imageSize;
 
 let running = false;
 
@@ -104,17 +104,16 @@ const load = async () => {
                         store.dispatch(changePercentage(data.percentage));
                         break;
                     case "RETURN_IMAGE_INCOMING":
-                        store.dispatch(changeDescription("Copying 1/2"));
+                        store.dispatch(changeDescription("Copying"));
                         break;
                     case "RETURN_IMAGE":
                         image = data.image;
-                        break;
-                    case "RETURN_PARSED_MAP_INCOMING":
-                        store.dispatch(changeDescription("Copying 2/2"));
+                        imageSize = data.imageSize;
                         break;
                     case "RETURN_PARSED_MAP":
                         world = data.world;
-                        store.dispatch(changeDescription("Finished"));
+                        console.log(world);
+                        store.dispatch(changeDescription("Re-rendering"));
                         start();
                         resolve();
                         break;
@@ -122,7 +121,7 @@ const load = async () => {
             }
 
             worker.postMessage({
-                action: "PARSE_AND_RENDER_MAP",
+                action: "PARSE_AND_RENDER_MAP_RETURN_WITHOUT_BLOCKS",
                 file: worldFile
             });
         });
@@ -150,14 +149,14 @@ const onCanvasWheel = e => {
 
         }
     } else if (e.deltaY > 0) {
-        if (canvas.clientWidth - zoomScale < world.header.maxTilesY) {
+        //if (canvas.clientWidth - zoomScale < world.header.maxTilesY) {
             zoomScale -= zoomFactor;
             posX -= zoomFactor / 2;
             posY -= zoomFactor / 4;
-        } else {
+        /*} else {
             leftover = world.header.maxTilesY - (canvas.clientWidth - zoomScale);
             console.log(leftover);
-        }
+        }*/
     }
 
     if (posX < 0)
@@ -233,6 +232,7 @@ const start = () => {
     posX = world.header.maxTilesX / 2 - canvas.clientWidth / 2;
     posY = 500;
 
+    store.dispatch(changeDescription("Finished"));
     running = true;
     tick(0);
 }

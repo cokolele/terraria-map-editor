@@ -22,6 +22,14 @@ import "/main.css";
 import React from "react";
 import { render } from "react-dom";
 
-import Editor from "/pages/editor.jsx"
+import { Provider } from "react-redux";
+import store from "/state/store.js";
 
-render( <Editor /> , document.querySelector("#app"));
+import Editor from "/pages/editor.jsx";
+
+render(
+    <Provider store={store}>
+        <Editor />
+    </Provider>,
+    document.querySelector("#app")
+);
