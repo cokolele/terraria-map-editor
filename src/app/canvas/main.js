@@ -42,19 +42,23 @@ store.subscribe(() => {
     }
 });
 
+const refreshCanvasSize = () => {
+    canvas.width = 0;
+    canvas.height = 0;
+    canvas.width = Math.floor(canvas.clientWidth);
+    canvas.height = Math.floor(canvas.clientHeight);
+}
+
 const init = (canvasEl) => {
     canvas = canvasEl;
     ctx = canvas.getContext("2d");
 
-    canvas.width = Math.floor(canvas.clientWidth);
-    canvas.height = Math.floor(canvas.clientHeight);
-
+    refreshCanvasSize();
     window.addEventListener("resize", () => {
         canvas.width = "auto";
         canvas.height = "auto";
 
-        canvas.width = Math.floor(canvas.clientWidth);
-        canvas.height = Math.floor(canvas.clientHeight);
+        refreshCanvasSize();
     });
 
     canvas.addEventListener("wheel", onCanvasWheel);
@@ -227,6 +231,8 @@ const onCanvasMouseMove = e => {
 }
 
 const start = () => {
+    console.log(world);
+
     const offscreen = {};
     offscreen.canvas = document.createElement("canvas");
     offscreen.ctx = offscreen.canvas.getContext("2d");
@@ -277,5 +283,9 @@ const tick = (T) => {
     if (running)
         requestAnimationFrame(tick, canvas);
 }
+
+export {
+    refreshCanvasSize
+};
 
 export default init;

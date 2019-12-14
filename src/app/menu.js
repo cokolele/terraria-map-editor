@@ -1,5 +1,5 @@
 import store from "/state/store.js";
-import { changeWorldFile } from "/state/modules/menu.js";
+import { changeWorldFile, toggleOption } from "/state/modules/menu.js";
 import { changePercentage, changeDescription, changeError } from "/state/modules/status.js";
 
 const DIVIDER = "__DIVIDER__";
@@ -33,7 +33,7 @@ const onCloseFile = (e) => {
 const debugFile = (e) => {
     store.dispatch(changeDescription("downloading map"));
 
-    fetch("/downloadable/Canvas.wld")
+    fetch("/downloadable/example_map.wld")
         .then(response => response.blob())
         .then(blob => {
             const file = new File([blob], "example map");
@@ -43,6 +43,14 @@ const debugFile = (e) => {
             store.dispatch(changeDescription("failed to download map"));
             console.error(e);
         });
+}
+
+const onToggleToolbar = () => {
+    store.dispatch(toggleOption(["view", "toolbar"]));
+}
+
+const onToggleSidebar = () => {
+    store.dispatch(toggleOption(["view", "sidebar"]));
 }
 
 const menuOptionsConfig = {
@@ -57,7 +65,16 @@ const menuOptionsConfig = {
         DIVIDER
     },
     View: {
-        DIVIDER
+        "Toolbar": {
+            type: "checkbox",
+            for: ["view", "toolbar"],
+            onClick: onToggleToolbar
+        },
+        "Sidebar": {
+            type: "checkbox",
+            for: ["view", "sidebar"],
+            onClick: onToggleSidebar
+        }
     }
 }
 

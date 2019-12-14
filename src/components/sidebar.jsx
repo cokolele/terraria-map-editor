@@ -1,17 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+
+import { connect } from "react-redux";
+
+import { refreshCanvasSize } from "/app/canvas/main.js";
 
 import "./sidebar.css";
 
-function Sidebar() {
-   //const [tabOpened, setTabOpened] = useState(false);
+function Sidebar({ show }) {
+   useEffect(() => {
+      refreshCanvasSize()
+   }, [show]);
 
-   return (
-      <div className="sidebar-container">
-         <div className="sidebar debug_rotated_text">
-         _sidebar
+   if (show)
+      return (
+         <div className="sidebar-container">
+            <div className="sidebar debug_rotated_text">
+            _sidebar
+            </div>
          </div>
-      </div>
-   )
+      )
+   else
+      return "";
 }
 
-export default Sidebar;
+export default connect(state => {
+   return {
+      show: state.menu.view.sidebar
+   }
+})(Sidebar);

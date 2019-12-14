@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import useToggle from "/utils/hooks/useToggle.js";
 
-import "./menu-options.css";
+import MenuOption from "/components/menu-option.jsx";
 
-function MenuOptions({ label, options, tabOpened, setTabOpened, index }) {
+import "./menu-options-container.css";
+
+function MenuOptionsContainer({ label, options, tabOpened, setTabOpened, index, toggleViewOption }) {
    const [showDropdown, toggleDropdown] = useToggle(false, true);
 
    const onClick = e => {
@@ -35,18 +37,15 @@ function MenuOptions({ label, options, tabOpened, setTabOpened, index }) {
    }, [tabOpened]);
 
    return (
-      <div className={showDropdown ? "menu-options-container--opened" : "menu-options-container"} onClick={onClick} onBlur={onBlur} onMouseEnter={onMouseEnter} tabIndex={index}>
-         <span className="menu-options-label">{label}</span>
+      <div className={showDropdown ? "menu-options-container-wrapper--opened" : "menu-options-container-wrapper"} onClick={onClick} onBlur={onBlur} onMouseEnter={onMouseEnter} tabIndex={index}>
+         <span className="menu-options-container-label">{label}</span>
          {
             showDropdown &&
-            <div className="menu-options">
+            <div className="menu-options-container">
             {
-               Object.keys(options).map((label, i) => {
-                  if (options[label] == "__DIVIDER__")
-                     return <div className="menu-option-divider" key={i}></div>
-                  else
-                     return <div className="menu-option" key={i} onClick={options[label]}>{label}</div>
-               })
+               Object.keys(options).map((key, i) =>
+                  <MenuOption label={key} option={options[key]} key={i}/>
+               )
             }
             </div>
          }
@@ -54,4 +53,4 @@ function MenuOptions({ label, options, tabOpened, setTabOpened, index }) {
    )
 }
 
-export default MenuOptions;
+export default MenuOptionsContainer;

@@ -1,0 +1,29 @@
+.menu-option {
+    position: relative;
+    height: 1.35rem;
+    padding: 1px 4px 2px 18px;
+    box-sizing: border-box;
+    color: black;
+    line-height: 1.15rem;
+    text-shadow: rgba(0,0,0,.01) 0 0 1px;
+}
+
+.menu-option:hover {
+    background-color: #0078d7;
+    color: white;
+}
+
+.menu-option--checked:before {
+    position: absolute;
+    content: "✓";
+    font-weight: 800;
+    font-size: 0.8rem;
+    left: 4px;
+    top: 0px;
+}
+
+.menu-option-divider {
+    height: 1px;
+    background-color: #a0a0a0;
+    margin: 3px 2px;
+}

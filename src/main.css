@@ -12,3 +12,7 @@ html, body, #app {
     color: white;
     transform: rotate(90deg) translate(50%);
 }
+
+.hidden {
+    display: none;
+}

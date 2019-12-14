@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import menuOptionsConfig from "/app/menu.js";
 
-import MenuOptions from "/components/menu-options.jsx";
+import MenuOptionsContainer from "/components/menu-options-container.jsx";
 import "./menu.css";
 
 function Menu() {
@@ -13,7 +13,7 @@ function Menu() {
          <div className="menu">
          {
             Object.keys(menuOptionsConfig).map((key, i) =>
-               <MenuOptions label={key} options={menuOptionsConfig[key]} tabOpened={tabOpened} setTabOpened={setTabOpened} index={i+1} key={i+1}/>
+               <MenuOptionsContainer label={key} options={menuOptionsConfig[key]} tabOpened={tabOpened} setTabOpened={setTabOpened} index={i+1} key={i+1}/>
             )
          }
          </div>

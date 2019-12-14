@@ -1,28 +1,41 @@
-const OPTION_CHANGE = "twe/menu/OPTION_CHANGE";
-const FILE_CHANGE = "twe/menu/FILE_CHANGE";
+const CHANGE_FILE = "twe/menu/CHANGE_FILE";
+const TOGGLE_OPTION = "twe/menu/TOGGLE_OPTION";
 
 const default_state = {
     file: null,
+    view: {
+        sidebar: true,
+        toolbar: true
+    }
 }
 
 // Reducer
 export default function menu(state = default_state, action) {
     switch (action.type) {
-        case FILE_CHANGE:
+        case CHANGE_FILE:
             return {
                 ...state,
                 file: action.file
             };
+        case TOGGLE_OPTION:
+            const newState = state;
+            newState[action.option[0]][action.option[1]] = !newState[action.option[0]][action.option[1]];
+            return {...newState};
         default:
-            return state;
+            return {...state};
     }
 }
 
 // Action Creators
 function changeWorldFile(file) {
-    return { type: FILE_CHANGE, file };
+    return { type: CHANGE_FILE, file };
+}
+
+function toggleOption(option) {
+    return { type: TOGGLE_OPTION, option };
 }
 
 export {
-    changeWorldFile
+    changeWorldFile,
+    toggleOption
 };

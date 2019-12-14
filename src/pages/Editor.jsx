@@ -10,9 +10,9 @@ import "./editor.css";
 function Editor() {
    return (
       <div className="editor">
+         <Canvas/>
          <Menu/>
          <Toolbar/>
-         <Canvas/>
          <Sidebar/>
          <StatusBar/>
       </div>
