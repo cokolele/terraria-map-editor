@@ -5,7 +5,7 @@ const default_state = {
     file: null,
     view: {
         sidebar: true,
-        toolbar: true
+        toolbar: false
     }
 }
 

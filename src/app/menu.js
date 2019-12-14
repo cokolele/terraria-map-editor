@@ -67,11 +67,13 @@ const menuOptionsConfig = {
     View: {
         "Toolbar": {
             type: "checkbox",
+            default: false,
             for: ["view", "toolbar"],
             onClick: onToggleToolbar
         },
         "Sidebar": {
             type: "checkbox",
+            default: true,
             for: ["view", "sidebar"],
             onClick: onToggleSidebar
         }

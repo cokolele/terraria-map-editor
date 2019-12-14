@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import useToggle from "/utils/hooks/useToggle.js";
-
-import { connect } from "react-redux";
 
 import "./menu-option.css";
 
@@ -13,20 +11,17 @@ function MenuOption({ label, option, state }) {
       return <div className="menu-option" onClick={option}>{label}</div>
 
    if (option.type == "checkbox") {
-      const initChecked = state[option.for[0]][option.for[1]];
-      const [checked, toggleCheck] = initChecked ? useToggle(true, false) : useToggle(false, true);
+      // checkbox state is kept in prop instead of useToggle because state resets every unmount
+      if (option.value === undefined)
+         option.value = option.default;
 
       const onCheckboxClick = () => {
-         toggleCheck();
+         option.value = !option.value;
          option.onClick();
       }
 
-      return <div className={"menu-option" + (checked ? " menu-option--checked" : "")} onClick={onCheckboxClick}>{label}</div>
+      return <div className={"menu-option" + (option.value ? " menu-option--checked" : "")} onClick={onCheckboxClick}>{label}</div>
    }
 }
 
-export default connect(state => {
-   return {
-      state: state.menu
-   }
-})(MenuOption);
+export default MenuOption;
