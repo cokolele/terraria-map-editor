@@ -3,8 +3,9 @@
     !$  non-editable text
     &   checkbox
 */
-{
-    "General": {
+
+export default {
+    General: {
         "world name": "$mapName",
         "world id": "!$worldId",
         "seed": "!$seedText",
@@ -42,5 +43,7 @@
                 "adamantite": 111,
                 "titanium": 223,
             }
-        },
+        }
+    },
+    "NPCs": {}
 }

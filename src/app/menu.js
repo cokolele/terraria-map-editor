@@ -13,9 +13,9 @@ inputElHidden.addEventListener("input", async () => {
 
 const onNewFile = (e, file) => {
     if (file == undefined) {
-        onCloseFile();
         inputElHidden.click();
     } else {
+        onCloseFile();
         store.dispatch(changeWorldFile(file));
     }
 }
@@ -31,6 +31,8 @@ const onCloseFile = (e) => {
 }
 
 const debugFile = (e) => {
+    onCloseFile();
+
     store.dispatch(changeDescription("downloading map"));
 
     fetch("/downloadable/example_map.wld")
@@ -53,31 +55,27 @@ const onToggleSidebar = () => {
     store.dispatch(toggleOption(["view", "sidebar"]));
 }
 
-const menuOptionsConfig = {
+export default {
     File: {
         "Open...": onNewFile,
-        "Select example map": debugFile,
-        "_Save": onSaveFile,
+        "Open example map": debugFile,
+        _Save: onSaveFile,
         DIVIDER,
-        "Close": onCloseFile
+        Close: onCloseFile
     },
     Edit: {
         DIVIDER
     },
     View: {
-        "Toolbar": {
+        Toolbar: {
             type: "checkbox",
             default: false,
-            for: ["view", "toolbar"],
             onClick: onToggleToolbar
         },
-        "Sidebar": {
+        Sidebar: {
             type: "checkbox",
             default: true,
-            for: ["view", "sidebar"],
             onClick: onToggleSidebar
         }
     }
 }
-
-export default menuOptionsConfig;

@@ -168,14 +168,14 @@ const onCanvasWheel = e => {
 
         }
     } else if (e.deltaY > 0) {
-        //if (canvas.clientWidth - zoomScale < world.header.maxTilesY) {
+        if (canvas.clientWidth - zoomScale < world.header.maxTilesX) {
             zoomScale -= zoomFactor;
             posX -= zoomFactor / 2;
             posY -= zoomFactor / 4;
-        /*} else {
+        } else {
             leftover = world.header.maxTilesY - (canvas.clientWidth - zoomScale);
             console.log(leftover);
-        }*/
+        }
     }
 
     if (posX < 0)

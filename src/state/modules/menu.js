@@ -1,11 +1,13 @@
+import menuOptionsConfig from "/app/menu.js";
+
 const CHANGE_FILE = "twe/menu/CHANGE_FILE";
 const TOGGLE_OPTION = "twe/menu/TOGGLE_OPTION";
 
 const default_state = {
     file: null,
     view: {
-        sidebar: true,
-        toolbar: false
+        sidebar: menuOptionsConfig.View.Sidebar.default,
+        toolbar: menuOptionsConfig.View.Toolbar.default
     }
 }
 
