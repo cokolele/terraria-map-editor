@@ -2,10 +2,9 @@ import React, { useEffect } from "react";
 import useToggle from "/utils/hooks/useToggle.js";
 
 import MenuOption from "/components/menu-option.jsx";
+import "/components/styles/menu-options-container.css";
 
-import "./menu-options-container.css";
-
-function MenuOptionsContainer({ label, options, tabOpened, setTabOpened, index, toggleViewOption }) {
+function MenuOptionsContainer({ label, options, currentTab, setCurrentTab, index, toggleViewOption }) {
    const [showDropdown, toggleDropdown] = useToggle(false, true);
 
    const onClick = e => {
@@ -13,7 +12,7 @@ function MenuOptionsContainer({ label, options, tabOpened, setTabOpened, index, 
          return;
 
       toggleDropdown();
-      setTabOpened(tabOpened == index ? false : index);
+      setCurrentTab(currentTab == index ? false : index);
    }
 
    const onBlur = e => {
@@ -21,20 +20,20 @@ function MenuOptionsContainer({ label, options, tabOpened, setTabOpened, index, 
          toggleDropdown();
 
       if (e.relatedTarget === null)
-         setTabOpened(false);
+         setCurrentTab(false);
    }
 
    const onMouseEnter = () => {
-      if (tabOpened !== false && tabOpened != index) {
+      if (currentTab !== false && currentTab != index) {
          toggleDropdown();
-         setTabOpened(index);
+         setCurrentTab(index);
       }
    }
 
    useEffect(() => {
-      if (tabOpened !== index && showDropdown)
+      if (currentTab !== index && showDropdown)
          toggleDropdown();
-   }, [tabOpened]);
+   }, [currentTab]);
 
    return (
       <div className={showDropdown ? "menu-options-container-wrapper--opened" : "menu-options-container-wrapper"} onClick={onClick} onBlur={onBlur} onMouseEnter={onMouseEnter} tabIndex={index}>

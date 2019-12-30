@@ -1,7 +1,7 @@
 import React from "react";
 import useToggle from "/utils/hooks/useToggle.js";
 
-import "./menu-option.css";
+import "/components/styles/menu-option.css";
 
 function MenuOption({ label, option, state }) {
    if (label == "DIVIDER")
@@ -17,7 +17,7 @@ function MenuOption({ label, option, state }) {
 
       const onCheckboxClick = () => {
          option.value = !option.value;
-         option.onClick();
+         option.onClick(option.value);
       }
 
       return <div className={"menu-option" + (option.value ? " menu-option--checked" : "")} onClick={onCheckboxClick}>{label}</div>

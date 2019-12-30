@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./sidebar-folder-option.css";
+import "/components/styles/sidebar-folder-option.css";
 
 function SidebarFolderOption({ label, active, index, onClick }) {
    return (

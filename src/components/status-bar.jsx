@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { changePercentage } from "/state/modules/status.js";
 
-import "./status-bar.css";
+import "/components/styles/status-bar.css";
 
 function StatusBar({ percentage, description, error, changePercentage }) {
    useEffect(() => {

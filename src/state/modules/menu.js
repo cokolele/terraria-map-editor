@@ -1,43 +1,38 @@
 import menuOptionsConfig from "/app/menu.js";
 
-const CHANGE_FILE = "twe/menu/CHANGE_FILE";
 const TOGGLE_OPTION = "twe/menu/TOGGLE_OPTION";
+const SET_OPTION = "twe/menu/SET_OPTION";
 
-const default_state = {
-    file: null,
+let default_state = {
     view: {
-        sidebar: menuOptionsConfig.View.Sidebar.default,
-        toolbar: menuOptionsConfig.View.Toolbar.default
+        sidebar: menuOptionsConfig.View.Sidebar.value,
+        toolbar: menuOptionsConfig.View.Toolbar.value
     }
 }
 
 // Reducer
 export default function menu(state = default_state, action) {
     switch (action.type) {
-        case CHANGE_FILE:
-            return {
-                ...state,
-                file: action.file
-            };
         case TOGGLE_OPTION:
-            const newState = state;
-            newState[action.option[0]][action.option[1]] = !newState[action.option[0]][action.option[1]];
-            return {...newState};
+            state[action.option[0]][action.option[1]] = !state[action.option[0]][action.option[1]];
+            return {...state};
+        case SET_OPTION:
+            state[action.option[0]][action.option[1]] = action.value;
+            return {...state};
         default:
             return {...state};
     }
-}
-
-// Action Creators
-function changeWorldFile(file) {
-    return { type: CHANGE_FILE, file };
 }
 
 function toggleOption(option) {
     return { type: TOGGLE_OPTION, option };
 }
 
+function setOption(option, value) {
+    return { type: SET_OPTION, option, value };
+}
+
 export {
-    changeWorldFile,
-    toggleOption
+    toggleOption,
+    setOption
 };

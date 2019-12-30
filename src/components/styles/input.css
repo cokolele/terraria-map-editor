@@ -1,0 +1,28 @@
+.input {
+    text-align: center;
+    box-sizing: border-box;
+    height: 1.4rem;
+    margin: 0 4px;
+
+    color: #f0f0f0;
+}
+
+.input[type=text] {
+    background-color: #454545;
+    text-shadow: rgba(0,0,0,.01) 0 0 1px;
+    border: 1px #666666 solid;
+    border-radius: 2px;
+}
+
+.input[type=checkbox] {
+    background-color: red !important;
+    border: 1px solid #4a4a4a;
+}
+
+.input:first-child {
+    margin-left: 0;
+}
+
+.input:last-child {
+    margin-right: 0;
+}

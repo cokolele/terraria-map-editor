@@ -1,14 +1,12 @@
-import "./polyfill-requestAnimationFrame.js";
+import "/utils/polyfills/polyfill-requestAnimationFrame.js";
 
 import store from "/state/store.js";
-import { changeWorldFile } from "/state/modules/menu.js";
+import { changeWorldObject, changeWorldFile } from "/state/modules/app.js";
 import { changePercentage, changeDescription, changeError } from "/state/modules/status.js";
-
-const _DEBUG_SAVE = false;
 
 let worldFile, world;
 let canvas, ctx;
-let image, imageSize;
+let image, imageUrl = new Image();
 
 let running = false;
 
@@ -18,131 +16,84 @@ let deltaY = 0;
 let prevDragX = null;
 let prevDragY = null;
 
-let zoomScale = 0;
+let zoomLevel = 0;
+let zoomFactors = [];
+let viewWidthScale, viewHeightScale;
+let tilePixelRatio;
 
 let posX;
 let posY;
 
-let prevFile;
-store.subscribe(() => {
-    const file = store.getState().menu.file;
+const changeCanvasWorldFile = (_worldFile) => {
+    worldFile = _worldFile;
 
-    if (file === null && running) {
-        prevFile = null;
-        worldFile = null;
-        running = false;
+    if (worldFile === null)
         stop();
-    }
-    else if (file instanceof File) {
-        if (prevFile == undefined || (prevFile.name !== file.name && prevFile.size !== file.size && prevFile.lastModified !== file.lastModified)) {
-            prevFile = file;
-            worldFile = file;
-            load();
-        }
-    }
-});
-
-const refreshCanvasSize = () => {
-    canvas.width = 0;
-    canvas.height = 0;
-    canvas.width = Math.floor(canvas.clientWidth);
-    canvas.height = Math.floor(canvas.clientHeight);
+    else
+        load();
 }
 
-const init = (canvasEl) => {
-    canvas = canvasEl;
+function init(_canvas) {
+    canvas = _canvas;
     ctx = canvas.getContext("2d");
-
-    refreshCanvasSize();
-    window.addEventListener("resize", () => {
-        canvas.width = "auto";
-        canvas.height = "auto";
-
-        refreshCanvasSize();
-    });
 
     canvas.addEventListener("wheel", onCanvasWheel);
     canvas.addEventListener("mouseup", onCanvasMouseUp);
     document.addEventListener("mouseup", onCanvasMouseUp);
     canvas.addEventListener("mousedown", onCanvasMouseDown);
     canvas.addEventListener("mousemove", onCanvasMouseMove);
-
-    if (_DEBUG_SAVE && localStorage.getItem("_DEBUG_SAVE_IMAGE") !== null) {
-        image = new Image();
-        image.src = JSON.parse(localStorage.getItem("_DEBUG_SAVE_IMAGE"));
-
-        world = {};
-        world.header = JSON.parse(localStorage.getItem("_DEBUG_SAVE_HEADER"));
-
-        posX = world.header.maxTilesX / 2 - canvas.clientWidth / 2;
-        posY = 500;
-
-        running = true;
-        tick(0);
-    }
 }
 
-const load = async () => {
+function load() {
     store.dispatch(changeError(null));
 
     try {
-        await new Promise((resolve, reject) => {
-            const worker = new Worker("./web-worker-map-parsing.js");
+        const worker = new Worker("./web-worker.js");
 
-            const errorFn = ({ message }) => {
-                console.error(message);
-                reject(message);
+        worker.onmessage = ({ data }) => {
+            switch(data.action) {
+                case "RETURN_PERCENTAGE_PARSING_INCOMING":
+                    store.dispatch(changeDescription("Parsing"));
+                    break;
+                case "RETURN_PERCENTAGE_PARSING":
+                    store.dispatch(changePercentage(data.percentage));
+                    break;
+                case "RETURN_PERCENTAGE_RENDERING_INCOMING":
+                    store.dispatch(changeDescription("Rendering"));
+                    break;
+                case "RETURN_PERCENTAGE_RENDERING":
+                    store.dispatch(changePercentage(data.percentage));
+                    break;
+                case "RETURN_IMAGE_INCOMING":
+                    store.dispatch(changeDescription("Copying"));
+                    break;
+                case "RETURN_IMAGE":
+                    image = data.image;
+                    break;
+                case "RETURN_PARSED_MAP":
+                    world = data.world;
+                    store.dispatch(changeDescription("Re-rendering"));
+                    store.dispatch(changeWorldObject(world));
+                    start();
+                    break;
+                case "ERROR":
+                    store.dispatch(changeDescription("Failed"));
+                    store.dispatch(changePercentage(null));
+                    store.dispatch(changeWorldFile(null));
+
+                    if (data.error.name == "TerrariaWorldParserError") {
+                        store.dispatch(changeError(data.error.message));
+                    } else {
+                        store.dispatch(changeError("see more info in console (please report the error to developer)"));
+                        console.log("web worker error:", data.error);
+                    }
+                    break;
             }
+        }
 
-            worker.onerror = errorFn;
-            worker.onmessageerror = errorFn;
-            worker.onmessage = ({ data }) => {
-                switch(data.action) {
-                    case "RETURN_PERCENTAGE_PARSING_INCOMING":
-                        store.dispatch(changeDescription("Parsing"));
-                        break;
-                    case "RETURN_PERCENTAGE_PARSING":
-                        store.dispatch(changePercentage(data.percentage));
-                        break;
-                    case "RETURN_PERCENTAGE_RENDERING_INCOMING":
-                        store.dispatch(changeDescription("Rendering"));
-                        break;
-                    case "RETURN_PERCENTAGE_RENDERING":
-                        store.dispatch(changePercentage(data.percentage));
-                        break;
-                    case "RETURN_IMAGE_INCOMING":
-                        store.dispatch(changeDescription("Copying"));
-                        break;
-                    case "RETURN_IMAGE":
-                        image = data.image;
-                        imageSize = data.imageSize;
-                        break;
-                    case "RETURN_PARSED_MAP":
-                        world = data.world;
-                        store.dispatch(changeDescription("Re-rendering"));
-                        start();
-                        resolve();
-                        break;
-
-                    case "ERROR":
-                        store.dispatch(changeDescription("Failed"));
-                        store.dispatch(changePercentage(0));
-                        store.dispatch(changeWorldFile(null));
-
-                        if (data.error.name == "TerrariaWorldParserError") {
-                            store.dispatch(changeError(data.error.message));
-                        } else {
-                            store.dispatch(changeError("see more info in console (please report the error to developer)"));
-                            console.log("web worker error:", data.error);
-                        }
-                        break;
-                }
-            }
-
-            worker.postMessage({
-                action: "PARSE_AND_RENDER_MAP_RETURN_WITHOUT_BLOCKS",
-                file: worldFile
-            });
+        worker.postMessage({
+            action: "PARSE_AND_RENDER_MAP_RETURN_WITHOUT_BLOCKS",
+            file: worldFile
         });
     }
     catch(e) {
@@ -151,55 +102,47 @@ const load = async () => {
     }
 }
 
-let leftover = null;
-const onCanvasWheel = e => {
+function getMouseCanvasPosition(e) {
     const rect = e.target.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - Math.floor(rect.top);
-
-    const zoomFactor = Math.floor((canvas.clientWidth - zoomScale) / 6);
-
-    if (e.deltaY < 0) {
-        if (canvas.clientWidth - zoomScale > 32) {
-            zoomScale += zoomFactor;
-            posX += zoomFactor / 2;
-            posY += zoomFactor / 4;
-        } else {
-
-        }
-    } else if (e.deltaY > 0) {
-        if (canvas.clientWidth - zoomScale < world.header.maxTilesX) {
-            zoomScale -= zoomFactor;
-            posX -= zoomFactor / 2;
-            posY -= zoomFactor / 4;
-        } else {
-            leftover = world.header.maxTilesY - (canvas.clientWidth - zoomScale);
-            console.log(leftover);
-        }
-    }
-
-    if (posX < 0)
-        posX = 0;
-
-    if (posY < 0)
-        posY = 0;
+    return [e.clientX - rect.left, e.clientY - Math.floor(rect.top)];
 }
 
-const onCanvasMouseDown = e => {
+function getMouseImagePosition(e) {
+    const [x, y] = getMouseCanvasPosition(e);
+
+    console.log(posX, posY);
+}
+
+function onCanvasWheel(e) {
+    e.preventDefault();
+
+    if (e.deltaY < 0 && zoomLevel < zoomFactors.length - 1)
+        viewHeightScale = zoomFactors[++zoomLevel];
+    else if (e.deltaY > 0 && zoomLevel > 0)
+        viewHeightScale = zoomFactors[--zoomLevel];
+
+    tilePixelRatio = canvas.clientHeight / viewHeightScale;
+}
+
+function onCanvasMouseDown(e) {
     if (e.buttons == 1 || e.buttons == 4) {
         isDragging = true;
         canvas.classList.add("grabbed");
     }
+
+    if (e.buttons == 1) {
+        getMouseImagePosition(e);
+    }
 }
 
-const onCanvasMouseUp = e => {
+function onCanvasMouseUp(e) {
     isDragging = false;
     deltaX = deltaY = 0;
     prevDragX = prevDragY = null;
     canvas.classList.remove("grabbed");
 }
 
-const onCanvasMouseMove = e => {
+function onCanvasMouseMove(e) {
     if (!isDragging)
         return;
 
@@ -219,9 +162,8 @@ const onCanvasMouseMove = e => {
     prevDragX = x;
     prevDragY = y;
 
-    // dragDelta * one real pixel to one map pixel ratio
-    posX -= deltaX * ( Math.round((canvas.clientWidth - zoomScale) / canvas.clientWidth * 100) / 100 );
-    posY -= deltaY * ( Math.round((canvas.clientWidth - zoomScale) / canvas.clientWidth * 100) / 100 );
+    posX -= deltaX * tilePixelRatio;
+    posY -= deltaY * tilePixelRatio;
 
     if (posX < 0)
         posX = 0;
@@ -230,62 +172,73 @@ const onCanvasMouseMove = e => {
         posY = 0;
 }
 
-const start = () => {
-    console.log(world);
+function updateImageUrl() {
+    const offscreenCanvas = document.createElement("canvas");
+    const offscreenCtx = offscreenCanvas.getContext("2d");
+    offscreenCanvas.width = world.header.maxTilesX;
+    offscreenCanvas.height = world.header.maxTilesY;
+    offscreenCtx.putImageData(image, 0, 0);
+    imageUrl.src = offscreenCanvas.toDataURL();
+}
 
-    const offscreen = {};
-    offscreen.canvas = document.createElement("canvas");
-    offscreen.ctx = offscreen.canvas.getContext("2d");
-    offscreen.canvas.width = world.header.maxTilesX;
-    offscreen.canvas.height = world.header.maxTilesY;
-    offscreen.ctx.putImageData(image, 0, 0);
-    image = new Image();
-    image.src = offscreen.canvas.toDataURL();
-
-    delete offscreen.canvas;
-    delete offscreen.ctx;
-
-    if (_DEBUG_SAVE && localStorage.getItem("_DEBUG_SAVE_IMAGE") === null) {
-        localStorage.setItem("_DEBUG_SAVE_IMAGE", JSON.stringify(image.src));
-        localStorage.setItem("_DEBUG_SAVE_HEADER", JSON.stringify(world.header));
-    }
-
-    posX = world.header.maxTilesX / 2 - canvas.clientWidth / 2;
-    posY = 500;
-
+function start() {
+    updateImageUrl();
     store.dispatch(changeDescription("Finished"));
     running = true;
     tick(0);
 }
 
-const stop = () => {
-    canvas.height++;
-    canvas.height--;
-}
+function refreshCanvas() {
+    canvas.width = 0;
+    canvas.height = 0;
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
 
-let dimension;
-const tick = (T) => {
-    canvas.height++;
-    canvas.height--;
+    tilePixelRatio = canvas.clientHeight / viewHeightScale;
+    viewWidthScale = canvas.width / tilePixelRatio;
 
     ctx.imageSmoothingEnabled = false;
     ctx.mozImageSmoothingEnabled = false;
     ctx.webkitImageSmoothingEnabled = false;
     ctx.msImageSmoothingEnabled = false;
+}
 
-    dimension = canvas.clientWidth > canvas.clientHeight ? canvas.clientWidth : canvas.clientHeight;
-    ctx.drawImage(image,
+function preRender() {
+    posX = 0;
+    posY = 0;
+
+    for (let i = world.header.maxTilesY; i > 10; i = Math.ceil(i * (3.5/5)))
+        zoomFactors.push(i);
+    zoomFactors.push(10);
+    viewHeightScale = zoomFactors[zoomLevel];
+
+    refreshCanvas();
+}
+
+function stop() {
+    running = false;
+    canvas.height++;
+    canvas.height--;
+}
+
+const tick = (T) => {
+    if (T == 0)
+        preRender();
+
+    refreshCanvas();
+    //correctPositions();
+
+    ctx.drawImage(imageUrl,
         posX, posY,
-        dimension - zoomScale, dimension - zoomScale,
+        viewWidthScale, viewHeightScale,
         0, 0,
-        dimension, dimension);
+        canvas.width, canvas.height);
 
     if (running)
         requestAnimationFrame(tick, canvas);
 }
 
-export {
-    refreshCanvasSize
-};
-
 export default init;
+export {
+    changeCanvasWorldFile
+};

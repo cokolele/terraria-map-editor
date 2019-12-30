@@ -1,6 +1,8 @@
 import store from "/state/store.js";
-import { changeWorldFile, toggleOption } from "/state/modules/menu.js";
+import { changeWorldFile } from "/state/modules/app.js";
+import { toggleOption } from "/state/modules/menu.js";
 import { changePercentage, changeDescription, changeError } from "/state/modules/status.js";
+import { getLocalSettings, saveToLocalSettings } from "/utils/localStorage.js";
 
 const DIVIDER = "__DIVIDER__";
 
@@ -26,11 +28,12 @@ const onSaveFile = (e) => {
 
 const onCloseFile = (e) => {
     store.dispatch(changeWorldFile(null));
+    store.dispatch(changePercentage(null));
     store.dispatch(changeDescription(null));
     store.dispatch(changeError(null));
 }
 
-const debugFile = (e) => {
+const onExampleMap = (e) => {
     onCloseFile();
 
     store.dispatch(changeDescription("downloading map"));
@@ -47,18 +50,22 @@ const debugFile = (e) => {
         });
 }
 
-const onToggleToolbar = () => {
+const onToggleToolbar = (value) => {
     store.dispatch(toggleOption(["view", "toolbar"]));
+    saveToLocalSettings("toolbar", value);
 }
 
-const onToggleSidebar = () => {
+const onToggleSidebar = (value) => {
     store.dispatch(toggleOption(["view", "sidebar"]));
+    saveToLocalSettings("sidebar", value);
 }
+
+const localSettings = getLocalSettings();
 
 export default {
     File: {
         "Open...": onNewFile,
-        "Open example map": debugFile,
+        "Open example map": onExampleMap,
         _Save: onSaveFile,
         DIVIDER,
         Close: onCloseFile
@@ -69,12 +76,12 @@ export default {
     View: {
         Toolbar: {
             type: "checkbox",
-            default: false,
+            value: localSettings.toolbar !== undefined ? localSettings.toolbar : false,
             onClick: onToggleToolbar
         },
         Sidebar: {
             type: "checkbox",
-            default: true,
+            value: localSettings.sidebar !== undefined ? localSettings.sidebar : true,
             onClick: onToggleSidebar
         }
     }

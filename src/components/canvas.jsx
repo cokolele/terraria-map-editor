@@ -2,22 +2,25 @@ import React, { useRef, useEffect } from "react";
 
 import { connect } from "react-redux";
 
-import init from "/app/canvas/main.js";
+import init, { changeCanvasWorldFile } from "/app/canvas/main.js";
 
-import "./canvas.css";
+import "/components/styles/canvas.css";
 
-function Canvas({ file, statusDescription }) {
+function Canvas({ worldFile, statusDescription }) {
    const canvasEl = useRef(null);
 
    useEffect(() => {
-      if (canvasEl.current !== null)
-         init(canvasEl.current);
-   });
+      init(canvasEl.current);
+   }, []);
+
+   useEffect(() => {
+      changeCanvasWorldFile(worldFile);
+   }, [worldFile]);
 
    return (
       <div className={"canvas-container" + (statusDescription == "Finished" ? "" : " hidden")}>
          <div className="canvas-container-inner">
-            <div className="canvas-container-label">{file && file.name}</div>
+            <div className="canvas-container-label">{worldFile && worldFile.name}</div>
             <canvas ref={canvasEl}></canvas>
          </div>
       </div>
@@ -26,7 +29,7 @@ function Canvas({ file, statusDescription }) {
 
 export default connect(state => {
    return {
-      file: state.menu.file,
+      worldFile: state.app.worldFile,
       statusDescription: state.status.description
    }
 })(Canvas);

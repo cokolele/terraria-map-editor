@@ -1,23 +1,23 @@
 /*
-    $   editable text field
-    !$  non-editable text
+    $   reference
+    %   editable
     &   checkbox
 */
 
 export default {
     General: {
-        "world name": "$mapName",
-        "world id": "!$worldId",
-        "seed": "!$seedText",
-        "world size (blocks)": "!$maxTilesX x !$maxTilesY",
-        "world size (pixels)": "!$rightWorld x !$bottomWorld",
-        "spawn point": "X $spawnTileX Y $spawnTileY",
-        "dungeon point": "X $dungeonX Y $dungeonY",
-        "__DIVIDER___": "",
-        "expert mode": "&expertMode",
-        "hard mode": "&hardMode",
-        "is crimson": "&crimson",
-        "hardmore ore 1": {
+        "World name": "%$mapName",
+        "World id": "$worldId",
+        "Seed": "$seedText",
+        "World size (blocks)": "%$maxTilesX x %$maxTilesY",
+        "World size (pixels)": "%$rightWorld x %$bottomWorld",
+        "Spawn point": "X: %$spawnTileX Y: %$spawnTileY",
+        "Dungeon point": "X: %$dungeonX Y: %$dungeonY",
+        "divider1": "__DIVIDER__",
+        "Expert mode": "&$expertMode",
+        "Hard mode": "&$hardMode",
+        "Crimson": "&$crimson",
+        "Hardmore ore 1": {
             "for": "oreTier1",
             "type": "select",
             "options": {
@@ -26,7 +26,7 @@ export default {
                 "palladium": 221,
             }
         },
-        "hardmore ore 2": {
+        "Hardmore ore 2": {
             "for": "oreTier2",
             "type": "select",
             "options": {
@@ -35,7 +35,7 @@ export default {
                 "orichalcum": 222,
             }
         },
-        "hardmore ore 3": {
+        "Hardmore ore 3": {
             "for": "oreTier3",
             "type": "select",
             "options": {
@@ -43,7 +43,75 @@ export default {
                 "adamantite": 111,
                 "titanium": 223,
             }
-        }
+        },
+        "divider2": "__DIVIDER__",
+        "Snow background": "%$iceBackStyle",
+        "Jungle background": "%$jungleBackStyle",
+        "Underworld background": "%$hellBackStyle",
+        "Ground layer level": "%$worldSurface",
+        "Rock layer": "%$rockLayer",
+        "divider3": "__DIVIDER__",
+        "Current time": "%$tempTime",
+        "Is day": "&$tempDayTime",
+        "Moon type": "%$moonType",
+        "Moon phase": "%$tempMoonPhase",
+        "Is blood moon": "&$tempBloodMoon",
+        "Is eclipse": "&$tempEclipse",
+        "Has eclipse happened": "&$eclipse",
+        "Altar count": "$altarCount",
+        "Shadow orbs smashed": "&$shadowOrbSmashed",
+        "Shadow orb count": "%$shadowOrbCount",
+        "spawn meteor": "$spawnMeteor",
+        "Raining": "&$tempRaining",
+        "Rain time": "%$tempRainTime",
+        "tempMaxRain": "$tempMaxRain",
+        "cloudBGActive": "$cloudBGActive",
+        "cloudBGAlpha": "$cloudBGAlpha",
+        "Clouds count": "%$numClounds",
+        "wind speed": "$windSpeed",
+        "Sandstorm": "&$Temp_Sandstorm_Happening",
+        "Sandstorm time left": "$Temp_Sandstorm_TimeLeft",
+        "Sandstorm severity": "$Temp_Sandstorm_Severity",
+        "Sandstorm intented severity": "$Temp_Sandstorm_IntentedSeverity",
+        "divider4": "__DIVIDER__",
+        "King Slime":"&$downedSlimeKing",
+        "Eye of Cthulu":"&$downedBoss1",
+        "Eater of Worlds":"&$downedBoss2",
+        "Skeletron":"&$downedBoss3",
+        "Queen Bee":"&$downedQueenBee",
+        "The Destroyer":"&$downedMechBoss1",
+        "Skeletron Prime":"&$downedMechBoss2",
+        "any mechanical":"&$downedMechBossAny",
+        "The Twins":"&$downedMechBoss3",
+        "Plantera":"&$downedPlantBoss",
+        "Golem":"&$downedGolemBoss",
+        "Fishron":"&$downedFishron",
+        "Lunatic Cultist":"&$downedAncientCultist",
+        "Moon Lord":"&$downedMoonlord",
+        "divider5": "__DIVIDER__",
+        "Clown":"&$downedClown",
+        "Mourning Wood":"&$downedHalloweenTree",
+        "Pumpking":"&$downedHalloweenKing",
+        "Ice Queen":"&$downedChristmasIceQueen",
+        "Santa-NK1":"&$downedChristmasSantank",
+        "EverScream":"&$downedChristmasTree",
+        "Solar Pillar":"&$downedTowerSolar",
+        "Vortex Pillar":"&$downedTowerVortex",
+        "Nebula Pillar":"&$downedTowerNebula",
+        "Stardust Pillar":"&$downedTowerStardust",
+        "divider6": "__DIVIDER__",
+        "Goblin Army":"&$downedGoblins",
+        "Pirate Invasion":"&$downedPirates",
+        "Frost Legion":"&$downedFrost",
+        "Martian Madness":"&$downedMartians",
+        "divider7": "__DIVIDER__",
+        "Goblin": "&$savedGoblin",
+        "Wizard": "&$savedWizard",
+        "Mechanic": "&$savedMech",
+        "Angler": "&$savedAngler",
+        "Stylist": "&$savedStylist",
+        "TaxCollector": "&$savedTaxCollector",
+        "Tavern Keep": "&$savedBartender",
     },
     "NPCs": {}
 }
