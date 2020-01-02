@@ -2,8 +2,8 @@ const secrets = require("../secrets.js");
 
 module.exports = {
     port: 3000,
-    hostname: "www.terraria-map-editor.eu",
-    cwd: "/var/server/",
+    domain: "localhost",
+    cwd: "E:/wamp/www/terraria-web-editor/express-server/",
     db: {
         host: "localhost",
         user: "root",

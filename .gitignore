@@ -4,6 +4,5 @@ npm-debug.log*
 node_modules/
 .cache/
 dist/
-_src/
-src/utils/api/db.json
+logs/
 secrets.js

@@ -5,30 +5,26 @@ const session = require("express-session");
 const MySQLStore = require("express-mysql-session")(session);
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
+const helmet = require("helmet");
 const fs = require("fs");
 const path = require("path");
 
+const { db } = require("./db.js");
+const routes = require("../routes/routes.js");
 const secrets = require("./secrets.js");
 
 const create = (cfg) => {
     app.set("env", cfg.env);
     app.set("port", cfg.port);
-    app.set("hostname", cfg.hostname);
-
-    const connection = mysql.createConnection(cfg.db);
-    connection.connect(e => {
-        if (e)
-            console.error("Error connecting to database: " + e.stack);
-        else
-            console.log("Database connected as id: " + connection.threadId);
-    });
+    app.set("domain", cfg.domain);
 
     const sessionSettings = {
         cookie: {
-            domain: app.get("hostname"),
-            maxAge: 15552000000, //6 months
+            domain: app.get("domain"),
+            maxAge: 2592000,
+            name: "tweSessId"
         },
-        store: new MySQLStore({}, connection),
+        store: new MySQLStore({}, db),
         secret: secrets.sessionSecret,
         resave: false,
         saveUninitialized: false
@@ -42,15 +38,21 @@ const create = (cfg) => {
     app.use(session(sessionSettings));
     app.use(bodyParser.urlencoded({ extended : true }));
     app.use(bodyParser.json());
-
+    app.use(helmet());
     app.use(morgan("common", {
         stream: fs.createWriteStream( cfg.cwd + "logs/api-access.log", { flags: "a" })
     }));
+
+    app.use(routes);
+
+    app.use((req, res) => {
+        res.status(404).send("twe api server");
+    });
 };
 
 const start = () => {
     app.listen(app.get("port"), () => {
-        console.log("Express server listening on: " + app.get("hostname") + ":" + app.get("port"));
+        console.log("Express server listening on: " + app.get("domain") + ":" + app.get("port"));
     });
 };
 
