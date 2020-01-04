@@ -1,0 +1,10 @@
+.menu-folder-account {
+    position: absolute;
+    top: 1.6rem;
+    right: -1px;
+
+    min-width: 300px;
+    min-height: 50px;
+    background-color: #383838;
+    border: 1px solid #636363;
+}

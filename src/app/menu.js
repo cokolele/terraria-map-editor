@@ -1,6 +1,5 @@
 import store from "/state/store.js";
-import { changeWorldFile } from "/state/modules/app.js";
-import { toggleOption } from "/state/modules/menu.js";
+import { changeWorldFile, changeWorldObject, toggleViewOption, changeModal } from "/state/modules/app.js";
 import { changePercentage, changeDescription, changeError } from "/state/modules/status.js";
 import { getLocalSettings, saveToLocalSettings } from "/utils/localStorage.js";
 
@@ -28,6 +27,7 @@ const onSaveFile = (e) => {
 
 const onCloseFile = (e) => {
     store.dispatch(changeWorldFile(null));
+    store.dispatch(changeWorldObject(null));
     store.dispatch(changePercentage(null));
     store.dispatch(changeDescription(null));
     store.dispatch(changeError(null));
@@ -51,12 +51,12 @@ const onExampleMap = (e) => {
 }
 
 const onToggleToolbar = (value) => {
-    store.dispatch(toggleOption(["view", "toolbar"]));
+    store.dispatch(toggleViewOption("toolbar"));
     saveToLocalSettings("toolbar", value);
 }
 
 const onToggleSidebar = (value) => {
-    store.dispatch(toggleOption(["view", "sidebar"]));
+    store.dispatch(toggleViewOption("sidebar"));
     saveToLocalSettings("sidebar", value);
 }
 

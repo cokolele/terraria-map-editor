@@ -1,0 +1,37 @@
+.modal-background {
+    position: relative;
+    z-index: 5000;
+    grid-area: 1 / 1 / 4 / 4;
+    background-color: rgba(0,0,0,0.5);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-container {
+    position: relative;
+    background-color: #535353;
+    padding: 30px 50px;
+    min-width: 300px;
+    border-radius: 5px;
+}
+
+.modal-button-close {
+    position: absolute;
+    top: 30px;
+    right: 50px;
+}
+
+.modal-button-close:focus {
+    outline: none;
+}
+
+.modal-button-close:focus svg {
+    -webkit-filter: drop-shadow( 0 10px 20px rgba(0,0,0,0.4));
+    filter: drop-shadow(0px 2px 5px rgba(0, 0, 0, 0.7));
+}
+
+.modal-button-close svg {
+    fill: #f0f0f0;
+}

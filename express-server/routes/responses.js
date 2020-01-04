@@ -11,13 +11,13 @@ module.exports = {
     internal_error: (res) => {
         res.status(500).json({
             status: "error",
-            message: "database query error"
+            message: "API error: internal_error"
         });
     },
     default_bad_request: (res) => {
         res.status(400).json({
             status: "error",
-            message: null
+            message: "API error: default_bad_request"
         });
     },
     unprocessable: (res, msg) => {
@@ -29,7 +29,7 @@ module.exports = {
     unauthorized: (res) => {
         res.status(401).json({
             status: "error",
-            message: "not logged in"
+            message: "Not logged in"
         })
     }
 }

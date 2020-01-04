@@ -3,6 +3,7 @@ import "/utils/polyfills/polyfill-requestAnimationFrame.js";
 import store from "/state/store.js";
 import { changeWorldObject, changeWorldFile } from "/state/modules/app.js";
 import { changePercentage, changeDescription, changeError } from "/state/modules/status.js";
+import { map } from "/utils/number.js";
 
 let worldFile, world;
 let canvas, ctx;
@@ -18,7 +19,7 @@ let prevDragY = null;
 
 let zoomLevel = 0;
 let zoomFactors = [];
-let viewWidthScale, viewHeightScale;
+let viewWidthTiles, viewHeightTiles;
 let tilePixelRatio;
 
 let posX;
@@ -42,6 +43,7 @@ function init(_canvas) {
     document.addEventListener("mouseup", onCanvasMouseUp);
     canvas.addEventListener("mousedown", onCanvasMouseDown);
     canvas.addEventListener("mousemove", onCanvasMouseMove);
+    canvas.addEventListener("click", onCanvasClick);
 }
 
 function load() {
@@ -108,30 +110,33 @@ function getMouseCanvasPosition(e) {
 }
 
 function getMouseImagePosition(e) {
-    const [x, y] = getMouseCanvasPosition(e);
+    let [x, y] = getMouseCanvasPosition(e);
 
-    console.log(posX, posY);
+    x = Math.floor(map(x, 0, canvas.width, posX, posX + viewWidthTiles));
+    y = Math.floor(map(y, 0, canvas.height, posY, posY + viewHeightTiles));
+
+    console.log(x, y);
+}
+
+function onCanvasClick(e) {
+    getMouseImagePosition(e);
 }
 
 function onCanvasWheel(e) {
     e.preventDefault();
 
     if (e.deltaY < 0 && zoomLevel < zoomFactors.length - 1)
-        viewHeightScale = zoomFactors[++zoomLevel];
+        viewHeightTiles = zoomFactors[++zoomLevel];
     else if (e.deltaY > 0 && zoomLevel > 0)
-        viewHeightScale = zoomFactors[--zoomLevel];
+        viewHeightTiles = zoomFactors[--zoomLevel];
 
-    tilePixelRatio = canvas.clientHeight / viewHeightScale;
+    tilePixelRatio = canvas.clientHeight / viewHeightTiles;
 }
 
 function onCanvasMouseDown(e) {
     if (e.buttons == 1 || e.buttons == 4) {
         isDragging = true;
         canvas.classList.add("grabbed");
-    }
-
-    if (e.buttons == 1) {
-        getMouseImagePosition(e);
     }
 }
 
@@ -162,26 +167,40 @@ function onCanvasMouseMove(e) {
     prevDragX = x;
     prevDragY = y;
 
-    posX -= deltaX * tilePixelRatio;
-    posY -= deltaY * tilePixelRatio;
+    posX -= deltaX / tilePixelRatio;
+    posY -= deltaY / tilePixelRatio;
+}
 
+function correctPositions() {
     if (posX < 0)
         posX = 0;
 
     if (posY < 0)
         posY = 0;
+
+    if (posY + viewHeightTiles > world.header.maxTilesY && posY > 0)
+        if (world.header.maxTilesY - viewHeightTiles < 0)
+            posY = 0;
+        else
+            posY = world.header.maxTilesY - viewHeightTiles;
+
+    if (posX + viewWidthTiles > world.header.maxTilesX && posX > 0)
+        if (world.header.maxTilesX - viewWidthTiles < 0)
+            posX = 0;
+        else
+            posX = world.header.maxTilesX - viewWidthTiles;
 }
 
+let offscreenCanvas = document.createElement("canvas");
+let offscreenCtx = offscreenCanvas.getContext("2d");
 function updateImageUrl() {
-    const offscreenCanvas = document.createElement("canvas");
-    const offscreenCtx = offscreenCanvas.getContext("2d");
-    offscreenCanvas.width = world.header.maxTilesX;
-    offscreenCanvas.height = world.header.maxTilesY;
     offscreenCtx.putImageData(image, 0, 0);
-    imageUrl.src = offscreenCanvas.toDataURL();
+    //imageUrl.src = offscreenCanvas.toDataURL();
 }
 
 function start() {
+    offscreenCanvas.width = world.header.maxTilesX;
+    offscreenCanvas.height = world.header.maxTilesY;
     updateImageUrl();
     store.dispatch(changeDescription("Finished"));
     running = true;
@@ -194,8 +213,8 @@ function refreshCanvas() {
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
 
-    tilePixelRatio = canvas.clientHeight / viewHeightScale;
-    viewWidthScale = canvas.width / tilePixelRatio;
+    tilePixelRatio = canvas.clientHeight / viewHeightTiles;
+    viewWidthTiles = canvas.width / tilePixelRatio;
 
     ctx.imageSmoothingEnabled = false;
     ctx.mozImageSmoothingEnabled = false;
@@ -210,7 +229,7 @@ function preRender() {
     for (let i = world.header.maxTilesY; i > 10; i = Math.ceil(i * (3.5/5)))
         zoomFactors.push(i);
     zoomFactors.push(10);
-    viewHeightScale = zoomFactors[zoomLevel];
+    viewHeightTiles = zoomFactors[zoomLevel];
 
     refreshCanvas();
 }
@@ -222,15 +241,17 @@ function stop() {
 }
 
 const tick = (T) => {
-    if (T == 0)
+    if (T == 0) {
         preRender();
+    }
 
     refreshCanvas();
-    //correctPositions();
+    correctPositions();
 
-    ctx.drawImage(imageUrl,
+    //updateImageUrl();
+    ctx.drawImage(offscreenCanvas,
         posX, posY,
-        viewWidthScale, viewHeightScale,
+        viewWidthTiles, viewHeightTiles,
         0, 0,
         canvas.width, canvas.height);
 

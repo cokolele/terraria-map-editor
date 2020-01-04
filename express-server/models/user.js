@@ -23,11 +23,11 @@ module.exports = {
 
             if (sameCredentialsUsers.length > 1 || (sameCredentialsUsers.length === 1 && username === sameCredentialsUsers[0].username && email === sameCredentialsUsers[0].email))
                 return {
-                    error: "username and email taken"
+                    error: "Username and email taken"
                 };
             else if (sameCredentialsUsers.length === 1)
                 return {
-                    error: username === sameCredentialsUsers[0].username ? "username taken" : "email taken"
+                    error: username === sameCredentialsUsers[0].username ? "Username taken" : "Email taken"
                 };
 
             const insertUser = await dbQuery(
@@ -49,7 +49,7 @@ module.exports = {
 
             if (sameUsernameUser.length === 0)
                 return {
-                    error: "no user found"
+                    error: "No user found"
                 };
 
             const passwordsMatch = await new Promise((resolve, reject) => {
@@ -61,7 +61,7 @@ module.exports = {
 
             if (!passwordsMatch)
                 return {
-                    error: "wrong password"
+                    error: "Wrong password"
                 };
             else
                 return sameUsernameUser;

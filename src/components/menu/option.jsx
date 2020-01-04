@@ -1,7 +1,7 @@
 import React from "react";
 import useToggle from "/utils/hooks/useToggle.js";
 
-import "/components/styles/menu-option.css";
+import "/components/styles/menu/option.css";
 
 function MenuOption({ label, option, state }) {
    if (label == "DIVIDER")

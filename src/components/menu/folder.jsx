@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import useToggle from "/utils/hooks/useToggle.js";
 
-import MenuOption from "/components/menu-option.jsx";
-import "/components/styles/menu-options-container.css";
+import MenuOption from "/components/menu/option.jsx";
+import "/components/styles/menu/folder.css";
 
-function MenuOptionsContainer({ label, options, currentTab, setCurrentTab, index, toggleViewOption }) {
+function MenuFolder({ label, options, currentTab, setCurrentTab, index, toggleViewOption}) {
    const [showDropdown, toggleDropdown] = useToggle(false, true);
 
    const onClick = e => {
-      if (e.target.classList.contains("menu-options") || e.target.classList.contains("menu-option-divider")) //click on divider or border
+      if (e.target.classList.contains("menu-folder") || e.target.classList.contains("menu-option-divider")) //click on divider or border
          return;
 
       toggleDropdown();
@@ -36,15 +36,13 @@ function MenuOptionsContainer({ label, options, currentTab, setCurrentTab, index
    }, [currentTab]);
 
    return (
-      <div className={showDropdown ? "menu-options-container-wrapper--opened" : "menu-options-container-wrapper"} onClick={onClick} onBlur={onBlur} onMouseEnter={onMouseEnter} tabIndex={index}>
-         <span className="menu-options-container-label">{label}</span>
+      <div className={"menu-folder-container" + (showDropdown ? " menu-folder-container--opened" : "")} onClick={onClick} onBlur={onBlur} onMouseEnter={onMouseEnter} tabIndex={index}>
+         {label}
          {
             showDropdown &&
-            <div className="menu-options-container">
+            <div className="menu-folder">
             {
-               Object.keys(options).map((key, i) =>
-                  <MenuOption label={key} option={options[key]} key={i}/>
-               )
+               Object.keys(options).map((key, i) => <MenuOption label={key} option={options[key]} key={i}/>)
             }
             </div>
          }
@@ -52,4 +50,4 @@ function MenuOptionsContainer({ label, options, currentTab, setCurrentTab, index
    )
 }
 
-export default MenuOptionsContainer;
+export default MenuFolder;

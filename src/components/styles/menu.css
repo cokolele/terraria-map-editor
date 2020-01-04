@@ -1,14 +1,18 @@
 .menu-container {
     height: 2.2rem;
-    padding-left: 46px;
+    padding: 0 46px;
     background-color: #535353;
 
     border: 0 solid #383838;
     border-right-width: 1px;
+
+    display: flex;
+    justify-content: space-between;
 }
 
 .menu {
     display: inline-flex;
+    align-items: center;
     border: 0 solid #383838;
 
     user-select: none;

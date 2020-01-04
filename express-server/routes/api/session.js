@@ -9,7 +9,7 @@ const usernameRegexp = /^[a-z0-9_-]{3,16}$/;
 
 router.get("//", (req, res) => {
     if (req.session.loggedIn) {
-        responses.success(res, "logged in", { user: req.session.user });
+        responses.success(res, "Logged in", { user: req.session.user });
         return;
     } else {
         responses.unauthorized(res);
@@ -21,20 +21,20 @@ router.get("//", (req, res) => {
 
 router.post("/login", async (req, res) => {
     if (req.session.loggedIn) {
-        responses.success(res, "logged in");
+        responses.unprocessable(res, "Already logged in");
         return;
     }
 
     if (req.body.username === undefined || req.body.password === undefined) {
-        responses.unprocessable(res, "missing parameters");
+        responses.unprocessable(res, "Missing parameters");
         return;
     }
     if (req.body.username.trim().length === 0 || !usernameRegexp.test(req.body.username)) {
-        responses.unprocessable(res, "invalid username");
+        responses.unprocessable(res, "Invalid username");
         return;
     }
     if (req.body.password.trim().length === 0 || req.body.password.length > 55) {
-        responses.unprocessable(res, "invalid password");
+        responses.unprocessable(res, "Invalid password");
         return;
     }
 
@@ -55,7 +55,7 @@ router.post("/login", async (req, res) => {
             username: getUser[0].username,
             email: getUser[0].email
         },
-        responses.success(res, "logged in");
+        responses.success(res, "Logged in");
         return;
     }
 
@@ -66,7 +66,7 @@ router.post("/logout", (req, res) => {
     if (req.session.loggedIn) {
         delete req.session.user;
         req.session.loggedIn = false;
-        responses.success(res, "logged out");
+        responses.success(res, "Logged out");
         return;
     } else {
         responses.unauthorized(res);
@@ -78,19 +78,19 @@ router.post("/logout", (req, res) => {
 
 router.post("/register", async (req, res) => {
     if (req.body.username === undefined || req.body.password === undefined || req.body.email === undefined) {
-        responses.unprocessable(res, "missing parameters");
+        responses.unprocessable(res, "Missing parameters");
         return;
     }
     if (req.body.username.trim().length === 0 || !usernameRegexp.test(req.body.username)) {
-        responses.unprocessable(res, "invalid username");
+        responses.unprocessable(res, "Invalid username");
         return;
     }
     if (req.body.password.trim().length === 0 || req.body.password.length > 55) {
-        responses.unprocessable(res, "invalid password");
+        responses.unprocessable(res, "Invalid password");
         return;
     }
     if (!isemail.validate(req.body.email)) {
-        responses.unprocessable(res, "invalid email");
+        responses.unprocessable(res, "Invalid email");
         return;
     }
 
@@ -105,7 +105,7 @@ router.post("/register", async (req, res) => {
         return;
     }
     if (userSaved) {
-        responses.success(res, "registered");
+        responses.success(res, "Registered");
         return;
     }
 

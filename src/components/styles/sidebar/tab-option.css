@@ -1,18 +1,18 @@
-.sidebar-folder-option-container {
+.sidebar-tab-option-container {
     overflow: hidden;
 }
 
-.sidebar-folder-option-container--active {
+.sidebar-tab-option-container--active {
     overflow: visible;
 }
 
-.sidebar-folder-option-container--active > .sidebar-folder-option {
+.sidebar-tab-option-container--active > .sidebar-tab-option {
     padding-bottom: 5px;
     background-color: #535353;
     cursor: auto;
 }
 
-.sidebar-folder-option {
+.sidebar-tab-option {
     height: 1.2rem;
     padding: 4px 9px;
     background-color: #424242;

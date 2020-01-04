@@ -1,6 +1,6 @@
 import React from "react";
 
-import Input from "/components/input.jsx";
+import SidebarInputInline from "/components/sidebar/input-inline.jsx";
 const Divider = () => <div className="sidebar-inputs-divider"></div>;
 
 const config = [
@@ -22,7 +22,7 @@ function TabGeneral({ worldObject }) {
    {
       config.map(([label, value], i) => {
          if (label == "__DIVIDER__"){
-            return <Divider/>;
+            return <Divider key={i}/>;
          }
 
          if (typeof value == "string") {

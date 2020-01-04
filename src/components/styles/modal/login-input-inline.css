@@ -1,0 +1,11 @@
+.modal-login-input-inline {
+    padding: 0 5px;
+
+    color: #96d2ff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.modal-login-input-inline:first-child {
+    padding-left: 0;
+}

@@ -4,11 +4,10 @@ import { connect } from "react-redux";
 
 import config from "/app/sidebar.js";
 
-import SidebarFolderOption from "/components/sidebar-folder-option.jsx";
-import Input from "/components/input.jsx";
+import SidebarTabOption from "/components/sidebar/tab-option.jsx";
+import SidebarInputInline from "/components/sidebar/input-inline.jsx";
 import TabGeneral from "/components/sidebar/tab-general.jsx";
 import "/components/styles/sidebar.css";
-
 
 function Sidebar({ show, worldObject }) {
    const [currentTab, setCurrentTab] = useState(0);
@@ -23,7 +22,7 @@ function Sidebar({ show, worldObject }) {
             <div className="sidebar-folders">
             {
                Object.keys(config).map((key, i) =>
-                  <SidebarFolderOption label={key} key={i} index={i} active={i == currentTab ? true : false} onClick={onTabClick}/>
+                  <SidebarTabOption label={key} key={i} index={i} active={i == currentTab ? true : false} onClick={onTabClick}/>
                )
             }
             </div>
@@ -48,9 +47,9 @@ function Sidebar({ show, worldObject }) {
                                     if (word.indexOf("$") == -1)
                                        return <span key={i*10+j}>{word}</span>;
                                     else if (word.indexOf("%") != -1)
-                                       return <Input text defaultValue={worldObject.header[word.substring(word.indexOf("$") + 1)]} key={i*10+j}/>
+                                       return <SidebarInputInline text defaultValue={worldObject.header[word.substring(word.indexOf("$") + 1)]} key={i*10+j}/>
                                     else if (word.indexOf("&") != -1)
-                                       return <Input checkbox defaultValue={worldObject.header[word.substring(word.indexOf("$") + 1)]} key={i*10+j}/>
+                                       return <SidebarInputInline checkbox defaultValue={worldObject.header[word.substring(word.indexOf("$") + 1)]} key={i*10+j}/>
                                     else
                                        return <span className="sidebar-input--readonly" key={i*10+j}>{worldObject.header[word.substring(word.indexOf("$") + 1)]}</span>
                                  })
@@ -73,15 +72,9 @@ function Sidebar({ show, worldObject }) {
       return "";
 }
 
-function GeneralTab() {
-   return {
-
-   }
-}
-
 export default connect(state => {
    return {
-      show: state.menu.view.sidebar,
+      show: state.app.view.sidebar,
       worldObject: state.app.worldObject
    }
 })(Sidebar);

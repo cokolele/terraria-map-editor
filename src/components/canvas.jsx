@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from "react";
-
 import { connect } from "react-redux";
 
 import init, { changeCanvasWorldFile } from "/app/canvas/main.js";
@@ -18,11 +17,17 @@ function Canvas({ worldFile, statusDescription }) {
    }, [worldFile]);
 
    return (
-      <div className={"canvas-container" + (statusDescription == "Finished" ? "" : " hidden")}>
-         <div className="canvas-container-inner">
+      <div className="canvas-container">
+         <div className={"canvas-container-inner" + (statusDescription == "Finished" ? "" : " hidden")}>
             <div className="canvas-container-label">{worldFile && worldFile.name}</div>
             <canvas ref={canvasEl}></canvas>
          </div>
+         {
+            statusDescription !== "Finished" &&
+            <div className="canvas-placeholder">
+            TERRARIA MAP EDITOR
+            </div>
+         }
       </div>
    )
 }

@@ -1,5 +1,5 @@
 import terrariaWorldParser from "/../terraria-world-parser/src/browser/terraria-world-parser.js";
-import tileColors from "/utils/databases/tile-colors.json";
+import tileColors from "/utils/dbs/tile-colors.json";
 import "/utils/polyfills/polyfill-imageData.js";
 
 self.onmessage = async ({ data }) => {
@@ -110,7 +110,7 @@ const render = () => {
                 else if (y >= layers.underworld)                                        color = tileColors.backgrounds.underworld;
             }
 
-            image.data[position + 0] = color.red;
+            image.data[position] = color.red;
             image.data[position + 1] = color.green;
             image.data[position + 2] = color.blue;
             image.data[position + 3] = color.alpha;

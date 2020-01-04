@@ -37,7 +37,7 @@ body {
 }
 
 .menu-container { grid-area: 1 / 1 / 2 / 4; }
-.toolbar-container { grid-area: 2 / 1 / 3 / 2; }
+.toolbar-container { grid-area: 2 / 1 / 4 / 2; }
 .canvas-container { grid-area: 2 / 2 / 3 / 3; }
 .sidebar-container { grid-area: 2 / 3 / 3 / 4; }
-.status-bar-container { grid-area: 3 / 1 / 4 / 4; }
+.status-bar-container { grid-area: 3 / 2 / 4 / 4; }
