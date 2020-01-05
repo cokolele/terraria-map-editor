@@ -7,9 +7,17 @@ import MenuOption from "/components/menu/option.jsx";
 import "/components/styles/menu/folder.css";
 import "/components/styles/menu/folder-account.css";
 
-function MenuFolderAccount({ loggedIn, user, changeModal }) {
+import { GithubIcon } from "/components/icon.jsx";
+
+function MenuFolderAccount({ loggedIn, user, changeModal, __templink }) {
 
    const onClick = e => {
+      if (__templink) {
+         const win = window.open("https://github.com/cokolele/terraria-web-editor", '_blank');
+         win.focus();
+         return;
+      }
+
       if (!loggedIn)
          changeModal("signin");
       else
@@ -18,8 +26,18 @@ function MenuFolderAccount({ loggedIn, user, changeModal }) {
 
    return (
       <div className="menu-folder-container menu-folder-container--icon" onClick={onClick}>
-         <span>{loggedIn ? user.username : "Account"}</span>
-         <AccountBoxIcon/>
+      {
+         __templink ?
+         <>
+            <span>Github</span>
+            <GithubIcon size="20"/>
+         </>
+         :
+         <>
+            <span>{loggedIn ? user.username : "Account"}</span>
+            <AccountBoxIcon/>
+         </>
+      }
       </div>
    )
 }

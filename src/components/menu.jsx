@@ -20,6 +20,7 @@ function Menu() {
          </div>
          <div className="menu">
             <MenuFolderAccount/>
+            <MenuFolderAccount __templink/>
          </div>
       </div>
    )
