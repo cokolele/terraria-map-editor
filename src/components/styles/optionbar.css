@@ -1,0 +1,31 @@
+.optionbar-container {
+    background-color: #535353;
+    border: 0 solid #383838;
+    border-width: 1px 0;
+}
+
+.optionbar {
+    height: 2.36rem;
+
+    display: inline-flex;
+    align-items: center;
+}
+
+.optionbar-icon {
+    display: flex;
+    justify-content: center;
+    width: 2.65rem;
+    height: 20px;
+    fill: #dddddd;
+}
+
+.optionbar-icon--stroke {
+    fill: none;
+    stroke: #dddddd;
+}
+
+.optionbar-divider {
+    width: 1px;
+    height: 23px;
+    background-color: #3e3e3e;
+}

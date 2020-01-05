@@ -110,10 +110,10 @@ const render = () => {
                 else if (y >= layers.underworld)                                        color = tileColors.backgrounds.underworld;
             }
 
-            image.data[position] = color.red;
-            image.data[position + 1] = color.green;
-            image.data[position + 2] = color.blue;
-            image.data[position + 3] = color.alpha;
+            image.data[position] = color.r;
+            image.data[position + 1] = color.g;
+            image.data[position + 2] = color.b;
+            image.data[position + 3] = 255;
 
             position += 4;
         }

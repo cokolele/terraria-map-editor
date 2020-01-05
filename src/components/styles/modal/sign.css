@@ -1,4 +1,4 @@
-.modal-login {
+.modal-sign {
     font-family: "Lato", sans-serif;
     color: #f0f0f0;
 
@@ -6,7 +6,7 @@
     flex-direction: column;
 }
 
-.modal-login-headtext {
+.modal-sign-headtext {
     font-size: 1.6rem;
     font-weight: 900;
     margin-bottom: 22px;

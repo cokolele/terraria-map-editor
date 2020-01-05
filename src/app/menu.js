@@ -3,6 +3,8 @@ import { changeWorldFile, changeWorldObject, toggleViewOption, changeModal } fro
 import { changePercentage, changeDescription, changeError } from "/state/modules/status.js";
 import { getLocalSettings, saveToLocalSettings } from "/utils/localStorage.js";
 
+import { getCanvasMapData } from "/app/canvas/main.js";
+
 const DIVIDER = "__DIVIDER__";
 
 const inputElHidden = document.createElement("input");
@@ -23,6 +25,17 @@ const onNewFile = (e, file) => {
 
 const onSaveFile = (e) => {
     console.log("clicked save file");
+}
+
+const onSaveImage = () => {
+    const data = getCanvasMapData({name: true, imageUrlPng: true});
+
+    if (data !== null) {
+        const link = document.createElement("a");
+        link.download = data.name.replace(" ", "_") + ".png";
+        link.href = data.imageUrlPng;
+        link.click();
+    }
 }
 
 const onCloseFile = (e) => {
@@ -67,11 +80,13 @@ export default {
         "Open...": onNewFile,
         "Open example map": onExampleMap,
         _Save: onSaveFile,
+        "Save map image": onSaveImage,
         DIVIDER,
         Close: onCloseFile
     },
     Edit: {
-        DIVIDER
+        "Undo": () => { console.log("undo") },
+        "Redo": () => { console.log("redo") },
     },
     View: {
         Toolbar: {

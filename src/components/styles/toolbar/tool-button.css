@@ -1,4 +1,4 @@
-.toolbar-tool {
+.toolbar-tool-button {
     height: 20px;
     margin: 5px 0 1px 0;
     padding: 2px 5px;
@@ -9,18 +9,23 @@
     fill: #dddddd;
 }
 
-.toolbar-tool:focus {
+.toolbar-tool-button:focus {
     outline: none;
 }
 
-.toolbar-tool:hover {
+.toolbar-tool-button:hover {
     background-color: #454545;
     border: 1px solid #666666;
     margin: 4px 0 0 0;
 }
 
-.toolbar-tool--selected, .toolbar-tool--selected:hover {
+.toolbar-tool-button--selected, .toolbar-tool-button--selected:hover {
     background-color: #383838;
     border: 1px solid #666666;
     margin: 4px 0 0 0;
+}
+
+.toolbar-tool-button--stroke {
+    fill: none;
+    stroke: #dddddd;
 }

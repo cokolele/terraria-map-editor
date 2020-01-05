@@ -1,0 +1,12 @@
+.modal-account {
+    min-width: 500px;
+    min-height: 300px;
+    width: 40vw;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-account-view {
+    flex-grow: 1;
+}

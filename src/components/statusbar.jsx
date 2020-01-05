@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { changePercentage } from "/state/modules/status.js";
 
-import "/components/styles/status-bar.css";
+import "/components/styles/statusbar.css";
 
 function StatusBar({ percentage, description, error, changePercentage }) {
    useEffect(() => {
@@ -13,8 +13,8 @@ function StatusBar({ percentage, description, error, changePercentage }) {
    }, [percentage]);
 
    return (
-      <div className="status-bar-container">
-         <div className="status-bar">
+      <div className="statusbar-container">
+         <div className="statusbar">
             <div className="status-zoom"></div>
             <div className="status-action">
                <span>{ description == null ? "-" : description }</span>

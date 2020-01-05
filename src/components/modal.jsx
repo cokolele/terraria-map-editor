@@ -5,15 +5,18 @@ import { changeModal } from "/state/modules/app.js";
 import { CrossIcon } from "/components/icon.jsx";
 import "/components/styles/modal.css";
 
-import Login from "/components/modal/login.jsx";
-import Register from "/components/modal/register.jsx";
+import ModalSignin from "/components/modal/signin.jsx";
+import ModalSignup from "/components/modal/signup.jsx";
+import ModalAccount from "/components/modal/account.jsx";
 
 const Modal = ({ modalView, changeModal }) => {
    let ViewComponent;
-   if (modalView == "login")
-      ViewComponent = Login;
-   else if (modalView == "register")
-      ViewComponent = Register;
+   if (modalView == "signin")
+      ViewComponent = ModalSignin;
+   else if (modalView == "signup")
+      ViewComponent = ModalSignup;
+   else if (modalView == "account")
+      ViewComponent = ModalAccount;
 
    const onClose = () => {
       changeModal(null);

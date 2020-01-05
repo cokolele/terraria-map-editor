@@ -1,10 +1,11 @@
 import React, { useReducer } from "react";
 
 import Menu from "/components/menu.jsx";
+import Optionbar from "/components/optionbar.jsx";
 import Toolbar from "/components/toolbar.jsx";
 import Canvas from "/components/canvas.jsx";
 import Sidebar from "/components/sidebar.jsx";
-import StatusBar from "/components/status-bar.jsx";
+import Statusbar from "/components/statusbar.jsx";
 import Modal from "/components/modal.jsx";
 import "./editor.css";
 
@@ -13,9 +14,10 @@ function Editor() {
       <div className="editor">
          <Canvas/>
          <Menu/>
+         <Optionbar/>
          <Toolbar/>
          <Sidebar/>
-         <StatusBar/>
+         <Statusbar/>
          <Modal/>
       </div>
    )

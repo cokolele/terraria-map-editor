@@ -1,8 +1,8 @@
-.status-bar-container, .status-bar, .status-bar > * {
+.statusbar-container, .statusbar, .statusbar > * {
     height: 1.15rem;
 }
 
-.status-bar-container {
+.statusbar-container {
     user-select: none;
     -moz-user-select: none;
     background-color: #4a4a4a;
@@ -11,12 +11,12 @@
     border-right-width: 1px;
 }
 
-.status-bar {
+.statusbar {
     display: inline-flex;
     vertical-align: top;
 }
 
-.status-bar > * {
+.statusbar > * {
     border: 0 solid #424242;
     box-sizing: border-box;
     border-width: 1px 1px 0 0;

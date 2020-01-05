@@ -1,4 +1,4 @@
-.modal-login-input-inline {
+.modal-sign-input-inline {
     padding: 0 5px;
 
     color: #96d2ff;
@@ -6,6 +6,6 @@
     cursor: pointer;
 }
 
-.modal-login-input-inline:first-child {
+.modal-sign-input-inline:first-child {
     padding-left: 0;
 }

@@ -1,7 +1,6 @@
 .modal-background {
     position: relative;
     z-index: 5000;
-    grid-area: 1 / 1 / 4 / 4;
     background-color: rgba(0,0,0,0.5);
 
     display: flex;
@@ -10,10 +9,11 @@
 }
 
 .modal-container {
+    min-width: 300px;
+    min-height: 28px;
     position: relative;
     background-color: #535353;
     padding: 30px 50px;
-    min-width: 300px;
     border-radius: 5px;
 }
 

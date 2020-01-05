@@ -1,13 +1,17 @@
 import "/utils/polyfills/polyfill-requestAnimationFrame.js";
 
+import tileColors from "/utils/dbs/tile-colors.json";
+
 import store from "/state/store.js";
-import { changeWorldObject, changeWorldFile } from "/state/modules/app.js";
+import { changeWorldObject, changeWorldFile, changeRunning } from "/state/modules/app.js";
 import { changePercentage, changeDescription, changeError } from "/state/modules/status.js";
 import { map } from "/utils/number.js";
 
 let worldFile, world;
 let canvas, ctx;
-let image, imageUrl = new Image();
+let image;
+let offscreenCanvas = document.createElement("canvas");
+let offscreenCtx = offscreenCanvas.getContext("2d");
 
 let running = false;
 
@@ -25,6 +29,9 @@ let tilePixelRatio;
 let posX;
 let posY;
 
+let tool = "move";
+let isPencilDrawing = false;
+
 const changeCanvasWorldFile = (_worldFile) => {
     worldFile = _worldFile;
 
@@ -32,6 +39,25 @@ const changeCanvasWorldFile = (_worldFile) => {
         stop();
     else
         load();
+}
+
+const changeCanvasTool = (_tool) => {
+    tool = _tool;
+}
+
+const getCanvasMapData = ({ name, imageUrlPng }) => {
+    let data = {};
+
+    if (name && running)
+        data.name = worldFile.name;
+
+    if (imageUrlPng && running) {
+        data.imageUrlPng = offscreenCanvas.toDataURL("image/png;base64");
+    }
+
+    if (Object.entries(data).length === 0 && data.constructor === Object) //empty object
+        return null;
+    return data;
 }
 
 function init(_canvas) {
@@ -111,15 +137,12 @@ function getMouseCanvasPosition(e) {
 
 function getMouseImagePosition(e) {
     let [x, y] = getMouseCanvasPosition(e);
-
-    x = Math.floor(map(x, 0, canvas.width, posX, posX + viewWidthTiles));
-    y = Math.floor(map(y, 0, canvas.height, posY, posY + viewHeightTiles));
-
-    console.log(x, y);
+    return [Math.floor(map(x, 0, canvas.width, posX, posX + viewWidthTiles)), Math.floor(map(y, 0, canvas.height, posY, posY + viewHeightTiles))]
 }
 
 function onCanvasClick(e) {
-    getMouseImagePosition(e);
+    if (tool == "pencil")
+        onPencilClick(e);
 }
 
 function onCanvasWheel(e) {
@@ -134,26 +157,32 @@ function onCanvasWheel(e) {
 }
 
 function onCanvasMouseDown(e) {
-    if (e.buttons == 1 || e.buttons == 4) {
+    if ((e.buttons == 1 && tool == "move") || e.buttons == 4) {
         isDragging = true;
         canvas.classList.add("grabbed");
+    }
+    else if (e.buttons == 1 && tool == "pencil") {
+        isPencilDrawing = true;
     }
 }
 
 function onCanvasMouseUp(e) {
     isDragging = false;
+    isPencilDrawing = false;
     deltaX = deltaY = 0;
     prevDragX = prevDragY = null;
     canvas.classList.remove("grabbed");
 }
 
 function onCanvasMouseMove(e) {
-    if (!isDragging)
-        return;
+    if (isDragging)
+        onDrag(e);
+    else if (isPencilDrawing)
+        onPencilDrag(e);
+}
 
-    const rect = e.target.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - Math.floor(rect.top);
+function onDrag(e) {
+    const [x, y] = getMouseCanvasPosition(e);
 
     if (prevDragX == null) {
         prevDragX = x;
@@ -169,6 +198,34 @@ function onCanvasMouseMove(e) {
 
     posX -= deltaX / tilePixelRatio;
     posY -= deltaY / tilePixelRatio;
+}
+
+function onPencilDrag(e) {
+    const [x, y] = getMouseImagePosition(e);
+
+    if (prevDragX == null || (x != prevDragX || y != prevDragY)) {
+        prevDragX = x;
+        prevDragY = y;
+        const color = tileColors.tiles[0];
+        const offset = (world.header.maxTilesX * y + x) * 4;
+        image.data[offset] = color.r;
+        image.data[offset+1] = color.g;
+        image.data[offset+2] = color.b;
+        image.data[offset+3] = 255;
+        updateImage();
+    }
+}
+
+function onPencilClick(e) {
+    const [x, y] = getMouseImagePosition(e);
+
+    const color = tileColors.tiles[0];
+    const offset = (world.header.maxTilesX * y + x) * 4;
+    image.data[offset] = color.r;
+    image.data[offset+1] = color.g;
+    image.data[offset+2] = color.b;
+    image.data[offset+3] = 255;
+    updateImage();
 }
 
 function correctPositions() {
@@ -191,19 +248,17 @@ function correctPositions() {
             posX = world.header.maxTilesX - viewWidthTiles;
 }
 
-let offscreenCanvas = document.createElement("canvas");
-let offscreenCtx = offscreenCanvas.getContext("2d");
-function updateImageUrl() {
+function updateImage() {
     offscreenCtx.putImageData(image, 0, 0);
-    //imageUrl.src = offscreenCanvas.toDataURL();
 }
 
 function start() {
     offscreenCanvas.width = world.header.maxTilesX;
     offscreenCanvas.height = world.header.maxTilesY;
-    updateImageUrl();
+    updateImage();
     store.dispatch(changeDescription("Finished"));
     running = true;
+    store.dispatch(changeRunning(true));
     tick(0);
 }
 
@@ -236,6 +291,9 @@ function preRender() {
 
 function stop() {
     running = false;
+    store.dispatch(changeRunning(false));
+    zoomLevel = 0;
+    zoomFactors = [];
     canvas.height++;
     canvas.height--;
 }
@@ -248,7 +306,6 @@ const tick = (T) => {
     refreshCanvas();
     correctPositions();
 
-    //updateImageUrl();
     ctx.drawImage(offscreenCanvas,
         posX, posY,
         viewWidthTiles, viewHeightTiles,
@@ -261,5 +318,7 @@ const tick = (T) => {
 
 export default init;
 export {
-    changeCanvasWorldFile
+    changeCanvasWorldFile,
+    changeCanvasTool,
+    getCanvasMapData,
 };

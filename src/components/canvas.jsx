@@ -1,11 +1,11 @@
 import React, { useRef, useEffect } from "react";
 import { connect } from "react-redux";
 
-import init, { changeCanvasWorldFile } from "/app/canvas/main.js";
+import init, { changeCanvasWorldFile, changeCanvasTool } from "/app/canvas/main.js";
 
 import "/components/styles/canvas.css";
 
-function Canvas({ worldFile, statusDescription }) {
+function Canvas({ worldFile, statusDescription, tool, changeRunning }) {
    const canvasEl = useRef(null);
 
    useEffect(() => {
@@ -15,6 +15,10 @@ function Canvas({ worldFile, statusDescription }) {
    useEffect(() => {
       changeCanvasWorldFile(worldFile);
    }, [worldFile]);
+
+   useEffect(() => {
+      changeCanvasTool(tool);
+   }, [tool]);
 
    return (
       <div className="canvas-container">
@@ -35,6 +39,7 @@ function Canvas({ worldFile, statusDescription }) {
 export default connect(state => {
    return {
       worldFile: state.app.worldFile,
-      statusDescription: state.status.description
+      statusDescription: state.status.description,
+      tool: state.app.toolbar.tool
    }
 })(Canvas);

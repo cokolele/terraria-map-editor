@@ -2,6 +2,7 @@ import menuOptionsConfig from "/app/menu.js";
 
 const CHANGE_WORLD_FILE = "twe/app/CHANGE_WORLD_FILE";
 const CHANGE_WORLD_OBJECT = "twe/app/CHANGE_WORLD_OBJECT";
+const CHANGE_RUNNING = "twe/app/CHANGE_RUNNING";
 const CHANGE_USER = "twe/app/CHANGE_USER";
 const CHANGE_MODAL = "twe/app/CHANGE_MODAL";
 const TOGGLE_VIEW_OPTION = "twe/app/TOGGLE_VIEW_OPTION";
@@ -10,6 +11,7 @@ const CHANGE_TOOLBAR_TOOL = "twe/app/CHANGE_TOOLBAR_TOOL";
 const default_state = {
     worldFile: null,
     worldObject: null,
+    running: false,
     loggedIn: false,
     user: null,
     modal: null,
@@ -34,6 +36,11 @@ export default function app(state = default_state, action) {
             return {
                 ...state,
                 worldObject: action.worldObject
+            };
+        case CHANGE_RUNNING:
+            return {
+                ...state,
+                running: action.running
             };
         case CHANGE_USER:
             if (action.user === null)
@@ -73,6 +80,10 @@ function changeWorldObject(worldObject) {
     return { type: CHANGE_WORLD_OBJECT, worldObject };
 }
 
+function changeRunning(running) {
+    return { type: CHANGE_RUNNING, running };
+}
+
 function changeUser(user) {
     return { type: CHANGE_USER, user };
 }
@@ -92,6 +103,7 @@ function changeToolbarTool(tool) {
 export {
     changeWorldFile,
     changeWorldObject,
+    changeRunning,
     changeUser,
     changeModal,
     toggleViewOption,

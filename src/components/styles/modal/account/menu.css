@@ -1,0 +1,43 @@
+.modal-account-menu {
+    display: flex;
+    flex-direction: column;
+    max-width: 50%;
+}
+
+.modal-account-menu-category {
+    display: inline-flex;
+    height: 4rem;
+    padding: 0 2rem 0 1rem;
+
+    font-family: "Lato", sans-serif;
+    color: #f0f0f0;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 4rem;
+    letter-spacing: 0.4px;
+    text-overflow: ellipsis;
+
+    user-select: none;
+    -moz-user-select: none;
+    transition: text-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.modal-account-menu-category:hover {
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+.modal-account-menu-category--selected {
+    color: #5cc2ff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.modal-account-menu-category svg {
+    fill: #f0f0f0;
+    width: 35px;
+    margin-right: 10px;
+}
+
+.modal-account-menu-category--selected svg {
+    fill: #5cc2ff;
+}

@@ -3,11 +3,11 @@
     padding: 1px 1px 0 0;
     background-color: #474747;
     border: 0 solid #383838;
-    border-width: 1px 1px 0 0;
+    border-width: 0 1px 0 0;
 }
 
 .toolbar {
-    width: 37px;
+    width: 2.65rem;
     height: 100%;
     box-sizing: border-box;
     background-color: #535353;

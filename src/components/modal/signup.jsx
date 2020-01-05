@@ -4,15 +4,19 @@ import { changeUser, changeModal } from "/state/modules/app.js";
 
 import api from "/utils/api/api.js";
 
-import ModalLoginInput from "/components/modal/login-input.jsx";
-import ModalLoginInputInline from "/components/modal/login-input-inline.jsx"
-import "/components/styles/modal/login.css";
+import ModalSignInput from "/components/modal/sign/input.jsx";
+import ModalSignInputInline from "/components/modal/sign/input-inline.jsx"
+import "/components/styles/modal/sign.css";
 
-function ModalLogin({ changeUser, changeModal }) {
+function ModalSignup({ changeUser, changeModal }) {
    const [username, setUsername] = useState("");
    const [password, setPassword] = useState("");
+   const [password2, setPassword2] = useState("");
+   const [email, setEmail] = useState("");
    const [usernameError, setUsernameError] = useState("");
    const [passwordError, setPasswordError] = useState("");
+   const [password2Error, setPassword2Error] = useState("");
+   const [emailError, setEmailError] = useState("");
    const [submitError, setSubmitError] = useState("");
 
    useEffect(() => {
@@ -27,13 +31,13 @@ function ModalLogin({ changeUser, changeModal }) {
       return () => {
          window.removeEventListener("keydown", keyDownHandler);
       };
-   }, []);
+   }, [username, password, password2, email]);
 
    const usernameRegexp = /^[a-z0-9_-]{3,16}$/;
    const checkInputsErrors = () => {
       const usernameLength = username.trim().length;
       const passwordLength = password.trim().length;
-      let _usernameError, _passwordError;
+      let _usernameError, _passwordError, _password2Error, _emailError;
 
       if (usernameLength === 0)
          _usernameError = "Empty username";
@@ -53,10 +57,22 @@ function ModalLogin({ changeUser, changeModal }) {
       else
          _passwordError = "";
 
+      if (password2 !== password)
+         _password2Error = "Password don't match";
+      else
+         _password2Error = "";
+
+      if (email.trim().length === 0)
+         _emailError = "Empty email";
+      else
+         _emailError = "";
+
       setUsernameError(_usernameError);
       setPasswordError(_passwordError);
+      setPassword2Error(_password2Error);
+      setEmailError(_emailError);
 
-      if (_passwordError === "" && _usernameError === "")
+      if (_passwordError === "" && _usernameError === "" && _password2Error === "" && _emailError === "")
          return true;
       return false;
    }
@@ -69,6 +85,17 @@ function ModalLogin({ changeUser, changeModal }) {
    const onSubmit = async () => {
       if (!checkInputsErrors())
          return;
+
+      const register = await api.post("/session/register", {
+         username,
+         password,
+         email
+      });
+
+      if (register.status != "ok") {
+         setSubmitError(register.message);
+         return;
+      }
 
       const login = await api.post("/session/login", {
          username,
@@ -83,31 +110,29 @@ function ModalLogin({ changeUser, changeModal }) {
       const session = await api.get("/session");
 
       if (session.status != "ok") {
-         setSubmitError(session.error);
+         setSubmitError(session.message);
+         return;
       }
 
       changeUser(session.user);
       changeModal(null);
    }
 
-   const onClickSignUp = () => {
-      changeModal("register");
+   const onClickSignIn = () => {
+      changeModal("signin");
    }
 
    return (
-      <div className="modal-login">
-         <span className="modal-login-headtext">Sign In</span>
-         <ModalLoginInput text placeholder="username" value={username} setValue={setUsername} onBlur={onInputsBlur} errorMessage={usernameError}/>
-         <ModalLoginInput password placeholder="password" value={password} setValue={setPassword} onBlur={onInputsBlur} errorMessage={passwordError}/>
-         <ModalLoginInput submit onClick={onSubmit} value="SIGN IN" errorMessage={submitError}/>
-         <span className="modal-login-text">
-            <ModalLoginInputInline link placeholder="Forgot username" onClick={e => {console.log("clicked")}}/>
-            <span>·</span>
-            <ModalLoginInputInline link placeholder="Forgot password" onClick={e => {console.log("clicked")}}/>
-         </span>
-         <span className="modal-login-text">
-            <span>Need an account ?</span>
-            <ModalLoginInputInline link placeholder="SIGN UP" onClick={onClickSignUp}/>
+      <div className="modal-sign">
+         <span className="modal-sign-headtext">Sign Up</span>
+         <ModalSignInput text placeholder="username" value={username} setValue={setUsername} onBlur={onInputsBlur} errorMessage={usernameError}/>
+         <ModalSignInput password placeholder="password" value={password} setValue={setPassword} onBlur={onInputsBlur} errorMessage={passwordError}/>
+         <ModalSignInput password placeholder="password again" value={password2} setValue={setPassword2} onBlur={onInputsBlur} errorMessage={password2Error}/>
+         <ModalSignInput text placeholder="e-mail address" value={email} setValue={setEmail} onBlur={onInputsBlur} errorMessage={emailError}/>
+         <ModalSignInput submit onClick={onSubmit} value="SIGN UP" errorMessage={submitError}/>
+         <span className="modal-sign-text">
+            <span>Already have an account ?</span>
+            <ModalSignInputInline link placeholder="SIGN IN" onClick={onClickSignIn}/>
          </span>
       </div>
    );
@@ -116,5 +141,5 @@ function ModalLogin({ changeUser, changeModal }) {
 export default connect(
    null,
    { changeUser, changeModal }
-)(ModalLogin);
+)(ModalSignup);
 

@@ -21,13 +21,15 @@ const create = (cfg) => {
     const sessionSettings = {
         cookie: {
             domain: app.get("domain"),
-            maxAge: 2592000,
-            name: "tweSessId"
+            httpOnly: true,
+            maxAge: 2592000000,
         },
+        name: "tweSessId",
         store: new MySQLStore({}, db),
         secret: secrets.sessionSecret,
         resave: false,
-        saveUninitialized: false
+        saveUninitialized: false,
+        rolling: true
     }
 
     if (app.get("env") == "production") {
