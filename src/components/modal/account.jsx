@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { changeUser, changeModal } from "/state/modules/app.js";
-
+import { StateChangeUser, stateChangeModal } from "/state/modules/app.js";
 import api from "/utils/api/api.js";
 
 import { AccountBoxIcon, FolderIcon } from "/components/icon.jsx";
@@ -9,6 +8,7 @@ import ModalAccountMenu from "/components/modal/account/menu.jsx";
 import ModalAccountCategoryAccount from "/components/modal/account/category-account.jsx";
 import ModalAccountCategoryMaps from "/components/modal/account/category-maps.jsx";
 import "/components/styles/modal/account.css";
+
 
 const categoriesConfig = [
    {
@@ -23,11 +23,11 @@ const categoriesConfig = [
    }
 ];
 
-function ModalAccount({ changeUser, changeModal }) {
+function ModalAccount({ StateChangeUser, stateChangeModal }) {
    useEffect(() => {
       const keyDownHandler = (e) => {
          if (e.code == "Escape")
-            changeModal(null);
+            stateChangeModal(null);
       };
 
       window.addEventListener("keydown", keyDownHandler);
@@ -51,6 +51,6 @@ function ModalAccount({ changeUser, changeModal }) {
 
 export default connect(
    null,
-   { changeUser, changeModal }
+   { StateChangeUser, stateChangeModal }
 )(ModalAccount);
 

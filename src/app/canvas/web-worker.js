@@ -1,5 +1,6 @@
 import terrariaWorldParser from "/../terraria-world-parser/src/browser/terraria-world-parser.js";
 import tileColors from "/utils/dbs/tile-colors.json";
+import LAYERS from "./struct_LAYERS.js";
 import "/utils/polyfills/polyfill-imageData.js";
 
 self.onmessage = async ({ data }) => {
@@ -8,18 +9,19 @@ self.onmessage = async ({ data }) => {
             case "PARSE_AND_RENDER_MAP_RETURN_WITHOUT_BLOCKS":
                 await parse(data.file);
                 render();
+
                 postMessage({
-                    action: "RETURN_IMAGE_INCOMING",
+                    action: "RETURN_IMAGES_INCOMING",
                 });
                 postMessage({
-                    action: "RETURN_IMAGE",
-                    image,
+                    action: "RETURN_IMAGES",
+                    layerImage
                 });
                 postMessage({
-                    action: "RETURN_PARSED_MAP_INCOMING",
+                    action: "RETURN_WORLD_OBJECT_INCOMING",
                 });
                 postMessage({
-                    action: "RETURN_PARSED_MAP",
+                    action: "RETURN_WORLD_OBJECT",
                     world: {
                         fileFormatHeader: world.fileFormatHeader,
                         header: world.header,
@@ -48,7 +50,7 @@ self.onmessage = async ({ data }) => {
 }
 
 let world;
-let image;
+let layerImage = {};
 
 const parse = async (file) => {
     postMessage({
@@ -69,9 +71,11 @@ const render = () => {
         return;
     }
 
-    image = new ImageData(world.header.maxTilesX, world.header.maxTilesY)
+    Object.values(LAYERS).forEach(LAYER => {
+        layerImage[LAYER] = new ImageData(world.header.maxTilesX, world.header.maxTilesY);
+    })
 
-    const layers = {
+    const bgLayers = {
         space: 80, // below
         // sky - betweens
         ground: world.header.worldSurface, //above
@@ -98,22 +102,38 @@ const render = () => {
         }
 
         for (let x = 0; x < world.header.maxTilesX; x++) {
-            let color;
-            if (world.worldTiles[x][y].blockId || world.worldTiles[x][y].blockId == 0)  color = tileColors.tiles[world.worldTiles[x][y].blockId];
-            else if (world.worldTiles[x][y].liquid)                                     color = tileColors.liquids[world.worldTiles[x][y].liquid.type];
-            else if (world.worldTiles[x][y].wallId)                                     color = tileColors.walls[world.worldTiles[x][y].wallId];
+            let pixel = {};
+            if (world.worldTiles[x][y].blockId || world.worldTiles[x][y].blockId == 0) {
+                pixel.color = tileColors.tiles[world.worldTiles[x][y].blockId];
+                pixel.LAYER = LAYERS.TILES;
+            }
+            else if (world.worldTiles[x][y].liquid) {
+                pixel.color = tileColors.liquids[world.worldTiles[x][y].liquid.type];
+                pixel.LAYER = LAYERS.TILES;
+            }
+            else if (world.worldTiles[x][y].wallId) {
+                pixel.color = tileColors.walls[world.worldTiles[x][y].wallId];
+                pixel.LAYER = LAYERS.WALLS;
+            }
             else {
-                if (y < layers.space)                                                   color = tileColors.backgrounds.space;
-                else if (y >= layers.space && y < layers.ground)                        color = tileColors.backgrounds.sky;
-                else if (y >= layers.ground && y < layers.cavern)                       color = tileColors.backgrounds.ground;
-                else if (y >= layers.cavern && y < layers.underworld)                   color = tileColors.backgrounds.cavern;
-                else if (y >= layers.underworld)                                        color = tileColors.backgrounds.underworld;
+                if (y < bgLayers.space)
+                    pixel.color = tileColors.backgrounds.space;
+                else if (y >= bgLayers.space && y < bgLayers.ground)
+                    pixel.color = tileColors.backgrounds.sky;
+                else if (y >= bgLayers.ground && y < bgLayers.cavern)
+                    pixel.color = tileColors.backgrounds.ground;
+                else if (y >= bgLayers.cavern && y < bgLayers.underworld)
+                    pixel.color = tileColors.backgrounds.cavern;
+                else if (y >= bgLayers.underworld)
+                    pixel.color = tileColors.backgrounds.underworld;
+
+                pixel.LAYER = LAYERS.BACKGROUND;
             }
 
-            image.data[position] = color.r;
-            image.data[position + 1] = color.g;
-            image.data[position + 2] = color.b;
-            image.data[position + 3] = 255;
+            layerImage[pixel.LAYER].data[position] = pixel.color.r;
+            layerImage[pixel.LAYER].data[position + 1] = pixel.color.g;
+            layerImage[pixel.LAYER].data[position + 2] = pixel.color.b;
+            layerImage[pixel.LAYER].data[position + 3] = 255;
 
             position += 4;
         }

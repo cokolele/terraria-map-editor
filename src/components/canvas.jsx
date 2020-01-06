@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from "react";
 import { connect } from "react-redux";
 
-import init, { changeCanvasWorldFile, changeCanvasTool } from "/app/canvas/main.js";
-
 import "/components/styles/canvas.css";
+
+import init, { changeCanvasWorldFile, changeCanvasTool } from "/app/canvas/main.js";
 
 function Canvas({ worldFile, statusDescription, tool, changeRunning }) {
    const canvasEl = useRef(null);

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { changeModal } from "/state/modules/app.js";
+import { stateChangeModal } from "/state/modules/app.js";
 
 import { CrossIcon } from "/components/icon.jsx";
 import "/components/styles/modal.css";
@@ -9,7 +9,7 @@ import ModalSignin from "/components/modal/signin.jsx";
 import ModalSignup from "/components/modal/signup.jsx";
 import ModalAccount from "/components/modal/account.jsx";
 
-const Modal = ({ modalView, changeModal }) => {
+const Modal = ({ modalView, stateChangeModal }) => {
    let ViewComponent;
    if (modalView == "signin")
       ViewComponent = ModalSignin;
@@ -19,7 +19,7 @@ const Modal = ({ modalView, changeModal }) => {
       ViewComponent = ModalAccount;
 
    const onClose = () => {
-      changeModal(null);
+      stateChangeModal(null);
    }
 
    if (!modalView)
@@ -43,5 +43,5 @@ export default connect(
          modalView: state.app.modal
       };
    },
-   { changeModal }
+   { stateChangeModal }
 )(Modal);

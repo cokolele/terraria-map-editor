@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React from "react";
 
 import Menu from "/components/menu.jsx";
 import Optionbar from "/components/optionbar.jsx";

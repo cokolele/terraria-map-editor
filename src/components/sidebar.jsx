@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-
 import { connect } from "react-redux";
-
-import config from "/app/sidebar.js";
 
 import SidebarTabOption from "/components/sidebar/tab-option.jsx";
 import SidebarInputInline from "/components/sidebar/input-inline.jsx";
 import TabGeneral from "/components/sidebar/tab-general.jsx";
 import "/components/styles/sidebar.css";
+
+import config from "/app/sidebar.js";
 
 function Sidebar({ show, worldObject }) {
    const [currentTab, setCurrentTab] = useState(0);

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-import folders from "/app/menu.js";
-
 import MenuFolder from "/components/menu/folder.jsx";
 import MenuFolderAccount from "/components/menu/folder-account.jsx";
 import "/components/styles/menu.css";
+
+import folders from "/app/menu.js";
 
 function Menu() {
    const [currentTab, setCurrentTab] = useState(false);

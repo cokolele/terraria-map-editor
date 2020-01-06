@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
-
 import { connect } from "react-redux";
-import { changePercentage } from "/state/modules/status.js";
+import { stateChangePercentage } from "/state/modules/status.js";
 
 import "/components/styles/statusbar.css";
 
-function StatusBar({ percentage, description, error, changePercentage }) {
+function StatusBar({ percentage, description, error, stateChangePercentage }) {
    useEffect(() => {
       if (percentage == 100) {
-         changePercentage(null);
+         stateChangePercentage(null);
       }
    }, [percentage]);
 
@@ -35,5 +34,5 @@ export default connect(
          error: state.status.error
       };
    },
-   { changePercentage }
+   { stateChangePercentage }
 )(StatusBar);

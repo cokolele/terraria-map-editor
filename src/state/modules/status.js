@@ -32,20 +32,20 @@ export default function status(state = default_state, action) {
 }
 
 // Action Creators
-function changePercentage(percentage) {
+function stateChangePercentage(percentage) {
     return { type: PERCENTAGE_CHANGE, percentage };
 }
 
-function changeDescription(description) {
+function stateChangeDescription(description) {
     return { type: DESCRIPTION_CHANGE, description };
 }
 
-function changeError(error) {
+function stateChangeError(error) {
     return { type: ERROR_CHANGE, error };
 }
 
 export {
-    changePercentage,
-    changeDescription,
-    changeError
+    stateChangePercentage,
+    stateChangeDescription,
+    stateChangeError
 };

@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { changeToolbarTool } from "/state/modules/app.js";
+import { stateChangeToolbarTool } from "/state/modules/app.js";
 
 import ToolButton from "/components/toolbar/tool-button.jsx";
 import "/components/styles/toolbar.css";
 
 import toolsConfig from "/app/tools.js";
 
-function Toolbar({ show, selectedTool, changeToolbarTool }) {
+function Toolbar({ show, selectedTool, stateChangeToolbarTool }) {
    const onToolClick = (toolName) => {
-      changeToolbarTool(toolName);
+      stateChangeToolbarTool(toolName);
    };
 
    return (
@@ -31,5 +31,5 @@ export default connect(state => {
          show: state.app.view.toolbar,
          selectedTool: state.app.toolbar.tool
       }
-   }, { changeToolbarTool }
+   }, { stateChangeToolbarTool }
 )(Toolbar);

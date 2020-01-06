@@ -72,40 +72,40 @@ export default function app(state = default_state, action) {
 }
 
 // Action Creators
-function changeWorldFile(worldFile) {
+function stateChangeWorldFile(worldFile) {
     return { type: CHANGE_WORLD_FILE, worldFile };
 }
 
-function changeWorldObject(worldObject) {
+function stateChangeWorldObject(worldObject) {
     return { type: CHANGE_WORLD_OBJECT, worldObject };
 }
 
-function changeRunning(running) {
+function stateChangeRunning(running) {
     return { type: CHANGE_RUNNING, running };
 }
 
-function changeUser(user) {
+function stateChangeUser(user) {
     return { type: CHANGE_USER, user };
 }
 
-function changeModal(modal) {
+function stateChangeModal(modal) {
     return { type: CHANGE_MODAL, modal }
 }
 
-function toggleViewOption(option) {
+function stateToggleViewOption(option) {
     return { type: TOGGLE_VIEW_OPTION, option };
 }
 
-function changeToolbarTool(tool) {
+function stateChangeToolbarTool(tool) {
     return { type: CHANGE_TOOLBAR_TOOL, tool };
 }
 
 export {
-    changeWorldFile,
-    changeWorldObject,
-    changeRunning,
-    changeUser,
-    changeModal,
-    toggleViewOption,
-    changeToolbarTool
+    stateChangeWorldFile,
+    stateChangeWorldObject,
+    stateChangeRunning,
+    stateChangeUser,
+    stateChangeModal,
+    stateToggleViewOption,
+    stateChangeToolbarTool
 };

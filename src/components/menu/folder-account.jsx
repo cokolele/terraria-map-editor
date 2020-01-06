@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { changeModal } from "/state/modules/app.js";
+import { stateChangeModal } from "/state/modules/app.js";
 
 import { AccountBoxIcon } from "/components/icon.jsx";
 import MenuOption from "/components/menu/option.jsx";
@@ -9,7 +9,7 @@ import "/components/styles/menu/folder-account.css";
 
 import { GithubIcon } from "/components/icon.jsx";
 
-function MenuFolderAccount({ loggedIn, user, changeModal, __templink }) {
+function MenuFolderAccount({ loggedIn, user, stateChangeModal, __templink }) {
 
    const onClick = e => {
       if (__templink) {
@@ -19,9 +19,9 @@ function MenuFolderAccount({ loggedIn, user, changeModal, __templink }) {
       }
 
       if (!loggedIn)
-         changeModal("signin");
+         stateChangeModal("signin");
       else
-         changeModal("account");
+         stateChangeModal("account");
    }
 
    return (
@@ -48,5 +48,5 @@ export default connect(state => {
          user: state.app.user
       };
    },
-   { changeModal }
+   { stateChangeModal }
 )(MenuFolderAccount);
