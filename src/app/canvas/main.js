@@ -4,8 +4,8 @@
 
 import "/utils/polyfills/polyfill-requestAnimationFrame.js";
 
-import tileColors from "/utils/dbs/tile-colors.json";
-import LAYERS from "./struct_LAYERS.js";
+import pointColors from "./pointColors.js";
+import LAYERS from "./enum-LAYERS.js";
 
 import store from "/state/store.js";
 import { stateChangeWorldObject, stateChangeWorldFile, stateChangeRunning } from "/state/modules/app.js";
@@ -86,7 +86,7 @@ function load() {
     store.dispatch(stateChangeError(null));
 
     try {
-        const worker = new Worker("./web-worker.js");
+        const worker = new Worker("./webWorker.js");
 
         worker.onmessage = ({ data }) => {
             switch(data.action) {
@@ -143,6 +143,8 @@ function load() {
 function onCanvasClick(e) {
     if (tool == "pencil")
         onPencilClick(e);
+    else if (tool == "bucket")
+        onBucketClick(e);
 }
 
 function onCanvasWheel(e) {
@@ -191,6 +193,80 @@ function onCanvasMouseMove(e) {
         onPencilDrag(e);
 }
 
+function getMouseCanvasPosition(e) {
+    const rect = e.target.getBoundingClientRect();
+    return [e.clientX - rect.left, e.clientY - Math.floor(rect.top)];
+}
+
+function getMouseImagePosition(e) {
+    let [x, y] = getMouseCanvasPosition(e);
+    return [Math.floor(map(x, 0, canvas.width, posX, posX + viewWidthTiles)), Math.floor(map(y, 0, canvas.height, posY, posY + viewHeightTiles))]
+}
+
+function getPointColor(LAYER, id) {
+    return pointColors[LAYER][id];
+}
+
+function setLayerImagePointColor(LAYER, color, x, y, push = true) {
+    if (typeof color == "number") {
+        color = getPointColor(LAYER, color);
+        console.log(color);
+    }
+
+    const offset = (world.header.maxTilesX * y + x) * 4;
+    layerImage[LAYER].data[offset] = color.r;
+    layerImage[LAYER].data[offset+1] = color.g;
+    layerImage[LAYER].data[offset+2] = color.b;
+    layerImage[LAYER].data[offset+3] = 255;
+
+    if (push)
+        pushLayerImage(LAYER);
+}
+
+function setLayerImageRectangleColor(LAYER, color, point1, point2) {
+    if (typeof color == "number")
+        color = getPointColor(LAYER, color);
+
+    const [x1, y1] = point1;
+    const [x2, y2] = point2;
+
+    for (let y = y1; y < y2; y++)
+        for (let x = x1; x < x2; x++)
+            setLayerImagePointColor(LAYER, color, x, y, false);
+
+    pushLayerImage(LAYER);
+}
+
+function setLayerImageFourwayFillColor(LAYER, fillColor, x, y) {
+    let pointsBuffer = [[x,y]];
+    let offset = (world.header.maxTilesX * y + x) * 4;
+    let pointColor = {
+        r: layerImage[LAYER].data[offset],
+        g: layerImage[LAYER].data[offset+1],
+        b: layerImage[LAYER].data[offset+2],
+    };
+    const boundaryColor = pointColor;
+
+    if (typeof fillColor == "number")
+        fillColor = getPointColor(LAYER, fillColor);
+
+    while(pointsBuffer.length !== 0) {
+        const [x, y] = pointsBuffer.pop();
+
+        offset = (world.header.maxTilesX * y + x) * 4;
+        pointColor = {
+            r: layerImage[LAYER].data[offset],
+            g: layerImage[LAYER].data[offset+1],
+            b: layerImage[LAYER].data[offset+2],
+        };
+
+        if (pointColor.r == boundaryColor.r && pointColor.g == boundaryColor.g && pointColor.b == boundaryColor.b) {
+            setLayerImagePointColor(LAYER, fillColor, x, y, false);
+            pointsBuffer.push([x-1, y], [x+1, y], [x, y-1], [x, y+1]);
+        }
+    }
+}
+
 function onDrag(e) {
     const [x, y] = getMouseCanvasPosition(e);
 
@@ -216,23 +292,20 @@ function onPencilDrag(e) {
     if (prevDragX == null || (x != prevDragX || y != prevDragY)) {
         prevDragX = x;
         prevDragY = y;
-        editLayerImage(LAYERS.TILES, 0, x, y);
+        setLayerImageRectangleColor(LAYERS.TILES, 0, [x-2, y-2], [x+2, y+2]);
     }
 }
 
 function onPencilClick(e) {
     const [x, y] = getMouseImagePosition(e);
-    editLayerImage(LAYERS.BACKGROUND, 0, x, y);
+    setLayerImageRectangleColor(LAYERS.TILES, 0, [x-2, y-2], [x+2, y+2]);
 }
 
-function getMouseCanvasPosition(e) {
-    const rect = e.target.getBoundingClientRect();
-    return [e.clientX - rect.left, e.clientY - Math.floor(rect.top)];
-}
+function onBucketClick(e) {
+    const [x, y] = getMouseImagePosition(e);
 
-function getMouseImagePosition(e) {
-    let [x, y] = getMouseCanvasPosition(e);
-    return [Math.floor(map(x, 0, canvas.width, posX, posX + viewWidthTiles)), Math.floor(map(y, 0, canvas.height, posY, posY + viewHeightTiles))]
+    setLayerImageFourwayFillColor(LAYERS.TILES, 0, x, y);
+    pushLayerImage(LAYERS.TILES);
 }
 
 function correctPositions() {
@@ -253,40 +326,6 @@ function correctPositions() {
             posX = 0;
         else
             posX = world.header.maxTilesX - viewWidthTiles;
-}
-
-function editLayerImage(LAYER, LAYERId, param1, param2) {
-    let a, b;
-    let x, y;
-    const color = tileColors.tiles[LAYERId];
-
-    if (typeof param1 == "object") {
-        a = param1;
-        b = param2;
-    } else if (typeof param1 == "number") {
-        x = param1;
-        y = param2;
-    }
-
-    if (x && y) {
-        const offset = (world.header.maxTilesX * y + x) * 4;
-        layerImage[LAYER].data[offset] = color.r;
-        layerImage[LAYER].data[offset+1] = color.g;
-        layerImage[LAYER].data[offset+2] = color.b;
-        layerImage[LAYER].data[offset+3] = 255;
-        pushLayerImage(LAYER);
-    }
-
-    else if (a && b) {/*todo
-        let width, height, offset;
-        const width = a[0] < b[0] ? b[0] - a[0] : a[0] - b[0];
-        const height = a[1] < b[1] ? b[1] - a[1] : a[1] - b[1];
-
-        for (let x = 0; x < width; x++)
-            for (let y = 0; y < height; y++) {
-
-            }
-    */}
 }
 
 function pushLayerImage(LAYER) {
@@ -363,6 +402,7 @@ const tick = (T) => {
             viewWidthTiles, viewHeightTiles,
             0, 0,
             canvas.width, canvas.height);
+
     });
 
     if (running)

@@ -1,6 +1,6 @@
 import terrariaWorldParser from "/../terraria-world-parser/src/browser/terraria-world-parser.js";
-import tileColors from "/utils/dbs/tile-colors.json";
-import LAYERS from "./struct_LAYERS.js";
+import pointColors from "./pointColors.js";
+import LAYERS from "./enum-LAYERS.js";
 import "/utils/polyfills/polyfill-imageData.js";
 
 self.onmessage = async ({ data }) => {
@@ -102,38 +102,49 @@ const render = () => {
         }
 
         for (let x = 0; x < world.header.maxTilesX; x++) {
-            let pixel = {};
-            if (world.worldTiles[x][y].blockId || world.worldTiles[x][y].blockId == 0) {
-                pixel.color = tileColors.tiles[world.worldTiles[x][y].blockId];
-                pixel.LAYER = LAYERS.TILES;
-            }
-            else if (world.worldTiles[x][y].liquid) {
-                pixel.color = tileColors.liquids[world.worldTiles[x][y].liquid.type];
-                pixel.LAYER = LAYERS.TILES;
-            }
-            else if (world.worldTiles[x][y].wallId) {
-                pixel.color = tileColors.walls[world.worldTiles[x][y].wallId];
-                pixel.LAYER = LAYERS.WALLS;
-            }
-            else {
-                if (y < bgLayers.space)
-                    pixel.color = tileColors.backgrounds.space;
-                else if (y >= bgLayers.space && y < bgLayers.ground)
-                    pixel.color = tileColors.backgrounds.sky;
-                else if (y >= bgLayers.ground && y < bgLayers.cavern)
-                    pixel.color = tileColors.backgrounds.ground;
-                else if (y >= bgLayers.cavern && y < bgLayers.underworld)
-                    pixel.color = tileColors.backgrounds.cavern;
-                else if (y >= bgLayers.underworld)
-                    pixel.color = tileColors.backgrounds.underworld;
+            if (world.worldTiles[x][y].blockId !== undefined) {
+                const color = pointColors[LAYERS.TILES][world.worldTiles[x][y].blockId];
 
-                pixel.LAYER = LAYERS.BACKGROUND;
+                layerImage[LAYERS.TILES].data[position] = color.r;
+                layerImage[LAYERS.TILES].data[position + 1] = color.g;
+                layerImage[LAYERS.TILES].data[position + 2] = color.b;
+                layerImage[LAYERS.TILES].data[position + 3] = 255;
             }
 
-            layerImage[pixel.LAYER].data[position] = pixel.color.r;
-            layerImage[pixel.LAYER].data[position + 1] = pixel.color.g;
-            layerImage[pixel.LAYER].data[position + 2] = pixel.color.b;
-            layerImage[pixel.LAYER].data[position + 3] = 255;
+            if (world.worldTiles[x][y].liquid !== undefined) {
+                const color = pointColors[LAYERS.LIQUIDS][world.worldTiles[x][y].liquid.type];
+
+                layerImage[LAYERS.LIQUIDS].data[position] = color.r;
+                layerImage[LAYERS.LIQUIDS].data[position + 1] = color.g;
+                layerImage[LAYERS.LIQUIDS].data[position + 2] = color.b;
+                layerImage[LAYERS.LIQUIDS].data[position + 3] = 255;
+            }
+
+            if (world.worldTiles[x][y].wallId !== undefined) {
+                const color = pointColors[LAYERS.WALLS][world.worldTiles[x][y].wallId];
+
+                layerImage[LAYERS.WALLS].data[position] = color.r;
+                layerImage[LAYERS.WALLS].data[position + 1] = color.g;
+                layerImage[LAYERS.WALLS].data[position + 2] = color.b;
+                layerImage[LAYERS.WALLS].data[position + 3] = 255;
+            }
+
+            let color;
+            if (y < bgLayers.space)
+                color = pointColors[LAYERS.BACKGROUND].space;
+            else if (y >= bgLayers.space && y < bgLayers.ground)
+                color = pointColors[LAYERS.BACKGROUND].sky;
+            else if (y >= bgLayers.ground && y < bgLayers.cavern)
+                color = pointColors[LAYERS.BACKGROUND].ground;
+            else if (y >= bgLayers.cavern && y < bgLayers.underworld)
+                color = pointColors[LAYERS.BACKGROUND].cavern;
+            else if (y >= bgLayers.underworld)
+                color = pointColors[LAYERS.BACKGROUND].underworld;
+
+            layerImage[LAYERS.BACKGROUND].data[position] = color.r;
+            layerImage[LAYERS.BACKGROUND].data[position + 1] = color.g;
+            layerImage[LAYERS.BACKGROUND].data[position + 2] = color.b;
+            layerImage[LAYERS.BACKGROUND].data[position + 3] = 255;
 
             position += 4;
         }

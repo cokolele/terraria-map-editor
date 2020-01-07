@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import "/components/styles/sidebar/input-inline.css";
 
 const SidebarInputInline = ({ defaultValue, text, checkbox, select }) => {
-   const [value, setValue] = useState(typeof defaultValue == "number" ? defaultValue.toFixed(2) : defaultValue);
+   const [value, setValue] = useState(typeof defaultValue == "number" ? (Math.round(defaultValue * 100) / 100) : defaultValue);
 
    const onTextChange = (e) => {
       setValue(e.target.value);
