@@ -113,5 +113,6 @@ export default {
         "TaxCollector": "&$savedTaxCollector",
         "Tavern Keep": "&$savedBartender",
     },
-    "NPCs": {}
+    "NPCs": {},
+    "Layers": {}
 }

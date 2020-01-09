@@ -4,11 +4,11 @@ import useToggle from "/utils/hooks/useToggle.js";
 import MenuOption from "/components/menu/option.jsx";
 import "/components/styles/menu/folder.css";
 
-function MenuFolder({ label, options, currentTab, setCurrentTab, index, toggleViewOption}) {
+function MenuFolder({ label, options, currentTab, setCurrentTab, index, toggleViewOption }) {
    const [showDropdown, toggleDropdown] = useToggle(false, true);
 
    const onClick = e => {
-      if (e.target.classList.contains("menu-folder") || e.target.classList.contains("menu-option-divider")) //click on divider or border
+      if (e.target.classList.contains("menu-folder") || e.target.classList.contains("menu-option-divider") || e.target.classList.contains("menu-option--disabled"))
          return;
 
       toggleDropdown();

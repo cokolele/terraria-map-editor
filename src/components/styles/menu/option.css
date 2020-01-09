@@ -1,11 +1,11 @@
 .menu-option {
     position: relative;
     height: 1.35rem;
-    padding: 1px 4px 2px 18px;
+    padding: 1px 0.3rem 2px 1.25rem;
     box-sizing: border-box;
+
     color: black;
     line-height: 1.15rem;
-    text-shadow: rgba(0,0,0,.01) 0 0 1px;
 }
 
 .menu-option:hover {
@@ -18,8 +18,12 @@
     content: "✓";
     font-weight: 800;
     font-size: 0.8rem;
-    left: 4px;
+    left: 0.3rem;
     top: 0px;
+}
+
+.menu-option--disabled, .menu-option--disabled:hover {
+    color: #6d6d6d;
 }
 
 .menu-option-divider {

@@ -1,9 +1,13 @@
 import store from "/state/store.js";
 import { stateChangeWorldFile, stateChangeWorldObject, stateToggleViewOption } from "/state/modules/app.js";
 import { stateChangePercentage, stateChangeDescription, stateChangeError } from "/state/modules/status.js";
-import { getLocalSettings, saveToLocalSettings } from "/utils/localStorage.js";
+import { saveToLocalSettings } from "/utils/localStorage.js";
 
 import { getCanvasMapData } from "/app/canvas/main.js";
+
+let localState = {
+    running: false
+};
 
 const DIVIDER = "__DIVIDER__";
 
@@ -73,31 +77,12 @@ const onToggleSidebar = (value) => {
     saveToLocalSettings("sidebar", value);
 }
 
-const localSettings = getLocalSettings();
-
-export default {
-    File: {
-        "Open...": onNewFile,
-        "Open example map": onExampleMap,
-        _Save: onSaveFile,
-        "Save map image": onSaveImage,
-        DIVIDER,
-        Close: onCloseFile
-    },
-    Edit: {
-        "Undo": () => { console.log("undo") },
-        "Redo": () => { console.log("redo") },
-    },
-    View: {
-        Toolbar: {
-            type: "checkbox",
-            value: localSettings.toolbar !== undefined ? localSettings.toolbar : false,
-            onClick: onToggleToolbar
-        },
-        Sidebar: {
-            type: "checkbox",
-            value: localSettings.sidebar !== undefined ? localSettings.sidebar : true,
-            onClick: onToggleSidebar
-        }
-    }
-}
+export {
+    onNewFile,
+    onExampleMap,
+    onCloseFile,
+    onSaveImage,
+    onSaveFile,
+    onToggleSidebar,
+    onToggleToolbar
+};

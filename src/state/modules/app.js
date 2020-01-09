@@ -1,4 +1,5 @@
-import menuOptionsConfig from "/app/menu.js";
+import { localSettings } from "/utils/localStorage.js";
+import LAYERS from "/app/canvas/enum-LAYERS.js";
 
 const CHANGE_WORLD_FILE = "twe/app/CHANGE_WORLD_FILE";
 const CHANGE_WORLD_OBJECT = "twe/app/CHANGE_WORLD_OBJECT";
@@ -7,8 +8,9 @@ const CHANGE_USER = "twe/app/CHANGE_USER";
 const CHANGE_MODAL = "twe/app/CHANGE_MODAL";
 const TOGGLE_VIEW_OPTION = "twe/app/TOGGLE_VIEW_OPTION";
 const CHANGE_TOOLBAR_TOOL = "twe/app/CHANGE_TOOLBAR_TOOL";
+const TOGGLE_LAYER_VISIBILITY = "twe/app/TOGGLE_LAYER_VISIBILITY";
 
-const default_state = {
+let defaultState = {
     worldFile: null,
     worldObject: null,
     running: false,
@@ -16,16 +18,25 @@ const default_state = {
     user: null,
     modal: null,
     view: {
-        sidebar: menuOptionsConfig.View.Sidebar.value,
-        toolbar: menuOptionsConfig.View.Toolbar.value
+        toolbar:  localSettings.toolbar !== undefined ? localSettings.toolbar : false,
+        sidebar: localSettings.sidebar !== undefined ? localSettings.sidebar : false
     },
     toolbar: {
-        tool: "move"
-    }
+        tool: "move",
+        options: {
+            layer: LAYERS.TILES,
+            id: 0
+        }
+    },
+    layersVisibility: {},
 };
 
+Object.values(LAYERS).forEach(LAYER => {
+    defaultState.layersVisibility[LAYER] = true;
+});
+
 // Reducer
-export default function app(state = default_state, action) {
+export default function app(state = defaultState, action) {
     switch (action.type) {
         case CHANGE_WORLD_FILE:
             return {
@@ -66,6 +77,9 @@ export default function app(state = default_state, action) {
         case CHANGE_TOOLBAR_TOOL:
             state.toolbar.tool = action.tool;
             return {...state};
+        case TOGGLE_LAYER_VISIBILITY:
+            state.layersVisibility[action.LAYER] = !state.layersVisibility[action.LAYER];
+            return {...state};
         default:
             return {...state};
     }
@@ -100,6 +114,10 @@ function stateChangeToolbarTool(tool) {
     return { type: CHANGE_TOOLBAR_TOOL, tool };
 }
 
+function stateToggleLayerVisibility(LAYER) {
+    return { type: TOGGLE_LAYER_VISIBILITY, LAYER };
+}
+
 export {
     stateChangeWorldFile,
     stateChangeWorldObject,
@@ -107,5 +125,6 @@ export {
     stateChangeUser,
     stateChangeModal,
     stateToggleViewOption,
-    stateChangeToolbarTool
+    stateChangeToolbarTool,
+    stateToggleLayerVisibility
 };

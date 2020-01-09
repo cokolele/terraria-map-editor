@@ -55,6 +55,12 @@ const GithubIcon = ({ size=24 }) => (
    </svg>
 );
 
+const EyeIcon = ({ size=24 }) => (
+   <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24">
+      <path d="M12,4.9c-4.6,0-8.7,2.5-11.8,6.6c-0.3,0.3-0.3,0.8,0,1.1c3.1,4.1,7.2,6.6,11.8,6.6c4.6,0,8.7-2.5,11.8-6.6c0.3-0.3,0.3-0.8,0-1.1C20.7,7.4,16.6,4.9,12,4.9z M12.3,17c-3.3,0.2-5.9-2.7-5.3-6C7.4,9,9,7.4,11,7.1c3.3-0.7,6.3,2,6.1,5.3C16.9,14.8,14.8,16.9,12.3,17z M14.1,11.2c-0.8,0.1-1.5-0.7-1.2-1.6c0.1-0.4,0.4-0.7,0.8-0.8c0.8-0.2,1.6,0.4,1.6,1.2C15.2,10.6,14.7,11.1,14.1,11.2z"/>
+   </svg>
+);
+
 export {
    AccountBoxIcon,
    CrossIcon,
@@ -64,5 +70,6 @@ export {
    ToolPencilIcon,
    ToolBucketIcon,
    FolderIcon,
-   GithubIcon
+   GithubIcon,
+   EyeIcon
 };

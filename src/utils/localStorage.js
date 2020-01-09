@@ -1,21 +1,14 @@
 let localSettings = JSON.parse(localStorage.getItem("settings"));
-let settings = localSettings !== null ? localSettings : {};
 
-function saveToLocalSettings(section, sectionSettings) {
-    settings[section] = sectionSettings;
-    localStorage.setItem("settings", JSON.stringify(settings));
-}
+if (localSettings === null)
+    localSettings = {};
 
-function getFromLocalSettings(section) {
-    return settings[section];
-}
-
-function getLocalSettings() {
-    return settings;
+function saveToLocalSettings(key, value) {
+    localSettings[key] = value;
+    localStorage.setItem("settings", JSON.stringify(localSettings));
 }
 
 export {
-    saveToLocalSettings,
-    getFromLocalSettings,
-    getLocalSettings
+    localSettings,
+    saveToLocalSettings
 };

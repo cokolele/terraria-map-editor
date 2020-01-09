@@ -5,7 +5,6 @@ import { stateChangeModal } from "/state/modules/app.js";
 import { AccountBoxIcon } from "/components/icon.jsx";
 import MenuOption from "/components/menu/option.jsx";
 import "/components/styles/menu/folder.css";
-import "/components/styles/menu/folder-account.css";
 
 import { GithubIcon } from "/components/icon.jsx";
 

@@ -117,7 +117,7 @@ const render = () => {
                 layerImage[LAYERS.LIQUIDS].data[position] = color.r;
                 layerImage[LAYERS.LIQUIDS].data[position + 1] = color.g;
                 layerImage[LAYERS.LIQUIDS].data[position + 2] = color.b;
-                layerImage[LAYERS.LIQUIDS].data[position + 3] = 255;
+                layerImage[LAYERS.LIQUIDS].data[position + 3] = 155;
             }
 
             if (world.worldTiles[x][y].wallId !== undefined) {

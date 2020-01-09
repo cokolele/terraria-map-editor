@@ -5,3 +5,18 @@ function Template() {
 }
 
 export default Template;
+
+export default connect(state => {
+   return {
+      prop: state.prop,
+   };
+})(Template);
+
+export default connect(
+   state => {
+      return {
+         prop: state.prop,
+      };
+   },
+   { changeState }
+)(Template);

@@ -10,7 +10,7 @@
     border: 1px solid #383838;
 }
 
-.sidebar-folders {
+.sidebar-tabList {
     height: 1.85rem;
     display: flex;
     max-width: 100%;

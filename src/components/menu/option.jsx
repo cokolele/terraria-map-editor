@@ -10,17 +10,21 @@ function MenuOption({ label, option, state }) {
    if (typeof option == "function")
       return <div className="menu-option" onClick={option}>{label}</div>
 
-   if (option.type == "checkbox") {
-      // checkbox state is kept in prop instead of useToggle because state resets every unmount
-      if (option.value === undefined)
-         option.value = option.default;
-
-      const onCheckboxClick = () => {
-         option.value = !option.value;
-         option.onClick(option.value);
+   if (option.type == "default") {
+      const _onClick = (e) => {
+         if (option.enabled)
+            option.onClick();
       }
 
-      return <div className={"menu-option" + (option.value ? " menu-option--checked" : "")} onClick={onCheckboxClick}>{label}</div>
+      return <div className={"menu-option" + (option.enabled ? "" : " menu-option--disabled")} onClick={_onClick}>{label}</div>
+   }
+
+   if (option.type == "checkbox") {
+      const _onClick = (e) => {
+         option.onClick(!option.checked);
+      }
+
+      return <div className={"menu-option" + (option.checked ? " menu-option--checked" : "")} onClick={_onClick}>{label}</div>
    }
 }
 

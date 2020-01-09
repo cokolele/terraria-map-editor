@@ -1,19 +1,17 @@
 .menu-folder-container {
     position: relative;
-    padding: 0 7px;
+    padding: 2px 7px;
     border-radius: 4px;
 
-    line-height: 1.3rem;
-    font-family: "Lato", sans-serif;
     font-size: 0.95rem;
     color: #f0f0f0;
 }
 
 .menu-folder-container:hover {
+    padding: 2px 6px;
     outline: none;
     background-color: #474747;
     border: 1px solid #636363;
-    padding: 0 6px;
 }
 
 .menu-folder-container:focus {
@@ -21,9 +19,9 @@
 }
 
 .menu-folder-container--opened {
+    padding: 2px 6px;
     background-color: #383838 !important;
     border: 1px solid #636363;
-    padding: 0 6px;
 }
 
 .menu-folder-container--icon {
@@ -37,15 +35,12 @@
 }
 
 .menu-folder {
-    min-width: 140px;
-    max-width: 400px;
     padding: 2px;
-
-    font-family: "Lato", sans-serif;
-    font-size: 0.95rem;
+    min-width: 140px;
+    white-space: nowrap;
 
     position: absolute;
-    top: 1.2rem;
+    top: calc(0.95rem + 7px);
     left: 0;
     z-index: 1000;
     background-color: #f0f0f0;

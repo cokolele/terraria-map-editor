@@ -22,6 +22,7 @@ Object.values(LAYERS).forEach(LAYER => {
     layerCanvas[LAYER] = document.createElement("canvas");
     layerCtx[LAYER] = layerCanvas[LAYER].getContext("2d");
 });
+let layersVisibility;
 
 let running = false;
 
@@ -53,6 +54,10 @@ const changeCanvasWorldFile = (_worldFile) => {
 
 const changeCanvasTool = (_tool) => {
     tool = _tool;
+}
+
+const changeCanvasLayersVisibility = (_layersVisibility) => {
+    layersVisibility = _layersVisibility
 }
 
 const getCanvasMapData = ({ name, imageUrlPng }) => {
@@ -208,10 +213,8 @@ function getPointColor(LAYER, id) {
 }
 
 function setLayerImagePointColor(LAYER, color, x, y, push = true) {
-    if (typeof color == "number") {
+    if (typeof color == "number")
         color = getPointColor(LAYER, color);
-        console.log(color);
-    }
 
     const offset = (world.header.maxTilesX * y + x) * 4;
     layerImage[LAYER].data[offset] = color.r;
@@ -223,7 +226,7 @@ function setLayerImagePointColor(LAYER, color, x, y, push = true) {
         pushLayerImage(LAYER);
 }
 
-function setLayerImageRectangleColor(LAYER, color, point1, point2) {
+function setLayerImageRectangleColor(LAYER, color, point1, point2, push = true) {
     if (typeof color == "number")
         color = getPointColor(LAYER, color);
 
@@ -234,7 +237,8 @@ function setLayerImageRectangleColor(LAYER, color, point1, point2) {
         for (let x = x1; x < x2; x++)
             setLayerImagePointColor(LAYER, color, x, y, false);
 
-    pushLayerImage(LAYER);
+    if (push)
+        pushLayerImage(LAYER);
 }
 
 function setLayerImageFourwayFillColor(LAYER, fillColor, x, y) {
@@ -249,6 +253,9 @@ function setLayerImageFourwayFillColor(LAYER, fillColor, x, y) {
 
     if (typeof fillColor == "number")
         fillColor = getPointColor(LAYER, fillColor);
+
+    if (pointColor.r == fillColor.r && pointColor.g == fillColor.g && pointColor.b == fillColor.b)
+        return;
 
     while(pointsBuffer.length !== 0) {
         const [x, y] = pointsBuffer.pop();
@@ -292,8 +299,10 @@ function onPencilDrag(e) {
     if (prevDragX == null || (x != prevDragX || y != prevDragY)) {
         prevDragX = x;
         prevDragY = y;
-        setLayerImageRectangleColor(LAYERS.TILES, 0, [x-2, y-2], [x+2, y+2]);
+        setLayerImageRectangleColor(LAYERS.TILES, 0, [x-2, y-2], [x+2, y+2], false);
     }
+
+    pushLayerImage(LAYERS.TILES);
 }
 
 function onPencilClick(e) {
@@ -397,12 +406,12 @@ const tick = (T) => {
     correctPositions();
 
     Object.values(LAYERS).forEach(LAYER => {
-        ctx.drawImage(layerCanvas[LAYER],
-            posX, posY,
-            viewWidthTiles, viewHeightTiles,
-            0, 0,
-            canvas.width, canvas.height);
-
+        if (layersVisibility[LAYER])
+            ctx.drawImage(layerCanvas[LAYER],
+                posX, posY,
+                viewWidthTiles, viewHeightTiles,
+                0, 0,
+                canvas.width, canvas.height);
     });
 
     if (running)
@@ -413,5 +422,6 @@ export default init;
 export {
     changeCanvasWorldFile,
     changeCanvasTool,
+    changeCanvasLayersVisibility,
     getCanvasMapData,
 };
