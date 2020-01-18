@@ -3,7 +3,7 @@ import { stateChangeWorldFile, stateChangeWorldObject, stateToggleViewOption } f
 import { stateChangePercentage, stateChangeDescription, stateChangeError } from "/state/modules/status.js";
 import { saveToLocalSettings } from "/utils/localStorage.js";
 
-import { getCanvasMapData } from "/app/canvas/main.js";
+import { getCanvasMapData, getCanvasMapFile } from "/app/canvas/main.js";
 
 let localState = {
     running: false
@@ -27,12 +27,8 @@ const onNewFile = (e, file) => {
     }
 }
 
-const onSaveFile = (e) => {
-    console.log("clicked save file");
-}
-
 const onSaveImage = () => {
-    const data = getCanvasMapData({name: true, imageUrlPng: true});
+    const data = getCanvasMapData({ name: true, imageUrlPng: true });
 
     if (data !== null) {
         const link = document.createElement("a");
@@ -40,6 +36,25 @@ const onSaveImage = () => {
         link.href = data.imageUrlPng;
         link.click();
     }
+}
+
+const onSaveFile = async (e) => {
+    console.log("clicked save file");
+
+    const filename = getCanvasMapData({ name: true }).name;
+    const file = await getCanvasMapFile();
+
+    if (!file) return;
+
+    const link = document.createElement("a");
+    const blob = new Blob([file], {type: "octet/stream"});
+    const url = window.URL.createObjectURL(blob);
+
+    link.href = url;
+    link.download = filename;
+    link.click();
+
+    window.URL.revokeObjectURL(url);
 }
 
 const onCloseFile = (e) => {
@@ -58,7 +73,7 @@ const onExampleMap = (e) => {
     fetch("/downloadable/example_map.wld")
         .then(response => response.blob())
         .then(blob => {
-            const file = new File([blob], "example map");
+            const file = new File([blob], "example_map.wld");
             store.dispatch(stateChangeWorldFile(file));
         })
         .catch(function(e) {

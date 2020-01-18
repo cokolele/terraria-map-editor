@@ -1,13 +1,6 @@
 .modal-sign {
-    font-family: "Lato", sans-serif;
     color: #f0f0f0;
 
     display: flex;
     flex-direction: column;
-}
-
-.modal-sign-headtext {
-    font-size: 1.6rem;
-    font-weight: 900;
-    margin-bottom: 22px;
 }

@@ -1,14 +1,17 @@
 import terrariaWorldParser from "/../terraria-world-parser/src/browser/terraria-world-parser.js";
+import terrariaWorldSaver from "/../terraria-world-parser/src/browser/terraria-world-saver.js";
 import pointColors from "./pointColors.js";
 import LAYERS from "./enum-LAYERS.js";
 import "/utils/polyfills/polyfill-imageData.js";
+
+let world;
 
 self.onmessage = async ({ data }) => {
     try {
         switch(data.action) {
             case "PARSE_AND_RENDER_MAP_RETURN_WITHOUT_BLOCKS":
-                await parse(data.file);
-                render();
+                world = await parse(data.file);
+                const layerImage = render();
 
                 postMessage({
                     action: "RETURN_IMAGES_INCOMING",
@@ -34,30 +37,33 @@ self.onmessage = async ({ data }) => {
                     }
                 });
                 break;
+            case "SAVE_MAP":
+                const newWorldFile = save(world);
+                postMessage({
+                    action: "RETURN_MAP_FILE",
+                    newWorldFile
+                });
+                break;
         }
-    } catch (e) {
-        if (e.name == "TerrariaWorldParserError")
-            e.message = e.onlyMessage;
-
+    } catch (error) {
         postMessage({
             action: "ERROR",
             error: {
-                name: e.name,
-                message: e.message
+                name: error.name,
+                message: error.message,
+                onlyMessage: error.onlyMessage,
+                stack: error.stack
             }
         });
     }
 }
 
-let world;
-let layerImage = {};
-
-const parse = async (file) => {
+async function parse(file) {
     postMessage({
         action: "RETURN_PERCENTAGE_PARSING_INCOMING",
     });
-    world = await new terrariaWorldParser().loadFile(file);
-    world = await world.parse((percentVal) => {
+    let world = await new terrariaWorldParser().loadFile(file);
+    return world.parse((percentVal) => {
         postMessage({
             action: "RETURN_PERCENTAGE_PARSING",
             percentage: percentVal
@@ -65,12 +71,13 @@ const parse = async (file) => {
     });
 }
 
-const render = () => {
+function render() {
     if (!world) {
         console.error("Web-worker-map-parsing error: no world loaded");
         return;
     }
 
+    let layerImage = {};
     Object.values(LAYERS).forEach(LAYER => {
         layerImage[LAYER] = new ImageData(world.header.maxTilesX, world.header.maxTilesY);
     })
@@ -149,4 +156,16 @@ const render = () => {
             position += 4;
         }
     }
+
+    return layerImage;
+}
+
+function save(world) {
+    if (!world) {
+        console.error("Web-worker-map-parsing error: no world loaded");
+        return;
+    }
+
+    let file = new terrariaWorldSaver(world);
+    return file.save();
 }

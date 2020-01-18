@@ -21,9 +21,9 @@ function Menu({ view, running }) {
             enabled: running,
             onClick: onSaveImage
          },
-         _Save: {
+         Save: {
             type: "default",
-            enabled: false,
+            enabled: running,
             onClick: onSaveFile
          },
          DIVIDER,

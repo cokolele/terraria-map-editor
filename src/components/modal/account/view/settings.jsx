@@ -3,10 +3,11 @@ import { connect } from "react-redux";
 import { stateChangeUser, stateChangeModal } from "/state/modules/app.js";
 
 import ModalSignInputInline from "/components/modal/sign/input-inline.jsx"
+import "/components/styles/modal/account/view/settings.css";
 
 import api from "/utils/api/api.js";
 
-function ModalAccountCategoryAccount({ stateChangeModal, stateChangeUser }) {
+function ModalAccountViewSettings({ stateChangeModal, stateChangeUser }) {
    const onLogOut = async () => {
       const logout = await api.post("/session/logout");
 
@@ -19,10 +20,14 @@ function ModalAccountCategoryAccount({ stateChangeModal, stateChangeUser }) {
       stateChangeModal(null);
    }
 
-   return <ModalSignInputInline link placeholder="Log out" onClick={onLogOut}/>
+   return (
+      <div className="modal-account-view-settings">
+         <ModalSignInputInline link placeholder="Log out" onClick={onLogOut}/>
+      </div>
+   );
 }
 
 export default connect(
    null,
    { stateChangeUser, stateChangeModal }
-)(ModalAccountCategoryAccount);
+)(ModalAccountViewSettings);

@@ -35,3 +35,11 @@
 .modal-button-close svg {
     fill: #f0f0f0;
 }
+
+.modal-header-text {
+    width: 100%;
+    color: #f0f0f0;
+    font-size: 1.6rem;
+    font-weight: 900;
+    padding-bottom: 22px;
+}

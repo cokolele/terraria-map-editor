@@ -3,23 +3,19 @@ import { connect } from "react-redux";
 import { StateChangeUser, stateChangeModal } from "/state/modules/app.js";
 import api from "/utils/api/api.js";
 
-import { AccountBoxIcon, FolderIcon } from "/components/icon.jsx";
-import ModalAccountMenu from "/components/modal/account/menu.jsx";
-import ModalAccountCategoryAccount from "/components/modal/account/category-account.jsx";
-import ModalAccountCategoryMaps from "/components/modal/account/category-maps.jsx";
+import ModalAccountMenuOption from "/components/modal/account/menu-option.jsx";
+import ModalAccountViewSettings from "/components/modal/account/view/settings.jsx";
+import ModalAccountViewMaps from "/components/modal/account/view/maps.jsx";
 import "/components/styles/modal/account.css";
 
-
-const categoriesConfig = [
+const config = [
    {
-      label: "Account",
-      Icon: AccountBoxIcon,
-      View: ModalAccountCategoryAccount,
+      label: "Settings",
+      View: ModalAccountViewSettings,
    },
    {
       label: "Saved maps",
-      Icon: FolderIcon,
-      View: ModalAccountCategoryMaps
+      View: ModalAccountViewMaps
    }
 ];
 
@@ -37,11 +33,21 @@ function ModalAccount({ StateChangeUser, stateChangeModal }) {
    }, []);
 
    const [selectedCategory, setSelectedCategory] = useState(0);
-   const ModalAccountCategoryView = categoriesConfig[selectedCategory].View;
+   const ModalAccountCategoryView = config[selectedCategory].View;
+
+   const onMenuItemClick = (i) => {
+      setSelectedCategory(i);
+   }
 
    return (
       <div className="modal-account">
-         <ModalAccountMenu selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} categoriesConfig={categoriesConfig}/>
+         <div className="modal-account-menu">
+            {
+               config.map(({ label }, i) => (
+                  <ModalAccountMenuOption label={label} selected={i == selectedCategory} onClick={onMenuItemClick} onClickReturnParam={i} key={i} />
+               ))
+            }
+         </div>
          <div className="modal-account-view">
             <ModalAccountCategoryView/>
          </div>

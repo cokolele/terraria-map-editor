@@ -4,37 +4,48 @@ import { stateChangeModal } from "/state/modules/app.js";
 
 import { CrossIcon } from "/components/icon.jsx";
 import "/components/styles/modal.css";
-
 import ModalSignin from "/components/modal/signin.jsx";
 import ModalSignup from "/components/modal/signup.jsx";
 import ModalAccount from "/components/modal/account.jsx";
 
+const config = {
+   signin: {
+      label: "Sign In",
+      View: ModalSignin
+   },
+   signup: {
+      label: "Sign Up",
+      View: ModalSignup
+   },
+   account: {
+      label: "Account",
+      View: ModalAccount
+   }
+};
+
 const Modal = ({ modalView, stateChangeModal }) => {
-   let ViewComponent;
-   if (modalView == "signin")
-      ViewComponent = ModalSignin;
-   else if (modalView == "signup")
-      ViewComponent = ModalSignup;
-   else if (modalView == "account")
-      ViewComponent = ModalAccount;
+   if (!modalView)
+      return "";
+
+   const View = config[modalView].View;
 
    const onClose = () => {
       stateChangeModal(null);
    }
 
-   if (!modalView)
-      return "";
-   else
-      return (
-         <div className="modal-background">
-            <div className="modal-container">
+   return (
+      <div className="modal-background">
+         <div className="modal-container">
+            <div className="modal-header">
+               <div className="modal-header-text">{config[modalView].label}</div>
                <button className="modal-button-close" type="button" onClick={onClose}>
                   <CrossIcon size={28}/>
                </button>
-               <ViewComponent/>
             </div>
+            <View/>
          </div>
-      );
+      </div>
+   );
 }
 
 export default connect(

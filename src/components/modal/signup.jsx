@@ -123,7 +123,6 @@ function ModalSignup({ stateChangeUser, stateChangeModal }) {
 
    return (
       <div className="modal-sign">
-         <span className="modal-sign-headtext">Sign Up</span>
          <ModalSignInput text placeholder="username" value={username} setValue={setUsername} onBlur={onInputsBlur} errorMessage={usernameError}/>
          <ModalSignInput password placeholder="password" value={password} setValue={setPassword} onBlur={onInputsBlur} errorMessage={passwordError}/>
          <ModalSignInput password placeholder="password again" value={password2} setValue={setPassword2} onBlur={onInputsBlur} errorMessage={password2Error}/>

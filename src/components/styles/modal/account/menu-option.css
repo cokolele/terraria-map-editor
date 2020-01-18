@@ -1,0 +1,28 @@
+.modal-account-menu-option {
+    border: 0 solid #383838;
+    padding: 6px 12px;
+    border-width: 1px 1px 0 1px;
+
+    color: #f0f0f0;
+    font-size: 1.1rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    user-select: none;
+    -moz-user-select: none;
+    cursor: pointer;
+}
+
+.modal-account-menu-option:first-of-type {
+    border-radius: 4px 4px 0 0;
+}
+
+
+.modal-account-menu-option:last-of-type {
+    border-radius: 0 0 4px 4px;
+    border-width: 1px;
+}
+
+.modal-account-menu-option--selected {
+    border-left-width: 6px !important;
+}

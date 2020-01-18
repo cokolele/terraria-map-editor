@@ -27,7 +27,7 @@ function Canvas({ worldFile, statusDescription, tool, changeRunning, layersVisib
    return (
       <div className="canvas-container">
          <div className={"canvas-container-inner" + (statusDescription == "Finished" ? "" : " hidden")}>
-            <div className="canvas-container-label">{worldFile && worldFile.name}</div>
+            <div className="canvas-container-label">{worldFile && worldFile.name.replace(".wld", "")}</div>
             <canvas ref={canvasEl}></canvas>
          </div>
          {

@@ -1,4 +1,4 @@
-/*import api from "/utils/api/api.js";
+import api from "/utils/api/api.js";
 import store from "/state/store.js";
 import { stateChangeUser } from "/state/modules/app.js";
 
@@ -15,4 +15,4 @@ async function loadSessionLogin() {
     }
 }
 
-loadSessionLogin();*/
+loadSessionLogin();

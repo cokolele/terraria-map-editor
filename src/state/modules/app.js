@@ -18,8 +18,8 @@ let defaultState = {
     user: null,
     modal: null,
     view: {
-        toolbar:  localSettings.toolbar !== undefined ? localSettings.toolbar : false,
-        sidebar: localSettings.sidebar !== undefined ? localSettings.sidebar : false
+        toolbar:  localSettings.toolbar !== undefined ? localSettings.toolbar : true,
+        sidebar: localSettings.sidebar !== undefined ? localSettings.sidebar : true
     },
     toolbar: {
         tool: "move",

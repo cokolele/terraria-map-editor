@@ -2,11 +2,18 @@
     min-width: 500px;
     min-height: 300px;
     width: 40vw;
-
     display: flex;
     justify-content: space-between;
 }
 
+.modal-account-menu {
+    display: flex;
+    flex-direction: column;
+    max-width: 30%;
+}
+
 .modal-account-view {
+    box-sizing: border-box;
+    padding-left: 24px;
     flex-grow: 1;
 }

@@ -95,7 +95,6 @@ function ModalSignin({ stateChangeUser, stateChangeModal }) {
 
    return (
       <div className="modal-sign">
-         <span className="modal-sign-headtext">Sign In</span>
          <ModalSignInput text placeholder="username" value={username} setValue={setUsername} onBlur={onInputsBlur} errorMessage={usernameError}/>
          <ModalSignInput password placeholder="password" value={password} setValue={setPassword} onBlur={onInputsBlur} errorMessage={passwordError}/>
          <ModalSignInput submit onClick={onSubmit} value="SIGN IN" errorMessage={submitError}/>

@@ -14,6 +14,7 @@ import { map } from "/utils/number.js";
 
 let worldFile, world;
 let canvas, ctx;
+let worker;
 
 let layerImage;
 let layerCanvas = {};
@@ -67,12 +68,48 @@ const getCanvasMapData = ({ name, imageUrlPng }) => {
         data.name = worldFile.name;
 
     if (imageUrlPng && running) {
-        data.imageUrlPng = offscreenCanvas.toDataURL("image/png;base64");
+        const _tmpCanvas = document.createElement("canvas");
+        const _tmpCtx = _tmpCanvas.getContext("2d");
+
+        _tmpCanvas.width = world.header.maxTilesX;
+        _tmpCanvas.height = world.header.maxTilesY;
+
+        Object.values(LAYERS).forEach(LAYER => {
+            _tmpCtx.drawImage(layerCanvas[LAYER], 0, 0);
+        });
+
+        data.imageUrlPng = _tmpCanvas.toDataURL("image/png;base64");
     }
 
     if (Object.entries(data).length === 0 && data.constructor === Object) //empty object
         return null;
     return data;
+}
+
+const getCanvasMapFile = async () => {
+    if (!running)
+        return null;
+
+    return new Promise((resolve, reject) => {
+        worker.onmessage = ({ data }) => {
+            switch(data.action) {
+                case "RETURN_MAP_FILE":
+                    resolve(data.newWorldFile);
+                    break;
+                case "ERROR":
+                    if (data.error.name == "TerrariaWorldSaverError") {
+                        store.dispatch(stateChangeError(data.error.onlyMessage));
+                    } else {
+                        store.dispatch(stateChangeError("see more info in console (please report the error to developer)"));
+                    }
+                    console.error("web worker error:", data.error);
+                    resolve(null);
+                    break;
+            }
+        }
+
+        worker.postMessage({ action: "SAVE_MAP" });
+    });
 }
 
 function init(_canvas) {
@@ -91,7 +128,7 @@ function load() {
     store.dispatch(stateChangeError(null));
 
     try {
-        const worker = new Worker("./webWorker.js");
+        worker = new Worker("./webWorker.js");
 
         worker.onmessage = ({ data }) => {
             switch(data.action) {
@@ -125,11 +162,11 @@ function load() {
                     store.dispatch(stateChangeWorldFile(null));
 
                     if (data.error.name == "TerrariaWorldParserError") {
-                        store.dispatch(stateChangeError(data.error.message));
+                        store.dispatch(stateChangeError(data.error.onlyMessage));
                     } else {
                         store.dispatch(stateChangeError("see more info in console (please report the error to developer)"));
-                        console.log("web worker error:", data.error);
                     }
+                    console.error("web worker error:", data.error);
                     break;
             }
         }
@@ -373,6 +410,8 @@ function start() {
     running = true;
     store.dispatch(stateChangeRunning(true));
     tick(0);
+
+    console.log(world);
 }
 
 function preRender() {
@@ -424,4 +463,5 @@ export {
     changeCanvasTool,
     changeCanvasLayersVisibility,
     getCanvasMapData,
+    getCanvasMapFile
 };
