@@ -53,9 +53,13 @@
 
     fill: #ffe300;
     font-size: 1rem;
-    margin: 6px 5px 7px;
+    margin: 9px 5px 0;
     letter-spacing: 0.25px;
     color: #ffe300;
+}
+
+.modal-sign-submit-error > span {
+    margin-left: 5px;
 }
 
 .modal-sign-text {

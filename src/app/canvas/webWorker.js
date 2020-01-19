@@ -1,5 +1,5 @@
-import terrariaWorldParser from "/../terraria-world-parser/src/browser/terraria-world-parser.js";
-import terrariaWorldSaver from "/../terraria-world-parser/src/browser/terraria-world-saver.js";
+import terrariaWorldParser from "/../terraria-world-file-js/src/browser/terraria-world-parser.js";
+import terrariaWorldSaver from "/../terraria-world-file-js/src/browser/terraria-world-saver.js";
 import pointColors from "./pointColors.js";
 import LAYERS from "./enum-LAYERS.js";
 import "/utils/polyfills/polyfill-imageData.js";
@@ -26,14 +26,8 @@ self.onmessage = async ({ data }) => {
                 postMessage({
                     action: "RETURN_WORLD_OBJECT",
                     world: {
-                        fileFormatHeader: world.fileFormatHeader,
-                        header: world.header,
-                        chests: world.chests,
-                        signs: world.signs,
-                        NPCs: world.NPCs,
-                        tileEntities: world.tileEntities,
-                        weightedPressurePlates: world.weightedPressurePlates,
-                        townManager: world.townManager
+                        ...world,
+                        worldTiles: null
                     }
                 });
                 break;
@@ -62,7 +56,8 @@ async function parse(file) {
     postMessage({
         action: "RETURN_PERCENTAGE_PARSING_INCOMING",
     });
-    let world = await new terrariaWorldParser().loadFile(file);
+
+    const world = await new terrariaWorldParser().loadFile(file);
     return world.parse((percentVal) => {
         postMessage({
             action: "RETURN_PERCENTAGE_PARSING",
@@ -73,7 +68,7 @@ async function parse(file) {
 
 function render() {
     if (!world) {
-        console.error("Web-worker-map-parsing error: no world loaded");
+        throw new Error("web-worker: save: no world loaded");
         return;
     }
 
@@ -162,10 +157,15 @@ function render() {
 
 function save(world) {
     if (!world) {
-        console.error("Web-worker-map-parsing error: no world loaded");
+        throw new Error("web-worker: save: no world loaded");
         return;
     }
 
     let file = new terrariaWorldSaver(world);
-    return file.save();
+    return file.save((percentage) => {
+        postMessage({
+            action: "RETURN_PERCENTAGE_SAVING",
+            percentage
+        });
+    });
 }

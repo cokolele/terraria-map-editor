@@ -29,7 +29,7 @@ function ModalSignInput({ value, setValue, text, password, submit, placeholder, 
                errorMessage &&
                <div className="modal-sign-submit-error">
                   <ErrorOutlineIcon/>
-                  <span className="modal-sign-submit-error">{errorMessage}</span>
+                  <span>{errorMessage}</span>
                </div>
             }
          </>

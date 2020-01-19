@@ -1,5 +1,5 @@
 const fetchErrorDefault = (e) => {
-    console.error(e);
+    console.error("API call error:", e);
     return {
         status: "error",
         message: "network error (check console for more details)"

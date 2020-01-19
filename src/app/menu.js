@@ -39,8 +39,6 @@ const onSaveImage = () => {
 }
 
 const onSaveFile = async (e) => {
-    console.log("clicked save file");
-
     const filename = getCanvasMapData({ name: true }).name;
     const file = await getCanvasMapFile();
 
@@ -68,7 +66,7 @@ const onCloseFile = (e) => {
 const onExampleMap = (e) => {
     onCloseFile();
 
-    store.dispatch(stateChangeDescription("downloading map"));
+    store.dispatch(stateChangeDescription("Downloading map"));
 
     fetch("/downloadable/example_map.wld")
         .then(response => response.blob())
@@ -77,7 +75,7 @@ const onExampleMap = (e) => {
             store.dispatch(stateChangeWorldFile(file));
         })
         .catch(function(e) {
-            store.dispatch(stateChangeDescription("failed to download map"));
+            store.dispatch(stateChangeDescription("Failed to download map"));
             console.error(e);
         });
 }

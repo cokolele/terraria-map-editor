@@ -5,7 +5,7 @@ import "/components/styles/canvas.css";
 
 import init, { changeCanvasWorldFile, changeCanvasTool, changeCanvasLayersVisibility } from "/app/canvas/main.js";
 
-function Canvas({ worldFile, statusDescription, tool, changeRunning, layersVisibility }) {
+function Canvas({ worldFile, running, tool, changeRunning, layersVisibility }) {
    const canvasEl = useRef(null);
 
    useEffect(() => {
@@ -26,12 +26,12 @@ function Canvas({ worldFile, statusDescription, tool, changeRunning, layersVisib
 
    return (
       <div className="canvas-container">
-         <div className={"canvas-container-inner" + (statusDescription == "Finished" ? "" : " hidden")}>
+         <div className={"canvas-container-inner" + (running ? "" : " hidden")}>
             <div className="canvas-container-label">{worldFile && worldFile.name.replace(".wld", "")}</div>
             <canvas ref={canvasEl}></canvas>
          </div>
          {
-            statusDescription !== "Finished" &&
+            !running &&
             <div className="canvas-placeholder">
             TERRARIA MAP EDITOR
             </div>
@@ -43,7 +43,7 @@ function Canvas({ worldFile, statusDescription, tool, changeRunning, layersVisib
 export default connect(state => {
    return {
       worldFile: state.app.worldFile,
-      statusDescription: state.status.description,
+      running: state.app.running,
       tool: state.app.toolbar.tool,
       layersVisibility: state.app.layersVisibility
    }

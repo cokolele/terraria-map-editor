@@ -3,15 +3,10 @@ import store from "/state/store.js";
 import { stateChangeUser } from "/state/modules/app.js";
 
 async function loadSessionLogin() {
-    try {
-        const session = await api.get("/session");
+    const session = await api.get("/session");
 
-        if (session.status == "ok" && session.message == "Logged in") {
-            store.dispatch(stateChangeUser(session.user));
-        }
-    } catch(e) {
-        console.log("api call error");
-        console.error(e);
+    if (session.status == "ok" && session.message == "Logged in") {
+        store.dispatch(stateChangeUser(session.user));
     }
 }
 

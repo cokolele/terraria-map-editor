@@ -95,19 +95,25 @@ const getCanvasMapFile = async () => {
             switch(data.action) {
                 case "RETURN_MAP_FILE":
                     resolve(data.newWorldFile);
+                    store.dispatch(stateChangeDescription("Finished"));
+                    break;
+                case "RETURN_PERCENTAGE_SAVING":
+                    store.dispatch(stateChangePercentage(data.percentage));
                     break;
                 case "ERROR":
                     if (data.error.name == "TerrariaWorldSaverError") {
                         store.dispatch(stateChangeError(data.error.onlyMessage));
                     } else {
-                        store.dispatch(stateChangeError("see more info in console (please report the error to developer)"));
+                        store.dispatch(stateChangeError("See more info in console (please report the error to developer)"));
                     }
                     console.error("web worker error:", data.error);
+                    store.dispatch(stateChangeDescription("Failed"));
                     resolve(null);
                     break;
             }
         }
 
+        store.dispatch(stateChangeDescription("Generating"));
         worker.postMessage({ action: "SAVE_MAP" });
     });
 }
@@ -164,7 +170,7 @@ function load() {
                     if (data.error.name == "TerrariaWorldParserError") {
                         store.dispatch(stateChangeError(data.error.onlyMessage));
                     } else {
-                        store.dispatch(stateChangeError("see more info in console (please report the error to developer)"));
+                        store.dispatch(stateChangeError("See more info in console (please report the error to developer)"));
                     }
                     console.error("web worker error:", data.error);
                     break;
