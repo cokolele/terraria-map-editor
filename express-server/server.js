@@ -1,6 +1,16 @@
-const server = require("./configs/app.js");
 const config = require("./configs/profiles/config.js");
+const { dbInit } = require("./configs/db.js");
+const server = require("./configs/app.js");
 
-server.create(config);
+async function init() {
+    let db;
 
-server.start();
+    try {
+        db = await dbInit(config);
+    } catch(e) {}
+
+    server.create(config, db);
+    server.start();
+}
+
+init();

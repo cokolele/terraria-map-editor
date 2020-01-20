@@ -4,7 +4,8 @@ import { stateChangeUser, stateChangeModal } from "/state/modules/app.js";
 import api from "/utils/api/api.js";
 
 import ModalSignInput from "/components/modal/sign/input.jsx";
-import ModalSignInputInline from "/components/modal/sign/input-inline.jsx"
+import ModalSignOption from "/components/modal/sign/option.jsx";
+import ModalSignButton from "/components/modal/sign/button.jsx";
 import "/components/styles/modal/sign.css";
 
 function ModalSignup({ stateChangeUser, stateChangeModal }) {
@@ -127,10 +128,10 @@ function ModalSignup({ stateChangeUser, stateChangeModal }) {
          <ModalSignInput password placeholder="password" value={password} setValue={setPassword} onBlur={onInputsBlur} errorMessage={passwordError}/>
          <ModalSignInput password placeholder="password again" value={password2} setValue={setPassword2} onBlur={onInputsBlur} errorMessage={password2Error}/>
          <ModalSignInput text placeholder="e-mail address" value={email} setValue={setEmail} onBlur={onInputsBlur} errorMessage={emailError}/>
-         <ModalSignInput submit onClick={onSubmit} value="SIGN UP" errorMessage={submitError}/>
+         <ModalSignButton label="SIGN IN" onClick={onSubmit} error={submitError}/>
          <span className="modal-sign-text">
             <span>Already have an account ?</span>
-            <ModalSignInputInline link placeholder="SIGN IN" onClick={onClickSignIn}/>
+            <ModalSignOption link placeholder="SIGN IN" onClick={onClickSignIn}/>
          </span>
       </div>
    );

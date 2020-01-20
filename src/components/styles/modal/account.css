@@ -7,13 +7,36 @@
 }
 
 .modal-account-menu {
+    max-width: 30%;
     display: flex;
     flex-direction: column;
-    max-width: 30%;
+    border-right: 1px solid #ddd;
 }
 
 .modal-account-view {
     box-sizing: border-box;
-    padding-left: 24px;
+    margin-left: 24px;
     flex-grow: 1;
+}
+
+.modal-account-row {
+    height: 3.4rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #6d6d6d;
+    padding: 0 6px;
+}
+
+.modal-account-row-text--header-disabled {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #8c8a8a;
+}
+
+.modal-account-row-text {
+    color: #f0f0f0;
+}
+
+.modal-account-row-text--bold {
+    font-weight: 700;
 }

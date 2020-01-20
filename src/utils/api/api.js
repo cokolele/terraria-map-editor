@@ -2,7 +2,7 @@ const fetchErrorDefault = (e) => {
     console.error("API call error:", e);
     return {
         status: "error",
-        message: "network error (check console for more details)"
+        message: "Network error (check console for more details)"
     };
 }
 

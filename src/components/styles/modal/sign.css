@@ -4,3 +4,8 @@
     display: flex;
     flex-direction: column;
 }
+
+.modal-sign-text {
+    margin-top: 12px;
+    font-size: 0.95rem;
+}

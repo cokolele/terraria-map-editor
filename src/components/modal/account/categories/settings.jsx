@@ -2,9 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { stateChangeUser, stateChangeModal } from "/state/modules/app.js";
 
-import ModalSignInputInline from "/components/modal/sign/input-inline.jsx"
-import "/components/styles/modal/account/view/settings.css";
-
+import ModalSignOption from "/components/modal/sign/option.jsx"
 import api from "/utils/api/api.js";
 
 function ModalAccountViewSettings({ stateChangeModal, stateChangeUser }) {
@@ -22,7 +20,7 @@ function ModalAccountViewSettings({ stateChangeModal, stateChangeUser }) {
 
    return (
       <div className="modal-account-view-settings">
-         <ModalSignInputInline link placeholder="Log out" onClick={onLogOut}/>
+         <ModalSignOption link placeholder="Log out" onClick={onLogOut}/>
       </div>
    );
 }

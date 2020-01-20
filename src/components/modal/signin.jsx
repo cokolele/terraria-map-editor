@@ -4,7 +4,8 @@ import { stateChangeUser, stateChangeModal } from "/state/modules/app.js";
 import api from "/utils/api/api.js";
 
 import ModalSignInput from "/components/modal/sign/input.jsx";
-import ModalSignInputInline from "/components/modal/sign/input-inline.jsx"
+import ModalSignOption from "/components/modal/sign/option.jsx";
+import ModalSignButton from "/components/modal/sign/button.jsx";
 import "/components/styles/modal/sign.css";
 
 function ModalSignin({ stateChangeUser, stateChangeModal }) {
@@ -97,15 +98,15 @@ function ModalSignin({ stateChangeUser, stateChangeModal }) {
       <div className="modal-sign">
          <ModalSignInput text placeholder="username" value={username} setValue={setUsername} onBlur={onInputsBlur} errorMessage={usernameError}/>
          <ModalSignInput password placeholder="password" value={password} setValue={setPassword} onBlur={onInputsBlur} errorMessage={passwordError}/>
-         <ModalSignInput submit onClick={onSubmit} value="SIGN IN" errorMessage={submitError}/>
+         <ModalSignButton label="SIGN IN" onClick={onSubmit} error={submitError}/>
          <span className="modal-sign-text">
-            <ModalSignInputInline link placeholder="Forgot username" onClick={e => {console.log("clicked")}}/>
+            <ModalSignOption link placeholder="Forgot username" onClick={e => {console.log("clicked")}}/>
             <span>·</span>
-            <ModalSignInputInline link placeholder="Forgot password" onClick={e => {console.log("clicked")}}/>
+            <ModalSignOption link placeholder="Forgot password" onClick={e => {console.log("clicked")}}/>
          </span>
          <span className="modal-sign-text">
             <span>Need an account ?</span>
-            <ModalSignInputInline link placeholder="SIGN UP" onClick={onClickSignUp}/>
+            <ModalSignOption link placeholder="SIGN UP" onClick={onClickSignUp}/>
          </span>
       </div>
    );

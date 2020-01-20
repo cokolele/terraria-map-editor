@@ -11,15 +11,14 @@ let localState = {
 
 const DIVIDER = "__DIVIDER__";
 
-const inputElHidden = document.createElement("input");
-inputElHidden.setAttribute("type", "file");
-inputElHidden.setAttribute("accept", ".wld");
-inputElHidden.addEventListener("input", async () => {
-   onNewFile(null, inputElHidden.files[0]);
-});
-
 const onNewFile = (e, file) => {
     if (file == undefined) {
+        const inputElHidden = document.createElement("input");
+        inputElHidden.setAttribute("type", "file");
+        inputElHidden.setAttribute("accept", ".wld");
+        inputElHidden.addEventListener("input", async () => {
+           onNewFile(null, inputElHidden.files[0]);
+        });
         inputElHidden.click();
     } else {
         onCloseFile();

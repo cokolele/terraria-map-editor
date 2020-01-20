@@ -1,6 +1,6 @@
 import React from "react";
 
-import "/components/styles/modal/sign/input-inline.css";
+import "/components/styles/modal/sign/option.css";
 
 function ModalSignInputInline({ link, placeholder, onClick }) {
    const _onClick = e => {

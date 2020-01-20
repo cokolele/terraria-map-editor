@@ -1,12 +1,18 @@
 const mysql = require("mysql");
-const config = require("./profiles/config.js");
 
-const db = mysql.createConnection(config.db);
-db.connect(e => {
-    if (e)
-        console.error("Error connecting to database: " + e.stack);
-    else
-        console.log("Database connected as id: " + db.threadId);
+let db;
+
+const dbInit = (config) => new Promise((resolve, reject) => {
+    db = mysql.createConnection(config.db);
+    db.connect(e => {
+        if (e) {
+            console.error("Error connecting to database: ", e);
+            reject(e);
+        } else {
+            console.log("Connected to database as id: " + db.threadId);
+            resolve(db);
+        }
+    });
 });
 
 const dbQuery = (queryString, paramArray) => new Promise((resolve, reject) => {
@@ -19,6 +25,6 @@ const dbQuery = (queryString, paramArray) => new Promise((resolve, reject) => {
 });
 
 module.exports = {
-    db,
+    dbInit,
     dbQuery
 };

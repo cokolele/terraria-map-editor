@@ -1,9 +1,9 @@
 .modal-account-menu-option {
-    border: 0 solid #383838;
-    padding: 6px 12px;
-    border-width: 1px 1px 0 1px;
+    padding: 10px 18px;
+    position: relative;
 
     color: #f0f0f0;
+    font-weight: 700;
     font-size: 1.1rem;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -13,16 +13,19 @@
     cursor: pointer;
 }
 
-.modal-account-menu-option:first-of-type {
-    border-radius: 4px 4px 0 0;
-}
-
-
-.modal-account-menu-option:last-of-type {
-    border-radius: 0 0 4px 4px;
-    border-width: 1px;
-}
-
 .modal-account-menu-option--selected {
-    border-left-width: 6px !important;
+    background-color: #424242;
+    border-radius: 4px 0 0 4px;
+}
+
+.modal-account-menu-option--selected:after {
+    content: "";
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 6px;
+    background-color: #ddd;
+    border-radius: 2px 0 0 2px;
 }

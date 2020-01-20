@@ -22,13 +22,9 @@ module.exports = {
             )
 
             if (sameCredentialsUsers.length > 1 || (sameCredentialsUsers.length === 1 && username === sameCredentialsUsers[0].username && email === sameCredentialsUsers[0].email))
-                return {
-                    error: "Username and email taken"
-                };
+                return { error: "Username and email taken" };
             else if (sameCredentialsUsers.length === 1)
-                return {
-                    error: username === sameCredentialsUsers[0].username ? "Username taken" : "Email taken"
-                };
+                return { error: username === sameCredentialsUsers[0].username ? "Username taken" : "Email taken" };
 
             const insertUser = await dbQuery(
                 "INSERT INTO `accounts` (`id`, `username`, `password`, `email`) VALUES ('0', ?, ?, ?);",
@@ -48,9 +44,7 @@ module.exports = {
             );
 
             if (sameUsernameUser.length === 0)
-                return {
-                    error: "No user found"
-                };
+                return { error: "No user found" };
 
             const passwordsMatch = await new Promise((resolve, reject) => {
                 bcrypt.compare(password, sameUsernameUser[0].password, (err, result) => {
@@ -60,9 +54,7 @@ module.exports = {
             });
 
             if (!passwordsMatch)
-                return {
-                    error: "Wrong password"
-                };
+                return { error: "Wrong password" };
             else
                 return sameUsernameUser;
         } catch (e) {

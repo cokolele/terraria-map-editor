@@ -10,13 +10,25 @@ const fs = require("fs");
 const path = require("path");
 
 const { db } = require("./db.js");
+
 const routes = require("../routes/routes.js");
 const secrets = require("./secrets.js");
 
-const create = (cfg) => {
+const create = (cfg, db) => {
     app.set("env", cfg.env);
     app.set("port", cfg.port);
     app.set("domain", cfg.domain);
+
+    if (db === undefined) {
+        app.use((req, res) => {
+            res.status(404).json({
+                status: "error",
+                message: "fatal internal error (CODE 1)"
+            });
+        });
+
+        return;
+    }
 
     const sessionSettings = {
         cookie: {

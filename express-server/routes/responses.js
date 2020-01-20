@@ -1,12 +1,13 @@
 module.exports = {
     success: (res, msg, data) => {
         res.json({
-            ...({
-                status: "ok",
-                message: msg
-            }),
+            status: "ok",
+            message: msg,
             ...data
         });
+    },
+    successData: (res, data) => {
+        res.json(data);
     },
     internal_error: (res) => {
         res.status(500).json({
