@@ -20,3 +20,8 @@ export default connect(
    },
    { changeState }
 )(Template);
+
+export default connect(
+   null,
+   { changeState }
+)(Template);

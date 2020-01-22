@@ -11,9 +11,7 @@ import "/components/styles/modal/sign.css";
 function ModalSignin({ stateChangeUser, stateChangeModal }) {
    const [username, setUsername] = useState("");
    const [password, setPassword] = useState("");
-   const [usernameError, setUsernameError] = useState("");
-   const [passwordError, setPasswordError] = useState("");
-   const [submitError, setSubmitError] = useState("");
+   const [errors, setErrors] = useState({});
 
    useEffect(() => {
       const keyDownHandler = (e) => {
@@ -33,35 +31,31 @@ function ModalSignin({ stateChangeUser, stateChangeModal }) {
    const checkInputsErrors = () => {
       const usernameLength = username.trim().length;
       const passwordLength = password.trim().length;
-      let _usernameError, _passwordError;
 
       if (usernameLength === 0)
-         _usernameError = "Empty username";
+         errors.username = "Empty username";
       else if (usernameLength < 3)
-         _usernameError = "Username must be longer than 3 characters";
+         errors.username = "Username must be longer than 3 characters";
       else if (usernameLength > 16)
-         _usernameError = "Username must be shorther than 16 characters";
+         errors.username = "Username must be shorther than 16 characters";
       else if (!usernameRegexp.test(username))
-         _usernameError = "Username can contain only: letters , - , _";
+         errors.username = "Username can contain only: letters , - , _";
       else
-         _usernameError = "";
+         delete errors.username;
 
       if (passwordLength === 0)
-         _passwordError = "Empty password";
+         errors.password = "Empty password";
       else if (passwordLength > 55)
-         _passwordError = "Password must be shorther than 55 characters";
+         errors.password = "Password must be shorther than 55 characters";
       else
-         _passwordError = "";
+         delete errors.password;
 
-      setUsernameError(_usernameError);
-      setPasswordError(_passwordError);
-
-      if (_passwordError === "" && _usernameError === "")
-         return true;
-      return false;
+      setErrors({...errors});
+      delete errors.submit;
+      return Object.entries(errors).length === 0 ? true : false;
    }
 
-   const onInputsBlur = (e) => {
+   const onInputBlur = (e) => {
       if (e.relatedTarget === null)
          checkInputsErrors();
    }
@@ -76,14 +70,17 @@ function ModalSignin({ stateChangeUser, stateChangeModal }) {
       });
 
       if (login.status != "ok") {
-         setSubmitError(login.message);
+         errors.submit = login.message;
+         setErrors({...errors});
          return;
       }
 
       const session = await api.get("/session");
 
       if (session.status != "ok") {
-         setSubmitError(session.error);
+         errors.submit = session.error;
+         setErrors({...errors});
+         return;
       }
 
       stateChangeUser(session.user);
@@ -96,17 +93,17 @@ function ModalSignin({ stateChangeUser, stateChangeModal }) {
 
    return (
       <div className="modal-sign">
-         <ModalSignInput text placeholder="username" value={username} setValue={setUsername} onBlur={onInputsBlur} errorMessage={usernameError}/>
-         <ModalSignInput password placeholder="password" value={password} setValue={setPassword} onBlur={onInputsBlur} errorMessage={passwordError}/>
-         <ModalSignButton label="SIGN IN" onClick={onSubmit} error={submitError}/>
+         <ModalSignInput label="username" value={username} onChange={setUsername} onBlur={onInputBlur} error={errors.username}/>
+         <ModalSignInput label="password" value={password} onChange={setPassword} onBlur={onInputBlur} error={errors.password} password />
+         <ModalSignButton label="SIGN IN" onClick={onSubmit} error={errors.submit}/>
          <span className="modal-sign-text">
-            <ModalSignOption link placeholder="Forgot username" onClick={e => {console.log("clicked")}}/>
+            <ModalSignOption link label="Forgot username" onClick={e => {console.log("clicked")}}/>
             <span>·</span>
-            <ModalSignOption link placeholder="Forgot password" onClick={e => {console.log("clicked")}}/>
+            <ModalSignOption link label="Forgot password" onClick={e => {console.log("clicked")}}/>
          </span>
          <span className="modal-sign-text">
             <span>Need an account ?</span>
-            <ModalSignOption link placeholder="SIGN UP" onClick={onClickSignUp}/>
+            <ModalSignOption label="SIGN UP" onClick={onClickSignUp}/>
          </span>
       </div>
    );

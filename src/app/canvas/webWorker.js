@@ -38,6 +38,13 @@ self.onmessage = async ({ data }) => {
                     newWorldFile
                 });
                 break;
+            case "VERIFY_FILE":
+                const valid = await verify(data.file);
+                postMessage({
+                    action: "RETURN_FILE_VALIDITY",
+                    valid
+                });
+                break;
         }
     } catch (error) {
         postMessage({
@@ -168,4 +175,18 @@ function save(world) {
             percentage
         });
     });
+}
+
+async function verify(file) {
+    try {
+        const world = await new terrariaWorldParser().loadFile(file);
+        world.parse(["fileformatheader", "footer"]);
+    } catch(e) {
+        if (e.name == "TerrariaWorldParserError")
+            return false;
+        else
+            throw e;
+    }
+
+    return true;
 }

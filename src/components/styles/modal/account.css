@@ -19,12 +19,29 @@
     flex-grow: 1;
 }
 
+.modal-account-button-container{
+    margin: 12px 0 0 6px;
+    display: flex;
+}
+
+.modal-account-row:first-of-type {
+    border-top: 1px solid #6d6d6d;
+}
+
 .modal-account-row {
     height: 3.4rem;
     display: flex;
     align-items: center;
     border-bottom: 1px solid #6d6d6d;
     padding: 0 6px;
+}
+
+.modal-account-row:focus {
+    outline: none;
+}
+
+.modal-account-row--selected {
+    background-color: #424242;
 }
 
 .modal-account-row-text--header-disabled {
@@ -34,6 +51,7 @@
 }
 
 .modal-account-row-text {
+    margin-right: 6px;
     color: #f0f0f0;
 }
 

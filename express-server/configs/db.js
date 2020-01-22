@@ -15,11 +15,12 @@ const dbInit = (config) => new Promise((resolve, reject) => {
     });
 });
 
-const dbQuery = (queryString, paramArray) => new Promise((resolve, reject) => {
+const dbQuery = (queryString, paramArray, cb) => new Promise((resolve, reject) => {
     const sql = mysql.format(queryString, paramArray);
 
     db.query(sql, (err, results) => {
         if(err) return reject(err);
+        if (cb) cb();
         return resolve(results);
     });
 });

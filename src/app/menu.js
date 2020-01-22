@@ -5,12 +5,6 @@ import { saveToLocalSettings } from "/utils/localStorage.js";
 
 import { getCanvasMapData, getCanvasMapFile } from "/app/canvas/main.js";
 
-let localState = {
-    running: false
-};
-
-const DIVIDER = "__DIVIDER__";
-
 const onNewFile = (e, file) => {
     if (file == undefined) {
         const inputElHidden = document.createElement("input");

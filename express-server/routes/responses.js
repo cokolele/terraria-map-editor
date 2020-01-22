@@ -9,16 +9,19 @@ module.exports = {
     successData: (res, data) => {
         res.json(data);
     },
+    successFile: (res, path) => {
+        res.sendFile(path, { maxAge: 2592000000, headers: { "Content-Type": "application/octet-stream" } });
+    },
     internal_error: (res) => {
         res.status(500).json({
             status: "error",
-            message: "API error: internal_error"
+            message: "Unexpected server error"
         });
     },
     default_bad_request: (res) => {
         res.status(400).json({
             status: "error",
-            message: "API error: default_bad_request"
+            message: "Default bad request"
         });
     },
     unprocessable: (res, msg) => {

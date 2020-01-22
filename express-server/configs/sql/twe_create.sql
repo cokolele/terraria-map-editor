@@ -13,7 +13,10 @@ CREATE TABLE IF NOT EXISTS accounts (
 CREATE TABLE IF NOT EXISTS maps (
     id int NOT NULL AUTO_INCREMENT,
     id_account int NOT NULL,
-    filepath varchar(50) NOT NULL,
+    filename char(40) NOT NULL,
+    mapname varchar(50) NOT NULL,
+    size int NOT NULL,
+    uploadtime bigint NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_account) REFERENCES accounts(id)
 ) ENGINE = InnoDB CHARSET=utf8;

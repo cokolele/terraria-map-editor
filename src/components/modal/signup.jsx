@@ -13,11 +13,7 @@ function ModalSignup({ stateChangeUser, stateChangeModal }) {
    const [password, setPassword] = useState("");
    const [password2, setPassword2] = useState("");
    const [email, setEmail] = useState("");
-   const [usernameError, setUsernameError] = useState("");
-   const [passwordError, setPasswordError] = useState("");
-   const [password2Error, setPassword2Error] = useState("");
-   const [emailError, setEmailError] = useState("");
-   const [submitError, setSubmitError] = useState("");
+   const [errors, setErrors] = useState({});
 
    useEffect(() => {
       const keyDownHandler = (e) => {
@@ -37,47 +33,41 @@ function ModalSignup({ stateChangeUser, stateChangeModal }) {
    const checkInputsErrors = () => {
       const usernameLength = username.trim().length;
       const passwordLength = password.trim().length;
-      let _usernameError, _passwordError, _password2Error, _emailError;
 
       if (usernameLength === 0)
-         _usernameError = "Empty username";
+         errors.username = "Empty username";
       else if (usernameLength < 3)
-         _usernameError = "Username must be longer than 3 characters";
+         errors.username = "Username must be longer than 3 characters";
       else if (usernameLength > 16)
-         _usernameError = "Username must be shorther than 16 characters";
+         errors.username = "Username must be shorther than 16 characters";
       else if (!usernameRegexp.test(username))
-         _usernameError = "Username can contain only: letters , - , _";
+         errors.username = "Username can contain only: letters , - , _";
       else
-         _usernameError = "";
+         delete errors.username;
 
       if (passwordLength === 0)
-         _passwordError = "Empty password";
+         errors.password = "Empty password";
       else if (passwordLength > 55)
-         _passwordError = "Password must be shorther than 55 characters";
+         errors.password = "Password must be shorther than 55 characters";
       else
-         _passwordError = "";
+         delete errors.password;
 
       if (password2 !== password)
-         _password2Error = "Password don't match";
+         errors.password2 = "Password don't match";
       else
-         _password2Error = "";
+         delete errors.password2;
 
       if (email.trim().length === 0)
-         _emailError = "Empty email";
+         errors.email = "Empty email";
       else
-         _emailError = "";
+         delete errors.email;
 
-      setUsernameError(_usernameError);
-      setPasswordError(_passwordError);
-      setPassword2Error(_password2Error);
-      setEmailError(_emailError);
-
-      if (_passwordError === "" && _usernameError === "" && _password2Error === "" && _emailError === "")
-         return true;
-      return false;
+      setErrors({...errors});
+      delete errors.submit;
+      return Object.entries(errors).length === 0 ? true : false;
    }
 
-   const onInputsBlur = (e) => {
+   const onInputBlur = (e) => {
       if (e.relatedTarget === null)
          checkInputsErrors();
    }
@@ -93,7 +83,8 @@ function ModalSignup({ stateChangeUser, stateChangeModal }) {
       });
 
       if (register.status != "ok") {
-         setSubmitError(register.message);
+         errors.submit = register.message;
+         setErrors({...errors});
          return;
       }
 
@@ -103,14 +94,16 @@ function ModalSignup({ stateChangeUser, stateChangeModal }) {
       });
 
       if (login.status != "ok") {
-         setSubmitError(login.message);
+         errors.submit = login.message;
+         setErrors({...errors});
          return;
       }
 
       const session = await api.get("/session");
 
       if (session.status != "ok") {
-         setSubmitError(session.message);
+         errors.submit = session.message;
+         setErrors({...errors});
          return;
       }
 
@@ -124,14 +117,14 @@ function ModalSignup({ stateChangeUser, stateChangeModal }) {
 
    return (
       <div className="modal-sign">
-         <ModalSignInput text placeholder="username" value={username} setValue={setUsername} onBlur={onInputsBlur} errorMessage={usernameError}/>
-         <ModalSignInput password placeholder="password" value={password} setValue={setPassword} onBlur={onInputsBlur} errorMessage={passwordError}/>
-         <ModalSignInput password placeholder="password again" value={password2} setValue={setPassword2} onBlur={onInputsBlur} errorMessage={password2Error}/>
-         <ModalSignInput text placeholder="e-mail address" value={email} setValue={setEmail} onBlur={onInputsBlur} errorMessage={emailError}/>
-         <ModalSignButton label="SIGN IN" onClick={onSubmit} error={submitError}/>
+         <ModalSignInput label="username" value={username} onChange={setUsername} onBlur={onInputBlur} error={errors.username}/>
+         <ModalSignInput label="password" value={password} onChange={setPassword} onBlur={onInputBlur} error={errors.password} password />
+         <ModalSignInput label="password again" value={password2} onChange={setPassword2} onBlur={onInputBlur} error={errors.password2} password />
+         <ModalSignInput label="e-mail address" value={email} onChange={setEmail} onBlur={onInputBlur} error={errors.email}/>
+         <ModalSignButton label="SIGN IN" onClick={onSubmit} error={errors.submit}/>
          <span className="modal-sign-text">
             <span>Already have an account ?</span>
-            <ModalSignOption link placeholder="SIGN IN" onClick={onClickSignIn}/>
+            <ModalSignOption label="SIGN IN" onClick={onClickSignIn}/>
          </span>
       </div>
    );

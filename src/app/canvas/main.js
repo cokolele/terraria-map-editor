@@ -14,7 +14,7 @@ import { map } from "/utils/number.js";
 
 let worldFile, world;
 let canvas, ctx;
-let worker;
+let worker = new Worker("./webWorker.js");;
 
 let layerImage;
 let layerCanvas = {};
@@ -93,12 +93,12 @@ const getCanvasMapFile = async () => {
     return new Promise((resolve, reject) => {
         worker.onmessage = ({ data }) => {
             switch(data.action) {
-                case "RETURN_MAP_FILE":
-                    resolve(data.newWorldFile);
-                    store.dispatch(stateChangeDescription("Finished"));
-                    break;
                 case "RETURN_PERCENTAGE_SAVING":
                     store.dispatch(stateChangePercentage(data.percentage));
+                    break;
+                case "RETURN_MAP_FILE":
+                    store.dispatch(stateChangeDescription("Finished"));
+                    resolve(data.newWorldFile);
                     break;
                 case "ERROR":
                     if (data.error.name == "TerrariaWorldSaverError") {
@@ -118,6 +118,21 @@ const getCanvasMapFile = async () => {
     });
 }
 
+const verifyMapFile = async (file) => {
+    return new Promise((resolve, reject) => {
+        worker.onmessage = ({ data }) => {
+            switch(data.action) {
+                case "RETURN_FILE_VALIDITY":
+                    resolve(data.valid);
+                    break;
+                case "ERROR":
+                    reject(data.error);
+            }
+        }
+        worker.postMessage({ action: "VERIFY_FILE", file });
+    });
+};
+
 function init(_canvas) {
     canvas = _canvas;
     ctx = canvas.getContext("2d");
@@ -134,8 +149,6 @@ function load() {
     store.dispatch(stateChangeError(null));
 
     try {
-        worker = new Worker("./webWorker.js");
-
         worker.onmessage = ({ data }) => {
             switch(data.action) {
                 case "RETURN_PERCENTAGE_PARSING_INCOMING":
@@ -469,5 +482,6 @@ export {
     changeCanvasTool,
     changeCanvasLayersVisibility,
     getCanvasMapData,
-    getCanvasMapFile
+    getCanvasMapFile,
+    verifyMapFile
 };

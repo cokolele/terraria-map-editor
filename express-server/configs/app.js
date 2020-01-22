@@ -18,6 +18,7 @@ const create = (cfg, db) => {
     app.set("env", cfg.env);
     app.set("port", cfg.port);
     app.set("domain", cfg.domain);
+    app.set("cwd", cfg.cwd)
 
     if (db === undefined) {
         app.use((req, res) => {
@@ -50,8 +51,20 @@ const create = (cfg, db) => {
     }
 
     app.use(session(sessionSettings));
-    app.use(bodyParser.urlencoded({ extended : true }));
-    app.use(bodyParser.json());
+
+    let contentType;
+    app.use((req, res, next) => {
+        contentType = req.headers["content-type"];
+        console.log(contentType);
+        next();
+    });
+
+    if (contentType == "application/octet-stream" || (contentType && contentType.includes("multipart/form-data"))) {
+    } else {
+        app.use(bodyParser.urlencoded({ extended : true }));
+        app.use(bodyParser.json());
+    }
+
     app.use(helmet());
     app.use(morgan("common", {
         stream: fs.createWriteStream( cfg.cwd + "logs/api-access.log", { flags: "a" })
@@ -62,6 +75,12 @@ const create = (cfg, db) => {
     app.use((req, res) => {
         res.status(404).send("twe api server");
     });
+    app.use((err, req, res, next) => {
+        res.status(500).json({
+            status: "error",
+            message: "API error: internal_error"
+        });
+    })
 };
 
 const start = () => {

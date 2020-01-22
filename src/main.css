@@ -33,3 +33,7 @@ button, input[type="submit"], input[type="reset"] {
     cursor: pointer;
     outline: inherit;
 }
+
+.flex-filler {
+    flex-grow: 1;
+}

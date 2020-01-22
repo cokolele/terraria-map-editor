@@ -20,7 +20,7 @@ function ModalAccountViewSettings({ stateChangeModal, stateChangeUser }) {
 
    return (
       <div className="modal-account-view-settings">
-         <ModalSignOption link placeholder="Log out" onClick={onLogOut}/>
+         <ModalSignOption label="Log out" onClick={onLogOut}/>
       </div>
    );
 }
