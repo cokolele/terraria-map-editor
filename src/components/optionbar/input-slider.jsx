@@ -2,25 +2,40 @@ import React, { useState } from "react";
 
 import "/components/styles/optionbar/input.css";
 
-//i know...
-function OptionbarInputSlider({ label, value, onChange, float, min, max, roundTo = 2, sliderWidth, input, inputWidth, inputMin = min, inputMax = max, className }) {
-   const [_value, setValue] = useState(float ? Math.round(value * Math.pow(10, roundTo)) : value);
+function OptionbarInputSlider({ label, value, onChange, float, min, max, roundTo = 2, sliderWidth, input, inputWidth, className }) {
+   const shift = Math.pow(10, roundTo);
+   let unshifted;
+   if (float) {
+      unshifted = {
+         value: (value == -0 || value == "-0.") ? value : Math.round(value * shift) / shift,
+         min,
+         max,
+         onChange: (e) => {
+            if (e.target.value.endsWith(".") && !e.target.value.replace(/.$/, "").includes("."))
+               onChange(e.target.value);
+            else if (!isNaN(e.target.value) && e.target.value >= unshifted.min && e.target.value <= unshifted.max)
+               if (e.target.value > 0)
+                  onChange(Math.floor(e.target.value * shift) / shift);
+               else
+                  onChange(Math.ceil(e.target.value * shift) / shift);
+            else if (e.target.value.endsWith("-") && e.target.value.charAt(0) != "-")
+               onChange("-" + e.target.value.replace("-", ""));
+            else if (e.target.value.endsWith("+") && e.target.value.charAt(0) == "-")
+               onChange(e.target.value.replace("+", "").replace("-", ""));
+         }
+      };
+
+      value *= shift;
+      min *= shift;
+      max *= shift;
+   }
+
    const _onChange = (e) => {
-      if (float && (e.target.value == "0." || e.target.value == "-0" || e.target.value == "-0.")) {
-         setValue(e.target.value);
-         onChange(e.target.value);
-         return;
-      }
-
-      if (isNaN(e.target.value) || (inputMin !== undefined && e.target.value < (float ? inputMin * Math.pow(10, roundTo) : inputMin)) || (inputMax !== undefined && e.target.value > (float ? inputMax * Math.pow(10, roundTo) : inputMax)))
-         return;
-
-      if (float) {
-         setValue(e.target.value);
-         onChange(e.target.value / Math.pow(10, roundTo));
-      } else {
-         setValue(Math.round(e.target.value));
-         onChange(Math.round(e.target.value));
+      if (!isNaN(e.target.value) && e.target.value >= min && e.target.value <= max) {
+         if (float)
+            onChange(Math.round(e.target.value) / shift);
+         else
+            onChange(Math.round(e.target.value));
       }
    };
 
@@ -30,23 +45,13 @@ function OptionbarInputSlider({ label, value, onChange, float, min, max, roundTo
             label &&
             <span className="optionbar-input-label">{label + ":"}</span>
          }
-         <input className="optionbar-input-slider" type="range" min={float ? min * Math.pow(10, roundTo) : min} max={float ? max * Math.pow(10, roundTo) : max} value={_value} onChange={_onChange} style={{width: sliderWidth}}/>
+         <input className="optionbar-input-slider" type="range" value={value} onChange={_onChange} min={min} max={max} style={{width: sliderWidth}}/>
          {
             input &&
-            <input className="optionbar-input" type="text" value={(float && (typeof _value == "number" || !_value.endsWith(".")) && _value != "-0") ? _value / Math.pow(10, roundTo) : _value} onChange={(e) => {
-               if (e.target.value == "0-" || e.target.value == "-00")
-                  e.target.value = "-0";
-               if (e.target.value.endsWith("-")) {
-                  e.target.value = e.target.value.replace("-", "");
-                  e.target.value *= -1;
-               }
-               if (float && !e.target.value.endsWith(".") && e.target.value != "-0")
-                  e.target.value = e.target.value > 0 ? Math.floor(e.target.value * Math.pow(10, roundTo)) : Math.ceil(e.target.value * Math.pow(10, roundTo));
-               _onChange(e);
-            }} style={{width: inputWidth}}/>
+            <input className="optionbar-input" type="text" value={float ? unshifted.value : value} onChange={float ? unshifted.onChange : _onChange} style={{width: inputWidth}}/>
          }
       </div>
-   );
+   )
 }
 
 export default OptionbarInputSlider;

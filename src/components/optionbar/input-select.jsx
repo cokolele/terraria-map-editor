@@ -4,12 +4,6 @@ import { ArrowDownIcon } from "/components/icon.jsx";
 import "/components/styles/optionbar/input.css";
 
 function OptionbarInputSelect({ label, options, value, onChange, className, width }) {
-   const [_value, setValue] = useState(value ? value : (typeof options[0] == "object" ? options[0][1] : options[0]));
-   const _onChange = (e) => {
-      setValue(e.target.value);
-      onChange(e.target.value);
-   };
-
    return (
       <div className={"optionbar-input-container" + (className ? " " + className : "")}>
          {
@@ -17,7 +11,7 @@ function OptionbarInputSelect({ label, options, value, onChange, className, widt
             <span className="optionbar-input-label">{label + ":"}</span>
          }
          <div className="optionbar-input-select-container">
-            <select className="optionbar-input-select" value={_value} onChange={_onChange} style={width && {width}}>
+            <select className="optionbar-input-select" value={value ? value : (typeof options[0] == "object" ? options[0][1] : options[0])} onChange={(e) => {onChange(e.target.value)}} style={width && {width}}>
                {
                   options.map((option, i) => {
                      if (typeof option == "object")

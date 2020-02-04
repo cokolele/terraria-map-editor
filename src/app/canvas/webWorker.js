@@ -32,7 +32,15 @@ self.onmessage = async ({ data }) => {
                 });
                 break;
             case "SAVE_MAP":
-                const newWorldFile = save(world);
+                const newWorldFile = save({
+                    ...data.worldObject,
+                    worldTiles: world.worldTiles,
+                    footer: {
+                        signoff1: true,
+                        signoff2: data.worldObject.header.mapName,
+                        signoff3: data.worldObject.header.worldId
+                    }
+                });
                 postMessage({
                     action: "RETURN_MAP_FILE",
                     newWorldFile

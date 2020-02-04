@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { onNewFile, onExampleMap, onCloseFile, onSaveImage, onSaveFile, onToggleSidebar, onToggleToolbar } from "/app/menu.js";
+import { onNewFile, onExampleMap, onCloseFile, onSaveImage, onSaveFile, onToggleSidebar, onToggleToolbar, setWorldObject } from "/app/menu.js";
 import { stateChangeModal } from "/state/modules/app.js";
 import { localSettings } from "/utils/localStorage.js";
 
@@ -9,7 +9,11 @@ import MenuFolderButton from "/components/menu/folder-button.jsx";
 import { AccountBoxIcon, GithubIcon } from "/components/icon.jsx";
 import "/components/styles/menu.css";
 
-function Menu({ view, running, loggedIn, user, stateChangeModal }) {
+function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject }) {
+   useEffect(() => {
+      setWorldObject(worldObject);
+   }, [worldObject]);
+
    const [currentTab, setCurrentTab] = useState(false);
 
    const DIVIDER = "__DIVIDER__";
@@ -94,7 +98,8 @@ export default connect(state => {
          view: state.app.view,
          running: state.app.running,
          loggedIn: state.app.loggedIn,
-         user: state.app.user
+         user: state.app.user,
+         worldObject: state.app.worldObject
       };
    },
    { stateChangeModal }

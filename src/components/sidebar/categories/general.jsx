@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { stateChangeWorldObject } from "/state/modules/app.js"
 
 import OptionbarInput from "/components/optionbar/input.jsx";
 import OptionbarInputSlider from "/components/optionbar/input-slider.jsx";
@@ -7,168 +8,170 @@ import OptionbarInputSelect from "/components/optionbar/input-select.jsx";
 import OptionbarInputCheckbox from "/components/optionbar/input-checkbox.jsx";
 import "/components/styles/sidebar/categories/general.css";
 
+import LAYERS from "/app/canvas/enum-LAYERS.js";
 import { setLayerImageRectangleColor } from "/app/canvas/main.js";
 
-function SidebarCategoryGeneral({ worldObject }) {
-   const { fileFormatHeader } = worldObject;
-
+function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject }) {
    const [header, setHeader] = useState(worldObject.header);
 
-   const [invasionSizeStart, _setInvasionSizeStart] = useState(header.invasionSizeStart);
-   const setInvasionSizeStart = (value) => {
-      header.invasionSizeStart = value;
-      if (value > header.invasionSize)
-         header.invasionSize = value;
-      _setInvasionSizeStart(value);
-   };
+   const setHeaderKey = (key, value, index) => {
+      if (key == "worldSurface") {
+         if (value > header.worldSurface)
+            setLayerImageRectangleColor(LAYERS.BACKGROUND, "sky", [0, header.worldSurface], [header.maxTilesX, value]);
+         else
+            setLayerImageRectangleColor(LAYERS.BACKGROUND, "ground", [0, value], [header.maxTilesX, header.worldSurface]);
 
-   const [worldSurface, _setWorldSurface] = useState(header.worldSurface);
-   const [rockLayer, _setRockLayer] = useState(header.rockLayer);
-   const setWorldSurface = (value) => {
-      header.worldSurface = value;
-      _setWorldSurface(value);
-      if (value >= rockLayer) {
-         _setRockLayer(value);
-         header.rockLayer = value;
+         if (value >= header.rockLayer)
+            header.rockLayer = value;
       }
-   };
-   const setRockLayer = (value) => {
-      _setRockLayer(value);
-      header.rockLayer = value;
-      if (value <= worldSurface) {
-         console.log(value);
-         _setWorldSurface(value);
-         header.worldSurface = value;
+      else if (key == "rockLayer") {
+         if (value > header.rockLayer)
+            setLayerImageRectangleColor(LAYERS.BACKGROUND, "ground", [0, header.rockLayer], [header.maxTilesX, value]);
+         else
+            setLayerImageRectangleColor(LAYERS.BACKGROUND, "cavern", [0, value], [header.maxTilesX, header.rockLayer]);
+
+         if (value <= header.worldSurface)
+            header.worldSurface = value;
       }
-   };
+
+      if (index !== undefined) {
+         header[key][index] = value;
+      }
+      else {
+         header[key] = value;
+      }
+
+      setHeader({...header});
+      stateChangeWorldObject({...worldObject, header});
+   }
 
    return (
       <div className="sidebar-view-general">
-         <div className="sidebar-view-general-row-label">World name</div>
-         <OptionbarInput value={header.mapName} onChange={(value) => {header.mapName = value}} />
-         <div className="sidebar-view-general-row-label">World ID</div>
+         <span>World name</span>
+         <OptionbarInput value={header.mapName} onChange={(value) => {setHeaderKey("mapName", value)}} />
+         <span>World ID</span>
          <div className="sidebar-view-general-row-value">{header.worldId}</div>
-         <div className="sidebar-view-general-row-label">Seed</div>
+         <span>Seed</span>
          <div className="sidebar-view-general-row-value">{header.seedText}</div>
-         <div className="sidebar-view-general-row-label">Revision</div>
-         <div className="sidebar-view-general-row-value">{fileFormatHeader.revision}</div>
-         <div className="sidebar-view-general-row-label">World size in block</div>
+         <span>Revision</span>
+         <div className="sidebar-view-general-row-value">{worldObject.fileFormatHeader.revision}</div>
+         <span>World size in block</span>
          <div className="sidebar-view-general-row-value">{`${header.maxTilesX} x ${header.maxTilesY}`}</div>
-         <div className="sidebar-view-general-row-label">World size in pixels</div>
+         <span>World size in pixels</span>
          <div className="sidebar-view-general-row-value">{`${header.rightWorld} x ${header.bottomWorld}`}</div>
-         <div className="sidebar-view-general-row-label">Spawn point</div>
+         <span>Spawn point</span>
          <div className="sidebar-view-general-row-spanner">
             x:
-            <OptionbarInput value={header.spawnTileX} onChange={(value) => {header.spawnTileX = value}} int min={0} max={header.maxTilesX}/>
+            <OptionbarInput value={header.spawnTileX} onChange={(value) => {setHeaderKey("spawnTileX", value)}} int min={0} max={header.maxTilesX}/>
             y:
-            <OptionbarInput value={header.spawnTileY} onChange={(value) => {header.spawnTileY = value}} int min={0} max={header.maxTilesY}/>
+            <OptionbarInput value={header.spawnTileY} onChange={(value) => {setHeaderKey("spawnTileY", value)}} int min={0} max={header.maxTilesY}/>
          </div>
-         <div className="sidebar-view-general-row-label">Dungeon point</div>
+         <span>Dungeon point</span>
          <div className="sidebar-view-general-row-spanner">
             x:
-            <OptionbarInput value={header.dungeonX} onChange={(value) => {header.dungeonX = value}} int min={0} max={header.maxTilesX}/>
+            <OptionbarInput value={header.dungeonX} onChange={(value) => {setHeaderKey("dungeonX", value)}} int min={0} max={header.maxTilesX}/>
             y:
-            <OptionbarInput value={header.dungeonY} onChange={(value) => {header.dungeonY = value}} int min={0} max={header.maxTilesY}/>
+            <OptionbarInput value={header.dungeonY} onChange={(value) => {setHeaderKey("dungeonY", value)}} int min={0} max={header.maxTilesY}/>
          </div>
-         <div className="sidebar-view-general-row-label">Cavern level</div>
-         <OptionbarInputSlider value={worldSurface} onChange={setWorldSurface} min={0} max={header.maxTilesY} input inputWidth="6ch"/>
-         <div className="sidebar-view-general-row-label">Underground level</div>
-         <OptionbarInputSlider value={rockLayer} onChange={setRockLayer} min={0} max={header.maxTilesY} input inputWidth="6ch"/>
+         <span>Cavern level</span>
+         <OptionbarInputSlider value={header.worldSurface} onChange={(value) => {setHeaderKey("worldSurface", value)}} min={0} max={header.maxTilesY} input inputWidth="6ch"/>
+         <span>Underground level</span>
+         <OptionbarInputSlider value={header.rockLayer} onChange={(value) => {setHeaderKey("rockLayer", value)}} min={0} max={header.maxTilesY} input inputWidth="6ch"/>
 
          <div className="sidebar-view-general-row-divider"><span>Styles:</span></div>
 
-         <div className="sidebar-view-general-row-label">Tree styles X 1</div>
-         <OptionbarInputSlider value={header.treeX[0]} onChange={(value) => {header.treeX[0] = value}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
-         <div className="sidebar-view-general-row-label">Tree styles X 2</div>
-         <OptionbarInputSlider value={header.treeX[1]} onChange={(value) => {header.treeX[1] = value}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
-         <div className="sidebar-view-general-row-label">Tree styles X 3</div>
-         <OptionbarInputSlider value={header.treeX[2]} onChange={(value) => {header.treeX[2] = value}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
-         <div className="sidebar-view-general-row-label">Tree style</div>
+         <span>Tree styles X 1</span>
+         <OptionbarInputSlider value={header.treeX[0]} onChange={(value) => {setHeaderKey("treeX", value, 0)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
+         <span>Tree styles X 2</span>
+         <OptionbarInputSlider value={header.treeX[1]} onChange={(value) => {setHeaderKey("treeX", value, 1)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
+         <span>Tree styles X 3</span>
+         <OptionbarInputSlider value={header.treeX[2]} onChange={(value) => {setHeaderKey("treeX", value, 2)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
+         <span>Tree style</span>
          <div className="sidebar-view-general-row-spanner">
-            <OptionbarInputSelect value={header.treeStyle[0]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5]} onChange={(value) => {header.treeStyle[0] = value}}/>
-            <OptionbarInputSelect value={header.treeStyle[1]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5]} onChange={(value) => {header.treeStyle[1] = value}}/>
-            <OptionbarInputSelect value={header.treeStyle[2]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5]} onChange={(value) => {header.treeStyle[2] = value}}/>
-            <OptionbarInputSelect value={header.treeStyle[3]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5]} onChange={(value) => {header.treeStyle[3] = value}}/>
+            <OptionbarInputSelect value={header.treeStyle[0]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5]} onChange={(value) => {setHeaderKey("treeStyle", value, 0)}}/>
+            <OptionbarInputSelect value={header.treeStyle[1]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5]} onChange={(value) => {setHeaderKey("treeStyle", value, 1)}}/>
+            <OptionbarInputSelect value={header.treeStyle[2]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5]} onChange={(value) => {setHeaderKey("treeStyle", value, 2)}}/>
+            <OptionbarInputSelect value={header.treeStyle[3]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5]} onChange={(value) => {setHeaderKey("treeStyle", value, 3)}}/>
          </div>
-         <div className="sidebar-view-general-row-label">Forest background</div>
-         <OptionbarInputSelect value={header.setBG0} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 31, 51, 71, 72, 73]} onChange={(value) => {header.setBG0 = value}} width="5ch"/>
-         <div className="sidebar-view-general-row-label">Corruption background</div>
-         <OptionbarInputSelect value={header.setBG1} options={[0, 1]} onChange={(value) => {header.setBG1 = value}} width="5ch"/>
-         <div className="sidebar-view-general-row-label">Jungle background</div>
-         <OptionbarInputSelect value={header.setBG2} options={[0, 1]} onChange={(value) => {header.setBG2 = value}} width="5ch"/>
-         <div className="sidebar-view-general-row-label">Deep jungle background</div>
-         <OptionbarInputSelect value={header.jungleBackStyle} options={[0, 1]} onChange={(value) => {header.jungleBackStyle = value}} width="5ch"/>
-         <div className="sidebar-view-general-row-label">Snow background</div>
-         <OptionbarInputSelect value={header.setBG3} options={[0, 1, 2, 3, 4, 21, 22, 31, 32, 41, 42]} onChange={(value) => {header.setBG3 = value}} width="5ch"/>
-         <div className="sidebar-view-general-row-label">Deep snow background</div>
-         <OptionbarInputSelect value={header.iceBackStyle} options={[0, 1, 2, 3]} onChange={(value) => {header.iceBackStyle = value}} width="5ch"/>
-         <div className="sidebar-view-general-row-label">Hallow background</div>
-         <OptionbarInputSelect value={header.setBG4} options={[0, 1]} onChange={(value) => {header.setBG4 = value}} width="5ch"/>
-         <div className="sidebar-view-general-row-label">Crimson background</div>
-         <OptionbarInputSelect value={header.setBG5} options={[0, 1, 2]} onChange={(value) => {header.setBG5 = value}} width="5ch"/>
-         <div className="sidebar-view-general-row-label">Desert background</div>
-         <OptionbarInputSelect value={header.setBG6} options={[0, 1]} onChange={(value) => {header.setBG6 = value}} width="5ch"/>
-         <div className="sidebar-view-general-row-label">Ocean background</div>
-         <OptionbarInputSelect value={header.setBG7} options={[0, 1, 2]} onChange={(value) => {header.setBG7 = value}} width="5ch"/>
-         <div className="sidebar-view-general-row-label">Underground backgrounds X 1</div>
-         <OptionbarInputSlider value={header.caveBackX[0]} onChange={(value) => {header.caveBackX[0] = value}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
-         <div className="sidebar-view-general-row-label">Underground backgrounds X 2</div>
-         <OptionbarInputSlider value={header.caveBackX[1]} onChange={(value) => {header.caveBackX[1] = value}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
-         <div className="sidebar-view-general-row-label">Underground backgrounds X 3</div>
-         <OptionbarInputSlider value={header.caveBackX[2]} onChange={(value) => {header.caveBackX[2] = value}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
-         <div className="sidebar-view-general-row-label">Underground background</div>
+         <span>Forest background</span>
+         <OptionbarInputSelect value={header.setBG0} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBG0", value)}} width="5ch"/>
+         <span>Corruption background</span>
+         <OptionbarInputSelect value={header.setBG1} options={[0, 1]} onChange={(value) => {setHeaderKey("setBG1", value)}} width="5ch"/>
+         <span>Jungle background</span>
+         <OptionbarInputSelect value={header.setBG2} options={[0, 1]} onChange={(value) => {setHeaderKey("setBG2", value)}} width="5ch"/>
+         <span>Deep jungle background</span>
+         <OptionbarInputSelect value={header.jungleBackStyle} options={[0, 1]} onChange={(value) => {setHeaderKey("jungleBackStyle", value)}} width="5ch"/>
+         <span>Snow background</span>
+         <OptionbarInputSelect value={header.setBG3} options={[0, 1, 2, 3, 4, 21, 22, 31, 32, 41, 42]} onChange={(value) => {setHeaderKey("setBG3", value)}} width="5ch"/>
+         <span>Deep snow background</span>
+         <OptionbarInputSelect value={header.iceBackStyle} options={[0, 1, 2, 3]} onChange={(value) => {setHeaderKey("iceBackStyle", value)}} width="5ch"/>
+         <span>Hallow background</span>
+         <OptionbarInputSelect value={header.setBG4} options={[0, 1]} onChange={(value) => {setHeaderKey("setBG4", value)}} width="5ch"/>
+         <span>Crimson background</span>
+         <OptionbarInputSelect value={header.setBG5} options={[0, 1, 2]} onChange={(value) => {setHeaderKey("setBG5", value)}} width="5ch"/>
+         <span>Desert background</span>
+         <OptionbarInputSelect value={header.setBG6} options={[0, 1]} onChange={(value) => {setHeaderKey("setBG6", value)}} width="5ch"/>
+         <span>Ocean background</span>
+         <OptionbarInputSelect value={header.setBG7} options={[0, 1, 2]} onChange={(value) => {setHeaderKey("setBG7", value)}} width="5ch"/>
+         <span>Underground backgrounds X 1</span>
+         <OptionbarInputSlider value={header.caveBackX[0]} onChange={(value) => {setHeaderKey("caveBackX", value, 0)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
+         <span>Underground backgrounds X 2</span>
+         <OptionbarInputSlider value={header.caveBackX[1]} onChange={(value) => {setHeaderKey("caveBackX", value, 1)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
+         <span>Underground backgrounds X 3</span>
+         <OptionbarInputSlider value={header.caveBackX[2]} onChange={(value) => {setHeaderKey("caveBackX", value, 2)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
+         <span>Underground background</span>
          <div className="sidebar-view-general-row-spanner">
-            <OptionbarInputSelect value={header.caveBackStyle[0]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5, 6, 7]} onChange={(value) => {header.caveBackStyle[0] = value}}/>
-            <OptionbarInputSelect value={header.caveBackStyle[1]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5, 6, 7]} onChange={(value) => {header.caveBackStyle[1] = value}}/>
-            <OptionbarInputSelect value={header.caveBackStyle[2]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5, 6, 7]} onChange={(value) => {header.caveBackStyle[2] = value}}/>
-            <OptionbarInputSelect value={header.caveBackStyle[3]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5, 6, 7]} onChange={(value) => {header.caveBackStyle[3] = value}}/>
+            <OptionbarInputSelect value={header.caveBackStyle[0]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5, 6, 7]} onChange={(value) => {setHeaderKey("caveBackStyle", value, 0)}}/>
+            <OptionbarInputSelect value={header.caveBackStyle[1]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5, 6, 7]} onChange={(value) => {setHeaderKey("caveBackStyle", value, 1)}}/>
+            <OptionbarInputSelect value={header.caveBackStyle[2]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5, 6, 7]} onChange={(value) => {setHeaderKey("caveBackStyle", value, 2)}}/>
+            <OptionbarInputSelect value={header.caveBackStyle[3]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5, 6, 7]} onChange={(value) => {setHeaderKey("caveBackStyle", value, 3)}}/>
          </div>
-         <div className="sidebar-view-general-row-label">Underworld background</div>
-         <OptionbarInputSelect value={header.hellBackStyle} options={[0, 1, 2]} onChange={(value) => {header.hellBackStyle = value}} width="5ch"/>
+         <span>Underworld background</span>
+         <OptionbarInputSelect value={header.hellBackStyle} options={[0, 1, 2]} onChange={(value) => {setHeaderKey("hellBackStyle", value)}} width="5ch"/>
 
          <div className="sidebar-view-general-row-divider"><span>Events:</span></div>
 
-         <div className="sidebar-view-general-row-label">Blood moon</div>
-         <OptionbarInputCheckbox value={header.tempBloodMoon} onChange={(value) => {header.tempBloodMoon = value; setHeader(header)}} />
-         <div className="sidebar-view-general-row-label">Eclipse</div>
-         <OptionbarInputCheckbox value={header.tempEclipse} onChange={(value) => {header.tempEclipse = value; setHeader({...header})}} />
-         <div className="sidebar-view-general-row-label">Spawn meteor</div>
-         <OptionbarInputCheckbox value={header.spawnMeteor} onChange={(value) => {header.spawnMeteor = value}} />
-         <div className="sidebar-view-general-row-label">Invasion</div>
-         <OptionbarInputSelect value={header.invasionType} options={[["None", 0], ["Goblin invasion", 1], ["Frost legion", 2], ["Pirate invasion", 3], ["Martian madness", 4]]} onChange={(value) => {header.invasionType = value}}/>
-         <div className="sidebar-view-general-row-label">Invasion progress</div>
-         <OptionbarInputSlider value={header.invasionSize} onChange={(value) => {header.invasionSize = value}} min={0} max={invasionSizeStart}/>
-         <div className="sidebar-view-general-row-label">Invasion size</div>
-         <OptionbarInputSlider value={invasionSizeStart} onChange={setInvasionSizeStart} min={0} max={10400} input inputWidth="7ch"/>
-         <div className="sidebar-view-general-row-label">Slime rain time</div>
-         <OptionbarInputSlider value={header.slimeRainTime} onChange={(value) => {header.slimeRainTime = value}} min={-604800} max={54000} input inputWidth="9ch"/>
-         <div className="sidebar-view-general-row-label">Cultists cooldown</div>
-         <OptionbarInputSlider value={header.tempCultistDelay} onChange={(value) => {header.tempCultistDelay = value}} min={0} max={86400} input inputWidth="7ch"/>
+         <span>Blood moon</span>
+         <OptionbarInputCheckbox value={header.tempBloodMoon} onChange={(value) => {setHeaderKey("tempBloodMoon", value)}} />
+         <span>Eclipse</span>
+         <OptionbarInputCheckbox value={header.tempEclipse} onChange={(value) => {setHeaderKey("tempEclipse", value)}} />
+         <span>Spawn meteor</span>
+         <OptionbarInputCheckbox value={header.spawnMeteor} onChange={(value) => {setHeaderKey("spawnMeteor", value)}} />
+         <span>Invasion</span>
+         <OptionbarInputSelect value={header.invasionType} options={[["None", 0], ["Goblin invasion", 1], ["Frost legion", 2], ["Pirate invasion", 3], ["Martian madness", 4]]} onChange={(value) => {setHeaderKey("invasionType", value)}}/>
+         <span>Invasion progress</span>
+         <OptionbarInputSlider value={header.invasionSize} onChange={(value) => {setHeaderKey("invasionSize", value)}} min={0} max={header.invasionSizeStart}/>
+         <span>Invasion size</span>
+         <OptionbarInputSlider value={header.invasionSizeStart} onChange={(value) => {setHeaderKey("invasionSizeStart", value)}} min={0} max={10400} input inputWidth="7ch"/>
+         <span>Slime rain time</span>
+         <OptionbarInputSlider value={header.slimeRainTime} onChange={(value) => {setHeaderKey("slimeRainTime", value)}} min={-604800} max={54000} input inputWidth="9ch"/>
+         <span>Cultists cooldown</span>
+         <OptionbarInputSlider value={header.tempCultistDelay} onChange={(value) => {setHeaderKey("tempCultistDelay", value)}} min={0} max={86400} input inputWidth="7ch"/>
 
          <div className="sidebar-view-general-row-divider"><span>Flags:</span></div>
 
-         <div className="sidebar-view-general-row-label">Expert mode</div>
-         <OptionbarInputCheckbox value={header.expertMode} onChange={(value) => {header.expertMode = value}} />
-         <div className="sidebar-view-general-row-label">Crimson world</div>
-         <OptionbarInputCheckbox value={header.crimson} onChange={(value) => {header.crimson = value}} />
-         <div className="sidebar-view-general-row-label">Hard mode</div>
-         <OptionbarInputCheckbox value={header.hardMode} onChange={(value) => {header.hardMode = value}} />
-         <div className="sidebar-view-general-row-label">Hardmode ore 1</div>
-         <OptionbarInputSelect value={header.oreTier1} options={[["Not yet set", -1], ["Cobalt ore", 107], ["Palladium ore", 221]]} onChange={(value) => {header.oreTier1 = value}}/>
-         <div className="sidebar-view-general-row-label">Hardmode ore 2</div>
-         <OptionbarInputSelect value={header.oreTier2} options={[["Not yet set", -1], ["Mythril ore", 108], ["Orichalcum ore", 222]]} onChange={(value) => {header.oreTier2 = value}}/>
-         <div className="sidebar-view-general-row-label">Hardmode ore 3</div>
-         <OptionbarInputSelect value={header.oreTier3} options={[["Not yet set", -1], ["Adamantite ore", 111], ["Titanium ore", 223]]} onChange={(value) => {header.oreTier3 = value}}/>
-         <div className="sidebar-view-general-row-label">Shadow orb already smashed</div>
-         <OptionbarInputCheckbox value={header.shadowOrbSmashed} onChange={(value) => {header.shadowOrbSmashed = value}} />
-         <div className="sidebar-view-general-row-label">Shadow orbs smashed</div>
+         <span>Expert mode</span>
+         <OptionbarInputCheckbox value={header.expertMode} onChange={(value) => {setHeaderKey("expertMode", value)}} />
+         <span>Crimson world</span>
+         <OptionbarInputCheckbox value={header.crimson} onChange={(value) => {setHeaderKey("crimson", value)}} />
+         <span>Hard mode</span>
+         <OptionbarInputCheckbox value={header.hardMode} onChange={(value) => {setHeaderKey("hardMode", value)}} />
+         <span>Hardmode ore 1</span>
+         <OptionbarInputSelect value={header.oreTier1} options={[["Not yet set", -1], ["Cobalt ore", 107], ["Palladium ore", 221]]} onChange={(value) => {setHeaderKey("oreTier1", value)}}/>
+         <span>Hardmode ore 2</span>
+         <OptionbarInputSelect value={header.oreTier2} options={[["Not yet set", -1], ["Mythril ore", 108], ["Orichalcum ore", 222]]} onChange={(value) => {setHeaderKey("oreTier2", value)}}/>
+         <span>Hardmode ore 3</span>
+         <OptionbarInputSelect value={header.oreTier3} options={[["Not yet set", -1], ["Adamantite ore", 111], ["Titanium ore", 223]]} onChange={(value) => {setHeaderKey("oreTier3", value)}}/>
+         <span>Shadow orb already smashed</span>
+         <OptionbarInputCheckbox value={header.shadowOrbSmashed} onChange={(value) => {setHeaderKey("shadowOrbSmashed", value)}} />
+         <span>Shadow orbs smashed</span>
          <div className="sidebar-view-general-row-spanner">
-            <OptionbarInputSlider value={header.shadowOrbCount} onChange={(value) => {header.shadowOrbCount = value}} min={0} max={3} input inputWidth="3ch"/>
+            <OptionbarInputSlider value={header.shadowOrbCount} onChange={(value) => {setHeaderKey("shadowOrbCount", value)}} min={0} max={3} input inputWidth="3ch"/>
             <span>/ 3</span>
          </div>
-         <div className="sidebar-view-general-row-label">Altars smashed</div>
-         <OptionbarInput value={header.altarCount} onChange={(value) => {header.altarCount = value}} int min={0} max={2147483647} width="12ch"/>
-         <div className="sidebar-view-general-row-label">Active angler quest</div>
+         <span>Altars smashed</span>
+         <OptionbarInput value={header.altarCount} onChange={(value) => {setHeaderKey("altarCount", value)}} int min={0} max={2147483647} width="12ch"/>
+         <span>Active angler quest</span>
          <OptionbarInputSelect value={header.anglerQuest} options={[
                   ["Batfish", 0],
                   ["Bumblebee Tuna", 1],
@@ -209,133 +212,136 @@ function SidebarCategoryGeneral({ worldObject }) {
                   ["Mudfish", 36],
                   ["Slimefish", 37],
                   ["Tropical Barracuda", 38]
-               ]} onChange={(value) => {header.anglerQuest = value}}/>
-         <div className="sidebar-view-general-row-label">Sundial used</div>
-         <OptionbarInputCheckbox value={header.fastForwardTime} onChange={(value) => {header.fastForwardTime = value}} />
-         <div className="sidebar-view-general-row-label">Sundial cooldown</div>
-         <OptionbarInputSlider value={header.sundialCooldown} onChange={(value) => {header.sundialCooldown = value}} min={0} max={128} input inputWidth="5ch"/>
+               ]} onChange={(value) => {setHeaderKey("anglerQuest", value)}}/>
+         <span>Sundial used</span>
+         <OptionbarInputCheckbox value={header.fastForwardTime} onChange={(value) => {setHeaderKey("fastForwardTime", value)}} />
+         <span>Sundial cooldown</span>
+         <OptionbarInputSlider value={header.sundialCooldown} onChange={(value) => {setHeaderKey("sundialCooldown", value)}} min={0} max={128} input inputWidth="5ch"/>
 
          <div className="sidebar-view-general-row-divider"><span>Weather:</span></div>
 
-         <div className="sidebar-view-general-row-label">Day</div>
-         <OptionbarInputCheckbox value={header.tempDayTime} onChange={(value) => {header.tempDayTime = value}} />
-         <div className="sidebar-view-general-row-label">Current time</div>
-         <OptionbarInputSlider value={header.tempTime} onChange={(value) => {header.tempTime = value}} min={0} max={54000} input inputWidth="7ch"/>
-         <div className="sidebar-view-general-row-label">Moon type</div>
-         <OptionbarInputSelect value={header.moonType} options={[["Grey", 0], ["Orange", 1], ["Ringed", 2]]} onChange={(value) => {header.moonType = value}}/>
-         <div className="sidebar-view-general-row-label">Moon phase</div>
-         <OptionbarInputSelect value={header.moonType} options={[["Full moon", 0], ["Waning gibbous", 1], ["Third quarter", 2], ["Waning crescent", 3], ["New moon", 4], ["Waxing crescent", 5], ["First quarter", 6], ["Waxing gibbous", 7]]} onChange={(value) => {header.moonType = value}}/>
-         <div className="sidebar-view-general-row-label">Raining</div>
-         <OptionbarInputCheckbox value={header.tempRaining} onChange={(value) => {header.tempRaining = value}} />
-         <div className="sidebar-view-general-row-label">Rain time</div>
-         <OptionbarInputSlider value={header.tempRainTime} onChange={(value) => {header.tempRainTime = value}} min={0} max={147600} input inputWidth="8ch"/>
-         <div className="sidebar-view-general-row-label">Max rain</div>
-         <OptionbarInputSlider value={header.tempMaxRain} onChange={(value) => {header.tempMaxRain = value}} float roundTo={1} min={0} max={0.9} input inputWidth="4ch"/>
-         <div className="sidebar-view-general-row-label">Cloud background active</div>
+         <span>Day</span>
+         <OptionbarInputCheckbox value={header.tempDayTime} onChange={(value) => {setHeaderKey("tempDayTime", value)}} />
+         <span>Current time</span>
+         <OptionbarInputSlider value={header.tempTime} onChange={(value) => {setHeaderKey("tempTime", value)}} min={0} max={54000} input inputWidth="7ch"/>
+         <span>Moon type</span>
+         <OptionbarInputSelect value={header.moonType} options={[["Grey", 0], ["Orange", 1], ["Ringed", 2]]} onChange={(value) => {setHeaderKey("moonType", value)}}/>
+         <span>Moon phase</span>
+         <OptionbarInputSelect value={header.tempMoonPhase} options={[["Full moon", 0], ["Waning gibbous", 1], ["Third quarter", 2], ["Waning crescent", 3], ["New moon", 4], ["Waxing crescent", 5], ["First quarter", 6], ["Waxing gibbous", 7]]} onChange={(value) => {setHeaderKey("tempMoonPhase", value)}}/>
+         <span>Raining</span>
+         <OptionbarInputCheckbox value={header.tempRaining} onChange={(value) => {setHeaderKey("tempRaining", value)}} />
+         <span>Rain time</span>
+         <OptionbarInputSlider value={header.tempRainTime} onChange={(value) => {setHeaderKey("tempRainTime", value)}} min={0} max={147600} input inputWidth="8ch"/>
+         <span>Max rain</span>
+         <OptionbarInputSlider value={header.tempMaxRain} onChange={(value) => {setHeaderKey("tempMaxRain", value)}} float roundTo={1} min={0} max={0.9} input inputWidth="4ch"/>
+         <span>Cloud background active</span>
          <OptionbarInput value={header.cloudBGActive} onChange={(value) => {/*
             //text6 = (((double)maxRaining > 0.6) ? Language.GetTextValue("GameUI.HeavyRain") : (((double)maxRaining >= 0.2) ? Language.GetTextValue("GameUI.Rain") : ((maxRaining > 0f) ? Language.GetTextValue("GameUI.LightRain") : ((cloudBGActive > 0f) ? Language.GetTextValue("GameUI.Overcast") : ((numClouds > 120) ? Language.GetTextValue("GameUI.MostlyCloudy") : ((numClouds > 80) ? Language.GetTextValue("GameUI.Cloudy") : ((numClouds <= 20) ? Language.GetTextValue("GameUI.Clear") : Language.GetTextValue("GameUI.PartlyCloudy"))))))));
             header. = value
          */}} />
-         <div className="sidebar-view-general-row-label">Clouds count</div>
-         <OptionbarInputSlider value={header.numClouds} onChange={(value) => {header.numClouds = value}} min={0} max={200} input inputWidth="5ch"/>
-         <div className="sidebar-view-general-row-label">Wind speed</div>
-         <OptionbarInputSlider value={header.windSpeed} onChange={(value) => {header.windSpeed = value}} float min={-1} max={1} input inputWidth="6ch"/>
-         <div className="sidebar-view-general-row-label">Sandstorm</div>
-         <OptionbarInputCheckbox value={header.Temp_Sandstorm_Happening} onChange={(value) => {header.Temp_Sandstorm_Happening = value}} />
-         <div className="sidebar-view-general-row-label">Sandstorm time left</div>
+         <span>Clouds count</span>
+         <OptionbarInputSlider value={header.numClouds} onChange={(value) => {setHeaderKey("numClouds", value)}} min={0} max={200} input inputWidth="5ch"/>
+         <span>Wind speed</span>
+         <OptionbarInputSlider value={header.windSpeed} onChange={(value) => {setHeaderKey("windSpeed", value)}} float min={-1} max={1} input inputWidth="6ch"/>
+         <span>Sandstorm</span>
+         <OptionbarInputCheckbox value={header.Temp_Sandstorm_Happening} onChange={(value) => {setHeaderKey("Temp_Sandstorm_Happening", value)}} />
+         <span>Sandstorm time left</span>
          <OptionbarInput value={header.Temp_Sandstorm_TimeLeft} onChange={(value) => {/*header. = value*/}} />
-         <div className="sidebar-view-general-row-label">Sandstorm severity</div>
+         <span>Sandstorm severity</span>
          <OptionbarInput value={header.Temp_Sandstorm_Severity} onChange={(value) => {/*header. = value*/}} />
-         <div className="sidebar-view-general-row-label">Sandstorm intended severity</div>
+         <span>Sandstorm intended severity</span>
          <OptionbarInput value={header.Temp_Sandstorm_IntendedSeverity} onChange={(value) => {/*header. = value*/}} />
 
          <div className="sidebar-view-general-row-divider"><span>NPCs saved:</span></div>
 
-         <div className="sidebar-view-general-row-label">Goblin</div>
-         <OptionbarInputCheckbox value={header.savedGoblin} onChange={(value) => {header.savedGoblin = value}} />
-         <div className="sidebar-view-general-row-label">Wizard</div>
-         <OptionbarInputCheckbox value={header.savedWizard} onChange={(value) => {header.savedWizard = value}} />
-         <div className="sidebar-view-general-row-label">Mechanic</div>
-         <OptionbarInputCheckbox value={header.savedMech} onChange={(value) => {header.savedMech = value}} />
-         <div className="sidebar-view-general-row-label">Angler</div>
-         <OptionbarInputCheckbox value={header.savedAngler} onChange={(value) => {header.savedAngler = value}} />
-         <div className="sidebar-view-general-row-label">Stylist</div>
-         <OptionbarInputCheckbox value={header.savedStylist} onChange={(value) => {header.savedStylist = value}} />
-         <div className="sidebar-view-general-row-label">Tax Collector</div>
-         <OptionbarInputCheckbox value={header.savedTaxCollector} onChange={(value) => {header.savedTaxCollector = value}} />
-         <div className="sidebar-view-general-row-label">Tavern Keep</div>
-         <OptionbarInputCheckbox value={header.savedBartender} onChange={(value) => {header.savedBartender = value}} />
+         <span>Goblin</span>
+         <OptionbarInputCheckbox value={header.savedGoblin} onChange={(value) => {setHeaderKey("savedGoblin", value)}} />
+         <span>Wizard</span>
+         <OptionbarInputCheckbox value={header.savedWizard} onChange={(value) => {setHeaderKey("savedWizard", value)}} />
+         <span>Mechanic</span>
+         <OptionbarInputCheckbox value={header.savedMech} onChange={(value) => {setHeaderKey("savedMech", value)}} />
+         <span>Angler</span>
+         <OptionbarInputCheckbox value={header.savedAngler} onChange={(value) => {setHeaderKey("savedAngler", value)}} />
+         <span>Stylist</span>
+         <OptionbarInputCheckbox value={header.savedStylist} onChange={(value) => {setHeaderKey("savedStylist", value)}} />
+         <span>Tax Collector</span>
+         <OptionbarInputCheckbox value={header.savedTaxCollector} onChange={(value) => {setHeaderKey("savedTaxCollector", value)}} />
+         <span>Tavern Keep</span>
+         <OptionbarInputCheckbox value={header.savedBartender} onChange={(value) => {setHeaderKey("savedBartender", value)}} />
 
          <div className="sidebar-view-general-row-divider"><span>Bosses downed:</span></div>
 
-         <div className="sidebar-view-general-row-label">King Slime</div>
-         <OptionbarInputCheckbox value={header.downedSlimeKing} onChange={(value) => {header.downedSlimeKing = value}} />
-         <div className="sidebar-view-general-row-label">Eye of Cthulu</div>
-         <OptionbarInputCheckbox value={header.downedBoss1} onChange={(value) => {header.downedBoss1 = value}} />
-         <div className="sidebar-view-general-row-label">Eater of Worlds</div>
-         <OptionbarInputCheckbox value={header.downedBoss2} onChange={(value) => {header.downedBoss2 = value}} />
-         <div className="sidebar-view-general-row-label">Skeletron</div>
-         <OptionbarInputCheckbox value={header.downedBoss3} onChange={(value) => {header.downedBoss3 = value}} />
-         <div className="sidebar-view-general-row-label">Queen Bee</div>
-         <OptionbarInputCheckbox value={header.downedQueenBee} onChange={(value) => {header.downedQueenBee = value}} />
-         <div className="sidebar-view-general-row-label">Any mechanical boss</div>
-         <OptionbarInputCheckbox value={header.downedMechBossAny} onChange={(value) => {header.downedMechBossAny = value}} />
-         <div className="sidebar-view-general-row-label">The Destroyer</div>
-         <OptionbarInputCheckbox value={header.downedMechBoss1} onChange={(value) => {header.downedMechBoss1 = value}} />
-         <div className="sidebar-view-general-row-label">Skeletron Prime</div>
-         <OptionbarInputCheckbox value={header.downedMechBoss2} onChange={(value) => {header.downedMechBoss2 = value}} />
-         <div className="sidebar-view-general-row-label">The Twins</div>
-         <OptionbarInputCheckbox value={header.downedMechBoss3} onChange={(value) => {header.downedMechBoss3 = value}} />
-         <div className="sidebar-view-general-row-label">Plantera</div>
-         <OptionbarInputCheckbox value={header.downedPlantBoss} onChange={(value) => {header.downedPlantBoss = value}} />
-         <div className="sidebar-view-general-row-label">Golem</div>
-         <OptionbarInputCheckbox value={header.downedGolemBoss} onChange={(value) => {header.downedGolemBoss = value}} />
-         <div className="sidebar-view-general-row-label">Fishron</div>
-         <OptionbarInputCheckbox value={header.downedFishron} onChange={(value) => {header.downedFishron = value}} />
-         <div className="sidebar-view-general-row-label">Lunatic Cultists</div>
-         <OptionbarInputCheckbox value={header.downedAncientCultist} onChange={(value) => {header.downedAncientCultist = value}} />
-         <div className="sidebar-view-general-row-label">Moon Lord</div>
-         <OptionbarInputCheckbox value={header.downedMoonlord} onChange={(value) => {header.downedMoonlord = value}} />
+         <span>King Slime</span>
+         <OptionbarInputCheckbox value={header.downedSlimeKing} onChange={(value) => {setHeaderKey("downedSlimeKing", value)}} />
+         <span>Eye of Cthulu</span>
+         <OptionbarInputCheckbox value={header.downedBoss1} onChange={(value) => {setHeaderKey("downedBoss1", value)}} />
+         <span>Eater of Worlds</span>
+         <OptionbarInputCheckbox value={header.downedBoss2} onChange={(value) => {setHeaderKey("downedBoss2", value)}} />
+         <span>Skeletron</span>
+         <OptionbarInputCheckbox value={header.downedBoss3} onChange={(value) => {setHeaderKey("downedBoss3", value)}} />
+         <span>Queen Bee</span>
+         <OptionbarInputCheckbox value={header.downedQueenBee} onChange={(value) => {setHeaderKey("downedQueenBee", value)}} />
+         <span>Any mechanical boss</span>
+         <OptionbarInputCheckbox value={header.downedMechBossAny} onChange={(value) => {setHeaderKey("downedMechBossAny", value)}} />
+         <span>The Destroyer</span>
+         <OptionbarInputCheckbox value={header.downedMechBoss1} onChange={(value) => {setHeaderKey("downedMechBoss1", value)}} />
+         <span>Skeletron Prime</span>
+         <OptionbarInputCheckbox value={header.downedMechBoss2} onChange={(value) => {setHeaderKey("downedMechBoss2", value)}} />
+         <span>The Twins</span>
+         <OptionbarInputCheckbox value={header.downedMechBoss3} onChange={(value) => {setHeaderKey("downedMechBoss3", value)}} />
+         <span>Plantera</span>
+         <OptionbarInputCheckbox value={header.downedPlantBoss} onChange={(value) => {setHeaderKey("downedPlantBoss", value)}} />
+         <span>Golem</span>
+         <OptionbarInputCheckbox value={header.downedGolemBoss} onChange={(value) => {setHeaderKey("downedGolemBoss", value)}} />
+         <span>Fishron</span>
+         <OptionbarInputCheckbox value={header.downedFishron} onChange={(value) => {setHeaderKey("downedFishron", value)}} />
+         <span>Lunatic Cultists</span>
+         <OptionbarInputCheckbox value={header.downedAncientCultist} onChange={(value) => {setHeaderKey("downedAncientCultist", value)}} />
+         <span>Moon Lord</span>
+         <OptionbarInputCheckbox value={header.downedMoonlord} onChange={(value) => {setHeaderKey("downedMoonlord", value)}} />
 
          <div className="sidebar-view-general-row-divider"><span>Invasion bosses downed:</span></div>
 
-         <div className="sidebar-view-general-row-label">Clown</div>
-         <OptionbarInputCheckbox value={header.downedClown} onChange={(value) => {header.downedClown = value}} />
-         <div className="sidebar-view-general-row-label">Mourning Wood</div>
-         <OptionbarInputCheckbox value={header.downedHalloweenTree} onChange={(value) => {header.downedHalloweenTree = value}} />
-         <div className="sidebar-view-general-row-label">Pumpking</div>
-         <OptionbarInputCheckbox value={header.downedHalloweenKing} onChange={(value) => {header.downedHalloweenKing = value}} />
-         <div className="sidebar-view-general-row-label">Ice Queen</div>
-         <OptionbarInputCheckbox value={header.downedChristmasIceQueen} onChange={(value) => {header.downedChristmasIceQueen = value}} />
-         <div className="sidebar-view-general-row-label">Santa-NK1</div>
-         <OptionbarInputCheckbox value={header.downedChristmasSantank} onChange={(value) => {header.downedChristmasSantank = value}} />
-         <div className="sidebar-view-general-row-label">EverScream</div>
-         <OptionbarInputCheckbox value={header.downedChristmasTree} onChange={(value) => {header.downedChristmasTree = value}} />
-         <div className="sidebar-view-general-row-label">Solar Pillar</div>
-         <OptionbarInputCheckbox value={header.downedTowerSolar} onChange={(value) => {header.downedTowerSolar = value}} />
-         <div className="sidebar-view-general-row-label">Vortex Pillar</div>
-         <OptionbarInputCheckbox value={header.downedTowerVortex} onChange={(value) => {header.downedTowerVortex = value}} />
-         <div className="sidebar-view-general-row-label">Nebula Pillar</div>
-         <OptionbarInputCheckbox value={header.downedTowerNebula} onChange={(value) => {header.downedTowerNebula = value}} />
-         <div className="sidebar-view-general-row-label">Stardust Pillar</div>
-         <OptionbarInputCheckbox value={header.downedTowerStardust} onChange={(value) => {header.downedTowerStardust = value}} />
+         <span>Clown</span>
+         <OptionbarInputCheckbox value={header.downedClown} onChange={(value) => {setHeaderKey("downedClown", value)}} />
+         <span>Mourning Wood</span>
+         <OptionbarInputCheckbox value={header.downedHalloweenTree} onChange={(value) => {setHeaderKey("downedHalloweenTree", value)}} />
+         <span>Pumpking</span>
+         <OptionbarInputCheckbox value={header.downedHalloweenKing} onChange={(value) => {setHeaderKey("downedHalloweenKing", value)}} />
+         <span>Ice Queen</span>
+         <OptionbarInputCheckbox value={header.downedChristmasIceQueen} onChange={(value) => {setHeaderKey("downedChristmasIceQueen", value)}} />
+         <span>Santa-NK1</span>
+         <OptionbarInputCheckbox value={header.downedChristmasSantank} onChange={(value) => {setHeaderKey("downedChristmasSantank", value)}} />
+         <span>EverScream</span>
+         <OptionbarInputCheckbox value={header.downedChristmasTree} onChange={(value) => {setHeaderKey("downedChristmasTree", value)}} />
+         <span>Solar Pillar</span>
+         <OptionbarInputCheckbox value={header.downedTowerSolar} onChange={(value) => {setHeaderKey("downedTowerSolar", value)}} />
+         <span>Vortex Pillar</span>
+         <OptionbarInputCheckbox value={header.downedTowerVortex} onChange={(value) => {setHeaderKey("downedTowerVortex", value)}} />
+         <span>Nebula Pillar</span>
+         <OptionbarInputCheckbox value={header.downedTowerNebula} onChange={(value) => {setHeaderKey("downedTowerNebula", value)}} />
+         <span>Stardust Pillar</span>
+         <OptionbarInputCheckbox value={header.downedTowerStardust} onChange={(value) => {setHeaderKey("downedTowerStardust", value)}} />
 
          <div className="sidebar-view-general-row-divider"><span>Invasions downed:</span></div>
 
-         <div className="sidebar-view-general-row-label">Goblin army</div>
-         <OptionbarInputCheckbox value={header.downedGoblins} onChange={(value) => {header.downedGoblins = value}} />
-         <div className="sidebar-view-general-row-label">Pirate Invasion</div>
-         <OptionbarInputCheckbox value={header.downedPirates} onChange={(value) => {header.downedPirates = value}} />
-         <div className="sidebar-view-general-row-label">Frost Legion</div>
-         <OptionbarInputCheckbox value={header.downedFrost} onChange={(value) => {header.downedFrost = value}} />
-         <div className="sidebar-view-general-row-label">Martian Madness</div>
-         <OptionbarInputCheckbox value={header.downedMartians} onChange={(value) => {header.downedMartians = value}} />
+         <span>Goblin army</span>
+         <OptionbarInputCheckbox value={header.downedGoblins} onChange={(value) => {setHeaderKey("downedGoblins", value)}} />
+         <span>Pirate Invasion</span>
+         <OptionbarInputCheckbox value={header.downedPirates} onChange={(value) => {setHeaderKey("downedPirates", value)}} />
+         <span>Frost Legion</span>
+         <OptionbarInputCheckbox value={header.downedFrost} onChange={(value) => {setHeaderKey("downedFrost", value)}} />
+         <span>Martian Madness</span>
+         <OptionbarInputCheckbox value={header.downedMartians} onChange={(value) => {setHeaderKey("downedMartians", value)}} />
       </div>
    );
 }
 
-export default connect(state => {
-   return {
-      worldObject: state.app.worldObject,
-   };
-})(SidebarCategoryGeneral);
+export default connect(
+   state => {
+      return {
+         worldObject: state.app.worldObject,
+      };
+   },
+   { stateChangeWorldObject }
+)(SidebarCategoryGeneral);

@@ -5,6 +5,12 @@ import { saveToLocalSettings } from "/utils/localStorage.js";
 
 import { getCanvasMapData, getCanvasMapFile } from "/app/canvas/main.js";
 
+let worldObject;
+
+const setWorldObject = (_worldObject) => {
+    worldObject = _worldObject;
+}
+
 const onNewFile = (e, file) => {
     if (file == undefined) {
         const inputElHidden = document.createElement("input");
@@ -33,7 +39,7 @@ const onSaveImage = () => {
 
 const onSaveFile = async (e) => {
     const filename = getCanvasMapData({ name: true }).name;
-    const file = await getCanvasMapFile();
+    const file = await getCanvasMapFile(worldObject);
 
     if (!file) return;
 
@@ -91,5 +97,7 @@ export {
     onSaveImage,
     onSaveFile,
     onToggleSidebar,
-    onToggleToolbar
+    onToggleToolbar,
+
+    setWorldObject
 };

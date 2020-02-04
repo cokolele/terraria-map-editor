@@ -95,7 +95,7 @@ const getCanvasMapData = ({ name, imageUrlPng }) => {
     return data;
 }
 
-const getCanvasMapFile = async () => {
+const getCanvasMapFile = async (worldObject) => {
     if (!running)
         return null;
 
@@ -123,7 +123,7 @@ const getCanvasMapFile = async () => {
         }
 
         store.dispatch(stateChangeDescription("Generating"));
-        worker.postMessage({ action: "SAVE_MAP" });
+        worker.postMessage({ action: "SAVE_MAP", worldObject });
     });
 }
 
@@ -317,7 +317,7 @@ function getLayerImageRowColor(LAYER, x, y, length) {
 }
 */
 function setLayerImageRectangleColor(LAYER, color, point1, point2, push = true) {
-    if (typeof color == "number")
+    if (typeof color == "number" || typeof color == "string")
         color = pointColors[LAYER][color];
 
     const [x1, y1] = point1;

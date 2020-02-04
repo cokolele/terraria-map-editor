@@ -70,6 +70,7 @@
 .optionbar-input-slider {
     background-color: #757575;
     height: 0.215rem;
+    cursor: pointer;
 
     -webkit-appearance: none;
     -moz-appearance: none;
