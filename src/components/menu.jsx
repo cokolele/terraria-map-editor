@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import { onNewFile, onExampleMap, onCloseFile, onSaveImage, onSaveFile, onToggleSidebar, onToggleToolbar } from "/app/menu.js";
+import { stateChangeModal } from "/state/modules/app.js";
+import { localSettings } from "/utils/localStorage.js";
 
 import MenuFolder from "/components/menu/folder.jsx";
-import MenuFolderAccount from "/components/menu/folder-account.jsx";
+import MenuFolderButton from "/components/menu/folder-button.jsx";
+import { AccountBoxIcon, GithubIcon } from "/components/icon.jsx";
 import "/components/styles/menu.css";
 
-import { localSettings } from "/utils/localStorage.js";
-import { onNewFile, onExampleMap, onCloseFile, onSaveImage, onSaveFile, onToggleSidebar, onToggleToolbar } from "/app/menu.js";
-
-function Menu({ view, running }) {
+function Menu({ view, running, loggedIn, user, stateChangeModal }) {
    const [currentTab, setCurrentTab] = useState(false);
 
    const DIVIDER = "__DIVIDER__";
@@ -59,6 +60,18 @@ function Menu({ view, running }) {
       }
    };
 
+   const onAccountClick = () => {
+      if (!loggedIn)
+         stateChangeModal("signin");
+      else
+         stateChangeModal("account");
+   }
+
+   const onGithubClick = () => {
+      const win = window.open("https://github.com/cokolele/terraria-web-editor", '_blank');
+      win.focus();
+   }
+
    return (
       <div className="menu-container">
          <div className="menu">
@@ -69,16 +82,20 @@ function Menu({ view, running }) {
          }
          </div>
          <div className="menu">
-            <MenuFolderAccount/>
-            <MenuFolderAccount __templink/>
+            <MenuFolderButton label={loggedIn ? user.username : "Account"} onClick={onAccountClick} Icon={AccountBoxIcon}/>
+            <MenuFolderButton label="Github" onClick={onGithubClick} Icon={GithubIcon}/>
          </div>
       </div>
    )
 }
 
 export default connect(state => {
-   return {
-      view: state.app.view,
-      running: state.app.running
-   };
-})(Menu);
+      return {
+         view: state.app.view,
+         running: state.app.running,
+         loggedIn: state.app.loggedIn,
+         user: state.app.user
+      };
+   },
+   { stateChangeModal }
+)(Menu);

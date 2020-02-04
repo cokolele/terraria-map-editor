@@ -10,7 +10,7 @@ module.exports = {
             out_file: "./logs/server-out.log",
             log_file: "./logs/server-combined.log",
             time: true,
-            watch: ["./models/", "./routes/", "./configs/"],
+            watch: false, //["./models/", "./routes/", "./configs/"],
             env: {
                 "NODE_ENV": "development"
             },

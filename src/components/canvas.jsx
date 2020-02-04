@@ -3,9 +3,9 @@ import { connect } from "react-redux";
 
 import "/components/styles/canvas.css";
 
-import init, { changeCanvasWorldFile, changeCanvasTool, changeCanvasLayersVisibility } from "/app/canvas/main.js";
+import init, { changeCanvasWorldFile, changeCanvasTool, changeCanvasLayersVisibility, changeCanvasActiveLayer, changeCanvasActiveSize } from "/app/canvas/main.js";
 
-function Canvas({ worldFile, running, tool, changeRunning, layersVisibility }) {
+function Canvas({ worldFile, running, tool, changeRunning, layersVisibility, activeLayer, activeSize }) {
    const canvasEl = useRef(null);
 
    useEffect(() => {
@@ -23,6 +23,15 @@ function Canvas({ worldFile, running, tool, changeRunning, layersVisibility }) {
    useEffect(() => {
       changeCanvasLayersVisibility(layersVisibility);
    }, [layersVisibility]);
+
+   useEffect(() => {
+      changeCanvasActiveLayer(activeLayer);
+   }, [activeLayer]);
+
+   useEffect(() => {
+      changeCanvasActiveSize(activeSize);
+   }, [activeSize]);
+
 
    return (
       <div className="canvas-container">
@@ -45,6 +54,8 @@ export default connect(state => {
       worldFile: state.app.worldFile,
       running: state.app.running,
       tool: state.app.toolbar.tool,
-      layersVisibility: state.app.layersVisibility
+      layersVisibility: state.app.layersVisibility,
+      activeLayer: state.app.optionbar.layer,
+      activeSize: state.app.optionbar.size
    }
 })(Canvas);

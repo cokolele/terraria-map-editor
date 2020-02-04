@@ -4,11 +4,11 @@ import { connect } from "react-redux";
 import { stateToggleLayerVisibility } from "/state/modules/app.js";
 
 import { EyeIcon } from "/components/icon.jsx";
-import "/components/styles/sidebar/tab-layers.css";
+import "/components/styles/sidebar/categories/layers.css";
 
 import LAYERS from "/app/canvas/enum-LAYERS.js";
 
-function TabLayers({ layersVisibility, stateToggleLayerVisibility }) {
+function SidebarCategoryLayers({ layersVisibility, stateToggleLayerVisibility }) {
    const onLayerClick = (LAYER) => {
       stateToggleLayerVisibility(LAYER);
    }
@@ -18,7 +18,7 @@ function TabLayers({ layersVisibility, stateToggleLayerVisibility }) {
          {
             Object.entries(LAYERS).reverse().map(([LAYERlabel, LAYER], i) => (
                <div className="sidebar-tab-layers-layer" key={i}>
-                  <TabLayersLayerButton onClick={onLayerClick} LAYER={LAYER} visible={layersVisibility[LAYER]}/>
+                  <SidebarCategoryLayersButton onClick={onLayerClick} LAYER={LAYER} visible={layersVisibility[LAYER]}/>
                   <div className="sidebar-tab-layers-layer-label">
                      {LAYERlabel.toLowerCase()}
                   </div>
@@ -29,7 +29,7 @@ function TabLayers({ layersVisibility, stateToggleLayerVisibility }) {
    );
 }
 
-const TabLayersLayerButton = ({ onClick, LAYER, visible }) => {
+const SidebarCategoryLayersButton = ({ onClick, LAYER, visible }) => {
    const [checked, toggleChecked] = useToggle(visible, !visible);
    const _onClick = () => {
       toggleChecked();
@@ -53,4 +53,4 @@ export default connect(
       };
    },
    { stateToggleLayerVisibility }
-)(TabLayers);
+)(SidebarCategoryLayers);

@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS accounts (
 CREATE TABLE IF NOT EXISTS maps (
     id int NOT NULL AUTO_INCREMENT,
     id_account int NOT NULL,
-    filename char(40) NOT NULL,
-    mapname varchar(50) NOT NULL,
+    path varchar(255) NOT NULL,
+    name varchar(50) NOT NULL,
     size int NOT NULL,
     uploadtime bigint NOT NULL,
     PRIMARY KEY (id),

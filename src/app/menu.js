@@ -1,5 +1,5 @@
 import store from "/state/store.js";
-import { stateChangeWorldFile, stateChangeWorldObject, stateToggleViewOption } from "/state/modules/app.js";
+import { stateChangeWorldFile, stateChangeWorldObject, stateToggleViewOption, stateChangeRunning } from "/state/modules/app.js";
 import { stateChangePercentage, stateChangeDescription, stateChangeError } from "/state/modules/status.js";
 import { saveToLocalSettings } from "/utils/localStorage.js";
 
@@ -49,6 +49,7 @@ const onSaveFile = async (e) => {
 }
 
 const onCloseFile = (e) => {
+    store.dispatch(stateChangeRunning(false));
     store.dispatch(stateChangeWorldFile(null));
     store.dispatch(stateChangeWorldObject(null));
     store.dispatch(stateChangePercentage(null));

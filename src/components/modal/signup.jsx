@@ -4,7 +4,7 @@ import { stateChangeUser, stateChangeModal } from "/state/modules/app.js";
 import api from "/utils/api/api.js";
 
 import ModalSignInput from "/components/modal/sign/input.jsx";
-import ModalSignOption from "/components/modal/sign/option.jsx";
+import ModalSignButtonInlineText from "/components/modal/sign/button-inline-text.jsx";
 import ModalSignButton from "/components/modal/sign/button.jsx";
 import "/components/styles/modal/sign.css";
 
@@ -124,7 +124,7 @@ function ModalSignup({ stateChangeUser, stateChangeModal }) {
          <ModalSignButton label="SIGN IN" onClick={onSubmit} error={errors.submit}/>
          <span className="modal-sign-text">
             <span>Already have an account ?</span>
-            <ModalSignOption label="SIGN IN" onClick={onClickSignIn}/>
+            <ModalSignButtonInlineText label="SIGN IN" onClick={onClickSignIn}/>
          </span>
       </div>
    );

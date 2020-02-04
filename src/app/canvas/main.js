@@ -26,12 +26,7 @@ Object.values(LAYERS).forEach(LAYER => {
 let layersVisibility;
 
 let running = false;
-
-let isDragging = false;
-let deltaX = 0;
-let deltaY = 0;
-let prevDragX = null;
-let prevDragY = null;
+let editBuffer = [];
 
 let zoomLevel = 0;
 let zoomFactors = [];
@@ -42,7 +37,13 @@ let posX;
 let posY;
 
 let tool = "move";
-let isPencilDrawing = false;
+let activeLayer;
+let activeSize;
+
+let deltaX = 0;
+let deltaY = 0;
+let prevDragX = null;
+let prevDragY = null;
 
 const changeCanvasWorldFile = (_worldFile) => {
     worldFile = _worldFile;
@@ -58,7 +59,15 @@ const changeCanvasTool = (_tool) => {
 }
 
 const changeCanvasLayersVisibility = (_layersVisibility) => {
-    layersVisibility = _layersVisibility
+    layersVisibility = _layersVisibility;
+}
+
+const changeCanvasActiveLayer = (_activeLayer) => {
+    activeLayer = _activeLayer;
+}
+
+const changeCanvasActiveSize = (_activeSize) => {
+    activeSize = _activeSize;
 }
 
 const getCanvasMapData = ({ name, imageUrlPng }) => {
@@ -140,7 +149,6 @@ function init(_canvas) {
     canvas.addEventListener("wheel", onCanvasWheel);
     canvas.addEventListener("mouseup", onCanvasMouseUp);
     document.addEventListener("mouseup", onCanvasMouseUp);
-    canvas.addEventListener("mousedown", onCanvasMouseDown);
     canvas.addEventListener("mousemove", onCanvasMouseMove);
     canvas.addEventListener("click", onCanvasClick);
 }
@@ -206,6 +214,8 @@ function onCanvasClick(e) {
         onPencilClick(e);
     else if (tool == "bucket")
         onBucketClick(e);
+    else if (tool == "eraser")
+        onEraserClick(e);
 }
 
 function onCanvasWheel(e) {
@@ -229,29 +239,21 @@ function onCanvasWheel(e) {
     posY += prevViewHeightTiles * yNormalized - viewHeightTiles * yNormalized;
 }
 
-function onCanvasMouseDown(e) {
-    if ((e.buttons == 1 && tool == "move") || e.buttons == 4) {
-        isDragging = true;
+function onCanvasMouseMove(e) {
+    if ((tool == "move" && e.buttons == 1) || e.buttons == 4) {
         canvas.classList.add("grabbed");
+        onMoveDrag(e);
     }
-    else if (e.buttons == 1 && tool == "pencil") {
-        isPencilDrawing = true;
-    }
+    else if (tool == "pencil" && e.buttons == 1)
+        onPencilDrag(e);
+    else if (tool == "eraser" && e.buttons == 1)
+        onEraserDrag(e);
 }
 
 function onCanvasMouseUp(e) {
-    isDragging = false;
-    isPencilDrawing = false;
     deltaX = deltaY = 0;
     prevDragX = prevDragY = null;
     canvas.classList.remove("grabbed");
-}
-
-function onCanvasMouseMove(e) {
-    if (isDragging)
-        onDrag(e);
-    else if (isPencilDrawing)
-        onPencilDrag(e);
 }
 
 function getMouseCanvasPosition(e) {
@@ -264,73 +266,140 @@ function getMouseImagePosition(e) {
     return [Math.floor(map(x, 0, canvas.width, posX, posX + viewWidthTiles)), Math.floor(map(y, 0, canvas.height, posY, posY + viewHeightTiles))]
 }
 
-function getPointColor(LAYER, id) {
-    return pointColors[LAYER][id];
-}
-
 function setLayerImagePointColor(LAYER, color, x, y, push = true) {
-    if (typeof color == "number")
-        color = getPointColor(LAYER, color);
-
     const offset = (world.header.maxTilesX * y + x) * 4;
     layerImage[LAYER].data[offset] = color.r;
     layerImage[LAYER].data[offset+1] = color.g;
     layerImage[LAYER].data[offset+2] = color.b;
-    layerImage[LAYER].data[offset+3] = 255;
+    layerImage[LAYER].data[offset+3] = color.a;
 
     if (push)
         pushLayerImage(LAYER);
 }
 
+function getLayerImagePointColor(LAYER, x, y) {
+    const offset = (world.header.maxTilesX * y + x) * 4;
+    return {
+        r:layerImage[LAYER].data[offset],
+        g:layerImage[LAYER].data[offset+1],
+        b:layerImage[LAYER].data[offset+2],
+        a:layerImage[LAYER].data[offset+3]
+    }
+}
+
+function setLayerImageRowColor(LAYER, color, x, y, length, push = true) {
+    if (typeof color == "number")
+        color = pointColors[LAYER][color];
+
+    const offset = (world.header.maxTilesX * y + x) * 4;
+    length = length  * 4;
+
+    for (let i = 0; i < length; i += 4) {
+        layerImage[LAYER].data[offset+i] = color.r;
+        layerImage[LAYER].data[offset+i+1] = color.g;
+        layerImage[LAYER].data[offset+i+2] = color.b;
+        layerImage[LAYER].data[offset+i+3] = color.a;
+    }
+
+    if (push)
+        pushLayerImage(LAYER);
+}
+/*
+function getLayerImageRowColor(LAYER, x, y, length) {
+    const offset = (world.header.maxTilesX * y + x) * 4;
+    length *= 4;
+
+    const buffer = [];
+    for (let i = 0; i < length; i++)
+        buffer.push( layerImage[LAYER].data[offset + i] );
+
+    return buffer;
+}
+*/
 function setLayerImageRectangleColor(LAYER, color, point1, point2, push = true) {
     if (typeof color == "number")
-        color = getPointColor(LAYER, color);
+        color = pointColors[LAYER][color];
 
     const [x1, y1] = point1;
     const [x2, y2] = point2;
 
     for (let y = y1; y < y2; y++)
-        for (let x = x1; x < x2; x++)
-            setLayerImagePointColor(LAYER, color, x, y, false);
+        setLayerImageRowColor(LAYER, color, x1, y, x2 - x1, false);
 
     if (push)
         pushLayerImage(LAYER);
 }
 
+function setLayerImagePathColor(LAYER, color, point1, point2, strokeWidth, push = true) {
+    if (typeof color == "number")
+        color = pointColors[LAYER][color];
+
+    const [x1, y1] = point1;
+    const [x2, y2] = point2;
+//    const dir;
+    const width = x2 - x1;
+    const height = y2 - y1;
+
+    const angleDir = width > height;
+    const angleLength = angleLength ? Math.round(width / height) : Math.round(height / width);
+
+    for (let y = y1, x = x1; y < y2; y++, x += angleLength) {
+        if (angleDir) {
+            for (let i = -strokeWidth / 2; i < strokeWidth / 2; i++)
+                setLayerImageRowColor(LAYER, color, x, y + i, angleLength, false);
+        }
+        else {
+            for (let i = -strokeWidth / 2; i < strokeWidth / 2; i++)
+                setLayerImageRowColor(LAYER, color, x + i, y, angleLength, false);
+        }
+    }
+
+    if (push)
+        pushLayerImage(LAYER);
+}
+/*
+function getLayerImageRectangleColor(LAYER, point1, point2) {
+    const [x1, y1] = point1;
+    const [x2, y2] = point2;
+    const height = y2 - y1;
+    const rowLength = (x2 - x1) * 4;
+
+    const buffer = [];
+
+    for (let i = 0; i < height; i++) {
+        const offset = (world.header.maxTilesX * (y1 + i) + x1) * 4;
+        for (let j = 0; j < rowLength; j++) {
+            buffer.push( layerImage[LAYER].data[offset + j] );
+        }
+    }
+
+    return buffer;
+}
+*/
 function setLayerImageFourwayFillColor(LAYER, fillColor, x, y) {
+    if (typeof fillColor == "number")
+        fillColor = pointColors[LAYER][fillColor];
+
     let pointsBuffer = [[x,y]];
-    let offset = (world.header.maxTilesX * y + x) * 4;
-    let pointColor = {
-        r: layerImage[LAYER].data[offset],
-        g: layerImage[LAYER].data[offset+1],
-        b: layerImage[LAYER].data[offset+2],
-    };
+    let pointColor = getLayerImagePointColor(LAYER, x, y);
     const boundaryColor = pointColor;
 
-    if (typeof fillColor == "number")
-        fillColor = getPointColor(LAYER, fillColor);
-
-    if (pointColor.r == fillColor.r && pointColor.g == fillColor.g && pointColor.b == fillColor.b)
+    if (pointColor.r == fillColor.r && pointColor.g == fillColor.g && pointColor.b == fillColor.b && pointColor.a == fillColor.a)
         return;
 
-    while(pointsBuffer.length !== 0) {
+
+    while (pointsBuffer.length !== 0) {
         const [x, y] = pointsBuffer.pop();
+        pointColor = getLayerImagePointColor(LAYER, x, y);
 
-        offset = (world.header.maxTilesX * y + x) * 4;
-        pointColor = {
-            r: layerImage[LAYER].data[offset],
-            g: layerImage[LAYER].data[offset+1],
-            b: layerImage[LAYER].data[offset+2],
-        };
-
-        if (pointColor.r == boundaryColor.r && pointColor.g == boundaryColor.g && pointColor.b == boundaryColor.b) {
+        if (pointColor.r == boundaryColor.r && pointColor.g == boundaryColor.g && pointColor.b == boundaryColor.b && pointColor.a == boundaryColor.a) {
             setLayerImagePointColor(LAYER, fillColor, x, y, false);
             pointsBuffer.push([x-1, y], [x+1, y], [x, y-1], [x, y+1]);
         }
     }
 }
 
-function onDrag(e) {
+function onMoveDrag(e) {
     const [x, y] = getMouseCanvasPosition(e);
 
     if (prevDragX == null) {
@@ -349,28 +418,53 @@ function onDrag(e) {
     posY -= deltaY / tilePixelRatio;
 }
 
+function onPencilClick(e) {
+    const [x, y] = getMouseImagePosition(e);
+    const activeSizeHalf = activeSize / 2;
+    setLayerImageRectangleColor(activeLayer, 0, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
+}
+
 function onPencilDrag(e) {
     const [x, y] = getMouseImagePosition(e);
 
-    if (prevDragX == null || (x != prevDragX || y != prevDragY)) {
+    if (prevDragX == null) {
         prevDragX = x;
         prevDragY = y;
-        setLayerImageRectangleColor(LAYERS.TILES, 0, [x-2, y-2], [x+2, y+2], false);
+        return;
     }
 
-    pushLayerImage(LAYERS.TILES);
-}
+    setLayerImagePathColor(activeLayer, 0, [prevDragX, prevDragY], [x, y], 4);
 
-function onPencilClick(e) {
-    const [x, y] = getMouseImagePosition(e);
-    setLayerImageRectangleColor(LAYERS.TILES, 0, [x-2, y-2], [x+2, y+2]);
+    console.log([prevDragX, prevDragY], [x, y]);
+
+    prevDragX = x;
+    prevDragY = y;
 }
 
 function onBucketClick(e) {
     const [x, y] = getMouseImagePosition(e);
 
-    setLayerImageFourwayFillColor(LAYERS.TILES, 0, x, y);
-    pushLayerImage(LAYERS.TILES);
+    setLayerImageFourwayFillColor(activeLayer, 0, x, y);
+    pushLayerImage(activeLayer);
+}
+
+function onEraserClick(e) {
+    const [x, y] = getMouseImagePosition(e);
+    const activeSizeHalf = activeSize / 2;
+    setLayerImageRectangleColor(activeLayer, {r:0,g:0,b:0,a:0}, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)], false);
+}
+
+function onEraserDrag(e) {
+    const [x, y] = getMouseImagePosition(e);
+    console.log(x,y);
+    if (prevDragX == null || (x != prevDragX || y != prevDragY)) {
+        prevDragX = x;
+        prevDragY = y;
+        const activeSizeHalf = activeSize / 2;
+        setLayerImageRectangleColor(activeLayer, {r:0,g:0,b:0,a:0}, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)], false);
+    }
+
+    pushLayerImage(activeLayer);
 }
 
 function correctPositions() {
@@ -481,7 +575,11 @@ export {
     changeCanvasWorldFile,
     changeCanvasTool,
     changeCanvasLayersVisibility,
+    changeCanvasActiveLayer,
+    changeCanvasActiveSize,
     getCanvasMapData,
     getCanvasMapFile,
-    verifyMapFile
+    verifyMapFile,
+
+    setLayerImageRectangleColor
 };

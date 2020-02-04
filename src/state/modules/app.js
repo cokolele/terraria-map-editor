@@ -9,6 +9,9 @@ const CHANGE_MODAL = "twe/app/CHANGE_MODAL";
 const TOGGLE_VIEW_OPTION = "twe/app/TOGGLE_VIEW_OPTION";
 const CHANGE_TOOLBAR_TOOL = "twe/app/CHANGE_TOOLBAR_TOOL";
 const TOGGLE_LAYER_VISIBILITY = "twe/app/TOGGLE_LAYER_VISIBILITY";
+const CHANGE_OPTIONBAR_LAYER = "twe/app/CHANGE_OPTIONBAR_LAYER";
+
+const SET_KEY = "twe/app/SET_KEY";
 
 let defaultState = {
     worldFile: null,
@@ -22,11 +25,11 @@ let defaultState = {
         sidebar: localSettings.sidebar !== undefined ? localSettings.sidebar : true
     },
     toolbar: {
-        tool: "move",
-        options: {
-            layer: LAYERS.TILES,
-            id: 0
-        }
+        tool: "move"
+    },
+    optionbar: {
+        layer: LAYERS.TILES,
+        size: 6
     },
     layersVisibility: {},
 };
@@ -38,6 +41,17 @@ Object.values(LAYERS).forEach(LAYER => {
 // Reducer
 export default function app(state = defaultState, action) {
     switch (action.type) {
+        case SET_KEY:
+            if (typeof action.key == "object") {
+                let stateDepthted = state;
+                let key = action.key.pop();
+                action.key.forEach(key => { stateDepthted = stateDepthted[key] });
+                stateDepthted[key] = action.value;
+            }
+            else
+                state[action.key] = action.value;
+
+            return {...state};
         case CHANGE_WORLD_FILE:
             return {
                 ...state,
@@ -86,6 +100,10 @@ export default function app(state = defaultState, action) {
 }
 
 // Action Creators
+function stateSetKey(key, value) {
+    return { type: SET_KEY, key, value };
+}
+
 function stateChangeWorldFile(worldFile) {
     return { type: CHANGE_WORLD_FILE, worldFile };
 }
@@ -119,6 +137,7 @@ function stateToggleLayerVisibility(LAYER) {
 }
 
 export {
+    stateSetKey,
     stateChangeWorldFile,
     stateChangeWorldObject,
     stateChangeRunning,
@@ -126,5 +145,5 @@ export {
     stateChangeModal,
     stateToggleViewOption,
     stateChangeToolbarTool,
-    stateToggleLayerVisibility
+    stateToggleLayerVisibility,
 };

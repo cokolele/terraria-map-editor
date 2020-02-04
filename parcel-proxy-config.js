@@ -10,10 +10,4 @@ const server = new ParcelProxyServer({
   }
 });
 
-server.bundler.on('buildEnd', () => {
-  console.log('Build completed!');
-});
-
-server.listen(80, () => {
-  console.log('Parcel proxy server has started');
-});
+server.listen(80, () => {});

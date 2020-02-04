@@ -5,18 +5,25 @@
 }
 
 .optionbar {
-    height: 2.36rem;
+    height: 2.3rem;
+    margin-left: 0.6rem;
 
     display: inline-flex;
     align-items: center;
 }
 
+.optionbar > * {
+    margin-right: 0.6rem;
+}
+
 .optionbar-icon {
     display: flex;
     justify-content: center;
-    width: 2.65rem;
-    height: 20px;
     fill: #dddddd;
+}
+
+.optionbar-icon svg {
+    width: 1.4rem;
 }
 
 .optionbar-icon--stroke {
@@ -26,6 +33,6 @@
 
 .optionbar-divider {
     width: 1px;
-    height: 23px;
+    height: 1.6rem;
     background-color: #3e3e3e;
 }

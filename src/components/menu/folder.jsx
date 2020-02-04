@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import useToggle from "/utils/hooks/useToggle.js";
 
-import MenuOption from "/components/menu/option.jsx";
+import MenuFolderOption from "/components/menu/folder/option.jsx";
 import "/components/styles/menu/folder.css";
 
 function MenuFolder({ label, options, currentTab, setCurrentTab, index, toggleViewOption }) {
@@ -42,7 +42,7 @@ function MenuFolder({ label, options, currentTab, setCurrentTab, index, toggleVi
             showDropdown &&
             <div className="menu-folder">
             {
-               Object.keys(options).map((key, i) => <MenuOption label={key} option={options[key]} key={i}/>)
+               Object.keys(options).map((key, i) => <MenuFolderOption label={key} option={options[key]} key={i}/>)
             }
             </div>
          }

@@ -1,0 +1,10 @@
+.menu-folder-button {
+    display: inline-flex;
+    align-items: center;
+}
+
+.menu-folder-button svg {
+    padding-left: 0.4rem;
+    fill: #f0f0f0;
+    width: 1.1rem;
+}

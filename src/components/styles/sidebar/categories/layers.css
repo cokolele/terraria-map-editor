@@ -5,10 +5,6 @@
     display: flex;
 }
 
-.sidebar-tab-layers-layer:first-of-type {
-    border-top: 1px solid #454545;
-}
-
 .sidebar-tab-layers-layer-button {
     border-right: 1px solid #454545;
     fill: #f0f0f0;

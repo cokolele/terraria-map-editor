@@ -1,0 +1,128 @@
+.optionbar-input-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.optionbar-input-label {
+    color: #d6d6d6;
+    font-size: 0.84rem;
+    margin-right: 0.4rem;
+
+    user-select: none;
+    -moz-user-select: none;
+}
+
+.optionbar-input-label--rightside {
+    margin-right: 0;
+    margin-left: 0.4rem;
+}
+
+.optionbar-input {
+    height: 1.5rem;
+    padding: 0 0.2rem;
+    box-sizing: border-box;
+    background-color: #454545;
+    border: 1px solid #666666;
+    border-radius: 0.2rem;
+
+    color: #f0f0f0;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.optionbar-input-select-container {
+    position: relative;
+}
+
+.optionbar-input-select {
+    height: 1.5rem;
+    padding: 0 1.1rem 0 0.25rem;
+    box-sizing: border-box;
+    background-color: #454545;
+    border: 1px solid #666666;
+    border-radius: 0.2rem;
+
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    color: #f0f0f0;
+    font-size: 0.84rem;
+}
+
+.optionbar-input-select-arrow {
+    position: absolute;
+    pointer-events: none;
+    top: calc(100%/2 - 1.05rem/2);
+    right: 0.15rem;
+    height: 1.05rem;
+    width: 1.05rem;
+    fill: #c1c1c1;
+}
+
+.optionbar-input-select:focus, .optionbar-input:focus {
+    outline: none;
+    border: 1px solid #0078d7;
+}
+
+.optionbar-input-slider {
+    background-color: #757575;
+    height: 0.215rem;
+
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.optionbar-input-slider:focus {
+    outline: none;
+}
+
+.optionbar-input-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    border-radius: 0.1rem;
+    width: 0.3rem;
+    height: 0.7rem;
+    background: #f0f0f0;
+    cursor: pointer;
+}
+
+.optionbar-input-slider::-moz-range-thumb {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    border-radius: 0.1rem;
+    width: 0.3rem;
+    height: 0.7rem;
+    background: #f0f0f0;
+    cursor: pointer;
+}
+
+.optionbar-input-slider + .optionbar-input {
+    margin-left: 6px;
+}
+
+.optionbar-input-checkbox {
+    position: relative;
+    height: 0.8rem;
+    width: 0.8rem;
+    border-radius: 0.15rem;
+    background-color: #d4d4d4;
+}
+
+.optionbar-input-checkbox--checked:after {
+    position: absolute;
+    top: 0;
+    left: 0.07rem;
+    content: "✓";
+    color: #323232;
+    font-weight: 800;
+    font-size: 0.8rem;
+    line-height: 0.8rem;
+}

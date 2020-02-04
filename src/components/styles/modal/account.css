@@ -13,6 +13,38 @@
     border-right: 1px solid #ddd;
 }
 
+.modal-account-menu-option {
+    padding: 10px 18px;
+    position: relative;
+
+    color: #f0f0f0;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    user-select: none;
+    -moz-user-select: none;
+    cursor: pointer;
+}
+
+.modal-account-menu-option--selected {
+    background-color: #424242;
+    border-radius: 4px 0 0 4px;
+}
+
+.modal-account-menu-option--selected:after {
+    content: "";
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 6px;
+    background-color: #ddd;
+    border-radius: 2px 0 0 2px;
+}
+
 .modal-account-view {
     box-sizing: border-box;
     margin-left: 24px;

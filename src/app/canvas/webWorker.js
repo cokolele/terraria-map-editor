@@ -96,7 +96,15 @@ function render() {
         action: "RETURN_PERCENTAGE_RENDERING_INCOMING",
     });
 
+
     let position = 0;
+    const setLayerTileColor = (LAYER, color) => {
+        layerImage[LAYER].data[position]     = color.r;
+        layerImage[LAYER].data[position + 1] = color.g;
+        layerImage[LAYER].data[position + 2] = color.b;
+        layerImage[LAYER].data[position + 3] = color.a;
+    }
+
     const drawPercentil = world.header.maxTilesY / 100;
     let drawPercentilNext = 0;
     let drawPercentage = 0;
@@ -111,31 +119,26 @@ function render() {
         }
 
         for (let x = 0; x < world.header.maxTilesX; x++) {
-            if (world.worldTiles[x][y].blockId !== undefined) {
-                const color = pointColors[LAYERS.TILES][world.worldTiles[x][y].blockId];
+            const tile = world.worldTiles[x][y];
 
-                layerImage[LAYERS.TILES].data[position] = color.r;
-                layerImage[LAYERS.TILES].data[position + 1] = color.g;
-                layerImage[LAYERS.TILES].data[position + 2] = color.b;
-                layerImage[LAYERS.TILES].data[position + 3] = 255;
-            }
+            if (tile.blockId !== undefined)
+                setLayerTileColor(LAYERS.TILES, pointColors[LAYERS.TILES][tile.blockId]);
 
-            if (world.worldTiles[x][y].liquid !== undefined) {
-                const color = pointColors[LAYERS.LIQUIDS][world.worldTiles[x][y].liquid.type];
+            if (tile.liquid)
+                setLayerTileColor(LAYERS.LIQUIDS, pointColors[LAYERS.LIQUIDS][tile.liquid.type]);
 
-                layerImage[LAYERS.LIQUIDS].data[position] = color.r;
-                layerImage[LAYERS.LIQUIDS].data[position + 1] = color.g;
-                layerImage[LAYERS.LIQUIDS].data[position + 2] = color.b;
-                layerImage[LAYERS.LIQUIDS].data[position + 3] = 155;
-            }
+            if (tile.wallId !== undefined)
+                setLayerTileColor(LAYERS.WALLS, pointColors[LAYERS.WALLS][tile.wallId]);
 
-            if (world.worldTiles[x][y].wallId !== undefined) {
-                const color = pointColors[LAYERS.WALLS][world.worldTiles[x][y].wallId];
-
-                layerImage[LAYERS.WALLS].data[position] = color.r;
-                layerImage[LAYERS.WALLS].data[position + 1] = color.g;
-                layerImage[LAYERS.WALLS].data[position + 2] = color.b;
-                layerImage[LAYERS.WALLS].data[position + 3] = 255;
+            if (tile.wiring && tile.wiring.wires) {
+                if (tile.wiring.wires.red)
+                    setLayerTileColor(LAYERS.WIRES, pointColors[LAYERS.WIRES]["red"]);
+                if (tile.wiring.wires.green)
+                    setLayerTileColor(LAYERS.WIRES, pointColors[LAYERS.WIRES]["green"]);
+                if (tile.wiring.wires.blue)
+                    setLayerTileColor(LAYERS.WIRES, pointColors[LAYERS.WIRES]["blue"]);
+                if (tile.wiring.wires.yellow)
+                    setLayerTileColor(LAYERS.WIRES, pointColors[LAYERS.WIRES]["yellow"]);
             }
 
             let color;
@@ -150,10 +153,7 @@ function render() {
             else if (y >= bgLayers.underworld)
                 color = pointColors[LAYERS.BACKGROUND].underworld;
 
-            layerImage[LAYERS.BACKGROUND].data[position] = color.r;
-            layerImage[LAYERS.BACKGROUND].data[position + 1] = color.g;
-            layerImage[LAYERS.BACKGROUND].data[position + 2] = color.b;
-            layerImage[LAYERS.BACKGROUND].data[position + 3] = 255;
+            setLayerTileColor(LAYERS.BACKGROUND, color);
 
             position += 4;
         }

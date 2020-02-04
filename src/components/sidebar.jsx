@@ -1,24 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
-import SidebarTabListOption from "/components/sidebar/tabList-option.jsx";
-import SidebarInputInline from "/components/sidebar/input-inline.jsx";
+import SidebarViewGeneral from "/components/sidebar/categories/general.jsx";
+import SidebarViewLayers from "/components/sidebar/categories/layers.jsx";
 import "/components/styles/sidebar.css";
-import TabGeneral from "/components/sidebar/tab-general.jsx";
-import TabLayers from "/components/sidebar/tab-layers.jsx";
 
 const config = [
    {
       label: "General",
-      View: TabGeneral,
-   },
-   {
-      label: "NPCs",
-      View: TabGeneral,
+      View: SidebarViewGeneral,
    },
    {
       label: "Layers",
-      View: TabLayers
+      View: SidebarViewLayers
    }
 ];
 
@@ -33,14 +27,16 @@ function Sidebar({ show, running }) {
    if (show)
       return (
          <div className="sidebar-container">
-            <div className="sidebar-tabList">
+            <div className="sidebar-tabs">
                {
-                  config.map((tab, i) =>
-                     <SidebarTabListOption label={tab.label} key={i} index={i} active={i == currentTab} onClick={onTabClick}/>
+                  config.map(({ label }, i) =>
+                     <div className={"sidebar-tabs-option-container" + (i == currentTab ? " sidebar-tabs-option-container--active" : "")} onClick={() => { onTabClick(i) }} key={i}>
+                        <div className="sidebar-tabs-option">{label}</div>
+                     </div>
                   )
                }
             </div>
-            <div>
+            <div className="sidebar-view-container">
                {
                   running &&
                   <View/>

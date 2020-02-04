@@ -1,4 +1,4 @@
-.modal-sign-input-inline {
+.modal-sign-button-inline-text {
     padding: 0 5px;
 
     color: #96d2ff;
@@ -6,6 +6,6 @@
     cursor: pointer;
 }
 
-.modal-sign-input-inline:first-child {
+.modal-sign-button-inline-text:first-child {
     padding-left: 0;
 }

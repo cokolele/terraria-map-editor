@@ -1,7 +1,7 @@
 import React from "react";
 
 const AccountBoxIcon = ({ size=24 }) => (
-   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox={"0 0 24 24"}>
+   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox={"3 3 19 19"}>
       <path d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"/>
    </svg>
 );
@@ -61,6 +61,19 @@ const EyeIcon = ({ size=24 }) => (
    </svg>
 );
 
+const ToolEraserIcon = () => (
+   <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" width="auto" height="auto" viewBox="0 0 24 24">
+      <path d="M13.8,18.4l-7-7L17,1.3l7,7L13.8,18.4z M7.9,12.4l-1.1-1.1L0,18.2l1.1,1.1L7.9,12.4z M23.9,22.7v-1.5H4.5v1.5H23.9zM13.8,18.4l-1.1-1.1l-5.4,5.4h2.1L13.8,18.4z M2.1,18.2l-1.1,1.1l3.5,3.5h2.1L2.1,18.2z"/>
+   </svg>
+);
+
+const ArrowDownIcon = ({ className }) => (
+   <svg className={className} xmlns="http://www.w3.org/2000/svg" width="auto" height="auto" viewBox="0 0 24 24">
+      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+   </svg>
+);
+
+
 export {
    AccountBoxIcon,
    CrossIcon,
@@ -71,5 +84,7 @@ export {
    ToolBucketIcon,
    FolderIcon,
    GithubIcon,
-   EyeIcon
+   EyeIcon,
+   ToolEraserIcon,
+   ArrowDownIcon
 };

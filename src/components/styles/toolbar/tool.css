@@ -1,0 +1,32 @@
+.toolbar-tool {
+    padding: 0.2rem 0.35rem;
+    box-sizing: content-box;
+    border-radius: 0.2rem;
+    border: 1px solid rgba(0,0,0,0);
+
+    cursor: default;
+    fill: #dddddd;
+}
+
+.toolbar-tool svg {
+    width: 1.4rem;
+}
+
+.toolbar-tool:focus {
+    outline: none;
+}
+
+.toolbar-tool:hover {
+    background-color: #454545;
+    border-color: #666666;
+}
+
+.toolbar-tool--selected, .toolbar-tool--selected:hover {
+    background-color: #383838;
+    border-color: #666666;
+}
+
+.toolbar-tool--stroke {
+    fill: none;
+    stroke: #dddddd;
+}

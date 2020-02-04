@@ -8,6 +8,10 @@ html, body, #app {
     height: 100%;
 }
 
+svg {
+    display: block;
+}
+
 .debug_rotated_text {
     color: white;
     transform: rotate(90deg) translate(50%);

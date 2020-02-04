@@ -1,9 +1,9 @@
 import React from "react";
 import useToggle from "/utils/hooks/useToggle.js";
 
-import "/components/styles/menu/option.css";
+import "/components/styles/menu/folder/option.css";
 
-function MenuOption({ label, option, state }) {
+function MenuFolderOption({ label, option, state }) {
    if (label == "DIVIDER")
       return <div className="menu-option-divider"></div>
 
@@ -28,4 +28,4 @@ function MenuOption({ label, option, state }) {
    }
 }
 
-export default MenuOption;
+export default MenuFolderOption;

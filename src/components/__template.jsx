@@ -1,5 +1,7 @@
 import React from "react";
 
+import "/components/styles/";
+
 function Template() {
    return "test";
 }

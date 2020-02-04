@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { StateChangeUser, stateChangeModal } from "/state/modules/app.js";
 import api from "/utils/api/api.js";
 
-import ModalAccountMenuOption from "/components/modal/account/menu-option.jsx";
 import ModalAccountViewSettings from "/components/modal/account/categories/settings.jsx";
 import ModalAccountViewMaps from "/components/modal/account/categories/maps.jsx";
 import "/components/styles/modal/account.css";
@@ -44,7 +43,9 @@ function ModalAccount({ StateChangeUser, stateChangeModal }) {
          <div className="modal-account-menu">
             {
                config.map(({ label }, i) => (
-                  <ModalAccountMenuOption label={label} selected={i == selectedCategory} onClick={onMenuItemClick} onClickReturnParam={i} key={i} />
+                  <div className={"modal-account-menu-option" + (i == selectedCategory ? " modal-account-menu-option--selected" : "")} onClick={() => {setSelectedCategory(i)}} key={i}>
+                     {label}
+                  </div>
                ))
             }
          </div>
