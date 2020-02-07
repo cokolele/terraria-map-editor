@@ -12,6 +12,8 @@ import { stateChangeWorldObject, stateChangeWorldFile, stateChangeRunning } from
 import { stateChangePercentage, stateChangeDescription, stateChangeError } from "/state/modules/status.js";
 import { map } from "/utils/number.js";
 
+import sprite, { NPCsSprites } from "/utils/dbs/sprite.js";
+
 let worldFile, world;
 let canvas, ctx;
 let worker = new Worker("./webWorker.js");;
@@ -37,13 +39,16 @@ let posX;
 let posY;
 
 let tool = "move";
-let activeLayer;
-let activeSize;
+let activeLayer, activeSize, activeColor;
+const brush = new Image(1,1);
+brush.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkWPjfBwAENwHuUNRdVAAAAABJRU5ErkJggg==";
 
 let deltaX = 0;
 let deltaY = 0;
 let prevDragX = null;
 let prevDragY = null;
+
+let mouseX, mouseY;
 
 const changeCanvasWorldFile = (_worldFile) => {
     worldFile = _worldFile;
@@ -68,6 +73,10 @@ const changeCanvasActiveLayer = (_activeLayer) => {
 
 const changeCanvasActiveSize = (_activeSize) => {
     activeSize = _activeSize;
+}
+
+const changeCanvasActiveColor = (_activeColor) => {
+    activeColor = _activeColor;
 }
 
 const getCanvasMapData = ({ name, imageUrlPng }) => {
@@ -240,6 +249,8 @@ function onCanvasWheel(e) {
 }
 
 function onCanvasMouseMove(e) {
+    [mouseX, mouseY] = getMouseCanvasPosition(e);
+
     if ((tool == "move" && e.buttons == 1) || e.buttons == 4) {
         canvas.classList.add("grabbed");
         onMoveDrag(e);
@@ -258,7 +269,7 @@ function onCanvasMouseUp(e) {
 
 function getMouseCanvasPosition(e) {
     const rect = e.target.getBoundingClientRect();
-    return [e.clientX - rect.left, e.clientY - Math.floor(rect.top)];
+    return [e.clientX - Math.floor(rect.left), e.clientY - Math.floor(rect.top)];
 }
 
 function getMouseImagePosition(e) {
@@ -288,7 +299,7 @@ function getLayerImagePointColor(LAYER, x, y) {
 }
 
 function setLayerImageRowColor(LAYER, color, x, y, length, push = true) {
-    if (typeof color == "number")
+    if (typeof color == "number" || typeof color == "string")
         color = pointColors[LAYER][color];
 
     const offset = (world.header.maxTilesX * y + x) * 4;
@@ -331,7 +342,7 @@ function setLayerImageRectangleColor(LAYER, color, point1, point2, push = true) 
 }
 
 function setLayerImagePathColor(LAYER, color, point1, point2, strokeWidth, push = true) {
-    if (typeof color == "number")
+    if (typeof color == "number" || typeof color == "string")
         color = pointColors[LAYER][color];
 
     const [x1, y1] = point1;
@@ -376,8 +387,8 @@ function getLayerImageRectangleColor(LAYER, point1, point2) {
     return buffer;
 }
 */
-function setLayerImageFourwayFillColor(LAYER, fillColor, x, y) {
-    if (typeof fillColor == "number")
+function setLayerImageFourwayFillColor(LAYER, fillColor, x, y, push = true) {
+    if (typeof fillColor == "number" || typeof fillColor == "string")
         fillColor = pointColors[LAYER][fillColor];
 
     let pointsBuffer = [[x,y]];
@@ -397,6 +408,9 @@ function setLayerImageFourwayFillColor(LAYER, fillColor, x, y) {
             pointsBuffer.push([x-1, y], [x+1, y], [x, y-1], [x, y+1]);
         }
     }
+
+    if (push)
+        pushLayerImage(LAYER);
 }
 
 function onMoveDrag(e) {
@@ -421,7 +435,7 @@ function onMoveDrag(e) {
 function onPencilClick(e) {
     const [x, y] = getMouseImagePosition(e);
     const activeSizeHalf = activeSize / 2;
-    setLayerImageRectangleColor(activeLayer, 0, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
+    setLayerImageRectangleColor(activeLayer, activeColor, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
 }
 
 function onPencilDrag(e) {
@@ -433,9 +447,9 @@ function onPencilDrag(e) {
         return;
     }
 
-    setLayerImagePathColor(activeLayer, 0, [prevDragX, prevDragY], [x, y], 4);
-
-    console.log([prevDragX, prevDragY], [x, y]);
+    const activeSizeHalf = activeSize / 2;
+    setLayerImageRectangleColor(activeLayer, activeColor, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
+    //setLayerImagePathColor(activeLayer, activeColor, [prevDragX, prevDragY], [x, y], 4);
 
     prevDragX = x;
     prevDragY = y;
@@ -444,8 +458,7 @@ function onPencilDrag(e) {
 function onBucketClick(e) {
     const [x, y] = getMouseImagePosition(e);
 
-    setLayerImageFourwayFillColor(activeLayer, 0, x, y);
-    pushLayerImage(activeLayer);
+    setLayerImageFourwayFillColor(activeLayer, activeColor, x, y);
 }
 
 function onEraserClick(e) {
@@ -456,7 +469,7 @@ function onEraserClick(e) {
 
 function onEraserDrag(e) {
     const [x, y] = getMouseImagePosition(e);
-    console.log(x,y);
+
     if (prevDragX == null || (x != prevDragX || y != prevDragY)) {
         prevDragX = x;
         prevDragY = y;
@@ -548,6 +561,8 @@ function stop() {
     canvas.height--;
 }
 
+let temp0, temp1, temp2;
+
 const tick = (T) => {
     if (T == 0) {
         preRender();
@@ -566,6 +581,29 @@ const tick = (T) => {
                 canvas.width, canvas.height);
     });
 
+    if (tool == "pencil" || tool == "eraser") {
+        temp0 = activeSize * tilePixelRatio;
+        ctx.drawImage(brush, 0, 0, 1, 1, mouseX - temp0/2, mouseY - temp0/2, temp0, temp0);
+    }
+
+    if (world.NPCsData.NPCs && layersVisibility.NPCs)
+        world.NPCsData.NPCs.forEach(npc => {
+            temp0 = NPCsSprites[npc.id][2] * ( 2 + zoomLevel * 0.2 );
+            temp1 = NPCsSprites[npc.id][3] * ( 2 + zoomLevel * 0.2 );
+            ctx.drawImage(sprite,
+                NPCsSprites[npc.id][0], NPCsSprites[npc.id][1], NPCsSprites[npc.id][2], NPCsSprites[npc.id][3],
+                npc.homePosition.x * tilePixelRatio - posX * tilePixelRatio - temp0 / 2, npc.homePosition.y * tilePixelRatio - posY * tilePixelRatio - temp1, temp0, temp1);
+        });
+
+    if (world.NPCsData.pillars && layersVisibility.NPCs)
+        world.NPCsData.pillars.forEach(npc => {
+            temp0 = NPCsSprites[npc.id][2] * ( 2 + zoomLevel * 0.2 );
+            temp1 = NPCsSprites[npc.id][3] * ( 2 + zoomLevel * 0.2 );
+            ctx.drawImage(sprite,
+                NPCsSprites[npc.id][0], NPCsSprites[npc.id][1], NPCsSprites[npc.id][2], NPCsSprites[npc.id][3],
+                (npc.position.x / 16) * tilePixelRatio - posX * tilePixelRatio - temp0 / 2, (npc.position.y / 16) * tilePixelRatio - posY * tilePixelRatio - temp1, temp0, temp1);
+        });
+
     if (running)
         requestAnimationFrame(tick, canvas);
 }
@@ -577,6 +615,7 @@ export {
     changeCanvasLayersVisibility,
     changeCanvasActiveLayer,
     changeCanvasActiveSize,
+    changeCanvasActiveColor,
     getCanvasMapData,
     getCanvasMapFile,
     verifyMapFile,

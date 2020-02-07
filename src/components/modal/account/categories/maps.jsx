@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import api from "/utils/api/api.js";
 import { connect } from "react-redux";
 import { stateChangeWorldFile, stateChangeModal } from "/state/modules/app.js";
+import { stateChangeDescription, stateChangeError } from "/state/modules/status.js";
 
 import Button from "/components/modal/account/button.jsx";
 
 import { verifyMapFile } from "/app/canvas/main.js";
 
-function ModalAccountViewMap({ stateChangeWorldFile, stateChangeModal }) {
+function ModalAccountViewMap({ stateChangeWorldFile, stateChangeModal, stateChangeDescription, stateChangeError }) {
    const [maps, setMaps] = useState([]);
    const [selectedRow, setSelectedRow] = useState(null);
    const [error, setError] = useState("");
@@ -76,17 +77,19 @@ function ModalAccountViewMap({ stateChangeWorldFile, stateChangeModal }) {
    }
 
    const onLoadMap = async () => {
+      stateChangeDescription("Downloading map");
+      stateChangeModal(null);
       let mapFile = await api.get("/account/maps/" + maps[selectedRow].id, "application/octet-stream");
 
       if (mapFile.status == "error") {
-         setError(mapDeleted.message);
+         stateChangeDescription("Failed to download map");
+         stateChangeError(mapFile.message);
          return;
       }
 
       mapFile = new File([mapFile], maps[selectedRow].name);
 
       stateChangeWorldFile(mapFile);
-      stateChangeModal(null);
    }
 
    const onDeleteMap = async () => {
@@ -128,6 +131,6 @@ function ModalAccountViewMap({ stateChangeWorldFile, stateChangeModal }) {
 
 export default connect(
    null,
-   { stateChangeWorldFile, stateChangeModal }
+   { stateChangeWorldFile, stateChangeModal, stateChangeDescription, stateChangeError }
 )(ModalAccountViewMap);
 

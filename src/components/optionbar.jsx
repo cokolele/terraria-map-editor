@@ -1,32 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
-import { stateSetKey } from "/state/modules/app.js";
 
-import OptionbarInputSelect from "/components/optionbar/input-select.jsx";
-import OptionbarInputSlider from "/components/optionbar/input-slider.jsx";
+import OptionbarOptionLayer from "/components/optionbar/options/layer.jsx";
+import OptionbarOptionSize from "/components/optionbar/options/size.jsx";
+import OptionbarOptionColor from "/components/optionbar/options/color.jsx";
+
 import "/components/styles/optionbar.css";
 
-import LAYERS from "/app/canvas/enum-LAYERS.js";
 import toolsConfig from "/app/tools.js";
+import LAYERS from "/app/canvas/enum-LAYERS.js";
 
-const LayersOptions = [
-   ["Tiles", LAYERS.TILES],
-   ["Walls", LAYERS.WALLS],
-   ["Wires", LAYERS.WIRES],
-   ["Liquids", LAYERS.LIQUIDS],
-]
+const permValues = {
+   LAYER: LAYERS.TILES,
+   size: 6,
+   colors: {}
+};
+permValues.colors[LAYERS.TILES] = "0";
+permValues.colors[LAYERS.WALLS] = "1";
+permValues.colors[LAYERS.WIRES] = "red";
+permValues.colors[LAYERS.LIQUIDS] = "water";
 
-function Optionbar({ show, selectedTool, stateChangeOptionbarLayer, stateSetKey }) {
+function Optionbar({ show, selectedTool, stateChangeOptionbarLayer, stateSetKey, running }) {
    const ToolIcon = toolsConfig[selectedTool].icon;
    const stroke = toolsConfig[selectedTool].stroke;
 
-   const onLayerSelectChange = (LAYER) => {
-      stateSetKey(["optionbar", "layer"], LAYER);
-   }
-
-   const onToolSizeChange = (size) => {
-      stateSetKey(["optionbar", "size"], size);
-   }
+   const [LAYER, setLAYER] = useState(permValues.LAYER);
 
    return (
       show &&
@@ -36,20 +34,35 @@ function Optionbar({ show, selectedTool, stateChangeOptionbarLayer, stateSetKey 
                <ToolIcon size="auto"/>
             </div>
             <div className="optionbar-divider"></div>
-            <OptionbarInputSelect label="Layer" options={LayersOptions} onChange={onLayerSelectChange}/>
-            <div className="optionbar-divider"></div>
-            <OptionbarInputSlider label="Size" value={6} min={1} max={72} onChange={onToolSizeChange} sliderWidth="6rem" input inputMin={0} inputMax={999} inputWidth="5ch"/>
+            {
+               running && selectedTool != "move" && selectedTool != "select" &&
+               <>
+                  <OptionbarOptionLayer value={permValues.LAYER} onChange={(LAYER) => {permValues.LAYER = LAYER; setLAYER(LAYER)}}/>
+                  {
+                     selectedTool != "bucket" &&
+                     <>
+                        <div className="optionbar-divider"></div>
+                        <OptionbarOptionSize value={permValues.size} onChange={(size) => {permValues.size = size}}/>
+                     </>
+                  }
+                  {
+                     selectedTool != "eraser" &&
+                     <>
+                        <div className="optionbar-divider"></div>
+                        <OptionbarOptionColor LAYER={LAYER} value={permValues.colors[LAYER]} onChange={(color) => {permValues.colors[LAYER] = color}}/>
+                     </>
+                  }
+               </>
+            }
          </div>
       </div>
    );
 }
 
-export default connect(
-   state => {
-      return {
-         show: state.app.view.toolbar,
-         selectedTool: state.app.toolbar.tool
-      }
-   },
-   { stateSetKey }
-)(Optionbar);
+export default connect(state => {
+   return {
+      show: state.app.view.toolbar,
+      selectedTool: state.app.toolbar.tool,
+      running: state.app.running
+   };
+})(Optionbar);

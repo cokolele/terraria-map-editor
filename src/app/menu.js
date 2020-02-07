@@ -3,6 +3,7 @@ import { stateChangeWorldFile, stateChangeWorldObject, stateToggleViewOption, st
 import { stateChangePercentage, stateChangeDescription, stateChangeError } from "/state/modules/status.js";
 import { saveToLocalSettings } from "/utils/localStorage.js";
 
+import { resetWorld } from "/app/app.js";
 import { getCanvasMapData, getCanvasMapFile } from "/app/canvas/main.js";
 
 let worldObject;
@@ -21,18 +22,24 @@ const onNewFile = (e, file) => {
         });
         inputElHidden.click();
     } else {
-        onCloseFile();
+        resetWorld();
         store.dispatch(stateChangeWorldFile(file));
     }
 }
 
-const onSaveImage = () => {
+const onSaveImage = async () => {
     const data = getCanvasMapData({ name: true, imageUrlPng: true });
 
     if (data !== null) {
+        let mapBlob = await fetch(data.imageUrlPng);
+        mapBlob = await mapBlob.blob();
+        mapBlob = new Blob([mapBlob], {type: "image/png"});
+
+        const blobUrl = URL.createObjectURL(mapBlob);
+
         const link = document.createElement("a");
         link.download = data.name.replace(" ", "_") + ".png";
-        link.href = data.imageUrlPng;
+        link.href = blobUrl;
         link.click();
     }
 }
@@ -55,16 +62,11 @@ const onSaveFile = async (e) => {
 }
 
 const onCloseFile = (e) => {
-    store.dispatch(stateChangeRunning(false));
-    store.dispatch(stateChangeWorldFile(null));
-    store.dispatch(stateChangeWorldObject(null));
-    store.dispatch(stateChangePercentage(null));
-    store.dispatch(stateChangeDescription(null));
-    store.dispatch(stateChangeError(null));
+    resetWorld();
 }
 
 const onExampleMap = (e) => {
-    onCloseFile();
+    resetWorld();
 
     store.dispatch(stateChangeDescription("Downloading map"));
 

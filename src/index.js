@@ -27,7 +27,9 @@ import store from "/state/store.js";
 
 import Editor from "/pages/editor.jsx";
 
-import "/app/app.js";
+import { onPageLoad } from "/app/app.js";
+
+onPageLoad();
 
 render(
     <Provider store={store}>

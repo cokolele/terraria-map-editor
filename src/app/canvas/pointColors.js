@@ -476,7 +476,7 @@ pointColors[LAYERS.TILES] = [
 ];
 
 pointColors[LAYERS.WALLS] = [
-    {"r":0,"g":0,"b":0,"a":255},
+    null,
     {"r":52,"g":52,"b":52,"a":255},
     {"r":88,"g":61,"b":46,"a":255},
     {"r":61,"g":58,"b":78,"a":255},

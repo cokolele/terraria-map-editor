@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import "/components/styles/optionbar/input.css";
 
-function OptionbarInputSlider({ label, value, onChange, float, min, max, roundTo = 2, sliderWidth, input, inputWidth, className }) {
+function OptionbarInputSlider({ label, value, onChange, float, min, max, roundTo = 2, sliderWidth, input, inputWidth, inputMin = min, inputMax = max, className }) {
    const shift = Math.pow(10, roundTo);
    let unshifted;
    if (float) {
@@ -31,7 +31,10 @@ function OptionbarInputSlider({ label, value, onChange, float, min, max, roundTo
    }
 
    const _onChange = (e) => {
-      if (!isNaN(e.target.value) && e.target.value >= min && e.target.value <= max) {
+      if (e.target.value == "") {
+         onChange(inputMin);
+      }
+      else if ((e.target.classList.contains("optionbar-input-slider") && !isNaN(e.target.value) && e.target.value >= min && e.target.value <= max) || (e.target.classList.contains("optionbar-input") && !isNaN(e.target.value) && e.target.value >= inputMin && e.target.value <= inputMax)) {
          if (float)
             onChange(Math.round(e.target.value) / shift);
          else

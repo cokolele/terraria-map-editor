@@ -29,9 +29,12 @@ let defaultState = {
     },
     optionbar: {
         layer: LAYERS.TILES,
-        size: 6
+        size: 6,
+        color: 0
     },
-    layersVisibility: {},
+    layersVisibility: {
+        NPCs: true,
+    },
 };
 
 Object.values(LAYERS).forEach(LAYER => {

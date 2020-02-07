@@ -15,6 +15,10 @@ function SidebarCategoryLayers({ layersVisibility, stateToggleLayerVisibility })
 
    return (
       <>
+         <div className="sidebar-tab-layers-layer">
+            <SidebarCategoryLayersButton onClick={() => {onLayerClick("NPCs")}} visible={layersVisibility.NPCs}/>
+            <div className="sidebar-tab-layers-layer-label">NPCs</div>
+         </div>
          {
             Object.entries(LAYERS).reverse().map(([LAYERlabel, LAYER], i) => (
                <div className="sidebar-tab-layers-layer" key={i}>
