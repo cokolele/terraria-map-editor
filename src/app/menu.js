@@ -45,9 +45,7 @@ const onSaveImage = async () => {
 }
 
 const onSaveFile = async (e) => {
-    const filename = getCanvasMapData({ name: true }).name;
     const file = await getCanvasMapFile(worldObject);
-
     if (!file) return;
 
     const link = document.createElement("a");
@@ -55,7 +53,7 @@ const onSaveFile = async (e) => {
     const url = window.URL.createObjectURL(blob);
 
     link.href = url;
-    link.download = filename;
+    link.download = worldObject.header.mapName + ".wld";
     link.click();
 
     window.URL.revokeObjectURL(url);

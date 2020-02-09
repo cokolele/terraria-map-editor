@@ -53,6 +53,10 @@ self.onmessage = async ({ data }) => {
                     valid
                 });
                 break;
+            case "SAVE_TILES_RECTANGLE_CHANGE":
+                saveTilesRectangleChange(data.LAYER, data.id, data.point1, data.point2);
+                break;
+
         }
     } catch (error) {
         postMessage({
@@ -112,6 +116,8 @@ function render() {
         layerImage[LAYER].data[position + 2] = color.b;
         layerImage[LAYER].data[position + 3] = color.a;
     }
+
+    let temp = [];
 
     const drawPercentil = world.header.maxTilesY / 100;
     let drawPercentilNext = 0;
@@ -197,4 +203,94 @@ async function verify(file) {
     }
 
     return true;
+}
+
+function saveTileChange(x, y, properties) {
+    world.worldTiles[x][y] = { ...world.worldTiles[x][y] };
+
+    if (properties.delete) {
+        switch(properties.LAYER) {
+            case LAYERS.TILES:
+                delete world.worldTiles[x][y].blockId;
+                delete world.worldTiles[x][y].frameX;
+                delete world.worldTiles[x][y].frameY;
+                delete world.worldTiles[x][y].slope;
+                if (world.worldTiles[x][y].colors)
+                    delete world.worldTiles[x][y].colors.block;
+                break;
+            case LAYERS.WALLS:
+                delete world.worldTiles[x][y].wallId;
+                if (world.worldTiles[x][y].colors)
+                    delete world.worldTiles[x][y].colors.wall;
+                break;
+            case LAYERS.WIRES:
+                delete world.worldTiles[x][y].wiring;
+                break;
+            case LAYERS.LIQUIDS:
+                delete world.worldTiles[x][y].liquid;
+                break;
+        }
+        return;
+    }
+
+    if (properties.blockId !== undefined) {
+        world.worldTiles[x][y].blockId = properties.blockId;
+        delete world.worldTiles[x][y].frameX;
+        delete world.worldTiles[x][y].frameY;
+        delete world.worldTiles[x][y].slope;
+        if (world.worldTiles[x][y].colors)
+            delete world.worldTiles[x][y].colors.block;
+    }
+
+    if (properties.wallId !== undefined) {
+        world.worldTiles[x][y].wallId = properties.wallId;
+        if (world.worldTiles[x][y].colors)
+            delete world.worldTiles[x][y].colors.wall;
+    }
+
+    if (properties.liquid)
+        world.worldTiles[x][y].liquid = properties.liquid;
+
+    if (world.worldTiles[x][y].wiring && properties.wiring) {
+        if (world.worldTiles[x][y].wiring.wires && properties.wiring.wires)
+            properties.wiring.wires = { ...world.worldTiles[x][y].wiring.wires, ...properties.wiring.wires };
+
+        world.worldTiles[x][y].wiring = { ...world.worldTiles[x][y].wiring, ...properties.wiring };
+    } else if (properties.wiring)
+        world.worldTiles[x][y].wiring = properties.wiring;
+}
+
+function saveTilesRectangleChange(LAYER, id, point1, point2) {
+    if (id === null) {
+        for (let y = point1[1]; y < point2[1]; y++)
+            for (let x = point1[0]; x < point2[0]; x++)
+                saveTileChange(x, y, { delete: true, LAYER: LAYER });
+    } else {
+        let temp0;
+        switch(LAYER) {
+            case LAYERS.TILES:
+                for (let y = point1[1]; y < point2[1]; y++)
+                    for (let x = point1[0]; x < point2[0]; x++)
+                        saveTileChange(x, y, { blockId: id });
+                break;
+            case LAYERS.WALLS:
+                for (let y = point1[1]; y < point2[1]; y++)
+                    for (let x = point1[0]; x < point2[0]; x++)
+                        saveTileChange(x, y, { wallId: id });
+                break;
+            case LAYERS.WIRES:
+                for (let y = point1[1]; y < point2[1]; y++)
+                    for (let x = point1[0]; x < point2[0]; x++) {
+                        temp0 = {};
+                        temp0[id] = true;
+                        saveTileChange(x, y, { wiring: { wires: temp0 }});
+                    }
+                break;
+            case LAYERS.LIQUIDS:
+                for (let y = point1[1]; y < point2[1]; y++)
+                    for (let x = point1[0]; x < point2[0]; x++)
+                        saveTileChange(x, y, { liquid: { type: id, amount: 255 } });
+                break;
+        }
+    }
 }

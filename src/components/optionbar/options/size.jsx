@@ -8,6 +8,7 @@ function OptionbarOptionSize({ stateSetKey, value, onChange }) {
    const [activeSize, setActiveSize] = useState(value);
 
    const _onChange = (size) => {
+      size = parseInt(size);
       setActiveSize(size);
       stateSetKey(["optionbar", "size"], size);
       onChange(size);

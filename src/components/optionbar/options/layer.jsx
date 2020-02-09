@@ -17,6 +17,7 @@ function OptionbarOptionLayer({ stateSetKey, value, onChange }) {
    const [activeLayer, setActiveLayer] = useState(value);
 
    const _onChange = (LAYER) => {
+      LAYER = parseInt(LAYER);
       setActiveLayer(LAYER);
       stateSetKey(["optionbar", "layer"], LAYER);
       onChange(LAYER);

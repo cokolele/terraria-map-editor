@@ -20,6 +20,8 @@ function OptionbarOptionLayer({ stateSetKey, value, onChange, LAYER }) {
    const [activeColor, setActiveColor] = useState(value);
 
    const _onChange = (color) => {
+      if (LAYER == LAYERS.TILES || LAYER == LAYERS.WALLS)
+         color = parseInt(color);
       setActiveColor(color);
       stateSetKey(["optionbar", "color"], color);
       onChange(color);

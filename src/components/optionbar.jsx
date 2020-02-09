@@ -15,8 +15,8 @@ const permValues = {
    size: 6,
    colors: {}
 };
-permValues.colors[LAYERS.TILES] = "0";
-permValues.colors[LAYERS.WALLS] = "1";
+permValues.colors[LAYERS.TILES] = 0;
+permValues.colors[LAYERS.WALLS] = 1;
 permValues.colors[LAYERS.WIRES] = "red";
 permValues.colors[LAYERS.LIQUIDS] = "water";
 

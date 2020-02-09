@@ -315,7 +315,7 @@ function setLayerImageRowColor(LAYER, color, x, y, length, push = true) {
     if (push)
         pushLayerImage(LAYER);
 }
-/*
+
 function getLayerImageRowColor(LAYER, x, y, length) {
     const offset = (world.header.maxTilesX * y + x) * 4;
     length *= 4;
@@ -326,7 +326,7 @@ function getLayerImageRowColor(LAYER, x, y, length) {
 
     return buffer;
 }
-*/
+
 function setLayerImageRectangleColor(LAYER, color, point1, point2, push = true) {
     if (typeof color == "number" || typeof color == "string")
         color = pointColors[LAYER][color];
@@ -339,6 +339,28 @@ function setLayerImageRectangleColor(LAYER, color, point1, point2, push = true) 
 
     if (push)
         pushLayerImage(LAYER);
+}
+
+function getLayerImageRectangleColor() {
+    const [x1, y1] = point1;
+    const [x2, y2] = point2;
+    const height = y2 - y1;
+    const rowLength = (x2 - x1) * 4;
+
+    const buffer = [];
+
+    for (let i = 0; i < height; i++) {
+        const offset = (world.header.maxTilesX * (y1 + i) + x1) * 4;
+        for (let j = 0; j < rowLength; j++) {
+            buffer.push( layerImage[LAYER].data[offset + j] );
+        }
+    }
+
+    return buffer;
+}
+
+function sendTilesRectangleChange(LAYER, id, point1, point2) {
+    worker.postMessage({ action: "SAVE_TILES_RECTANGLE_CHANGE", LAYER, id, point1, point2 });
 }
 
 function setLayerImagePathColor(LAYER, color, point1, point2, strokeWidth, push = true) {
@@ -368,25 +390,7 @@ function setLayerImagePathColor(LAYER, color, point1, point2, strokeWidth, push 
     if (push)
         pushLayerImage(LAYER);
 }
-/*
-function getLayerImageRectangleColor(LAYER, point1, point2) {
-    const [x1, y1] = point1;
-    const [x2, y2] = point2;
-    const height = y2 - y1;
-    const rowLength = (x2 - x1) * 4;
 
-    const buffer = [];
-
-    for (let i = 0; i < height; i++) {
-        const offset = (world.header.maxTilesX * (y1 + i) + x1) * 4;
-        for (let j = 0; j < rowLength; j++) {
-            buffer.push( layerImage[LAYER].data[offset + j] );
-        }
-    }
-
-    return buffer;
-}
-*/
 function setLayerImageFourwayFillColor(LAYER, fillColor, x, y, push = true) {
     if (typeof fillColor == "number" || typeof fillColor == "string")
         fillColor = pointColors[LAYER][fillColor];
@@ -436,6 +440,7 @@ function onPencilClick(e) {
     const [x, y] = getMouseImagePosition(e);
     const activeSizeHalf = activeSize / 2;
     setLayerImageRectangleColor(activeLayer, activeColor, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
+    sendTilesRectangleChange(activeLayer, activeColor, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
 }
 
 function onPencilDrag(e) {
@@ -449,6 +454,7 @@ function onPencilDrag(e) {
 
     const activeSizeHalf = activeSize / 2;
     setLayerImageRectangleColor(activeLayer, activeColor, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
+    sendTilesRectangleChange(activeLayer, activeColor, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
     //setLayerImagePathColor(activeLayer, activeColor, [prevDragX, prevDragY], [x, y], 4);
 
     prevDragX = x;
@@ -464,7 +470,8 @@ function onBucketClick(e) {
 function onEraserClick(e) {
     const [x, y] = getMouseImagePosition(e);
     const activeSizeHalf = activeSize / 2;
-    setLayerImageRectangleColor(activeLayer, {r:0,g:0,b:0,a:0}, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)], false);
+    setLayerImageRectangleColor(activeLayer, {r:0,g:0,b:0,a:0}, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)], true);
+    sendTilesRectangleChange(activeLayer, null, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
 }
 
 function onEraserDrag(e) {
@@ -474,10 +481,9 @@ function onEraserDrag(e) {
         prevDragX = x;
         prevDragY = y;
         const activeSizeHalf = activeSize / 2;
-        setLayerImageRectangleColor(activeLayer, {r:0,g:0,b:0,a:0}, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)], false);
+        setLayerImageRectangleColor(activeLayer, {r:0,g:0,b:0,a:0}, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
+        sendTilesRectangleChange(activeLayer, null, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
     }
-
-    pushLayerImage(activeLayer);
 }
 
 function correctPositions() {
