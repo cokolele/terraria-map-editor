@@ -57,7 +57,8 @@ self.onmessage = async ({ data }) => {
             case "SAVE_TILES_RECTANGLE_CHANGE":
                 saveTilesRectangleChange(data.LAYER, data.id, data.point1, data.point2);
                 break;
-
+            case "SAVE_TILES_ARRAY_CHANGE":
+                saveTilesArrayChange(data.LAYER, data.id, data.tilesArray);
         }
     } catch (error) {
         postMessage({
@@ -142,8 +143,10 @@ function render() {
             if (tile.liquid)
                 setLayerTileColor(LAYERS.LIQUIDS, colors[LAYERS.LIQUIDS][tile.liquid.type]);
 
-            if (tile.wallId !== undefined)
+            if (tile.wallId !== undefined) {
+                if (tile.wallId == 21) console.log(colors[LAYERS.WALLS][tile.wallId]);
                 setLayerTileColor(LAYERS.WALLS, colors[LAYERS.WALLS][tile.wallId]);
+            }
 
             if (tile.wiring && tile.wiring.wires) {
                 if (tile.wiring.wires.red)
@@ -267,7 +270,6 @@ function saveTilesRectangleChange(LAYER, id, point1, point2) {
             for (let x = point1[0]; x < point2[0]; x++)
                 saveTileChange(x, y, { delete: true, LAYER: LAYER });
     } else {
-        let temp0;
         switch(LAYER) {
             case LAYERS.TILES:
                 for (let y = point1[1]; y < point2[1]; y++)
@@ -280,6 +282,7 @@ function saveTilesRectangleChange(LAYER, id, point1, point2) {
                         saveTileChange(x, y, { wallId: id });
                 break;
             case LAYERS.WIRES:
+                let temp0;
                 for (let y = point1[1]; y < point2[1]; y++)
                     for (let x = point1[0]; x < point2[0]; x++) {
                         temp0 = {};
@@ -293,5 +296,33 @@ function saveTilesRectangleChange(LAYER, id, point1, point2) {
                         saveTileChange(x, y, { liquid: { type: id, amount: 255 } });
                 break;
         }
+    }
+}
+
+function saveTilesArrayChange(LAYER, id, tilesArray) {
+    switch(LAYER) {
+        case LAYERS.TILES:
+            tilesArray.forEach(([x, y]) => {
+                saveTileChange(x, y, { blockId: id });
+            });
+            break;
+        case LAYERS.WALLS:
+            tilesArray.forEach(([x, y]) => {
+                saveTileChange(x, y, { wallId: id });
+            });
+            break;
+        case LAYERS.WIRES:
+            let temp0;
+            tilesArray.forEach(([x, y]) => {
+                temp0 = {};
+                temp0[id] = true;
+                saveTileChange(x, y, { wiring: { wires: temp0 }});
+            });
+            break;
+        case LAYERS.LIQUIDS:
+            tilesArray.forEach(([x, y]) => {
+                saveTileChange(x, y, { liquid: { type: id, amount: 255 } });
+            });
+            break;
     }
 }

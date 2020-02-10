@@ -357,10 +357,6 @@ function getLayerImageRectangleColor() {
     return buffer;
 }
 
-function sendTilesRectangleChange(LAYER, id, point1, point2) {
-    worker.postMessage({ action: "SAVE_TILES_RECTANGLE_CHANGE", LAYER, id, point1, point2 });
-}
-
 function setLayerImagePathColor(LAYER, color, point1, point2, strokeWidth, push = true) {
     if (typeof color == "number" || typeof color == "string")
         color = colors[LAYER][color];
@@ -400,19 +396,31 @@ function setLayerImageFourwayFillColor(LAYER, fillColor, x, y, push = true) {
     if (pointColor.r == fillColor.r && pointColor.g == fillColor.g && pointColor.b == fillColor.b && pointColor.a == fillColor.a)
         return;
 
-
+    let pointsEdited = [];
     while (pointsBuffer.length !== 0) {
         const [x, y] = pointsBuffer.pop();
+
         pointColor = getLayerImagePointColor(LAYER, x, y);
 
         if (pointColor.r == boundaryColor.r && pointColor.g == boundaryColor.g && pointColor.b == boundaryColor.b && pointColor.a == boundaryColor.a) {
             setLayerImagePointColor(LAYER, fillColor, x, y, false);
+            pointsEdited.push([x, y]);
             pointsBuffer.push([x-1, y], [x+1, y], [x, y-1], [x, y+1]);
         }
     }
 
     if (push)
         pushLayerImage(LAYER);
+
+    return pointsEdited;
+}
+
+function sendTilesRectangleChange(LAYER, id, point1, point2) {
+    worker.postMessage({ action: "SAVE_TILES_RECTANGLE_CHANGE", LAYER, id, point1, point2 });
+}
+
+function sendSendTilesArrayChange(LAYER, id, tilesArray) {
+    worker.postMessage({ action: "SAVE_TILES_ARRAY_CHANGE", LAYER, id, tilesArray });
 }
 
 function onMoveDrag(e) {
@@ -462,7 +470,7 @@ function onPencilDrag(e) {
 function onBucketClick(e) {
     const [x, y] = getMouseImagePosition(e);
 
-    setLayerImageFourwayFillColor(activeLayer, activeColor, x, y);
+    sendSendTilesArrayChange( activeLayer, activeColor, setLayerImageFourwayFillColor(activeLayer, activeColor, x, y) );
 }
 
 function onEraserClick(e) {
