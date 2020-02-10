@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import { StateChangeUser, stateChangeModal } from "/state/modules/app.js";
 import api from "/utils/api/api.js";
 
-import ModalAccountViewSettings from "/components/modal/account/categories/settings.jsx";
-import ModalAccountViewMaps from "/components/modal/account/categories/maps.jsx";
+import ModalAccountViewSettings from "/components/modal/account/views/settings.jsx";
+import ModalAccountViewMaps from "/components/modal/account/views/maps.jsx";
 import "/components/styles/modal/account.css";
 
 const config = [

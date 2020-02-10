@@ -1,24 +1,25 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 
-import OptionbarOptionLayer from "/components/optionbar/options/layer.jsx";
-import OptionbarOptionSize from "/components/optionbar/options/size.jsx";
-import OptionbarOptionColor from "/components/optionbar/options/color.jsx";
+import OptionbarOptionLayer from "/components/optionbar/layer.jsx";
+import OptionbarOptionSize from "/components/optionbar/size.jsx";
+import OptionbarOptionColor from "/components/optionbar/color.jsx";
 
 import "/components/styles/optionbar.css";
 
 import toolsConfig from "/app/tools.js";
-import LAYERS from "/app/canvas/enum-LAYERS.js";
+import LAYERS from "/utils/dbs/LAYERS.js";
 
 const permValues = {
    LAYER: LAYERS.TILES,
    size: 6,
-   colors: {}
+   colors: {
+      [LAYERS.TILES]: 0,
+      [LAYERS.WALLS]: 1,
+      [LAYERS.WIRES]: "red",
+      [LAYERS.LIQUIDS]: "water"
+   }
 };
-permValues.colors[LAYERS.TILES] = 0;
-permValues.colors[LAYERS.WALLS] = 1;
-permValues.colors[LAYERS.WIRES] = "red";
-permValues.colors[LAYERS.LIQUIDS] = "water";
 
 function Optionbar({ show, selectedTool, stateChangeOptionbarLayer, stateSetKey, running }) {
    const ToolIcon = toolsConfig[selectedTool].icon;

@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { stateChangeWorldObject } from "/state/modules/app.js"
 
-import OptionbarInput from "/components/optionbar/input.jsx";
-import OptionbarInputSlider from "/components/optionbar/input-slider.jsx";
-import OptionbarInputSelect from "/components/optionbar/input-select.jsx";
-import OptionbarInputCheckbox from "/components/optionbar/input-checkbox.jsx";
-import "/components/styles/sidebar/categories/general.css";
+import OptionbarInput from "/components/inputs/input.jsx";
+import OptionbarInputSlider from "/components/inputs/input-slider.jsx";
+import OptionbarInputSelect from "/components/inputs/input-select.jsx";
+import OptionbarInputCheckbox from "/components/inputs/input-checkbox.jsx";
+import "/components/styles/sidebar/views/general.css";
 
-import LAYERS from "/app/canvas/enum-LAYERS.js";
+import LAYERS from "/utils/dbs/LAYERS.js";
 import { setLayerImageRectangleColor } from "/app/canvas/main.js";
 
 function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject }) {

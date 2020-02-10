@@ -1,8 +1,9 @@
 import terrariaWorldParser from "/../terraria-world-file-js/src/browser/terraria-world-parser.js";
 import terrariaWorldSaver from "/../terraria-world-file-js/src/browser/terraria-world-saver.js";
-import pointColors from "./pointColors.js";
-import LAYERS from "./enum-LAYERS.js";
+
 import "/utils/polyfills/polyfill-imageData.js";
+import colors from "/utils/dbs/colors.js";
+import LAYERS from "/utils/dbs/LAYERS.js";
 
 let world;
 
@@ -136,36 +137,36 @@ function render() {
             const tile = world.worldTiles[x][y];
 
             if (tile.blockId !== undefined)
-                setLayerTileColor(LAYERS.TILES, pointColors[LAYERS.TILES][tile.blockId]);
+                setLayerTileColor(LAYERS.TILES, colors[LAYERS.TILES][tile.blockId]);
 
             if (tile.liquid)
-                setLayerTileColor(LAYERS.LIQUIDS, pointColors[LAYERS.LIQUIDS][tile.liquid.type]);
+                setLayerTileColor(LAYERS.LIQUIDS, colors[LAYERS.LIQUIDS][tile.liquid.type]);
 
             if (tile.wallId !== undefined)
-                setLayerTileColor(LAYERS.WALLS, pointColors[LAYERS.WALLS][tile.wallId]);
+                setLayerTileColor(LAYERS.WALLS, colors[LAYERS.WALLS][tile.wallId]);
 
             if (tile.wiring && tile.wiring.wires) {
                 if (tile.wiring.wires.red)
-                    setLayerTileColor(LAYERS.WIRES, pointColors[LAYERS.WIRES]["red"]);
+                    setLayerTileColor(LAYERS.WIRES, colors[LAYERS.WIRES]["red"]);
                 if (tile.wiring.wires.green)
-                    setLayerTileColor(LAYERS.WIRES, pointColors[LAYERS.WIRES]["green"]);
+                    setLayerTileColor(LAYERS.WIRES, colors[LAYERS.WIRES]["green"]);
                 if (tile.wiring.wires.blue)
-                    setLayerTileColor(LAYERS.WIRES, pointColors[LAYERS.WIRES]["blue"]);
+                    setLayerTileColor(LAYERS.WIRES, colors[LAYERS.WIRES]["blue"]);
                 if (tile.wiring.wires.yellow)
-                    setLayerTileColor(LAYERS.WIRES, pointColors[LAYERS.WIRES]["yellow"]);
+                    setLayerTileColor(LAYERS.WIRES, colors[LAYERS.WIRES]["yellow"]);
             }
 
             let color;
             if (y < bgLayers.space)
-                color = pointColors[LAYERS.BACKGROUND].space;
+                color = colors[LAYERS.BACKGROUND].space;
             else if (y >= bgLayers.space && y < bgLayers.ground)
-                color = pointColors[LAYERS.BACKGROUND].sky;
+                color = colors[LAYERS.BACKGROUND].sky;
             else if (y >= bgLayers.ground && y < bgLayers.cavern)
-                color = pointColors[LAYERS.BACKGROUND].ground;
+                color = colors[LAYERS.BACKGROUND].ground;
             else if (y >= bgLayers.cavern && y < bgLayers.underworld)
-                color = pointColors[LAYERS.BACKGROUND].cavern;
+                color = colors[LAYERS.BACKGROUND].cavern;
             else if (y >= bgLayers.underworld)
-                color = pointColors[LAYERS.BACKGROUND].underworld;
+                color = colors[LAYERS.BACKGROUND].underworld;
 
             setLayerTileColor(LAYERS.BACKGROUND, color);
 

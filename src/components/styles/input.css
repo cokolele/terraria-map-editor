@@ -1,11 +1,11 @@
-.optionbar-input-container {
+.input-container {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     position: relative;
 }
 
-.optionbar-input-label {
+.input-label {
     color: #d6d6d6;
     font-size: 0.84rem;
     margin-right: 0.4rem;
@@ -14,12 +14,12 @@
     -moz-user-select: none;
 }
 
-.optionbar-input-label--rightside {
+.input-label--rightside {
     margin-right: 0;
     margin-left: 0.4rem;
 }
 
-.optionbar-input {
+.input {
     height: 1.5rem;
     padding: 0 0.2rem;
     box-sizing: border-box;
@@ -32,11 +32,11 @@
     text-align: center;
 }
 
-.optionbar-input-select-container {
+.input-select-container {
     position: relative;
 }
 
-.optionbar-input-select {
+.input-select {
     height: 1.5rem;
     padding: 0 1.1rem 0 0.25rem;
     box-sizing: border-box;
@@ -52,7 +52,7 @@
     font-size: 0.84rem;
 }
 
-.optionbar-input-select-arrow {
+.input-select-arrow {
     position: absolute;
     pointer-events: none;
     top: calc(100%/2 - 1.05rem/2);
@@ -62,12 +62,12 @@
     fill: #c1c1c1;
 }
 
-.optionbar-input-select:focus, .optionbar-input:focus {
+.input-select:focus, .input:focus {
     outline: none;
     border: 1px solid #0078d7;
 }
 
-.optionbar-input-slider {
+.input-slider {
     background-color: #757575;
     height: 0.215rem;
     cursor: pointer;
@@ -77,11 +77,11 @@
     appearance: none;
 }
 
-.optionbar-input-slider:focus {
+.input-slider:focus {
     outline: none;
 }
 
-.optionbar-input-slider::-webkit-slider-thumb {
+.input-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -93,7 +93,7 @@
     cursor: pointer;
 }
 
-.optionbar-input-slider::-moz-range-thumb {
+.input-slider::-moz-range-thumb {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -105,11 +105,11 @@
     cursor: pointer;
 }
 
-.optionbar-input-slider + .optionbar-input {
+.input-slider + .input {
     margin-left: 6px;
 }
 
-.optionbar-input-checkbox {
+.input-checkbox {
     position: relative;
     height: 0.8rem;
     width: 0.8rem;
@@ -117,7 +117,7 @@
     background-color: #d4d4d4;
 }
 
-.optionbar-input-checkbox--checked:after {
+.input-checkbox--checked:after {
     position: absolute;
     top: 0;
     left: 0.07rem;

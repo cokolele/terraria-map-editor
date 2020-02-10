@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
-import SidebarViewGeneral from "/components/sidebar/categories/general.jsx";
-import SidebarViewLayers from "/components/sidebar/categories/layers.jsx";
+import SidebarViewGeneral from "/components/sidebar/views/general.jsx";
+import SidebarViewLayers from "/components/sidebar/views/layers.jsx";
 import "/components/styles/sidebar.css";
 
 const config = [

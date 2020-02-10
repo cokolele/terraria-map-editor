@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { stateSetKey } from "/state/modules/app.js";
 
-import OptionbarInputSlider from "/components/optionbar/input-slider.jsx";
+import OptionbarInputSlider from "/components/inputs/input-slider.jsx";
 
 function OptionbarOptionSize({ stateSetKey, value, onChange }) {
    const [activeSize, setActiveSize] = useState(value);

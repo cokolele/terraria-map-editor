@@ -1,5 +1,5 @@
 import { localSettings } from "/utils/localStorage.js";
-import LAYERS from "/app/canvas/enum-LAYERS.js";
+import LAYERS from "/utils/dbs/LAYERS.js";
 
 const CHANGE_WORLD_FILE = "twe/app/CHANGE_WORLD_FILE";
 const CHANGE_WORLD_OBJECT = "twe/app/CHANGE_WORLD_OBJECT";

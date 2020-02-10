@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { stateSetKey } from "/state/modules/app.js";
 
-import OptionbarInputSelect from "/components/optionbar/input-select.jsx";
+import OptionbarInputSelect from "/components/inputs/input-select.jsx";
 
-import LAYERS from "/app/canvas/enum-LAYERS.js";
+import LAYERS from "/utils/dbs/LAYERS.js";
 
 const LayersOptions = [
    ["Tiles", LAYERS.TILES],

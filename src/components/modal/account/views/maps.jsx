@@ -7,6 +7,7 @@ import { stateChangeDescription, stateChangeError } from "/state/modules/status.
 import Button from "/components/modal/account/button.jsx";
 
 import { verifyMapFile } from "/app/canvas/main.js";
+import { resetWorld } from "/app/app.js";
 
 function ModalAccountViewMap({ stateChangeWorldFile, stateChangeModal, stateChangeDescription, stateChangeError }) {
    const [maps, setMaps] = useState([]);
@@ -88,7 +89,7 @@ function ModalAccountViewMap({ stateChangeWorldFile, stateChangeModal, stateChan
       }
 
       mapFile = new File([mapFile], maps[selectedRow].name);
-
+      resetWorld();
       stateChangeWorldFile(mapFile);
    }
 

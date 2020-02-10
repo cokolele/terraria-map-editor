@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-import "/components/styles/optionbar/input.css";
+import "/components/styles/input.css";
 
-function OptionbarInputSlider({ label, value, onChange, float, min, max, roundTo = 2, sliderWidth, input, inputWidth, inputMin = min, inputMax = max, className }) {
+function InputSlider({ label, value, onChange, float, min, max, roundTo = 2, sliderWidth, input, inputWidth, inputMin = min, inputMax = max, className }) {
    const shift = Math.pow(10, roundTo);
    let unshifted;
    if (float) {
@@ -34,7 +34,7 @@ function OptionbarInputSlider({ label, value, onChange, float, min, max, roundTo
       if (e.target.value == "") {
          onChange(inputMin);
       }
-      else if ((e.target.classList.contains("optionbar-input-slider") && !isNaN(e.target.value) && e.target.value >= min && e.target.value <= max) || (e.target.classList.contains("optionbar-input") && !isNaN(e.target.value) && e.target.value >= inputMin && e.target.value <= inputMax)) {
+      else if ((e.target.classList.contains("input-slider") && !isNaN(e.target.value) && e.target.value >= min && e.target.value <= max) || (e.target.classList.contains("input") && !isNaN(e.target.value) && e.target.value >= inputMin && e.target.value <= inputMax)) {
          if (float)
             onChange(Math.round(e.target.value) / shift);
          else
@@ -43,18 +43,18 @@ function OptionbarInputSlider({ label, value, onChange, float, min, max, roundTo
    };
 
    return (
-      <div className={"optionbar-input-container" + (className ? " " + className : "")}>
+      <div className={"input-container" + (className ? " " + className : "")}>
          {
             label &&
-            <span className="optionbar-input-label">{label + ":"}</span>
+            <span className="input-label">{label + ":"}</span>
          }
-         <input className="optionbar-input-slider" type="range" value={value} onChange={_onChange} min={min} max={max} style={{width: sliderWidth}}/>
+         <input className="input-slider" type="range" value={value} onChange={_onChange} min={min} max={max} style={{width: sliderWidth}}/>
          {
             input &&
-            <input className="optionbar-input" type="text" value={float ? unshifted.value : value} onChange={float ? unshifted.onChange : _onChange} style={{width: inputWidth}}/>
+            <input className="input" type="text" value={float ? unshifted.value : value} onChange={float ? unshifted.onChange : _onChange} style={{width: inputWidth}}/>
          }
       </div>
    )
 }
 
-export default OptionbarInputSlider;
+export default InputSlider;

@@ -1,22 +1,20 @@
 /*
     spaghetti ahead
 */
-
 import "/utils/polyfills/polyfill-requestAnimationFrame.js";
-
-import pointColors from "./pointColors.js";
-import LAYERS from "./enum-LAYERS.js";
 
 import store from "/state/store.js";
 import { stateChangeWorldObject, stateChangeWorldFile, stateChangeRunning } from "/state/modules/app.js";
 import { stateChangePercentage, stateChangeDescription, stateChangeError } from "/state/modules/status.js";
 import { map } from "/utils/number.js";
 
-import sprite, { NPCsSprites } from "/utils/dbs/sprite.js";
+import LAYERS from "/utils/dbs/LAYERS.js";
+import colors from "/utils/dbs/colors.js";
+import sprite, { NPCsSprites } from "/utils/dbs/sprites.js";
 
 let worldFile, world;
 let canvas, ctx;
-let worker = new Worker("./webWorker.js");;
+let worker = new Worker("./web-worker.js");;
 
 let layerImage;
 let layerCanvas = {};
@@ -300,7 +298,7 @@ function getLayerImagePointColor(LAYER, x, y) {
 
 function setLayerImageRowColor(LAYER, color, x, y, length, push = true) {
     if (typeof color == "number" || typeof color == "string")
-        color = pointColors[LAYER][color];
+        color = colors[LAYER][color];
 
     const offset = (world.header.maxTilesX * y + x) * 4;
     length = length  * 4;
@@ -329,7 +327,7 @@ function getLayerImageRowColor(LAYER, x, y, length) {
 
 function setLayerImageRectangleColor(LAYER, color, point1, point2, push = true) {
     if (typeof color == "number" || typeof color == "string")
-        color = pointColors[LAYER][color];
+        color = colors[LAYER][color];
 
     const [x1, y1] = point1;
     const [x2, y2] = point2;
@@ -365,7 +363,7 @@ function sendTilesRectangleChange(LAYER, id, point1, point2) {
 
 function setLayerImagePathColor(LAYER, color, point1, point2, strokeWidth, push = true) {
     if (typeof color == "number" || typeof color == "string")
-        color = pointColors[LAYER][color];
+        color = colors[LAYER][color];
 
     const [x1, y1] = point1;
     const [x2, y2] = point2;
@@ -393,7 +391,7 @@ function setLayerImagePathColor(LAYER, color, point1, point2, strokeWidth, push 
 
 function setLayerImageFourwayFillColor(LAYER, fillColor, x, y, push = true) {
     if (typeof fillColor == "number" || typeof fillColor == "string")
-        fillColor = pointColors[LAYER][fillColor];
+        fillColor = colors[LAYER][fillColor];
 
     let pointsBuffer = [[x,y]];
     let pointColor = getLayerImagePointColor(LAYER, x, y);

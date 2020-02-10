@@ -4,9 +4,9 @@ import { connect } from "react-redux";
 import { stateToggleLayerVisibility } from "/state/modules/app.js";
 
 import { EyeIcon } from "/components/icon.jsx";
-import "/components/styles/sidebar/categories/layers.css";
+import "/components/styles/sidebar/views/layers.css";
 
-import LAYERS from "/app/canvas/enum-LAYERS.js";
+import LAYERS from "/utils/dbs/LAYERS.js";
 
 function SidebarCategoryLayers({ layersVisibility, stateToggleLayerVisibility }) {
    const onLayerClick = (LAYER) => {

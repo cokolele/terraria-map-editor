@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { stateSetKey } from "/state/modules/app.js";
 
-import OptionbarInputSelect from "/components/optionbar/input-select.jsx";
-import OptionbarInput from "/components/optionbar/input-select.jsx";
+import OptionbarInputSelect from "/components/inputs/input-select.jsx";
+import OptionbarInput from "/components/inputs/input-select.jsx";
 
-import LAYERS from "/app/canvas/enum-LAYERS.js";
+import LAYERS from "/utils/dbs/LAYERS.js";
+import editableTiles from "/utils/dbs/editable-tiles.js";
+import editableWalls from "/utils/dbs/editable-walls.js";
 
-import { editableTiles, editableWalls } from "/utils/dbs/editableTilesWalls.js";
-
-const editableTilesFormated = Object.entries(editableTiles).map(([id, name]) => [name, id]);
-const editableWallsFormated = Object.entries(editableWalls).map(([id, name]) => [name, id]);
+const tilesColors = Object.entries(editableTiles).map(([id, name]) => [name, id]);
+const wallsColors = Object.entries(editableWalls).map(([id, name]) => [name, id]);
 const wiresColors = ["red", "green", "blue", "yellow"];
 const liquidsColors = ["water", "lava", "honey"];
 
@@ -33,9 +33,9 @@ function OptionbarOptionLayer({ stateSetKey, value, onChange, LAYER }) {
 
    switch(parseInt(LAYER)) {
       case LAYERS.TILES:
-         return <OptionbarInputSelect label="Tile" options={editableTilesFormated} value={activeColor} onChange={_onChange}/>;
+         return <OptionbarInputSelect label="Tile" options={tilesColors} value={activeColor} onChange={_onChange}/>;
       case LAYERS.WALLS:
-         return <OptionbarInputSelect label="Wall" options={editableWallsFormated} value={activeColor} onChange={_onChange}/>;
+         return <OptionbarInputSelect label="Wall" options={wallsColors} value={activeColor} onChange={_onChange}/>;
       case LAYERS.WIRES:
          return <OptionbarInputSelect label="Wire" options={wiresColors} value={activeColor} onChange={_onChange}/>;
       case LAYERS.LIQUIDS:

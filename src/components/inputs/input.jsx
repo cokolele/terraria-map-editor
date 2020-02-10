@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-import "/components/styles/optionbar/input.css";
+import "/components/styles/input.css";
 
-function OptionbarInput({ value, onChange, width, int, float, min, max, roundTo = 2, className }) {
+function Input({ value, onChange, width, int, float, min, max, roundTo = 2, className }) {
    const _onChange = (e) => {
       if (((float || int) && isNaN(e.target.value)) || (min !== undefined && e.target.value < min) || (max !== undefined && e.target.value > max))
          return;
@@ -16,10 +16,10 @@ function OptionbarInput({ value, onChange, width, int, float, min, max, roundTo 
    };
 
    return (
-      <div className={"optionbar-input-container" + (className ? " " + className : "")}>
-         <input className="optionbar-input" type="text" value={value} onChange={_onChange} style={width && { width }}/>
+      <div className={"input-container" + (className ? " " + className : "")}>
+         <input className="input" type="text" value={value} onChange={_onChange} style={width && { width }}/>
       </div>
    );
 }
 
-export default OptionbarInput;
+export default Input;

@@ -1,4 +1,4 @@
-import LAYERS from "./enum-LAYERS.js";
+import LAYERS from "/utils/dbs/LAYERS.js";
 
 let pointColors = {};
 
