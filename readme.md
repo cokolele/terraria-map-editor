@@ -28,8 +28,8 @@ Feel free to contribute 🌳
 <br>\#>git submodule init
 <br>\#>git submodule update
 <br>\#>npm install core-js@2.5.7 --save-dev
-<br>go to */node_modules/parcel-bundler/src/transforms/babel/env.js @line 54* and change the line to
-<br>```javascript
+<br>go to */node_modules/parcel-bundler/src/transforms/babel/env.js @line 54* and change the line to<br>
+```javascript
 useBuiltIns: "usage",
 ```
 <br>(changing getEnvPlugins options for babel to import unly used polyfills)
@@ -39,8 +39,8 @@ useBuiltIns: "usage",
 
 \#>cd express-server
 <br>\#>npm install
-<br>\>create a file */configs/secrets.js* with a content
-<br>```javascript
+<br>\>create a file */configs/secrets.js* with a content<br>
+```javascript
 module.exports = {
     dbRootPass: "replace this with your database password",
     sessionSecret: "replace this with your express session secret",
