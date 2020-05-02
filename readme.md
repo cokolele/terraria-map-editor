@@ -20,48 +20,32 @@ Feel free to contribute 🌳
 ## Installation
 
 \#>git clone https://github.com/cokolele/terraria-map-editor
-
-\#>npm install
-
-(if you can fix unexpected config errors yourself:
-
-&nbsp;&nbsp;&nbsp;&nbsp;\#>npm audit fix
-
-&nbsp;&nbsp;&nbsp;&nbsp;\#>npm update
-
-)
-
-\#>git submodule init
-
-\#>git submodule update
-
-\#>npm install core-js@2.5.7 --save-dev
-
-go to */node_modules/parcel-bundler/src/transforms/babel/env.js @line 54* and change the line to
-
-```*useBuiltIns: "usage",```
-
-(changing getEnvPlugins options for babel to import unly used polyfills)
-
-\#>npm start
+<br>\#>npm install
+<br>(if you can fix unexpected config errors yourself:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;\#>npm audit fix
+<br>&nbsp;&nbsp;&nbsp;&nbsp;\#>npm update
+<br>)
+<br>\#>git submodule init
+<br>\#>git submodule update
+<br>\#>npm install core-js@2.5.7 --save-dev
+<br>go to */node_modules/parcel-bundler/src/transforms/babel/env.js @line 54* and change the line to
+<br>```javascript
+useBuiltIns: "usage",
+```
+<br>(changing getEnvPlugins options for babel to import unly used polyfills)
+<br>\#>npm start
 
 #### API installation (mysql/mariadb)
 
 \#>cd express-server
-
-\#>npm install
-
-\>create a file */configs/secrets.js* with a content
-
-```javascript
+<br>\#>npm install
+<br>\>create a file */configs/secrets.js* with a content
+<br>```javascript
 module.exports = {
     dbRootPass: "replace this with your database password",
     sessionSecret: "replace this with your express session secret",
 };
 ```
-
-\>setup your profiles in */configs/profiles/*
-
-\>run */configs/sql/twe_create.sql* in you database
-
-\#>npm run api:start
+<br>\>setup your profiles in */configs/profiles/*
+<br>\>run */configs/sql/twe_create.sql* in you database
+<br>\#>npm run api:start
