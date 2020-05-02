@@ -3,6 +3,7 @@ const apiRouter = express.Router();
 
 const sessionRouter = require("./session.js");
 const accountRouter = require("./account.js");
+const publicRouter = require("./public.js");
 
 apiRouter.use((req, res, next) => {
     res.type("application/json");
@@ -11,6 +12,7 @@ apiRouter.use((req, res, next) => {
 
 apiRouter.use("/session", sessionRouter);
 apiRouter.use("/account", accountRouter);
+apiRouter.use("/public", publicRouter);
 
 apiRouter.use("//", (req, res) => {
     res.json({

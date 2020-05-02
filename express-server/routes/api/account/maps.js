@@ -5,12 +5,16 @@ const responses = require("../../responses.js");
 const mapModel = require("../../../models/map.js");
 
 const crypto = require("crypto");
-const { unlinkSync } = require("fs");
+const { unlinkSync, existsSync, mkdirSync } = require("fs");
 const multer = require('multer');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, req.app.get("cwd") + "cdn/maps/");
+        const mapsDir = req.app.get("content") + "maps/";
+        if (!existsSync(mapsDir))
+            mkdirSync(mapsDir);
+
+        cb(null, mapsDir);
     },
 
     filename: (req, file, cb) => {
@@ -67,7 +71,6 @@ router.post("/", async (req, res) => {
         }
 
         const saveMap = mapModel.saveMap(req.session.user.id, req.file.path, req.file.originalname, req.file.size, Date.now());
-
         if (saveMap === false) {
             responses.internal_error(res);
             return;

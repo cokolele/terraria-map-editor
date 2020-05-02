@@ -2,6 +2,7 @@ import store from "/state/store.js";
 import { stateChangeWorldFile, stateChangeWorldObject, stateToggleViewOption, stateChangeRunning } from "/state/modules/app.js";
 import { stateChangePercentage, stateChangeDescription, stateChangeError } from "/state/modules/status.js";
 import { saveToLocalSettings } from "/utils/localStorage.js";
+import api from "/utils/api/api.js";
 
 import { resetWorld } from "/app/app.js";
 import { getCanvasMapData, getCanvasMapFile } from "/app/canvas/main.js";
@@ -63,21 +64,19 @@ const onCloseFile = (e) => {
     resetWorld();
 }
 
-const onExampleMap = (e) => {
+const onExampleMap = async (e) => {
+    let mapFile = await api.get("/public/maps/example", "application/octet-stream");
+    console.log(mapFile);
+
+    if (mapFile.status == "error") {
+        store.dispatch(stateChangeDescription("Map download failed"));
+        store.dispatch(stateChangeError(mapFile.message));
+        return;
+    }
+
+    mapFile = new File([mapFile], "example.wld");
     resetWorld();
-
-    store.dispatch(stateChangeDescription("Downloading map"));
-
-    fetch("/downloadable/example_map.wld")
-        .then(response => response.blob())
-        .then(blob => {
-            const file = new File([blob], "example_map.wld");
-            store.dispatch(stateChangeWorldFile(file));
-        })
-        .catch(function(e) {
-            store.dispatch(stateChangeDescription("Failed to download map"));
-            console.error(e);
-        });
+    store.dispatch(stateChangeWorldFile(mapFile));
 }
 
 const onToggleToolbar = (value) => {

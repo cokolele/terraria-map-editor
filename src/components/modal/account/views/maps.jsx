@@ -83,7 +83,7 @@ function ModalAccountViewMap({ stateChangeWorldFile, stateChangeModal, stateChan
       let mapFile = await api.get("/account/maps/" + maps[selectedRow].id, "application/octet-stream");
 
       if (mapFile.status == "error") {
-         stateChangeDescription("Failed to download map");
+         stateChangeDescription("Map download failed");
          stateChangeError(mapFile.message);
          return;
       }

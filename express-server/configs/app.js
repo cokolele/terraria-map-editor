@@ -18,13 +18,14 @@ const create = (cfg, db) => {
     app.set("env", cfg.env);
     app.set("port", cfg.port);
     app.set("domain", cfg.domain);
-    app.set("cwd", cfg.cwd)
+    app.set("cwd", cfg.cwd);
+    app.set("content", cfg.content);
 
     if (db === undefined) {
         app.use((req, res) => {
-            res.status(404).json({
+            res.status(503).json({
                 status: "error",
-                message: "fatal internal error (CODE 1)"
+                message: "Can't connect to database. Please try again later."
             });
         });
 
@@ -55,7 +56,6 @@ const create = (cfg, db) => {
     let contentType;
     app.use((req, res, next) => {
         contentType = req.headers["content-type"];
-        console.log(contentType);
         next();
     });
 
@@ -65,9 +65,13 @@ const create = (cfg, db) => {
         app.use(bodyParser.json());
     }
 
+    const logsDir = cfg.cwd + "logs/";
+    if (!fs.existsSync(logsDir))
+        fs.mkdirSync(logsDir);
+
     app.use(helmet());
     app.use(morgan("common", {
-        stream: fs.createWriteStream( cfg.cwd + "logs/api-access.log", { flags: "a" })
+        stream: fs.createWriteStream( logsDir + "api-access.log", { flags: "a" })
     }));
 
     app.use(routes);
@@ -78,7 +82,7 @@ const create = (cfg, db) => {
     app.use((err, req, res, next) => {
         res.status(500).json({
             status: "error",
-            message: "API error: internal_error"
+            message: "Unknown API error"
         });
     })
 };

@@ -144,7 +144,6 @@ function render() {
                 setLayerTileColor(LAYERS.LIQUIDS, colors[LAYERS.LIQUIDS][tile.liquid.type]);
 
             if (tile.wallId !== undefined) {
-                if (tile.wallId == 21) console.log(colors[LAYERS.WALLS][tile.wallId]);
                 setLayerTileColor(LAYERS.WALLS, colors[LAYERS.WALLS][tile.wallId]);
             }
 

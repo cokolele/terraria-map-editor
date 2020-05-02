@@ -7,6 +7,7 @@ import store from "/state/store.js";
 import { stateChangeWorldObject, stateChangeWorldFile, stateChangeRunning } from "/state/modules/app.js";
 import { stateChangePercentage, stateChangeDescription, stateChangeError } from "/state/modules/status.js";
 import { map } from "/utils/number.js";
+import { resetWorld } from "/app/app.js";
 
 import LAYERS from "/utils/dbs/LAYERS.js";
 import colors from "/utils/dbs/colors.js";
@@ -15,6 +16,52 @@ import sprite, { NPCsSprites } from "/utils/dbs/sprites.js";
 let worldFile, world;
 let canvas, ctx;
 let worker = new Worker("./web-worker.js");;
+
+worker.onmessage = ({ data }) => {
+    try {
+        switch(data.action) {
+            case "RETURN_PERCENTAGE_PARSING_INCOMING":
+                store.dispatch(stateChangeDescription("Parsing"));
+                break;
+            case "RETURN_PERCENTAGE_PARSING":
+                store.dispatch(stateChangePercentage(data.percentage));
+                break;
+            case "RETURN_PERCENTAGE_RENDERING_INCOMING":
+                store.dispatch(stateChangeDescription("Rendering"));
+                break;
+            case "RETURN_PERCENTAGE_RENDERING":
+                store.dispatch(stateChangePercentage(data.percentage));
+                break;
+            case "RETURN_IMAGES_INCOMING":
+                store.dispatch(stateChangeDescription("Copying"));
+                break;
+            case "RETURN_IMAGES":
+                layerImage = data.layerImage;
+                break;
+            case "RETURN_WORLD_OBJECT":
+                world = data.world;
+                store.dispatch(stateChangeDescription("Re-rendering"));
+                store.dispatch(stateChangeWorldObject(world));
+                start();
+                break;
+            case "ERROR":
+                store.dispatch(stateChangeDescription("Failed"));
+                store.dispatch(stateChangePercentage(null));
+                store.dispatch(stateChangeWorldFile(null));
+
+                if (data.error.name == "TerrariaWorldParserError") {
+                    store.dispatch(stateChangeError(data.error.onlyMessage));
+                } else {
+                    store.dispatch(stateChangeError("See more info in console (please report the error to developer)"));
+                }
+                console.error("web worker error:", data.error);
+                break;
+        }
+    } catch(e) {
+        console.error("web worker error:", e);
+        return;
+    }
+}
 
 let layerImage;
 let layerCanvas = {};
@@ -97,7 +144,7 @@ const getCanvasMapData = ({ name, imageUrlPng }) => {
         data.imageUrlPng = _tmpCanvas.toDataURL("image/png;base64");
     }
 
-    if (Object.entries(data).length === 0 && data.constructor === Object) //empty object
+    if (Object.entries(data).length === 0 && data.constructor === Object)
         return null;
     return data;
 }
@@ -163,57 +210,10 @@ function init(_canvas) {
 function load() {
     store.dispatch(stateChangeError(null));
 
-    try {
-        worker.onmessage = ({ data }) => {
-            switch(data.action) {
-                case "RETURN_PERCENTAGE_PARSING_INCOMING":
-                    store.dispatch(stateChangeDescription("Parsing"));
-                    break;
-                case "RETURN_PERCENTAGE_PARSING":
-                    store.dispatch(stateChangePercentage(data.percentage));
-                    break;
-                case "RETURN_PERCENTAGE_RENDERING_INCOMING":
-                    store.dispatch(stateChangeDescription("Rendering"));
-                    break;
-                case "RETURN_PERCENTAGE_RENDERING":
-                    store.dispatch(stateChangePercentage(data.percentage));
-                    break;
-                case "RETURN_IMAGES_INCOMING":
-                    store.dispatch(stateChangeDescription("Copying"));
-                    break;
-                case "RETURN_IMAGES":
-                    layerImage = data.layerImage;
-                    break;
-                case "RETURN_WORLD_OBJECT":
-                    world = data.world;
-                    store.dispatch(stateChangeDescription("Re-rendering"));
-                    store.dispatch(stateChangeWorldObject(world));
-                    start();
-                    break;
-                case "ERROR":
-                    store.dispatch(stateChangeDescription("Failed"));
-                    store.dispatch(stateChangePercentage(null));
-                    store.dispatch(stateChangeWorldFile(null));
-
-                    if (data.error.name == "TerrariaWorldParserError") {
-                        store.dispatch(stateChangeError(data.error.onlyMessage));
-                    } else {
-                        store.dispatch(stateChangeError("See more info in console (please report the error to developer)"));
-                    }
-                    console.error("web worker error:", data.error);
-                    break;
-            }
-        }
-
-        worker.postMessage({
-            action: "PARSE_AND_RENDER_MAP_RETURN_WITHOUT_BLOCKS",
-            file: worldFile
-        });
-    }
-    catch(e) {
-        console.error(e);
-        return;
-    }
+    worker.postMessage({
+        action: "PARSE_AND_RENDER_MAP_RETURN_WITHOUT_BLOCKS",
+        file: worldFile
+    });
 }
 
 function onCanvasClick(e) {
@@ -566,7 +566,6 @@ function preRender() {
 
 function stop() {
     running = false;
-    store.dispatch(stateChangeRunning(false));
     zoomLevel = 0;
     zoomFactors = [];
     canvas.height++;
