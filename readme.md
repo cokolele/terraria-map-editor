@@ -32,7 +32,7 @@ Feel free to contribute 🌳
 ```javascript
 useBuiltIns: "usage",
 ```
-(changing getEnvPlugins options for babel to import unly used polyfills)
+(changing getEnvPlugins options for babel to import only used polyfills)
 <br>\#>npm start
 
 #### API installation (mysql/mariadb)
@@ -47,5 +47,5 @@ module.exports = {
 };
 ```
 \>setup your profiles in */configs/profiles/*
-<br>\>run */configs/sql/twe_create.sql* in you database
+<br>\>run */configs/sql/twe_create.sql* in your database
 <br>\#>npm run api:start
