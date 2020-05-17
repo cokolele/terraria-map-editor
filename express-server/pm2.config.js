@@ -1,11 +1,13 @@
 const config = require("./configs/profiles/config.js");
 
+console.log(config);
+
 module.exports = {
     apps : [
         {
-            name: "express_api",
+            name: "express_api_2",
             cwd: config.cwd,
-            script: "./server.js",
+            script: "server.js",
             error_file: "./logs/server-error.log",
             out_file: "./logs/server-out.log",
             log_file: "./logs/server-combined.log",

@@ -56,6 +56,9 @@ worker.onmessage = ({ data }) => {
                 }
                 console.error("web worker error:", data.error);
                 break;
+            case "_DEBUG_RETURN_TILE_INFO":
+                console.log(data.tile);
+                break;
         }
     } catch(e) {
         console.error("web worker error:", e);
@@ -217,7 +220,9 @@ function load() {
 }
 
 function onCanvasClick(e) {
-    if (tool == "pencil")
+    if (tool == "move")
+        onDebugClick(e);
+    else if (tool == "pencil")
         onPencilClick(e);
     else if (tool == "bucket")
         onBucketClick(e);
@@ -247,8 +252,6 @@ function onCanvasWheel(e) {
 }
 
 function onCanvasMouseMove(e) {
-    [mouseX, mouseY] = getMouseCanvasPosition(e);
-
     if ((tool == "move" && e.buttons == 1) || e.buttons == 4) {
         canvas.classList.add("grabbed");
         onMoveDrag(e);
@@ -440,6 +443,11 @@ function onMoveDrag(e) {
 
     posX -= deltaX / tilePixelRatio;
     posY -= deltaY / tilePixelRatio;
+}
+
+function onDebugClick(e) {
+    const [x, y] = getMouseImagePosition(e);
+    worker.postMessage({ action: "_DEBUG_GET_TILE_INFO", x, y });
 }
 
 function onPencilClick(e) {

@@ -59,6 +59,13 @@ self.onmessage = async ({ data }) => {
                 break;
             case "SAVE_TILES_ARRAY_CHANGE":
                 saveTilesArrayChange(data.LAYER, data.id, data.tilesArray);
+                break;
+            case "_DEBUG_GET_TILE_INFO":
+                postMessage({
+                    action: "_DEBUG_RETURN_TILE_INFO",
+                    tile: world.worldTiles[data.x][data.y]
+                })
+                break;
         }
     } catch (error) {
         postMessage({
