@@ -61,6 +61,8 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject }) 
             checked: view.sidebar,
             onClick: onToggleSidebar
          }
+      },
+      "saving the map does not work yet for 1.4 version": {
       }
    };
 

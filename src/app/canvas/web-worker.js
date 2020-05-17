@@ -113,6 +113,14 @@ function render() {
 
     let position = 0;
     const setLayerTileColor = (LAYER, color) => {
+        if (!color) {
+            color = {
+                r:0,
+                g:0,
+                b:0,
+                a:0
+            };
+        }
         layerImage[LAYER].data[position]     = color.r;
         layerImage[LAYER].data[position + 1] = color.g;
         layerImage[LAYER].data[position + 2] = color.b;
