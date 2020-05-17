@@ -252,6 +252,8 @@ function onCanvasWheel(e) {
 }
 
 function onCanvasMouseMove(e) {
+    [mouseX, mouseY] = getMouseCanvasPosition(e);
+
     if ((tool == "move" && e.buttons == 1) || e.buttons == 4) {
         canvas.classList.add("grabbed");
         onMoveDrag(e);
