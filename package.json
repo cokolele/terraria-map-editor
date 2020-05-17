@@ -23,7 +23,7 @@
   },
   "scripts": {
     "start": "cross-env NODE_ENV=development node ./parcel-proxy-config.js",
-    "build": "cross-env NODE_ENV=production parcel build ./src/index.html --no-source-maps",
+    "build": "cross-env NODE_ENV=production parcel build ./src/index.html",
     "api:start": "cross-env NODE_ENV=development pm2 start ./express-server/pm2.config.js",
     "api:log": "pm2 logs express_api",
     "api:restart": "pm2 restart express_api",

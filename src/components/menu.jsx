@@ -62,7 +62,11 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject }) 
             onClick: onToggleSidebar
          }
       },
-      "saving the map does not work yet for 1.4 version": {
+      "1.4 maps saving does not work yet": {},
+      "if you encounter any problems, click here": {
+         "here": () => {
+            stateChangeModal("errorreport");
+         },
       }
    };
 

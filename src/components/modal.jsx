@@ -7,6 +7,8 @@ import "/components/styles/modal.css";
 import ModalSignin from "/components/modal/signin.jsx";
 import ModalSignup from "/components/modal/signup.jsx";
 import ModalAccount from "/components/modal/account.jsx";
+import ErrorReport from "/components/modal/errorreport.jsx";
+
 
 const config = {
    signin: {
@@ -20,6 +22,10 @@ const config = {
    account: {
       label: "Account",
       View: ModalAccount
+   },
+   errorreport: {
+      label: "Error report",
+      View: ErrorReport
    }
 };
 

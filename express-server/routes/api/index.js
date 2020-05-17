@@ -5,6 +5,8 @@ const sessionRouter = require("./session.js");
 const accountRouter = require("./account.js");
 const publicRouter = require("./public.js");
 
+const errorModel = require("../../models/error.js");
+
 apiRouter.use((req, res, next) => {
     res.type("application/json");
     next();
@@ -13,6 +15,14 @@ apiRouter.use((req, res, next) => {
 apiRouter.use("/session", sessionRouter);
 apiRouter.use("/account", accountRouter);
 apiRouter.use("/public", publicRouter);
+
+apiRouter.post("/error", async (req, res) => {
+    const saveError = await errorModel.saveError(req.body.error);
+
+    res.json({
+        "status": "ok"
+    })
+});
 
 apiRouter.use("//", (req, res) => {
     res.json({
