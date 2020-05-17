@@ -97,18 +97,23 @@ function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject }) {
          <OptionbarInputSlider value={header.slimeRainTime} onChange={(value) => {setHeaderKey("slimeRainTime", value)}} min={-604800} max={54000} input inputWidth="9ch"/>
          <span>Cultists cooldown</span>
          <OptionbarInputSlider value={header.tempCultistDelay} onChange={(value) => {setHeaderKey("tempCultistDelay", value)}} min={0} max={86400} input inputWidth="7ch"/>
-         <span>Lantern night cooldown</span>
-         <OptionbarInputSlider value={header.lanternNightCooldown} onChange={(value) => {setHeaderKey("lanternNightCooldown", value)}} min={0} max={11} input inputWidth="7ch"/>
-         <span>Lantern night started by world</span>
-         <OptionbarInputCheckbox value={header.lanternNightGenuine} onChange={(value) => {setHeaderKey("lanternNightGenuine", value)}} />
-         <span>Lantern night started by player</span>
-         <OptionbarInputCheckbox value={header.lanternNightManual} onChange={(value) => {setHeaderKey("lanternNightManual", value)}} />
-         <span>Next night will be latern night</span>
-         <OptionbarInputCheckbox value={header.lanternNightNextNightIsGenuine} onChange={(value) => {setHeaderKey("lanternNightNextNightIsGenuine", value)}} />
-         <span>Force Halloween invasion</span>
-         <OptionbarInputCheckbox value={header.forceHalloweenForToday} onChange={(value) => {setHeaderKey("forceHalloweenForToday", value)}} />
-         <span>Force Christmas invasion</span>
-         <OptionbarInputCheckbox value={header.forceXMasForToday} onChange={(value) => {setHeaderKey("forceXMasForToday", value)}} />
+         {
+            version >= 225 &&
+            <>
+               <span>Lantern night cooldown</span>
+               <OptionbarInputSlider value={header.lanternNightCooldown} onChange={(value) => {setHeaderKey("lanternNightCooldown", value)}} min={0} max={11} input inputWidth="7ch"/>
+               <span>Lantern night started by world</span>
+               <OptionbarInputCheckbox value={header.lanternNightGenuine} onChange={(value) => {setHeaderKey("lanternNightGenuine", value)}} />
+               <span>Lantern night started by player</span>
+               <OptionbarInputCheckbox value={header.lanternNightManual} onChange={(value) => {setHeaderKey("lanternNightManual", value)}} />
+               <span>Next night will be latern night</span>
+               <OptionbarInputCheckbox value={header.lanternNightNextNightIsGenuine} onChange={(value) => {setHeaderKey("lanternNightNextNightIsGenuine", value)}} />
+               <span>Force Halloween invasion</span>
+               <OptionbarInputCheckbox value={header.forceHalloweenForToday} onChange={(value) => {setHeaderKey("forceHalloweenForToday", value)}} />
+               <span>Force Christmas invasion</span>
+               <OptionbarInputCheckbox value={header.forceXMasForToday} onChange={(value) => {setHeaderKey("forceXMasForToday", value)}} />
+            </>
+         }
 
          <div className="sidebar-view-general-row-divider"><span>Flags:</span></div>
 
@@ -130,14 +135,19 @@ function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject }) {
          <OptionbarInputCheckbox value={header.crimson} onChange={(value) => {setHeaderKey("crimson", value)}} />
          <span>Hard mode</span>
          <OptionbarInputCheckbox value={header.hardMode} onChange={(value) => {setHeaderKey("hardMode", value)}} />
-         <span>Ore 1</span>
-         <OptionbarInputSelect value={header.savedOreTierCopper} options={[["Not yet set", -1], ["Copper ore", 7], ["Tin ore", 166]]} onChange={(value) => {setHeaderKey("savedOreTierCopper", value)}}/>
-         <span>Ore 2</span>
-         <OptionbarInputSelect value={header.savedOreTierIron} options={[["Not yet set", -1], ["Iron ore", 6], ["Lead ore", 167]]} onChange={(value) => {setHeaderKey("savedOreTierIron", value)}}/>
-         <span>Ore 3</span>
-         <OptionbarInputSelect value={header.savedOreTierSilver} options={[["Not yet set", -1], ["Silver ore", 9], ["Tungsten ore", 168]]} onChange={(value) => {setHeaderKey("savedOreTierSilver", value)}}/>
-         <span>Ore 4</span>
-         <OptionbarInputSelect value={header.savedOreTierGold} options={[["Not yet set", -1], ["Gold ore", 8], ["Platinum ore", 169]]} onChange={(value) => {setHeaderKey("savedOreTierGold", value)}}/>
+         {
+            version >= 225 &&
+            <>
+               <span>Ore 1</span>
+               <OptionbarInputSelect value={header.savedOreTierCopper} options={[["Not yet set", -1], ["Copper ore", 7], ["Tin ore", 166]]} onChange={(value) => {setHeaderKey("savedOreTierCopper", value)}}/>
+               <span>Ore 2</span>
+               <OptionbarInputSelect value={header.savedOreTierIron} options={[["Not yet set", -1], ["Iron ore", 6], ["Lead ore", 167]]} onChange={(value) => {setHeaderKey("savedOreTierIron", value)}}/>
+               <span>Ore 3</span>
+               <OptionbarInputSelect value={header.savedOreTierSilver} options={[["Not yet set", -1], ["Silver ore", 9], ["Tungsten ore", 168]]} onChange={(value) => {setHeaderKey("savedOreTierSilver", value)}}/>
+               <span>Ore 4</span>
+               <OptionbarInputSelect value={header.savedOreTierGold} options={[["Not yet set", -1], ["Gold ore", 8], ["Platinum ore", 169]]} onChange={(value) => {setHeaderKey("savedOreTierGold", value)}}/>
+            </>
+         }
          <span>Hardmode ore 1</span>
          <OptionbarInputSelect value={header.oreTier1} options={[["Not yet set", -1], ["Cobalt ore", 107], ["Palladium ore", 221]]} onChange={(value) => {setHeaderKey("oreTier1", value)}}/>
          <span>Hardmode ore 2</span>
@@ -199,8 +209,13 @@ function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject }) {
          <OptionbarInputCheckbox value={header.fastForwardTime} onChange={(value) => {setHeaderKey("fastForwardTime", value)}} />
          <span>Sundial cooldown</span>
          <OptionbarInputSlider value={header.sundialCooldown} onChange={(value) => {setHeaderKey("sundialCooldown", value)}} min={0} max={128} input inputWidth="5ch"/>
-         <span>Combat book used</span>
-         <OptionbarInputCheckbox value={header.combatBookWasUsed} onChange={(value) => {setHeaderKey("combatBookWasUsed", value)}} />
+         {
+            version >= 225 &&
+            <>
+               <span>Combat book used</span>
+               <OptionbarInputCheckbox value={header.combatBookWasUsed} onChange={(value) => {setHeaderKey("combatBookWasUsed", value)}} />
+            </>
+         }
 
          <div className="sidebar-view-general-row-divider"><span>Weather:</span></div>
 
@@ -251,34 +266,44 @@ function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject }) {
             <OptionbarInputSelect value={header.treeStyle[2]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5]} onChange={(value) => {setHeaderKey("treeStyle", value, 2)}}/>
             <OptionbarInputSelect value={header.treeStyle[3]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5]} onChange={(value) => {setHeaderKey("treeStyle", value, 3)}}/>
          </div>
-         <span>Forest 1 background</span>
-         <OptionbarInputSelect value={header.setBG0} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBG0", value)}} width="6ch"/>
-         <span>Forest 2 background</span>
-         <OptionbarInputSelect value={header.setBG10} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBG0", value)}} width="6ch"/>
-         <span>Forest 3 background</span>
-         <OptionbarInputSelect value={header.setBG11} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBG0", value)}} width="6ch"/>
-         <span>Forest 4 background</span>
-         <OptionbarInputSelect value={header.setBG12} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBG0", value)}} width="6ch"/>
+         <span>{version >= 225 ? "Forest 1 background" : "Forest background"}</span>
+         <OptionbarInputSelect value={header.setBG0} options={version >= 225 ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73] : [0, 1, 2, 3, 4, 5, 6, 7, 8, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBG0", value)}} width="6ch"/>
+         {
+            version >= 225 &&
+            <>
+               <span>Forest 2 background</span>
+               <OptionbarInputSelect value={header.setBG10} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBG0", value)}} width="6ch"/>
+               <span>Forest 3 background</span>
+               <OptionbarInputSelect value={header.setBG11} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBG0", value)}} width="6ch"/>
+               <span>Forest 4 background</span>
+               <OptionbarInputSelect value={header.setBG12} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBG0", value)}} width="6ch"/>
+            </>
+         }
          <span>Corruption background</span>
-         <OptionbarInputSelect value={header.setBG1} options={[0, 1, 2, 3, 4]} onChange={(value) => {setHeaderKey("setBG1", value)}} width="6ch"/>
+         <OptionbarInputSelect value={header.setBG1} options={version >= 225 ? [0, 1, 2, 3, 4] : [0, 1]} onChange={(value) => {setHeaderKey("setBG1", value)}} width="6ch"/>
          <span>Jungle background</span>
-         <OptionbarInputSelect value={header.setBG2} options={[0, 1, 2, 3, 4, 5]} onChange={(value) => {setHeaderKey("setBG2", value)}} width="6ch"/>
+         <OptionbarInputSelect value={header.setBG2} options={version >= 225 ? [0, 1, 2, 3, 4, 5] : [0, 1]} onChange={(value) => {setHeaderKey("setBG2", value)}} width="6ch"/>
          <span>Deep jungle background</span>
          <OptionbarInputSelect value={header.jungleBackStyle} options={[0, 1]} onChange={(value) => {setHeaderKey("jungleBackStyle", value)}} width="6ch"/>
          <span>Snow background</span>
-         <OptionbarInputSelect value={header.setBG3} options={[0, 1, 2, 3, 4, 5, 6, 7, 21, 22, 31, 32, 41, 42]} onChange={(value) => {setHeaderKey("setBG3", value)}} width="6ch"/>
+         <OptionbarInputSelect value={header.setBG3} options={version >= 225 ? [0, 1, 2, 3, 4, 5, 6, 7, 21, 22, 31, 32, 41, 42] : [0, 1, 2, 3, 4, 21, 22, 31, 32, 41, 42]} onChange={(value) => {setHeaderKey("setBG3", value)}} width="6ch"/>
          <span>Deep snow background</span>
          <OptionbarInputSelect value={header.iceBackStyle} options={[0, 1, 2, 3]} onChange={(value) => {setHeaderKey("iceBackStyle", value)}} width="6ch"/>
          <span>Hallow background</span>
-         <OptionbarInputSelect value={header.setBG4} options={[0, 1, 2, 3, 4]} onChange={(value) => {setHeaderKey("setBG4", value)}} width="6ch"/>
+         <OptionbarInputSelect value={header.setBG4} options={version >= 225 ? [0, 1, 2, 3, 4] : [0, 1]} onChange={(value) => {setHeaderKey("setBG4", value)}} width="6ch"/>
          <span>Crimson background</span>
-         <OptionbarInputSelect value={header.setBG5} options={[0, 1, 2, 3, 4, 5]} onChange={(value) => {setHeaderKey("setBG5", value)}} width="6ch"/>
+         <OptionbarInputSelect value={header.setBG5} options={version >= 225 ? [0, 1, 2, 3, 4, 5] : [0, 1, 2]} onChange={(value) => {setHeaderKey("setBG5", value)}} width="6ch"/>
          <span>Desert background</span>
-         <OptionbarInputSelect value={header.setBG6} options={[0, 1, 2, 3, 4]} onChange={(value) => {setHeaderKey("setBG6", value)}} width="6ch"/>
+         <OptionbarInputSelect value={header.setBG6} options={version >= 225 ? [0, 1, 2, 3, 4] : [0, 1]} onChange={(value) => {setHeaderKey("setBG6", value)}} width="6ch"/>
          <span>Ocean background</span>
-         <OptionbarInputSelect value={header.setBG7} options={[0, 1, 2, 3, 4, 5]} onChange={(value) => {setHeaderKey("setBG7", value)}} width="6ch"/>
-         <span>Mushroom background</span>
-         <OptionbarInputSelect value={header.setBG8} options={[0, 1, 2, 3]} onChange={(value) => {setHeaderKey("setBG8", value)}} width="6ch"/>
+         <OptionbarInputSelect value={header.setBG7} options={version >= 225 ? [0, 1, 2, 3, 4, 5] : [0, 1, 2]} onChange={(value) => {setHeaderKey("setBG7", value)}} width="6ch"/>
+         {
+            version >= 225 &&
+            <>
+               <span>Mushroom background</span>
+               <OptionbarInputSelect value={header.setBG8} options={[0, 1, 2, 3]} onChange={(value) => {setHeaderKey("setBG8", value)}} width="6ch"/>
+            </>
+         }
          <span>Underground backgrounds X 1</span>
          <OptionbarInputSlider value={header.caveBackX[0]} onChange={(value) => {setHeaderKey("caveBackX", value, 0)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
          <span>Underground backgrounds X 2</span>
@@ -292,19 +317,29 @@ function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject }) {
             <OptionbarInputSelect value={header.caveBackStyle[2]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5, 6, 7]} onChange={(value) => {setHeaderKey("caveBackStyle", value, 2)}}/>
             <OptionbarInputSelect value={header.caveBackStyle[3]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5, 6, 7]} onChange={(value) => {setHeaderKey("caveBackStyle", value, 3)}}/>
          </div>
-         <span>Underworld background</span>
-         <OptionbarInputSelect value={header.setBG9} options={[0, 1, 2]} onChange={(value) => {setHeaderKey("setBG9", value)}} width="6ch"/>
+         {
+            version >= 225 &&
+            <>
+               <span>Underworld background</span>
+               <OptionbarInputSelect value={header.setBG9} options={[0, 1, 2]} onChange={(value) => {setHeaderKey("setBG9", value)}} width="6ch"/>
+            </>
+         }
          <span>Underworld walls background</span>
          <OptionbarInputSelect value={header.hellBackStyle} options={[0, 1, 2]} onChange={(value) => {setHeaderKey("hellBackStyle", value)}} width="6ch"/>
 
-         <div className="sidebar-view-general-row-divider"><span>{"Pets <3"}</span></div>
+         {
+            version >= 225 &&
+            <>
+               <div className="sidebar-view-general-row-divider"><span>{"Pets <3"}</span></div>
 
-         <span>Bought cat</span>
-         <OptionbarInputCheckbox value={header.boughtCat} onChange={(value) => {setHeaderKey("boughtCat", value)}} />
-         <span>Bought dog</span>
-         <OptionbarInputCheckbox value={header.boughtDog} onChange={(value) => {setHeaderKey("boughtDog", value)}} />
-         <span>Bought bunny</span>
-         <OptionbarInputCheckbox value={header.boughtBunny} onChange={(value) => {setHeaderKey("boughtBunny", value)}} />
+               <span>Bought cat</span>
+               <OptionbarInputCheckbox value={header.boughtCat} onChange={(value) => {setHeaderKey("boughtCat", value)}} />
+               <span>Bought dog</span>
+               <OptionbarInputCheckbox value={header.boughtDog} onChange={(value) => {setHeaderKey("boughtDog", value)}} />
+               <span>Bought bunny</span>
+               <OptionbarInputCheckbox value={header.boughtBunny} onChange={(value) => {setHeaderKey("boughtBunny", value)}} />
+            </>
+         }
 
          <div className="sidebar-view-general-row-divider"><span>NPCs saved:</span></div>
 
@@ -342,8 +377,13 @@ function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject }) {
          <OptionbarInputCheckbox value={header.downedBoss3} onChange={(value) => {setHeaderKey("downedBoss3", value)}} />
          <span>Queen Bee</span>
          <OptionbarInputCheckbox value={header.downedQueenBee} onChange={(value) => {setHeaderKey("downedQueenBee", value)}} />
-         <span>Queen Slime</span>
-         <OptionbarInputCheckbox value={header.downedQueenSlime} onChange={(value) => {setHeaderKey("downedQueenSlime", value)}} />
+         {
+            version >= 225 &&
+            <>
+               <span>Queen Slime</span>
+               <OptionbarInputCheckbox value={header.downedQueenSlime} onChange={(value) => {setHeaderKey("downedQueenSlime", value)}} />
+            </>
+         }
          <span>Any mechanical boss</span>
          <OptionbarInputCheckbox value={header.downedMechBossAny} onChange={(value) => {setHeaderKey("downedMechBossAny", value)}} />
          <span>The Destroyer</span>
@@ -354,8 +394,13 @@ function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject }) {
          <OptionbarInputCheckbox value={header.downedMechBoss3} onChange={(value) => {setHeaderKey("downedMechBoss3", value)}} />
          <span>Plantera</span>
          <OptionbarInputCheckbox value={header.downedPlantBoss} onChange={(value) => {setHeaderKey("downedPlantBoss", value)}} />
-         <span>Empress of Light</span>
-         <OptionbarInputCheckbox value={header.downedEmpressOfLight} onChange={(value) => {setHeaderKey("downedEmpressOfLight", value)}} />
+         {
+            version >= 225 &&
+            <>
+               <span>Empress of Light</span>
+               <OptionbarInputCheckbox value={header.downedEmpressOfLight} onChange={(value) => {setHeaderKey("downedEmpressOfLight", value)}} />
+            </>
+         }
          <span>Golem</span>
          <OptionbarInputCheckbox value={header.downedGolemBoss} onChange={(value) => {setHeaderKey("downedGolemBoss", value)}} />
          <span>Fishron</span>
