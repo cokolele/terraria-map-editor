@@ -3,18 +3,54 @@ import { connect } from "react-redux";
 import { stateChangeModal } from "/state/modules/app.js";
 import api from "/utils/api/api.js";
 
-import ModalSignInput from "/components/modal/sign/input.jsx";
+import Button from "/components/modal/account/button.jsx";
 import ModalSignButton from "/components/modal/sign/button.jsx";
 import "/components/styles/modal/sign.css";
 
-function ModalErrorReport({ stateChangeModal }) {
+const fileData = new FormData();
+let added = false;
 
+function ModalErrorReport({ stateChangeModal }) {
    const [text, setText] = useState("");
+   const [error, setError] = useState("");
+
+   const onAddFile = async (e, file) => {
+      if (!file) {
+         const inputElHidden = document.createElement("input");
+         inputElHidden.setAttribute("type", "file");
+         inputElHidden.setAttribute("accept", ".wld");
+         inputElHidden.addEventListener("input", async () => {
+            onAddFile(null, inputElHidden.files[0]);
+         });
+         inputElHidden.click();
+      } else {
+         setError("");
+
+         if (!file.name.includes(".wld")) {
+            setError("Please select .wld file format");
+            return;
+         }
+
+         if (file.size > 40971520) {
+            setError("File exceeded size limit (20 MB)");
+            return;
+         }
+
+         //only one file
+         if (added)
+            return;
+         added = true;
+
+         fileData.append("map", file);
+
+      }
+   }
 
    const send = async () => {
       await api.post("/error", {
          error: text
       });
+      api.post("/account/maps/errorreportmap", fileData, false);
       stateChangeModal("");
    }
 
@@ -26,6 +62,11 @@ function ModalErrorReport({ stateChangeModal }) {
          <span className="modal-sign-text">3. copy the console text below</span>
          <span className="modal-sign-text"></span>
          <textarea value={text} onChange={(e) => {setText(e.target.value)}} />
+         <span className="modal-sign-text"></span>
+         <span className="modal-sign-text">(It will be even quicker if you send your map file <span style={{fontSize: "1.8rem"}}>😉</span>)</span>
+         <span className="modal-sign-text"></span>
+         <Button label={"Add attachment mapfile"} onClick={onAddFile} error={error}/>
+         <span className="modal-sign-text"></span>
          <ModalSignButton label="SEND" onClick={send}/>
       </div>
    );

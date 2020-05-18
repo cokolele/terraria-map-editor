@@ -64,7 +64,7 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject }) 
       },
       "1.4 maps saving does not work yet": {},
       "if you encounter any problems, click here": {
-         "here": () => {
+         "i mean here": () => {
             stateChangeModal("errorreport");
          },
       }

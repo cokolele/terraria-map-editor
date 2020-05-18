@@ -23,6 +23,25 @@ const storage = multer.diskStorage({
     }
 });
 
+const storageErrorReport = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const mapsDir = req.app.get("content") + "maps/";
+        if (!existsSync(mapsDir))
+            mkdirSync(mapsDir);
+
+        const errorMapsDir = req.app.get("content") + "maps/errorReport/";
+        if (!existsSync(errorMapsDir))
+            mkdirSync(errorMapsDir);
+
+        cb(null, errorMapsDir);
+    },
+
+    filename: (req, file, cb) => {
+        file.id = crypto.randomBytes(20).toString('hex');
+        cb(null, file.id);
+    }
+});
+
 const mapFilter = (req, file, cb) => {
     if (!file.originalname.includes(".wld") || file.encoding != "7bit" || file.mimetype != "application/octet-stream") {
         cb({ name: "FilterError", message: "Wrong file format" }, false);
@@ -33,6 +52,7 @@ const mapFilter = (req, file, cb) => {
 };
 
 const mapUpload = multer({ storage: storage, fileFilter: mapFilter, limits: { fileSize: 20971520 } });
+const mapUploadErrorReport = multer({ storage: storageErrorReport, fileFilter: mapFilter, limits: { fileSize: 40971520 } });
 
 router.post("/", async (req, res) => {
     if (!req.session.loggedIn) {
@@ -80,6 +100,33 @@ router.post("/", async (req, res) => {
             responses.success(res, "Map saved");
             return;
         }
+
+        responses.default_bad_request(res);
+    });
+});
+
+router.post("/errorreportmap", async(req, res) => {
+    let upload = mapUploadErrorReport.single("map");
+
+    upload(req, res, (err) => {
+        if (err) {
+            if (err.name == "FilterError" || err.name == "MulterError") {
+                if (err.code == "LIMIT_FILE_SIZE")
+                    err.message = "File exceeded size limit (20 MB)";
+
+                responses.unprocessable(res, err.message);
+                return;
+            }
+
+            console.error(err);
+            responses.internal_error(res);
+            return;
+        }
+
+        //const validFile = mapModel.verifyFile(req.file.path);
+
+        responses.success(res, "Map saved");
+        return;
 
         responses.default_bad_request(res);
     });
