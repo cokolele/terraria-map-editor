@@ -607,6 +607,7 @@ const tick = (T) => {
         ctx.drawImage(brush, 0, 0, 1, 1, mouseX - temp0/2, mouseY - temp0/2, temp0, temp0);
     }
 
+    //months after writing this i cant understand it, too bad!
     if (world.NPCsData.NPCs && layersVisibility.NPCs)
         world.NPCsData.NPCs.forEach(npc => {
             temp0 = NPCsSprites[npc.id][2] * ( 2 + zoomLevel * 0.2 );
