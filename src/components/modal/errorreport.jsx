@@ -62,8 +62,7 @@ function ModalErrorReport({ stateChangeModal }) {
          <span className="modal-sign-text">3. copy the console text below</span>
          <span className="modal-sign-text"></span>
          <textarea value={text} onChange={(e) => {setText(e.target.value)}} />
-         <span className="modal-sign-text"></span>
-         <span className="modal-sign-text">(It will be even quicker if you send your map file <span style={{fontSize: "1.8rem"}}>😉</span>)</span>
+         <span className="modal-sign-text">(It will be even quicker if you send your map file, i'm going through them individually and they are my error source priority <span style={{fontSize: "1.8rem"}}>😉</span>)</span>
          <span className="modal-sign-text"></span>
          <Button label={"Add attachment mapfile"} onClick={onAddFile} error={error}/>
          <span className="modal-sign-text"></span>
