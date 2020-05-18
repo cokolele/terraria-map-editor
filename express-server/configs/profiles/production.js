@@ -8,7 +8,7 @@ module.exports = {
     db: {
         host: "localhost",
         user: "root",
-        password: secrets.dbRootPass,
+        password: secrets.dbRootPassProd,
         database: "twe",
         port: 3306
     }

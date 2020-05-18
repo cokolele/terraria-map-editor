@@ -4,11 +4,11 @@
   "description": "",
   "main": "pm2.config.js",
   "scripts": {
-    "api:start": "cross-env NODE_ENV=development pm2 start ./pm2.config.js",
-    "api:start:prod": "cross-env NODE_ENV=development pm2 start ./pm2.config.js",
-    "api:log": "pm2 logs express_api",
-    "api:restart": "pm2 restart express_api",
-    "api:stop": "pm2 delete express_api"
+    "api:start": "cross-env NODE_ENV=development pm2 start ./pm2.config.js --env=development",
+    "api:start:prod": "cross-env NODE_ENV=production pm2 start ./pm2.config.js --env=production",
+    "api:log": "pm2 logs express_api_2",
+    "api:restart": "pm2 restart express_api_2",
+    "api:stop": "pm2 delete express_api_2"
   },
   "keywords": [],
   "author": "",

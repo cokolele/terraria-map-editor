@@ -42,7 +42,8 @@ useBuiltIns: "usage",
 <br>\>create a file */configs/secrets.js* with a content<br>
 ```javascript
 module.exports = {
-    dbRootPass: "replace this with your database password",
+    dbRootPass: "replace this with your local database password",
+    dbRootPassProd: "replace this with your production database password",
     sessionSecret: "replace this with your express session secret",
 };
 ```
