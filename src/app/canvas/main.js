@@ -6,6 +6,7 @@ import "/utils/polyfills/polyfill-requestAnimationFrame.js";
 import store from "/state/store.js";
 import { stateChangeWorldObject, stateChangeWorldFile, stateChangeRunning } from "/state/modules/app.js";
 import { stateChangePercentage, stateChangeDescription, stateChangeError } from "/state/modules/status.js";
+import api from "/utils/api/api.js";
 import { map } from "/utils/number.js";
 import { resetWorld } from "/app/app.js";
 
@@ -54,6 +55,9 @@ worker.onmessage = ({ data }) => {
                 } else {
                     store.dispatch(stateChangeError("See more info in console (please report the error to developer)"));
                 }
+                api.post("/error", {
+                    error: "auto_line_59: " + JSON.stringify(data.error)
+                });
                 console.error("web worker error:", data.error);
                 break;
             case "_DEBUG_RETURN_TILE_INFO":
@@ -62,6 +66,9 @@ worker.onmessage = ({ data }) => {
         }
     } catch(e) {
         console.error("web worker error:", e);
+        api.post("/error", {
+            error: "auto_line_70: " + JSON.stringify(e)
+        });
         return;
     }
 }
@@ -173,6 +180,9 @@ const getCanvasMapFile = async (worldObject) => {
                         store.dispatch(stateChangeError("See more info in console (please report the error to developer)"));
                     }
                     console.error("web worker error:", data.error);
+                    api.post("/error", {
+                        error: "auto_line_184: " + JSON.stringify(data.error)
+                    });
                     store.dispatch(stateChangeDescription("Failed"));
                     resolve(null);
                     break;
