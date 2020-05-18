@@ -32,7 +32,7 @@ function Optionbar({ show, selectedTool, stateChangeOptionbarLayer, stateSetKey,
       <div className="optionbar-container">
          <div className="optionbar">
             <div className={"optionbar-icon" + (stroke ? " optionbar-icon--stroke" : "")}>
-               <ToolIcon size="auto"/>
+               <ToolIcon size="100%"/>
             </div>
             <div className="optionbar-divider"></div>
             {

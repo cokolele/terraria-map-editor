@@ -9,7 +9,7 @@ function Tool({ title, Icon, onClick, selected, name, stroke }) {
 
    return (
       <div className={"toolbar-tool" + (selected ? " toolbar-tool--selected" : "") + (stroke ? " toolbar-tool--stroke" : "")} title={title} onClick={_onClick}>
-         <Icon size="auto"/>
+         <Icon size="100%"/>
       </div>
    );
 }

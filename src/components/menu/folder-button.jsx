@@ -6,7 +6,7 @@ function MenuFolderButton({ label, onClick, Icon }) {
    return (
       <div className="menu-folder-container menu-folder-button" onClick={onClick}>
          <span>{label}</span>
-         <Icon size="auto"/>
+         <Icon size="100%"/>
       </div>
    )
 }
