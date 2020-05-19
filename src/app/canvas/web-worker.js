@@ -11,7 +11,7 @@ self.onmessage = async ({ data }) => {
     try {
         switch(data.action) {
             case "PARSE_AND_RENDER_MAP_RETURN_WITHOUT_BLOCKS":
-                world = await parse(data.file);
+                world = await parse(data.file, data.unsafe);
                 const layerImage = render();
 
                 postMessage({
@@ -80,7 +80,7 @@ self.onmessage = async ({ data }) => {
     }
 }
 
-async function parse(file) {
+async function parse(file, unsafe) {
     postMessage({
         action: "RETURN_PERCENTAGE_PARSING_INCOMING",
     });
@@ -91,7 +91,7 @@ async function parse(file) {
             action: "RETURN_PERCENTAGE_PARSING",
             percentage: percentVal
         });
-    });
+    }, unsafe); //unsafe tells the parser to ignore the error when section pointers do not match. one corrupted section often does not cause any critical errors
 }
 
 function render() {

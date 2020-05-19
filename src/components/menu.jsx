@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { onNewFile, onExampleMap, onCloseFile, onSaveImage, onSaveFile, onToggleSidebar, onToggleToolbar, setWorldObject } from "/app/menu.js";
-import { stateChangeModal } from "/state/modules/app.js";
+import menu from "/app/menu.js";
+import { stateChangeModal, stateToggleUnsafe } from "/state/modules/app.js";
 import { localSettings } from "/utils/localStorage.js";
 
 import MenuFolder from "/components/menu/folder.jsx";
@@ -9,9 +9,9 @@ import MenuFolderButton from "/components/menu/folder-button.jsx";
 import { AccountBoxIcon, GithubIcon } from "/components/icon.jsx";
 import "/components/styles/menu.css";
 
-function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject }) {
+function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, unsafe, stateToggleUnsafe }) {
    useEffect(() => {
-      setWorldObject(worldObject);
+      menu.setWorldObject(worldObject);
    }, [worldObject]);
 
    const [currentTab, setCurrentTab] = useState(false);
@@ -19,23 +19,23 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject }) 
    const DIVIDER = "__DIVIDER__";
    const config = {
       File: {
-         "Open...": onNewFile,
-         "Open example map": onExampleMap,
+         "Open...": menu.onNewFile,
+         "Open example map": menu.onExampleMap,
          "Save map image": {
             type: "default",
             enabled: running,
-            onClick: onSaveImage
+            onClick: menu.onSaveImage
          },
          Save: {
             type: "default",
             enabled: running && worldObject.fileFormatHeader.version == 194,
-            onClick: onSaveFile
+            onClick: menu.onSaveFile
          },
          DIVIDER,
          Close: {
             type: "default",
             enabled: running,
-            onClick: onCloseFile
+            onClick: menu.onCloseFile
          },
       },
       Edit: {
@@ -54,18 +54,26 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject }) 
          Toolbar: {
             type: "checkbox",
             checked: view.toolbar,
-            onClick: onToggleToolbar
+            onClick: menu.onToggleToolbar
          },
          Sidebar: {
             type: "checkbox",
             checked: view.sidebar,
-            onClick: onToggleSidebar
+            onClick: menu.onToggleSidebar
          }
       },
-      "if you encounter any problems, click here": {
-         "i mean here": () => {
+      "Error report": {
+         type: "button",
+         onClick: () => {
             stateChangeModal("errorreport");
-         },
+         }
+      },
+      "Can't load map? click here": {
+         "Enable unsafe map loading": {
+            type: "checkbox",
+            checked: unsafe,
+            onClick: stateToggleUnsafe
+         }
       }
    };
 
@@ -85,13 +93,16 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject }) 
       <div className="menu-container">
          <div className="menu">
          {
-            Object.keys(config).map((label, i) =>
-               <MenuFolder label={label} options={config[label]} currentTab={currentTab} setCurrentTab={setCurrentTab} index={i+1} key={i}/>
-            )
+            Object.keys(config).map((label, i) => {
+               if (typeof config[label] == "object" && config[label].type && config[label].type == "button")
+                  return <MenuFolderButton label={label} onClick={config[label].onClick} index={i+1} key={i}/>
+               else
+                  return <MenuFolder label={label} options={config[label]} currentTab={currentTab} setCurrentTab={setCurrentTab} index={i+1} key={i}/>
+            })
          }
          </div>
          <div className="menu">
-            <MenuFolderButton label="version 2.1.5" onClick={() => {"hey baby!"}}/>
+            <MenuFolderButton label="version 2.1.6" onClick={() => {"hey baby!"}}/>
             <MenuFolderButton label="supported ingame version 1.4.0.2 (only map loading)" onClick={() => {"hey baby!"}}/>
             <MenuFolderButton label={loggedIn ? user.username : "Account"} onClick={onAccountClick} Icon={AccountBoxIcon}/>
             <MenuFolderButton label="Github" onClick={onGithubClick} Icon={GithubIcon}/>
@@ -106,8 +117,9 @@ export default connect(state => {
          running: state.app.running,
          loggedIn: state.app.loggedIn,
          user: state.app.user,
-         worldObject: state.app.worldObject
+         worldObject: state.app.worldObject,
+         unsafe: state.app.unsafe
       };
    },
-   { stateChangeModal }
+   { stateChangeModal, stateToggleUnsafe }
 )(Menu);

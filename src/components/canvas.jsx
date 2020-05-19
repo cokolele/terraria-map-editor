@@ -3,9 +3,9 @@ import { connect } from "react-redux";
 
 import "/components/styles/canvas.css";
 
-import init, { changeCanvasWorldFile, changeCanvasTool, changeCanvasLayersVisibility, changeCanvasActiveLayer, changeCanvasActiveSize, changeCanvasActiveColor } from "/app/canvas/main.js";
+import init, { changeCanvasWorldFile, changeCanvasTool, changeCanvasLayersVisibility, changeCanvasActiveLayer, changeCanvasActiveSize, changeCanvasActiveColor, changeUnsafe } from "/app/canvas/main.js";
 
-function Canvas({ worldFile, running, tool, changeRunning, layersVisibility, activeLayer, activeSize, activeColor }) {
+function Canvas({ worldFile, running, tool, changeRunning, layersVisibility, activeLayer, activeSize, activeColor, unsafe }) {
    const canvasEl = useRef(null);
 
    useEffect(() => {
@@ -36,6 +36,10 @@ function Canvas({ worldFile, running, tool, changeRunning, layersVisibility, act
       changeCanvasActiveColor(activeColor);
    }, [activeColor]);
 
+   useEffect(() => {
+      changeUnsafe(unsafe);
+   }, [unsafe]);
+
    return (
       <div className="canvas-container">
          <div className={"canvas-container-inner" + (running ? "" : " hidden")}>
@@ -60,6 +64,7 @@ export default connect(state => {
       layersVisibility: state.app.layersVisibility,
       activeLayer: state.app.optionbar.layer,
       activeSize: state.app.optionbar.size,
-      activeColor: state.app.optionbar.color
+      activeColor: state.app.optionbar.color,
+      unsafe: state.app.unsafe
    }
 })(Canvas);

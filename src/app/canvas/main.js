@@ -73,6 +73,8 @@ worker.onmessage = ({ data }) => {
     }
 }
 
+let unsafe;
+
 let layerImage;
 let layerCanvas = {};
 let layerCtx = {};
@@ -132,6 +134,10 @@ const changeCanvasActiveSize = (_activeSize) => {
 
 const changeCanvasActiveColor = (_activeColor) => {
     activeColor = _activeColor;
+}
+
+const changeUnsafe = (_unsafe) => {
+    unsafe = _unsafe;
 }
 
 const getCanvasMapData = ({ name, imageUrlPng }) => {
@@ -225,7 +231,8 @@ function load() {
 
     worker.postMessage({
         action: "PARSE_AND_RENDER_MAP_RETURN_WITHOUT_BLOCKS",
-        file: worldFile
+        file: worldFile,
+        unsafe
     });
 }
 
@@ -653,6 +660,7 @@ export {
     changeCanvasActiveLayer,
     changeCanvasActiveSize,
     changeCanvasActiveColor,
+    changeUnsafe,
     getCanvasMapData,
     getCanvasMapFile,
     verifyMapFile,

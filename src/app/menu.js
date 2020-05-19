@@ -90,7 +90,7 @@ const onToggleSidebar = (value) => {
     saveToLocalSettings("sidebar", value);
 }
 
-export {
+export default {
     onNewFile,
     onExampleMap,
     onCloseFile,
