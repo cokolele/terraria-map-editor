@@ -14,11 +14,12 @@ export default {
         title: "Rectangle select tool",
         icon: ToolSelectIcon,
     },*/
+    /*
     bucket: {
         title: "Paint bucket tool",
         icon: ToolBucketIcon,
         stroke: true
-    },
+    },*/
     eraser: {
         title: "Eraser tool",
         icon: ToolEraserIcon

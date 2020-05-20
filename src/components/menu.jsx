@@ -28,7 +28,7 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, un
          },
          Save: {
             type: "default",
-            enabled: running && worldObject.fileFormatHeader.version == 194,
+            enabled: running,
             onClick: menu.onSaveFile
          },
          DIVIDER,
@@ -102,8 +102,8 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, un
          }
          </div>
          <div className="menu">
-            <MenuFolderButton label="version 2.1.6" onClick={() => {"hey baby!"}}/>
-            <MenuFolderButton label="supported ingame version 1.4.0.2 (only map loading)" onClick={() => {"hey baby!"}}/>
+            <MenuFolderButton label="version 2.2.0" onClick={() => {console.log("hey baby!")}}/>
+            <MenuFolderButton label="supported game version: 1.4.0.2" onClick={() => {console.log(";)")}}/>
             <MenuFolderButton label={loggedIn ? user.username : "Account"} onClick={onAccountClick} Icon={AccountBoxIcon}/>
             <MenuFolderButton label="Github" onClick={onGithubClick} Icon={GithubIcon}/>
          </div>

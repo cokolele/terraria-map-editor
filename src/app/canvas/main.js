@@ -237,7 +237,7 @@ function load() {
 }
 
 function onCanvasClick(e) {
-    if (tool == "move")
+    if (window.debug)
         onDebugClick(e);
     else if (tool == "pencil")
         onPencilClick(e);
@@ -466,6 +466,7 @@ function onMoveDrag(e) {
 
 function onDebugClick(e) {
     const [x, y] = getMouseImagePosition(e);
+    console.log(x, y);
     worker.postMessage({ action: "_DEBUG_GET_TILE_INFO", x, y });
 }
 

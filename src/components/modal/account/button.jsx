@@ -3,10 +3,14 @@ import React from "react";
 import { ErrorOutlineIcon } from "/components/icon.jsx";
 import "/components/styles/modal/account/button.css";
 
-function ModalAccountButton({ label, onClick, error, disabled }) {
+function ModalAccountButton({ label, onClick, error, text, disabled }) {
    return (
       <div>
          <button type="button" className={"modal-account-button" + (disabled ? " modal-account-button--disabled" : "")} onClick={disabled ? undefined : onClick}>{label}</button>
+         {
+            text &&
+            <div className="modal-account-button-text">{text}</div>
+         }
          {
             error &&
             <div className="modal-account-button-error">
