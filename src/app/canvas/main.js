@@ -51,9 +51,11 @@ worker.onmessage = ({ data }) => {
                 store.dispatch(stateChangeWorldFile(null));
 
                 if (data.error.name == "TerrariaWorldParserError") {
-                    store.dispatch(stateChangeError(data.error.onlyMessage));
+                    store.dispatch(stateChangeError(data.error.onlyMessage + " Check map loading menu settings"));
+                } else if (data.error.message.includes("memory")) {
+                    store.dispatch(stateChangeError("You ran out of memory. Sorry, a lot of tiles."));
                 } else {
-                    store.dispatch(stateChangeError("See more info in console (please report the error to developer)"));
+                    store.dispatch(stateChangeError("Unexpected fatal worker error. Error message was sent to the developers and we hope it will be fixed soon."));
                 }
                 api.post("/error", {
                     error: "auto_line_59: " + JSON.stringify(data.error)
@@ -65,15 +67,20 @@ worker.onmessage = ({ data }) => {
                 break;
         }
     } catch(e) {
-        console.error("web worker error:", e);
+        console.error("main-to-webworker error:", e);
         api.post("/error", {
-            error: "auto_line_70: " + JSON.stringify(e)
+            error: "auto_line_70: " + JSON.stringify({
+                name: e.name,
+                message: e.message,
+                stack: e.stack
+            })
         });
+        store.dispatch(stateChangeError("Unexpected fatal main-to-worker error. Error message was sent to the developers and we hope it will be fixed soon."));
         return;
     }
 }
 
-let unsafe;
+let unsafe, unsafeOnlyTiles;
 
 let layerImage;
 let layerCanvas = {};
@@ -136,8 +143,12 @@ const changeCanvasActiveColor = (_activeColor) => {
     activeColor = _activeColor;
 }
 
-const changeUnsafe = (_unsafe) => {
+const changeCanvasUnsafe = (_unsafe) => {
     unsafe = _unsafe;
+}
+
+const changeCanvasUnsafeOnlyTiles = (_unsafeOnlyTiles) => {
+    unsafeOnlyTiles = _unsafeOnlyTiles;
 }
 
 const getCanvasMapData = ({ name, imageUrlPng }) => {
@@ -232,7 +243,8 @@ function load() {
     worker.postMessage({
         action: "PARSE_AND_RENDER_MAP_RETURN_WITHOUT_BLOCKS",
         file: worldFile,
-        unsafe
+        unsafe,
+        unsafeOnlyTiles
     });
 }
 
@@ -656,7 +668,8 @@ export {
     changeCanvasActiveLayer,
     changeCanvasActiveSize,
     changeCanvasActiveColor,
-    changeUnsafe,
+    changeCanvasUnsafe,
+    changeCanvasUnsafeOnlyTiles,
     getCanvasMapData,
     getCanvasMapFile,
     verifyMapFile,

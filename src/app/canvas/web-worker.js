@@ -11,7 +11,7 @@ self.onmessage = async ({ data }) => {
     try {
         switch(data.action) {
             case "PARSE_AND_RENDER_MAP_RETURN_WITHOUT_BLOCKS":
-                world = await parse(data.file, data.unsafe);
+                world = await parse(data.file, data.unsafe, data.unsafeOnlyTiles);
                 const layerImage = render();
 
                 postMessage({
@@ -75,21 +75,44 @@ self.onmessage = async ({ data }) => {
     }
 }
 
-async function parse(file, unsafe) {
+async function parse(file, unsafe, unsafeOnlyTiles) {
     postMessage({
         action: "RETURN_PERCENTAGE_PARSING_INCOMING",
     });
 
-    const world = await new terrariaWorldParser().loadFile(file);
-    return world.parse({
-        ignorePointers: unsafe,
-        progressCallback: (percentVal) => {
-            postMessage({
-                action: "RETURN_PERCENTAGE_PARSING",
-                percentage: percentVal
-            });
-        }
-    });
+    let world = await new terrariaWorldParser().loadFile(file);
+    if (unsafeOnlyTiles) {
+        world = world.parse({
+            sections: ["tiles", "necessary"],
+            ignorePointers: unsafe,
+            progressCallback: (percentVal) => {
+                postMessage({
+                    action: "RETURN_PERCENTAGE_PARSING",
+                    percentage: percentVal
+                });
+            }
+        });
+        world.fileFormatHeader = {
+            version: world.necessary.version,
+            pointers: world.necessary.pointers,
+            importants: world.necessary.importants
+        };
+        world.header = {
+            maxTilesX: world.necessary.width,
+            maxTilesY: world.necessary.height
+        };
+
+        return world;
+    } else
+        return world.parse({
+            ignorePointers: unsafe,
+            progressCallback: (percentVal) => {
+                postMessage({
+                    action: "RETURN_PERCENTAGE_PARSING",
+                    percentage: percentVal
+                });
+            }
+        });
 }
 
 function render() {

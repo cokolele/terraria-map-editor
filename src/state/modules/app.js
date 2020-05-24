@@ -11,6 +11,7 @@ const CHANGE_TOOLBAR_TOOL = "twe/app/CHANGE_TOOLBAR_TOOL";
 const TOGGLE_LAYER_VISIBILITY = "twe/app/TOGGLE_LAYER_VISIBILITY";
 const CHANGE_OPTIONBAR_LAYER = "twe/app/CHANGE_OPTIONBAR_LAYER";
 const TOGGLE_UNSAFE = "twe/app/TOGGLE_UNSAFE";
+const TOGGLE_UNSAFE_ONLY_TILES = "twe/app/TOGGLE_UNSAFE_ONLY_TILES";
 
 const SET_KEY = "twe/app/SET_KEY";
 
@@ -36,7 +37,8 @@ let defaultState = {
     layersVisibility: {
         NPCs: true,
     },
-    unsafe: false
+    unsafe: false,
+    unsafeOnlyTiles: false
 };
 
 Object.values(LAYERS).forEach(LAYER => {
@@ -102,6 +104,9 @@ export default function app(state = defaultState, action) {
         case TOGGLE_UNSAFE:
             state.unsafe = !state.unsafe;
             return {...state};
+        case TOGGLE_UNSAFE_ONLY_TILES:
+            state.unsafeOnlyTiles = !state.unsafeOnlyTiles;
+            return {...state};
         default:
             return {...state};
     }
@@ -148,6 +153,10 @@ function stateToggleUnsafe(unsafe) {
     return { type: TOGGLE_UNSAFE, unsafe };
 }
 
+function stateToggleUnsafeOnlyTiles(unsafeOnlyTiles) {
+    return { type: TOGGLE_UNSAFE_ONLY_TILES, unsafeOnlyTiles };
+}
+
 export {
     stateSetKey,
     stateChangeWorldFile,
@@ -158,5 +167,6 @@ export {
     stateToggleViewOption,
     stateChangeToolbarTool,
     stateToggleLayerVisibility,
-    stateToggleUnsafe
+    stateToggleUnsafe,
+    stateToggleUnsafeOnlyTiles
 };

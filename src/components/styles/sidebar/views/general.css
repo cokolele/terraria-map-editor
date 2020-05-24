@@ -6,6 +6,11 @@
     justify-content: space-between;
 }
 
+.sidebar-view-general--disabled {
+    margin: 1rem;
+    color: #f0f0f0;
+}
+
 .sidebar-view-general input {
     width: 90%;
     margin: 0 5%;

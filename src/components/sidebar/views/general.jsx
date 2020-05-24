@@ -11,7 +11,7 @@ import "/components/styles/sidebar/views/general.css";
 import LAYERS from "/utils/dbs/LAYERS.js";
 import { setLayerImageRectangleColor } from "/app/canvas/main.js";
 
-function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject }) {
+function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject, unsafeOnlyTiles }) {
    const [header, setHeader] = useState(worldObject.header);
    const version = worldObject.fileFormatHeader.version;
 
@@ -123,6 +123,17 @@ function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject }) {
       setHeader({...header});
       stateChangeWorldObject({...worldObject, header});
    }
+
+   if (unsafeOnlyTiles)
+      return (
+         <div className="sidebar-view-general--disabled">
+            <div style={{fontSize: "5rem"}}>:(</div>
+            <br/>
+            <div style={{lineHeight: "2rem"}}>
+               No data are retrieved from the map file when only tiles loading is activated. Sorry
+            </div>
+         </div>
+      )
 
    return (
       <div className="sidebar-view-general">
@@ -559,6 +570,7 @@ export default connect(
    state => {
       return {
          worldObject: state.app.worldObject,
+         unsafeOnlyTiles: state.app.unsafeOnlyTiles
       };
    },
    { stateChangeWorldObject }

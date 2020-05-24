@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import menu from "/app/menu.js";
-import { stateChangeModal, stateToggleUnsafe } from "/state/modules/app.js";
+import { stateChangeModal, stateToggleUnsafe, stateToggleUnsafeOnlyTiles } from "/state/modules/app.js";
 import { localSettings } from "/utils/localStorage.js";
 
 import MenuFolder from "/components/menu/folder.jsx";
@@ -9,7 +9,7 @@ import MenuFolderButton from "/components/menu/folder-button.jsx";
 import { AccountBoxIcon, GithubIcon } from "/components/icon.jsx";
 import "/components/styles/menu.css";
 
-function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, unsafe, stateToggleUnsafe }) {
+function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, unsafe, stateToggleUnsafe, unsafeOnlyTiles, stateToggleUnsafeOnlyTiles }) {
    useEffect(() => {
       menu.setWorldObject(worldObject);
    }, [worldObject]);
@@ -68,11 +68,17 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, un
             stateChangeModal("errorreport");
          }
       },
-      "Can't load map? click here": {
-         "Enable unsafe map loading": {
+      "Map loading": {
+         "NOTE: Resaving the map in the latest Terraria should fix any problems": () => {},
+         "Disable checking sections offsets (unsafe)": {
             type: "checkbox",
             checked: unsafe,
             onClick: stateToggleUnsafe
+         },
+         "Enable loading only tiles (any >1.3.5.3 map viewing ONLY)": {
+            type: "checkbox",
+            checked: unsafeOnlyTiles,
+            onClick: stateToggleUnsafeOnlyTiles
          }
       }
    };
@@ -102,8 +108,8 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, un
          }
          </div>
          <div className="menu">
-            <MenuFolderButton label="version 2.2.1" onClick={() => {console.log("hey baby!")}}/>
-            <MenuFolderButton label="supported game version: 1.4.0.3" onClick={() => {console.log(";)")}}/>
+            <MenuFolderButton label="version 2.2.2" onClick={() => {console.log("hey baby!")}}/>
+            <MenuFolderButton label="supported game version: 1.4.0.4" onClick={() => {console.log(";)")}}/>
             <MenuFolderButton label={loggedIn ? user.username : "Account"} onClick={onAccountClick} Icon={AccountBoxIcon}/>
             <MenuFolderButton label="Github" onClick={onGithubClick} Icon={GithubIcon}/>
          </div>
@@ -118,8 +124,9 @@ export default connect(state => {
          loggedIn: state.app.loggedIn,
          user: state.app.user,
          worldObject: state.app.worldObject,
-         unsafe: state.app.unsafe
+         unsafe: state.app.unsafe,
+         unsafeOnlyTiles: state.app.unsafeOnlyTiles
       };
    },
-   { stateChangeModal, stateToggleUnsafe }
+   { stateChangeModal, stateToggleUnsafe, stateToggleUnsafeOnlyTiles }
 )(Menu);

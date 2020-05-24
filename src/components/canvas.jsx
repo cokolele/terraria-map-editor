@@ -3,9 +3,9 @@ import { connect } from "react-redux";
 
 import "/components/styles/canvas.css";
 
-import init, { changeCanvasWorldFile, changeCanvasTool, changeCanvasLayersVisibility, changeCanvasActiveLayer, changeCanvasActiveSize, changeCanvasActiveColor, changeUnsafe } from "/app/canvas/main.js";
+import init, { changeCanvasWorldFile, changeCanvasTool, changeCanvasLayersVisibility, changeCanvasActiveLayer, changeCanvasActiveSize, changeCanvasActiveColor, changeCanvasUnsafe, changeCanvasUnsafeOnlyTiles } from "/app/canvas/main.js";
 
-function Canvas({ worldFile, running, tool, changeRunning, layersVisibility, activeLayer, activeSize, activeColor, unsafe }) {
+function Canvas({ worldFile, running, tool, changeRunning, layersVisibility, activeLayer, activeSize, activeColor, unsafe, unsafeOnlyTiles }) {
    const canvasEl = useRef(null);
 
    useEffect(() => {
@@ -37,8 +37,12 @@ function Canvas({ worldFile, running, tool, changeRunning, layersVisibility, act
    }, [activeColor]);
 
    useEffect(() => {
-      changeUnsafe(unsafe);
+      changeCanvasUnsafe(unsafe);
    }, [unsafe]);
+
+   useEffect(() => {
+      changeCanvasUnsafeOnlyTiles(unsafeOnlyTiles);
+   }, [unsafeOnlyTiles]);
 
    return (
       <div className="canvas-container">
@@ -65,6 +69,7 @@ export default connect(state => {
       activeLayer: state.app.optionbar.layer,
       activeSize: state.app.optionbar.size,
       activeColor: state.app.optionbar.color,
-      unsafe: state.app.unsafe
+      unsafe: state.app.unsafe,
+      unsafeOnlyTiles: state.app.unsafeOnlyTiles
    }
 })(Canvas);
