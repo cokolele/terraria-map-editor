@@ -625,28 +625,23 @@ const tick = (T) => {
         ctx.drawImage(brush, 0, 0, 1, 1, mouseX - temp0/2, mouseY - temp0/2, temp0, temp0);
     }
 
-    //months after writing this i cant understand it, too bad!
-    if (world.NPCsData.NPCs && layersVisibility.NPCs)
-        world.NPCsData.NPCs.forEach(npc => {
+    if (world.NPCs && layersVisibility.NPCs)
+        world.NPCs.forEach(npc => {
             try {
                 temp0 = NPCsSprites[npc.id][2] * ( 2 + zoomLevel * 0.2 );
                 temp1 = NPCsSprites[npc.id][3] * ( 2 + zoomLevel * 0.2 );
 
-                ctx.drawImage(sprite,
-                    NPCsSprites[npc.id][0], NPCsSprites[npc.id][1], NPCsSprites[npc.id][2], NPCsSprites[npc.id][3],
-                    npc.homePosition.x * tilePixelRatio - posX * tilePixelRatio - temp0 / 2, npc.homePosition.y * tilePixelRatio - posY * tilePixelRatio - temp1, temp0, temp1);
+                if (npc.homePosition)
+                    ctx.drawImage(sprite,
+                        NPCsSprites[npc.id][0], NPCsSprites[npc.id][1], NPCsSprites[npc.id][2], NPCsSprites[npc.id][3],
+                        npc.homePosition.x * tilePixelRatio - posX * tilePixelRatio - temp0 / 2, npc.homePosition.y * tilePixelRatio - posY * tilePixelRatio - temp1, temp0, temp1);
+                else
+                    ctx.drawImage(sprite,
+                        NPCsSprites[npc.id][0], NPCsSprites[npc.id][1], NPCsSprites[npc.id][2], NPCsSprites[npc.id][3],
+                        (npc.position.x / 16) * tilePixelRatio - posX * tilePixelRatio - temp0 / 2, (npc.position.y / 16) * tilePixelRatio - posY * tilePixelRatio - temp1, temp0, temp1);
                 }
             catch(e) {
             }
-        });
-
-    if (world.NPCsData.pillars && layersVisibility.NPCs)
-        world.NPCsData.pillars.forEach(npc => {
-            temp0 = NPCsSprites[npc.id][2] * ( 2 + zoomLevel * 0.2 );
-            temp1 = NPCsSprites[npc.id][3] * ( 2 + zoomLevel * 0.2 );
-            ctx.drawImage(sprite,
-                NPCsSprites[npc.id][0], NPCsSprites[npc.id][1], NPCsSprites[npc.id][2], NPCsSprites[npc.id][3],
-                (npc.position.x / 16) * tilePixelRatio - posX * tilePixelRatio - temp0 / 2, (npc.position.y / 16) * tilePixelRatio - posY * tilePixelRatio - temp1, temp0, temp1);
         });
 
     if (running)

@@ -69,7 +69,7 @@
 
 .input-slider {
     background-color: #757575;
-    height: 0.215rem;
+    height: 3px;
     cursor: pointer;
 
     -webkit-appearance: none;
@@ -81,26 +81,14 @@
     outline: none;
 }
 
-.input-slider::-webkit-slider-thumb {
+.input-slider::-webkit-slider-thumb, .input-slider::-moz-range-thumb {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
     border: none;
     border-radius: 0.1rem;
-    width: 0.3rem;
-    height: 0.7rem;
-    background: #f0f0f0;
-    cursor: pointer;
-}
-
-.input-slider::-moz-range-thumb {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    border: none;
-    border-radius: 0.1rem;
-    width: 0.3rem;
-    height: 0.7rem;
+    width: 4px;
+    height: 11px;
     background: #f0f0f0;
     cursor: pointer;
 }

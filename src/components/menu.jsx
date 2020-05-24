@@ -102,8 +102,8 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, un
          }
          </div>
          <div className="menu">
-            <MenuFolderButton label="version 2.2.0" onClick={() => {console.log("hey baby!")}}/>
-            <MenuFolderButton label="supported game version: 1.4.0.2" onClick={() => {console.log(";)")}}/>
+            <MenuFolderButton label="version 2.2.1" onClick={() => {console.log("hey baby!")}}/>
+            <MenuFolderButton label="supported game version: 1.4.0.3" onClick={() => {console.log(";)")}}/>
             <MenuFolderButton label={loggedIn ? user.username : "Account"} onClick={onAccountClick} Icon={AccountBoxIcon}/>
             <MenuFolderButton label="Github" onClick={onGithubClick} Icon={GithubIcon}/>
          </div>

@@ -34,6 +34,84 @@ function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject }) {
          if (value <= header.worldSurface)
             header.worldSurface = value;
       }
+      else if (key == "treeX") {
+         switch (index) {
+            case 0:
+               if (value >= header.treeX[1] && value < header.maxTilesX - 2) {
+                  header.treeX[1] = value + 1;
+                  if (header.treeX[1] >= header.treeX[2])
+                     header.treeX[2] = value + 2;
+               } else if (value > header.maxTilesX - 2) {
+                  value = header.maxTilesX - 2;
+                  header.treeX[1] = value + 1;
+                  header.treeX[2] = value + 2;
+               }
+               break;
+            case 1:
+               if (value <= header.treeX[0] && value > 1) {
+                  header.treeX[0] = value - 1;
+               } else if (value < 1) {
+                  header.treeX[0] = 0;
+                  value = 1;
+               } else if (value >= header.treeX[2] && value < header.maxTilesX - 1) {
+                  header.treeX[2] = value + 1;
+               } else if (value > header.maxTilesX - 1) {
+                  value = header.maxTilesX - 1;
+                  header.treeX[2] = header.maxTilesX;
+               }
+               break;
+            case 2:
+               if (value <= header.treeX[1] && value > 2) {
+                  header.treeX[1] = value - 1;
+                  if (header.treeX[1] <= header.treeX[0])
+                     header.treeX[0] = value - 2;
+               } else if (value < 2) {
+                  value = 2;
+                  header.treeX[1] = 1;
+                  header.treeX[0] = 0;
+               }
+               break;
+         }
+      }
+      else if (key == "caveBackX") {
+         switch (index) {
+            case 0:
+               if (value >= header.caveBackX[1] && value < header.maxTilesX - 2) {
+                  header.caveBackX[1] = value + 1;
+                  if (header.caveBackX[1] >= header.caveBackX[2])
+                     header.caveBackX[2] = value + 2;
+               } else if (value > header.maxTilesX - 2) {
+                  value = header.maxTilesX - 2;
+                  header.caveBackX[1] = value + 1;
+                  header.caveBackX[2] = value + 2;
+               }
+               break;
+            case 1:
+               if (value <= header.caveBackX[0] && value > 1) {
+                  header.caveBackX[0] = value - 1;
+               } else if (value < 1) {
+                  header.caveBackX[0] = 0;
+                  value = 1;
+               } else if (value >= header.caveBackX[2] && value < header.maxTilesX - 1) {
+                  header.caveBackX[2] = value + 1;
+               } else if (value > header.maxTilesX - 1) {
+                  value = header.maxTilesX - 1;
+                  header.caveBackX[2] = header.maxTilesX;
+               }
+               break;
+            case 2:
+               if (value <= header.caveBackX[1] && value > 2) {
+                  header.caveBackX[1] = value - 1;
+                  if (header.caveBackX[1] <= header.caveBackX[0])
+                     header.caveBackX[0] = value - 2;
+               } else if (value < 2) {
+                  value = 2;
+                  header.caveBackX[1] = 1;
+                  header.caveBackX[0] = 0;
+               }
+               break;
+         }
+      }
 
       if (index !== undefined) {
          header[key][index] = value;
@@ -89,10 +167,17 @@ function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject }) {
          <OptionbarInputCheckbox value={header.spawnMeteor} onChange={(value) => {setHeaderKey("spawnMeteor", value)}} />
          <span>Invasion</span>
          <OptionbarInputSelect value={header.invasionType} options={[["None", 0], ["Goblin invasion", 1], ["Frost legion", 2], ["Pirate invasion", 3], ["Martian madness", 4]]} onChange={(value) => {setHeaderKey("invasionType", value)}}/>
-         <span>Invasion progress</span>
-         <OptionbarInputSlider value={header.invasionSize} onChange={(value) => {setHeaderKey("invasionSize", value)}} min={0} max={header.invasionSizeStart}/>
          <span>Invasion size</span>
-         <OptionbarInputSlider value={header.invasionSizeStart} onChange={(value) => {setHeaderKey("invasionSizeStart", value)}} min={0} max={10400} input inputWidth="7ch"/>
+         <div className="sidebar-view-general-row-spanner">
+            <OptionbarInputSlider value={header.invasionSizeStart} onChange={(value) => {setHeaderKey("invasionSizeStart", value)}} min={0} max={10400} input inputWidth="7ch"/>
+            = 100%
+         </div>
+         <span>Invasion progress</span>
+         <div className="sidebar-view-general-row-spanner">
+            0%
+            <OptionbarInputSlider value={header.invasionSize} onChange={(value) => {setHeaderKey("invasionSize", value)}} min={0} max={header.invasionSizeStart}/>
+            100%
+         </div>
          <span>Slime rain time</span>
          <OptionbarInputSlider value={header.slimeRainTime} onChange={(value) => {setHeaderKey("slimeRainTime", value)}} min={-604800} max={54000} input inputWidth="9ch"/>
          <span>Cultists cooldown</span>
@@ -122,8 +207,15 @@ function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject }) {
                <>
                   <span>Game mode</span>
                   <OptionbarInputSelect value={header.gameMode} options={[["Normal", 0], ["Expert", 1], ["Master", 2], ["Journey/Creative", 3]]} onChange={(value) => {setHeaderKey("gameMode", value)}}/>
-                  <span>Drunk world</span>
+                  <span>Drunk world (seed)</span>
                   <OptionbarInputCheckbox value={header.drunkWorld} onChange={(value) => {setHeaderKey("drunkWorld", value)}} />
+                  {
+                     version >= 227 &&
+                     <>
+                        <span>Good world (seed)</span>
+                        <OptionbarInputCheckbox value={header.getGoodWorld} onChange={(value) => {setHeaderKey("getGoodWorld", value)}} />
+                     </>
+                  }
                </>
             :
                <>
@@ -203,7 +295,9 @@ function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject }) {
                   ["Infected Scabbardfish", 35],
                   ["Mudfish", 36],
                   ["Slimefish", 37],
-                  ["Tropical Barracuda", 38]
+                  ["Tropical Barracuda", 38],
+                  ["Scarab Fish", 39],
+                  ["Scorpio Fish", 40]
                ]} onChange={(value) => {setHeaderKey("anglerQuest", value)}}/>
          <span>Sundial used</span>
          <OptionbarInputCheckbox value={header.fastForwardTime} onChange={(value) => {setHeaderKey("fastForwardTime", value)}} />
@@ -222,9 +316,23 @@ function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject }) {
          <span>Day</span>
          <OptionbarInputCheckbox value={header.tempDayTime} onChange={(value) => {setHeaderKey("tempDayTime", value)}} />
          <span>Current time</span>
-         <OptionbarInputSlider value={header.tempTime} onChange={(value) => {setHeaderKey("tempTime", value)}} min={0} max={54000} input inputWidth="7ch"/>
+         <div className="sidebar-view-general-row-spanner">
+            {header.tempDayTime ? "sunrise" : "sunset"}
+            <OptionbarInputSlider value={header.tempTime} onChange={(value) => {setHeaderKey("tempTime", value)}} min={0} max={54000}/>
+            {header.tempDayTime ? "sunset" : "sunrise"}
+         </div>
          <span>Moon type</span>
-         <OptionbarInputSelect value={header.moonType} options={[["Grey", 0], ["Orange", 1], ["Ringed", 2]]} onChange={(value) => {setHeaderKey("moonType", value)}}/>
+         <OptionbarInputSelect value={header.moonType} options={[
+               ["Grey", 0],
+               ["Brown", 1],
+               ["Ringed", 2],
+               ["Blue marble", 3],
+               ["White ice", 4],
+               ["Green gas", 5],
+               ["Pink candy", 6],
+               ["Orange Venus", 7],
+               ["Triple purple", 8]
+            ]} onChange={(value) => {setHeaderKey("moonType", value)}}/>
          <span>Moon phase</span>
          <OptionbarInputSelect value={header.tempMoonPhase} options={[["Full moon", 0], ["Waning gibbous", 1], ["Third quarter", 2], ["Waning crescent", 3], ["New moon", 4], ["Waxing crescent", 5], ["First quarter", 6], ["Waxing gibbous", 7]]} onChange={(value) => {setHeaderKey("tempMoonPhase", value)}}/>
          <span>Raining</span>

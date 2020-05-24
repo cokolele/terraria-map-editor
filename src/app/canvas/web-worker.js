@@ -28,19 +28,14 @@ self.onmessage = async ({ data }) => {
                     action: "RETURN_WORLD_OBJECT",
                     world: {
                         ...world,
-                        worldTiles: null
+                        tiles: null
                     }
                 });
                 break;
             case "SAVE_MAP":
                 const newWorldFile = save({
                     ...data.worldObject,
-                    worldTiles: world.worldTiles,
-                    footer: {
-                        signoff1: true,
-                        signoff2: data.worldObject.header.mapName,
-                        signoff3: data.worldObject.header.worldId
-                    }
+                    tiles: world.tiles,
                 });
                 postMessage({
                     action: "RETURN_MAP_FILE",
@@ -63,7 +58,7 @@ self.onmessage = async ({ data }) => {
             case "_DEBUG_GET_TILE_INFO":
                 postMessage({
                     action: "_DEBUG_RETURN_TILE_INFO",
-                    tile: world.worldTiles[data.x][data.y]
+                    tile: world.tiles[data.x][data.y]
                 })
                 break;
         }
@@ -86,12 +81,15 @@ async function parse(file, unsafe) {
     });
 
     const world = await new terrariaWorldParser().loadFile(file);
-    return world.parse((percentVal) => {
-        postMessage({
-            action: "RETURN_PERCENTAGE_PARSING",
-            percentage: percentVal
-        });
-    }, unsafe); //unsafe tells the parser to ignore the error when section pointers do not match. one corrupted section often does not cause any critical errors
+    return world.parse({
+        ignorePointers: unsafe,
+        progressCallback: (percentVal) => {
+            postMessage({
+                action: "RETURN_PERCENTAGE_PARSING",
+                percentage: percentVal
+            });
+        }
+    });
 }
 
 function render() {
@@ -150,7 +148,7 @@ function render() {
         }
 
         for (let x = 0; x < world.header.maxTilesX; x++) {
-            const tile = world.worldTiles[x][y];
+            const tile = world.tiles[x][y];
 
             if (tile.blockId !== undefined)
                 setLayerTileColor(LAYERS.TILES, colors[LAYERS.TILES][tile.blockId]);
@@ -200,12 +198,15 @@ function save(world) {
         return;
     }
 
-    let file = new terrariaWorldSaver(world);
-    return file.save((percentage) => {
-        postMessage({
-            action: "RETURN_PERCENTAGE_SAVING",
-            percentage
-        });
+    let file = new terrariaWorldSaver();
+    return file.save({
+        world,
+        progressCallback: (percentage) => {
+            postMessage({
+                action: "RETURN_PERCENTAGE_SAVING",
+                percentage
+            });
+        }
     });
 }
 
@@ -224,58 +225,58 @@ async function verify(file) {
 }
 
 function saveTileChange(x, y, properties) {
-    world.worldTiles[x][y] = { ...world.worldTiles[x][y] };
+    world.tiles[x][y] = { ...world.tiles[x][y] };
 
     if (properties.delete) {
         switch(properties.LAYER) {
             case LAYERS.TILES:
-                delete world.worldTiles[x][y].blockId;
-                delete world.worldTiles[x][y].frameX;
-                delete world.worldTiles[x][y].frameY;
-                delete world.worldTiles[x][y].slope;
-                if (world.worldTiles[x][y].colors)
-                    delete world.worldTiles[x][y].colors.block;
+                delete world.tiles[x][y].blockId;
+                delete world.tiles[x][y].frameX;
+                delete world.tiles[x][y].frameY;
+                delete world.tiles[x][y].slope;
+                if (world.tiles[x][y].colors)
+                    delete world.tiles[x][y].colors.block;
                 break;
             case LAYERS.WALLS:
-                delete world.worldTiles[x][y].wallId;
-                if (world.worldTiles[x][y].colors)
-                    delete world.worldTiles[x][y].colors.wall;
+                delete world.tiles[x][y].wallId;
+                if (world.tiles[x][y].colors)
+                    delete world.tiles[x][y].colors.wall;
                 break;
             case LAYERS.WIRES:
-                delete world.worldTiles[x][y].wiring;
+                delete world.tiles[x][y].wiring;
                 break;
             case LAYERS.LIQUIDS:
-                delete world.worldTiles[x][y].liquid;
+                delete world.tiles[x][y].liquid;
                 break;
         }
         return;
     }
 
     if (properties.blockId !== undefined) {
-        world.worldTiles[x][y].blockId = properties.blockId;
-        delete world.worldTiles[x][y].frameX;
-        delete world.worldTiles[x][y].frameY;
-        delete world.worldTiles[x][y].slope;
-        if (world.worldTiles[x][y].colors)
-            delete world.worldTiles[x][y].colors.block;
+        world.tiles[x][y].blockId = properties.blockId;
+        delete world.tiles[x][y].frameX;
+        delete world.tiles[x][y].frameY;
+        delete world.tiles[x][y].slope;
+        if (world.tiles[x][y].colors)
+            delete world.tiles[x][y].colors.block;
     }
 
     if (properties.wallId !== undefined) {
-        world.worldTiles[x][y].wallId = properties.wallId;
-        if (world.worldTiles[x][y].colors)
-            delete world.worldTiles[x][y].colors.wall;
+        world.tiles[x][y].wallId = properties.wallId;
+        if (world.tiles[x][y].colors)
+            delete world.tiles[x][y].colors.wall;
     }
 
     if (properties.liquid)
-        world.worldTiles[x][y].liquid = properties.liquid;
+        world.tiles[x][y].liquid = properties.liquid;
 
-    if (world.worldTiles[x][y].wiring && properties.wiring) {
-        if (world.worldTiles[x][y].wiring.wires && properties.wiring.wires)
-            properties.wiring.wires = { ...world.worldTiles[x][y].wiring.wires, ...properties.wiring.wires };
+    if (world.tiles[x][y].wiring && properties.wiring) {
+        if (world.tiles[x][y].wiring.wires && properties.wiring.wires)
+            properties.wiring.wires = { ...world.tiles[x][y].wiring.wires, ...properties.wiring.wires };
 
-        world.worldTiles[x][y].wiring = { ...world.worldTiles[x][y].wiring, ...properties.wiring };
+        world.tiles[x][y].wiring = { ...world.tiles[x][y].wiring, ...properties.wiring };
     } else if (properties.wiring)
-        world.worldTiles[x][y].wiring = properties.wiring;
+        world.tiles[x][y].wiring = properties.wiring;
 }
 
 function saveTilesRectangleChange(LAYER, id, point1, point2) {

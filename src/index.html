@@ -1,23 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- open source tracking hosted on my server, dont worry :p -->
-    <!-- Matomo -->
+    <!-- Matomo-->
+    <!-- open source tracker hosted on my servers -->
     <script type="text/javascript">
-      var _paq = window._paq || [];
-      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-      _paq.push(["setCookieDomain", "*.www.terraria-map-editor.com"]);
-      _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
-      (function() {
-        var u="//matomo.terraria-map-editor.eu/";
-        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        var _paq = window._paq || [];
+        _paq.push(["setCookieDomain", "*.www.terraria-map-editor.com"]);
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        _paq.push(['setTrackerUrl', '//matomo.terraria-map-editor.eu/matomo.php']);
         _paq.push(['setSiteId', '1']);
-        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-      })();
     </script>
-    <!-- End Matomo Code -->
+    <script type="text/javascript" async defer src="//matomo.terraria-map-editor.eu/matomo.js"></script>
+    <img src="https://matomo.terraria-map-editor.eu/matomo.php?idsite=1&amp;rec=1&amp;action_name=terraria-map-editor" style="border:0; display:none" alt="" />
+    <!-- End Matomo -->
+
     <title>Terraria Map Editor</title>
     <meta charset="UTF-8">
     <meta name="description" content="Web browser editor for terraria maps. Open source">
