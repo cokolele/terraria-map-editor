@@ -7,6 +7,7 @@ import ModalAccountButton from "/components/modal/account/button.jsx";
 
 function ModalErrorReport({ stateChangeModal }) {
    const [text, setText] = useState("");
+   const [contact, setContact] = useState("");
    const [error, setError] = useState("");
    const [fileData, setFileData] = useState(undefined);
    const [fileName, setFileName] = useState("");
@@ -42,7 +43,7 @@ function ModalErrorReport({ stateChangeModal }) {
 
    const onSubmit = async () => {
       if (text.trim())
-         await api.post("/report/error", { text });
+         await api.post("/report/error", { text: contact + ": " + text });
       if (fileData)
          api.post("/report/error/map", fileData, false);
       stateChangeModal("");
@@ -56,6 +57,8 @@ function ModalErrorReport({ stateChangeModal }) {
          <span className="modal-sign-text"></span>
          <span className="modal-sign-text"></span>
          <textarea value={text} onChange={(e) => {setText(e.target.value)}} placeholder="Your problem, described with details..."/>
+         <span className="modal-sign-text"></span>
+         <textarea value={contact} onChange={(e) => {setContact(e.target.value)}} rows={1} placeholder="Any type of contact so i can get back to you (optional)..."/>
          <span className="modal-sign-text"></span>
          <ModalAccountButton label="Add attachment mapfile" onClick={onAddFile} text={fileName}/>
          <span className="modal-sign-text"></span>

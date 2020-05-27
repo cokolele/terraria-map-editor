@@ -7,10 +7,11 @@ import ModalAccountButton from "/components/modal/account/button.jsx";
 
 function ModalSuggestionReport({ stateChangeModal }) {
    const [text, setText] = useState("");
+   const [contact, setContact] = useState("");
 
    const onSubmit = async () => {
       if (text.trim())
-         await api.post("/report/suggestion", { text });
+         await api.post("/report/suggestion", { text: contact + ": " + text });
       stateChangeModal("");
    }
 
@@ -21,6 +22,8 @@ function ModalSuggestionReport({ stateChangeModal }) {
          <span className="modal-sign-text"></span>
          <span className="modal-sign-text"></span>
          <textarea value={text} onChange={(e) => {setText(e.target.value)}} placeholder="Your suggestion / request..."/>
+         <span className="modal-sign-text"></span>
+         <textarea value={contact} onChange={(e) => {setContact(e.target.value)}} rows={1} placeholder="Any type of contact so i can get back to you (optional)..."/>
          <span className="modal-sign-text"></span>
          <ModalAccountButton label="SEND" onClick={onSubmit} primary/>
       </div>
