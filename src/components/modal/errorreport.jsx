@@ -4,8 +4,6 @@ import { stateChangeModal } from "/state/modules/app.js";
 import api from "/utils/api/api.js";
 
 import ModalAccountButton from "/components/modal/account/button.jsx";
-import ModalSignButton from "/components/modal/sign/button.jsx";
-import "/components/styles/modal/sign.css";
 
 function ModalErrorReport({ stateChangeModal }) {
    const [text, setText] = useState("");
@@ -30,7 +28,7 @@ function ModalErrorReport({ stateChangeModal }) {
             return;
          }
 
-         if (file.size > 40971520) {
+         if (file.size > 20*1024*1024) {
             setError("File exceeded size limit (20 MB)");
             return;
          }
@@ -42,26 +40,26 @@ function ModalErrorReport({ stateChangeModal }) {
       }
    }
 
-   const send = async () => {
-      await api.post("/error", {
-         error: text
-      });
-      api.post("/account/maps/errorreportmap", fileData, false);
+   const onSubmit = async () => {
+      if (text.trim())
+         await api.post("/report/error", { text });
+      if (fileData)
+         api.post("/report/error/map", fileData, false);
       stateChangeModal("");
    }
 
    return (
       <div className="modal-sign">
-         <span className="modal-sign-text">If you got an error loading or saving the map, please send me your file.</span>
-         <span className="modal-sign-text">Having other troubles ? Any feature request ? Tell me about it</span>
+         <span className="modal-sign-text">Almost all errors are being automatically logged and checked through. If your problem<br/>persists, let me know below. Please describe your problem with details.</span>
+         <span className="modal-sign-text">If you have any problems loading or saving the map please send me your map file. It is<br/>much easier for me to find the problem if i can test it myself, hope you understand it.</span>
          <span className="modal-sign-text"></span>
          <span className="modal-sign-text"></span>
-         <textarea value={text} onChange={(e) => {setText(e.target.value)}} placeholder="Here :)"/>
          <span className="modal-sign-text"></span>
-         <ModalAccountButton label={"Add attachment mapfile"} onClick={onAddFile} text={fileName}/>
+         <textarea value={text} onChange={(e) => {setText(e.target.value)}} placeholder="Your problem, described with details..."/>
          <span className="modal-sign-text"></span>
+         <ModalAccountButton label="Add attachment mapfile" onClick={onAddFile} text={fileName}/>
          <span className="modal-sign-text"></span>
-         <ModalSignButton label="SEND" onClick={send}/>
+         <ModalAccountButton label="SEND" onClick={onSubmit} primary error={error}/>
       </div>
    );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { stateChangeModal } from "/state/modules/app.js";
 
@@ -7,8 +7,8 @@ import "/components/styles/modal.css";
 import ModalSignin from "/components/modal/signin.jsx";
 import ModalSignup from "/components/modal/signup.jsx";
 import ModalAccount from "/components/modal/account.jsx";
-import ErrorReport from "/components/modal/errorreport.jsx";
-
+import ErrorReport from "/components/modal/errorReport.jsx";
+import SuggestionReport from "/components/modal/suggestionReport.jsx";
 
 const config = {
    signin: {
@@ -26,21 +26,34 @@ const config = {
    errorreport: {
       label: "Error report",
       View: ErrorReport
+   },
+   suggestionreport: {
+      label: "Suggestions report",
+      View: SuggestionReport
    }
 };
 
 const Modal = ({ modalView, stateChangeModal }) => {
-   if (!modalView)
+   if (modalView === null)
       return "";
 
-   const View = config[modalView].View;
+   let View;
+   if (config[modalView])
+      View = config[modalView].View
+   else
+      return "";
 
    const onClose = () => {
       stateChangeModal(null);
    }
 
+   const onModalClick = (e) => {
+      if (e.target.classList.contains("modal-background"))
+         onClose();
+   }
+
    return (
-      <div className="modal-background">
+      <div className="modal-background" onClick={onModalClick}>
          <div className="modal-container">
             <div className="modal-header">
                <div className="modal-header-text">{config[modalView].label}</div>

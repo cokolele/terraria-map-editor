@@ -51,14 +51,14 @@ worker.onmessage = ({ data }) => {
                 store.dispatch(stateChangeWorldFile(null));
 
                 if (data.error.name == "TerrariaWorldParserError") {
-                    store.dispatch(stateChangeError(data.error.onlyMessage + " Check map loading menu settings"));
+                    store.dispatch(stateChangeError(data.error.onlyMessage + ". Check map loading menu settings"));
                 } else if (data.error.message.includes("memory")) {
                     store.dispatch(stateChangeError("You ran out of memory. Sorry, a lot of tiles."));
                 } else {
                     store.dispatch(stateChangeError("Unexpected fatal worker error. Error message was sent to the developers and we hope it will be fixed soon."));
                 }
-                api.post("/error", {
-                    error: "auto_line_59: " + JSON.stringify(data.error)
+                api.post("/report/error-auto", {
+                    text: "auto_line_59: " + JSON.stringify(data.error)
                 });
                 console.error("web worker error:", data.error);
                 break;
@@ -68,8 +68,8 @@ worker.onmessage = ({ data }) => {
         }
     } catch(e) {
         console.error("main-to-webworker error:", e);
-        api.post("/error", {
-            error: "auto_line_70: " + JSON.stringify({
+        api.post("/report/error-auto", {
+            text: "auto_line_70: " + JSON.stringify({
                 name: e.name,
                 message: e.message,
                 stack: e.stack
@@ -197,8 +197,8 @@ const getCanvasMapFile = async (worldObject) => {
                         store.dispatch(stateChangeError("See more info in console (please report the error to developer)"));
                     }
                     console.error("web worker error:", data.error);
-                    api.post("/error", {
-                        error: "auto_line_184: " + JSON.stringify(data.error)
+                    api.post("/report/error-auto", {
+                        text: "auto_line_184: " + JSON.stringify(data.error)
                     });
                     store.dispatch(stateChangeDescription("Failed"));
                     resolve(null);
@@ -219,7 +219,12 @@ const verifyMapFile = async (file) => {
                     resolve(data.valid);
                     break;
                 case "ERROR":
-                    reject(data.error);
+                    console.error("web worker error:", data.error);
+                    api.post("/report/error-auto", {
+                        text: "auto_line_223: " + JSON.stringify(data.error)
+                    });
+                    resolve(data.error);
+                    break;
             }
         }
         worker.postMessage({ action: "VERIFY_FILE", file });

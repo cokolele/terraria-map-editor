@@ -8,7 +8,7 @@ function MenuFolder({ label, options, currentTab, setCurrentTab, index, toggleVi
    const [showDropdown, toggleDropdown] = useToggle(false, true);
 
    const onClick = e => {
-      if (e.target.classList.contains("menu-folder") || e.target.classList.contains("menu-option-divider") || e.target.classList.contains("menu-option--disabled"))
+      if (e.target.classList.contains("menu-folder") || e.target.classList.contains("menu-option-divider") || e.target.classList.contains("menu-option--disabled") || e.target.classList.contains("menu-option--menu"))
          return;
 
       toggleDropdown();
@@ -35,12 +35,14 @@ function MenuFolder({ label, options, currentTab, setCurrentTab, index, toggleVi
          toggleDropdown();
    }, [currentTab]);
 
+   const hasMenuOption = Object.values(options).some(option => (option.type && option.type == "menu"));
+
    return (
       <div className={"menu-folder-container" + (showDropdown ? " menu-folder-container--opened" : "")} onClick={onClick} onBlur={onBlur} onMouseEnter={onMouseEnter} tabIndex={index}>
          {label}
          {
             showDropdown &&
-            <div className="menu-folder">
+            <div className={"menu-folder" + (hasMenuOption ? " menu-folder--hasMenu" : "")}>
             {
                Object.keys(options).map((key, i) => <MenuFolderOption label={key} option={options[key]} key={i}/>)
             }

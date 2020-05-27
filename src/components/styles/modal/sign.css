@@ -7,5 +7,7 @@
 
 .modal-sign-text {
     margin-top: 12px;
+    letter-spacing: 0.01rem;
+    line-height: 1.4rem;
     font-size: 0.95rem;
 }

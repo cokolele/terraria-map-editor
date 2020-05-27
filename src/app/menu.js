@@ -23,7 +23,7 @@ const onNewFile = (e, file) => {
         });
         inputElHidden.click();
     } else {
-        resetWorld();
+        resetWorld(true);
         store.dispatch(stateChangeDescription("Loading map from file"));
         store.dispatch(stateChangeWorldFile(file));
     }
@@ -63,11 +63,12 @@ const onSaveFile = async (e) => {
 
 const onCloseFile = (e) => {
     resetWorld();
+    store.dispatch(stateChangeDescription(null));
 }
 
-const onExampleMap = async (e) => {
-    let mapFile = await api.get("/public/maps/example", "application/octet-stream");
-    console.log(mapFile);
+const onExampleMap = async (map) => {
+    store.dispatch(stateChangeDescription("Downloading the map"));
+    let mapFile = await api.get("/public/maps/" + map, "application/octet-stream");
 
     if (mapFile.status == "error") {
         store.dispatch(stateChangeDescription("Map download failed"));
@@ -75,7 +76,7 @@ const onExampleMap = async (e) => {
         return;
     }
 
-    mapFile = new File([mapFile], "example.wld");
+    mapFile = new File([mapFile], map + ".wld");
     resetWorld();
     store.dispatch(stateChangeWorldFile(mapFile));
 }

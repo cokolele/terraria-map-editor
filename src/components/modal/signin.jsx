@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { stateChangeUser, stateChangeModal } from "/state/modules/app.js";
-import api from "/utils/api/api.js";
+import auth from "/utils/api/auth.js";
 
 import ModalSignInput from "/components/modal/sign/input.jsx";
 import ModalSignButtonInlineText from "/components/modal/sign/button-inline-text.jsx";
@@ -64,26 +64,18 @@ function ModalSignin({ stateChangeUser, stateChangeModal }) {
       if (!checkInputsErrors())
          return;
 
-      const login = await api.post("/session/login", {
+      const userLogin = await auth.post("/login", {
          username,
          password
       });
 
-      if (login.status != "ok") {
-         errors.submit = login.message;
+      if (userLogin.status != "ok") {
+         errors.submit = userLogin.message;
          setErrors({...errors});
          return;
       }
 
-      const session = await api.get("/session");
-
-      if (session.status != "ok") {
-         errors.submit = session.error;
-         setErrors({...errors});
-         return;
-      }
-
-      stateChangeUser(session.user);
+      stateChangeUser(userLogin.user);
       stateChangeModal(null);
    }
 

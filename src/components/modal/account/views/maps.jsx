@@ -15,7 +15,7 @@ function ModalAccountViewMap({ stateChangeWorldFile, stateChangeModal, stateChan
    const [error, setError] = useState("");
 
    const fetchMaps = async () => {
-      const _maps = await api.get("/account/maps");
+      const _maps = await api.get("/user/maps");
 
       if (_maps.status == "error") {
          setError(_maps.message);
@@ -46,33 +46,31 @@ function ModalAccountViewMap({ stateChangeWorldFile, stateChangeModal, stateChan
             return;
          }
 
-         if (file.size > 20971520) {
+         if (file.size > 20*1024*1024) {
             setError("File exceeded size limit (20 MB)");
             return;
          }
 
-         try {
-            const valid = await verifyMapFile(file);
-            if (!valid) {
-               setError("World file version is not supported (only 1.3.5.3) or corrupted metadata");
-               return;
-            }
-         } catch(e) {
-            console.error(e);
-            setError("Unexpected error (see console for dev info)");
+         const valid = await verifyMapFile(file);
+         if (valid !== true) {
+            if (valid.name == "TerrariaWorldParserError")
+               setError(valid.messageOnly);
+            else
+               setError("Unexpected error while verifying the map");
             return;
          }
 
          const fileData = new FormData();
          fileData.append("map", file);
 
-         const mapUpload = await api.post("/account/maps", fileData, false);
+         const mapUpload = await api.post("/user/maps", fileData, false);
 
          if (mapUpload.status != "ok") {
             setError(mapUpload.message);
             return;
          }
 
+         setError("");
          fetchMaps();
       }
    }
@@ -80,7 +78,8 @@ function ModalAccountViewMap({ stateChangeWorldFile, stateChangeModal, stateChan
    const onLoadMap = async () => {
       stateChangeDescription("Downloading map");
       stateChangeModal(null);
-      let mapFile = await api.get("/account/maps/" + maps[selectedRow].id, "application/octet-stream");
+
+      let mapFile = await api.get("/user/maps/" + maps[selectedRow].id, "application/octet-stream");
 
       if (mapFile.status == "error") {
          stateChangeDescription("Map download failed");
@@ -89,18 +88,20 @@ function ModalAccountViewMap({ stateChangeWorldFile, stateChangeModal, stateChan
       }
 
       mapFile = new File([mapFile], maps[selectedRow].name);
-      resetWorld();
+      resetWorld(true);
       stateChangeWorldFile(mapFile);
    }
 
    const onDeleteMap = async () => {
-      const mapDeleted = await api.delete("/account/maps/" + maps[selectedRow].id);
+      const mapDeleted = await api.delete("/user/maps/" + maps[selectedRow].id);
 
       if (mapDeleted.status != "ok") {
          setError(mapDeleted.message);
          return;
       }
 
+      setSelectedRow(null);
+      setError("");
       fetchMaps();
    }
 
@@ -109,7 +110,7 @@ function ModalAccountViewMap({ stateChangeWorldFile, stateChangeModal, stateChan
          {
             maps.length == 0 ?
                <div className="modal-account-view-row">
-                  <div className="modal-account-row-text--header-disabled">You can save your maps here...</div>
+                  <div className="modal-account-row-text--header-disabled">Here you can save your maps</div>
                </div>
             :
                maps.map((map, i) => (
@@ -121,7 +122,7 @@ function ModalAccountViewMap({ stateChangeWorldFile, stateChangeModal, stateChan
                ))
          }
          <div className="modal-account-button-container">
-            <Button label={"+ Add File"} onClick={onAddFile} error={error}/>
+            <Button label={"+ Add File"} onClick={onAddFile} error={error} primary/>
             <div className="flex-filler"></div>
             <Button label={"Load"} disabled={ selectedRow !== null ? false : true } onClick={onLoadMap}/>
             <Button label={"Delete"} disabled={ selectedRow !== null ? false : true } onClick={onDeleteMap}/>

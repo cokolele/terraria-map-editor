@@ -1,5 +1,5 @@
 const fetchErrorDefault = (e) => {
-    console.error("API call error:", e);
+    console.error("Auth call error:", e);
     return {
         status: "error",
         message: "Unexpected network error"
@@ -17,7 +17,7 @@ const get = async (resource = "/", contentType = "application/json") => {
             options.headers["Accept"] = contentType
         }
 
-        const response = await fetch("/api" + resource, options);
+        const response = await fetch("/auth" + resource, options);
 
         return contentType == "application/json" ? await response.json() : await response.blob();
     } catch (e) {
@@ -27,7 +27,7 @@ const get = async (resource = "/", contentType = "application/json") => {
 
 const delete_ = async (resource = "/") => {
     try {
-        const response = await fetch("/api" + resource, {
+        const response = await fetch("/auth" + resource, {
             method: "DELETE",
             credentials: "include"
         });
@@ -51,7 +51,7 @@ const post = async (resource = "/", body = {}, contentType = "application/json")
             options.headers["Content-Type"] = contentType
         }
 
-        const response = await fetch("/api" + resource, options);
+        const response = await fetch("/auth" + resource, options);
         return await response.json();
     } catch (e) {
         return fetchErrorDefault(e);
@@ -71,7 +71,7 @@ const put = async (resource = "/", body = {}, contentType = "application/json") 
             options.headers["Content-Type"] = contentType
         }
 
-        const response = await fetch("/api" + resource, options);
+        const response = await fetch("/auth" + resource, options);
         return await response.json();
     } catch (e) {
         return fetchErrorDefault(e);
@@ -91,7 +91,7 @@ const patch = async (resource = "/", body = {}, contentType = "application/json"
             options.headers["Content-Type"] = contentType
         }
 
-        const response = await fetch("/api" + resource, options);
+        const response = await fetch("/auth" + resource, options);
         return await response.json();
     } catch (e) {
         return fetchErrorDefault(e);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { stateChangeUser, stateChangeModal } from "/state/modules/app.js";
-import api from "/utils/api/api.js";
+import auth from "/utils/api/auth.js";
 
 import ModalSignInput from "/components/modal/sign/input.jsx";
 import ModalSignButtonInlineText from "/components/modal/sign/button-inline-text.jsx";
@@ -76,38 +76,19 @@ function ModalSignup({ stateChangeUser, stateChangeModal }) {
       if (!checkInputsErrors())
          return;
 
-      const register = await api.post("/session/register", {
+      const userRegistration = await auth.post("/registration", {
          username,
          password,
          email
       });
 
-      if (register.status != "ok") {
-         errors.submit = register.message;
+      if (userRegistration.status == "error") {
+         errors.submit = userRegistration.message;
          setErrors({...errors});
          return;
       }
 
-      const login = await api.post("/session/login", {
-         username,
-         password
-      });
-
-      if (login.status != "ok") {
-         errors.submit = login.message;
-         setErrors({...errors});
-         return;
-      }
-
-      const session = await api.get("/session");
-
-      if (session.status != "ok") {
-         errors.submit = session.message;
-         setErrors({...errors});
-         return;
-      }
-
-      stateChangeUser(session.user);
+      stateChangeUser(userRegistration.user);
       stateChangeModal(null);
    }
 

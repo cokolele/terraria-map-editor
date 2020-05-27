@@ -31,3 +31,20 @@
     background-color: #a0a0a0;
     margin: 3px 2px;
 }
+
+.menu-folder--hasMenu > * {
+    width: calc(100% + 0.8rem);
+}
+
+.menu-folder--hasMenu > .menu-option-divider {
+    width: calc(100% + 0.5rem);
+}
+
+.menu-option--menu:after {
+    position: absolute;
+    content: "🢒";
+    font-weight: 800;
+    font-size: 1.6rem;
+    right: 0.3rem;
+    top: -0.05rem;
+}

@@ -20,7 +20,15 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, un
    const config = {
       File: {
          "Open...": menu.onNewFile,
-         "Open example map": menu.onExampleMap,
+         "Open example map": {
+            type: "menu",
+            menu: {
+               "Normal world": () => { menu.onExampleMap("normal") },
+               "Drunk world (seed)": () => { menu.onExampleMap("drunk") },
+               "Bees world (seed)": () => { menu.onExampleMap("bees") },
+               "Good world (seed)": () => { menu.onExampleMap("good") }
+            }
+         },
          "Save map image": {
             type: "default",
             enabled: running,
@@ -62,14 +70,7 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, un
             onClick: menu.onToggleSidebar
          }
       },
-      "Error report": {
-         type: "button",
-         onClick: () => {
-            stateChangeModal("errorreport");
-         }
-      },
       "Map loading": {
-         "NOTE: Resaving the map in the latest Terraria should fix any problems": () => {},
          "Disable checking sections offsets (unsafe)": {
             type: "checkbox",
             checked: unsafe,
@@ -79,7 +80,16 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, un
             type: "checkbox",
             checked: unsafeOnlyTiles,
             onClick: stateToggleUnsafeOnlyTiles
-         }
+         },
+         DIVIDER,
+         "NOTE: Resaving the map in the latest Terraria should fix any problems": {
+            type: "default",
+            enabled: false
+         },
+      },
+      "Report": {
+         "Error": () => { stateChangeModal("errorreport") },
+         "Suggestions or feature requests": () => { stateChangeModal("suggestionreport") }
       }
    };
 
@@ -108,7 +118,7 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, un
          }
          </div>
          <div className="menu">
-            <MenuFolderButton label="version 2.2.2" onClick={() => {console.log("hey baby!")}}/>
+            <MenuFolderButton label="version 2.2.3" onClick={() => {console.log("hey baby!")}}/>
             <MenuFolderButton label="supported game version: 1.4.0.4" onClick={() => {console.log(";)")}}/>
             <MenuFolderButton label={loggedIn ? user.username : "Account"} onClick={onAccountClick} Icon={AccountBoxIcon}/>
             <MenuFolderButton label="Github" onClick={onGithubClick} Icon={GithubIcon}/>

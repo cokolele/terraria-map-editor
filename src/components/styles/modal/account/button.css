@@ -2,6 +2,7 @@
     font-weight: 700;
     font-size: 1.1rem;
     margin: .8rem .4rem 0;
+    color: white;
 }
 
 .modal-account-button {
@@ -34,6 +35,11 @@
 
 .modal-account-button--disabled, .modal-account-button--disabled:focus, .modal-account-button--disabled:active {
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.modal-account-button--primary {
+    background-color: #0079d3;
+    color: white;
 }
 
 .modal-account-button-error {

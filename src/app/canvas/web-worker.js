@@ -235,13 +235,11 @@ function save(world) {
 
 async function verify(file) {
     try {
-        const world = await new terrariaWorldParser().loadFile(file);
-        world.parse(["fileformatheader", "footer"]);
+        (await new terrariaWorldParser().loadFile(file)).parse({
+            sections: ["fileFormatHeader", "footer"]
+        });
     } catch(e) {
-        if (e.name == "TerrariaWorldParserError")
-            return false;
-        else
-            throw e;
+        return e;
     }
 
     return true;

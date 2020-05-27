@@ -35,3 +35,12 @@
     background-color: #f0f0f0;
     border: solid 1px #a0a0a0;
 }
+
+.menu-folder--hasMenu {
+    padding-right: 0.95rem;
+}
+
+.menu-folder--nested {
+    top: -0.3rem;
+    left: calc(100% - 0.1rem);
+}
