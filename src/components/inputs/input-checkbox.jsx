@@ -12,7 +12,7 @@ function InputCheckbox({ label, value, onChange, className }) {
          <div className={"input-checkbox" + (value ? " input-checkbox--checked" : "")} onClick={_onChange}></div>
          {
             label &&
-            <span className="input-label input-label--rightside" onClick={_onChange} >{label + ":"}</span>
+            <span className="input-label input-label--rightside" onClick={_onChange}>{label}</span>
          }
       </div>
    );

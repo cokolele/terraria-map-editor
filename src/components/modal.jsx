@@ -9,6 +9,7 @@ import ModalSignup from "/components/modal/signup.jsx";
 import ModalAccount from "/components/modal/account.jsx";
 import ErrorReport from "/components/modal/errorReport.jsx";
 import SuggestionReport from "/components/modal/suggestionReport.jsx";
+import SavingDisclaimer from "/components/modal/savingDisclaimer.jsx";
 
 const config = {
    signin: {
@@ -30,6 +31,10 @@ const config = {
    suggestionreport: {
       label: "Suggestions report",
       View: SuggestionReport
+   },
+   savingdisclaimer: {
+      label: "Please be careful",
+      View: SavingDisclaimer
    }
 };
 

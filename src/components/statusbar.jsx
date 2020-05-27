@@ -6,7 +6,7 @@ import "/components/styles/statusbar.css";
 
 function StatusBar({ percentage, description, error, stateChangePercentage }) {
    useEffect(() => {
-      if (percentage == 100) {
+      if (percentage >= 99) {
          stateChangePercentage(null);
       }
    }, [percentage]);

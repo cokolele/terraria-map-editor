@@ -18,68 +18,6 @@ let worldFile, world;
 let canvas, ctx;
 let worker = new Worker("./web-worker.js");;
 
-worker.onmessage = ({ data }) => {
-    try {
-        switch(data.action) {
-            case "RETURN_PERCENTAGE_PARSING_INCOMING":
-                store.dispatch(stateChangeDescription("Parsing"));
-                break;
-            case "RETURN_PERCENTAGE_PARSING":
-                store.dispatch(stateChangePercentage(data.percentage));
-                break;
-            case "RETURN_PERCENTAGE_RENDERING_INCOMING":
-                store.dispatch(stateChangeDescription("Rendering"));
-                break;
-            case "RETURN_PERCENTAGE_RENDERING":
-                store.dispatch(stateChangePercentage(data.percentage));
-                break;
-            case "RETURN_IMAGES_INCOMING":
-                store.dispatch(stateChangeDescription("Copying"));
-                break;
-            case "RETURN_IMAGES":
-                layerImage = data.layerImage;
-                break;
-            case "RETURN_WORLD_OBJECT":
-                world = data.world;
-                store.dispatch(stateChangeDescription("Re-rendering"));
-                store.dispatch(stateChangeWorldObject(world));
-                start();
-                break;
-            case "ERROR":
-                store.dispatch(stateChangeDescription("Failed"));
-                store.dispatch(stateChangePercentage(null));
-                store.dispatch(stateChangeWorldFile(null));
-
-                if (data.error.name == "TerrariaWorldParserError") {
-                    store.dispatch(stateChangeError(data.error.onlyMessage + ". Check map loading menu settings"));
-                } else if (data.error.message.includes("memory")) {
-                    store.dispatch(stateChangeError("You ran out of memory. Sorry, a lot of tiles."));
-                } else {
-                    store.dispatch(stateChangeError("Unexpected fatal worker error. Error message was sent to the developers and we hope it will be fixed soon."));
-                }
-                api.post("/report/error-auto", {
-                    text: "auto_line_59: " + JSON.stringify(data.error)
-                });
-                console.error("web worker error:", data.error);
-                break;
-            case "_DEBUG_RETURN_TILE_INFO":
-                console.log(data.tile);
-                break;
-        }
-    } catch(e) {
-        console.error("main-to-webworker error:", e);
-        api.post("/report/error-auto", {
-            text: "auto_line_70: " + JSON.stringify({
-                name: e.name,
-                message: e.message,
-                stack: e.stack
-            })
-        });
-        store.dispatch(stateChangeError("Unexpected fatal main-to-worker error. Error message was sent to the developers and we hope it will be fixed soon."));
-        return;
-    }
-}
-
 let unsafe, unsafeOnlyTiles;
 
 let layerImage;
@@ -244,6 +182,68 @@ function init(_canvas) {
 
 function load() {
     store.dispatch(stateChangeError(null));
+
+    worker.onmessage = ({ data }) => {
+        try {
+            switch(data.action) {
+                case "RETURN_PERCENTAGE_PARSING_INCOMING":
+                    store.dispatch(stateChangeDescription("Parsing"));
+                    break;
+                case "RETURN_PERCENTAGE_PARSING":
+                    store.dispatch(stateChangePercentage(data.percentage));
+                    break;
+                case "RETURN_PERCENTAGE_RENDERING_INCOMING":
+                    store.dispatch(stateChangeDescription("Rendering"));
+                    break;
+                case "RETURN_PERCENTAGE_RENDERING":
+                    store.dispatch(stateChangePercentage(data.percentage));
+                    break;
+                case "RETURN_IMAGES_INCOMING":
+                    store.dispatch(stateChangeDescription("Copying"));
+                    break;
+                case "RETURN_IMAGES":
+                    layerImage = data.layerImage;
+                    break;
+                case "RETURN_WORLD_OBJECT":
+                    world = data.world;
+                    store.dispatch(stateChangeDescription("Re-rendering"));
+                    store.dispatch(stateChangeWorldObject(world));
+                    start();
+                    break;
+                case "ERROR":
+                    store.dispatch(stateChangeDescription("Failed"));
+                    store.dispatch(stateChangePercentage(null));
+                    store.dispatch(stateChangeWorldFile(null));
+
+                    if (data.error.name == "TerrariaWorldParserError") {
+                        store.dispatch(stateChangeError(data.error.onlyMessage + ". Check map loading menu settings"));
+                    } else if (data.error.message.includes("memory")) {
+                        store.dispatch(stateChangeError("You ran out of memory. Sorry, a lot of tiles."));
+                    } else {
+                        store.dispatch(stateChangeError("Unexpected fatal worker error. Error message was sent to the developers and we hope it will be fixed soon."));
+                    }
+                    api.post("/report/error-auto", {
+                        text: "auto_line_59: " + JSON.stringify(data.error)
+                    });
+                    console.error("web worker error:", data.error);
+                    break;
+                case "_DEBUG_RETURN_TILE_INFO":
+                    console.log(data.tile);
+                    break;
+            }
+        } catch(e) {
+            console.error("main-to-webworker error:", e);
+            api.post("/report/error-auto", {
+                text: "auto_line_70: " + JSON.stringify({
+                    name: e.name,
+                    message: e.message,
+                    stack: e.stack
+                })
+            });
+            store.dispatch(stateChangeError("Unexpected fatal main-to-worker error. Error message was sent to the developers and we hope it will be fixed soon."));
+            return;
+        }
+    }
 
     worker.postMessage({
         action: "PARSE_AND_RENDER_MAP_RETURN_WITHOUT_BLOCKS",

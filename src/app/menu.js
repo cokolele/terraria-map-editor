@@ -1,7 +1,7 @@
 import store from "/state/store.js";
-import { stateChangeWorldFile, stateChangeWorldObject, stateToggleViewOption, stateChangeRunning } from "/state/modules/app.js";
+import { stateChangeWorldFile, stateChangeWorldObject, stateToggleViewOption, stateChangeRunning, stateChangeModal } from "/state/modules/app.js";
 import { stateChangePercentage, stateChangeDescription, stateChangeError } from "/state/modules/status.js";
-import { saveToLocalSettings } from "/utils/localStorage.js";
+import { localSettings, saveToLocalSettings } from "/utils/localStorage.js";
 import api from "/utils/api/api.js";
 
 import { resetWorld } from "/app/app.js";
@@ -47,6 +47,10 @@ const onSaveImage = async () => {
 }
 
 const onSaveFile = async (e) => {
+    console.log(localSettings);
+    if (!localSettings.savingDisclaimerChecked)
+        store.dispatch(stateChangeModal("savingdisclaimer"));
+
     const file = await getCanvasMapFile(worldObject);
     if (!file) return;
 

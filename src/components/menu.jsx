@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import menu from "/app/menu.js";
 import { stateChangeModal, stateToggleUnsafe, stateToggleUnsafeOnlyTiles } from "/state/modules/app.js";
-import { localSettings } from "/utils/localStorage.js";
 
 import MenuFolder from "/components/menu/folder.jsx";
 import MenuFolderButton from "/components/menu/folder-button.jsx";
@@ -34,7 +33,7 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, un
             enabled: running,
             onClick: menu.onSaveImage
          },
-         Save: {
+         "Save": {
             type: "default",
             enabled: running,
             onClick: menu.onSaveFile
@@ -118,7 +117,7 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, un
          }
          </div>
          <div className="menu">
-            <MenuFolderButton label="version 2.2.3" onClick={() => {console.log("hey baby!")}}/>
+            <MenuFolderButton label="version 2.2.4" onClick={() => {console.log("hey baby!")}}/>
             <MenuFolderButton label="supported game version: 1.4.0.4" onClick={() => {console.log(";)")}}/>
             <MenuFolderButton label={loggedIn ? user.username : "Account"} onClick={onAccountClick} Icon={AccountBoxIcon}/>
             <MenuFolderButton label="Github" onClick={onGithubClick} Icon={GithubIcon}/>
