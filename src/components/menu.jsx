@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import menu from "/app/menu.js";
-import { stateChangeModal, stateToggleUnsafe, stateToggleUnsafeOnlyTiles } from "/state/modules/app.js";
+import { stateChangeModal, stateToggleUnsafe, stateToggleUnsafeOnlyTiles, stateToggleIgnoreBounds } from "/state/modules/app.js";
 
 import MenuFolder from "/components/menu/folder.jsx";
 import MenuFolderButton from "/components/menu/folder-button.jsx";
 import { AccountBoxIcon, GithubIcon } from "/components/icon.jsx";
 import "/components/styles/menu.css";
 
-function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, unsafe, stateToggleUnsafe, unsafeOnlyTiles, stateToggleUnsafeOnlyTiles }) {
+function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, unsafe, stateToggleUnsafe, unsafeOnlyTiles, stateToggleUnsafeOnlyTiles, ignoreBounds, stateToggleIgnoreBounds }) {
    useEffect(() => {
       menu.setWorldObject(worldObject);
    }, [worldObject]);
@@ -70,12 +70,17 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, un
          }
       },
       "Map loading": {
-         "Disable checking sections offsets (unsafe)": {
+         "Disable checking sections offsets (helps with corrupted files)": {
             type: "checkbox",
             checked: unsafe,
             onClick: stateToggleUnsafe
          },
-         "Enable loading only tiles (any >1.3.5.3 map viewing ONLY)": {
+         "Enable ignoring buffer bounds (helps with missing data in files)": {
+            type: "checkbox",
+            checked: ignoreBounds,
+            onClick: stateToggleIgnoreBounds
+         },
+         "Enable loading only tiles (any valid >1.3.5.3 map viewing ONLY)": {
             type: "checkbox",
             checked: unsafeOnlyTiles,
             onClick: stateToggleUnsafeOnlyTiles
@@ -134,8 +139,9 @@ export default connect(state => {
          user: state.app.user,
          worldObject: state.app.worldObject,
          unsafe: state.app.unsafe,
-         unsafeOnlyTiles: state.app.unsafeOnlyTiles
+         unsafeOnlyTiles: state.app.unsafeOnlyTiles,
+         ignoreBounds: state.app.ignoreBounds
       };
    },
-   { stateChangeModal, stateToggleUnsafe, stateToggleUnsafeOnlyTiles }
+   { stateChangeModal, stateToggleUnsafe, stateToggleUnsafeOnlyTiles, stateToggleIgnoreBounds }
 )(Menu);

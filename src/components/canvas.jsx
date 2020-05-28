@@ -3,9 +3,9 @@ import { connect } from "react-redux";
 
 import "/components/styles/canvas.css";
 
-import init, { changeCanvasWorldFile, changeCanvasTool, changeCanvasLayersVisibility, changeCanvasActiveLayer, changeCanvasActiveSize, changeCanvasActiveColor, changeCanvasUnsafe, changeCanvasUnsafeOnlyTiles } from "/app/canvas/main.js";
+import init, { changeCanvasWorldFile, changeCanvasTool, changeCanvasLayersVisibility, changeCanvasActiveLayer, changeCanvasActiveSize, changeCanvasActiveColor, changeCanvasUnsafe, changeCanvasUnsafeOnlyTiles, changeCanvasIgnoreBounds } from "/app/canvas/main.js";
 
-function Canvas({ worldFile, running, tool, changeRunning, layersVisibility, activeLayer, activeSize, activeColor, unsafe, unsafeOnlyTiles }) {
+function Canvas({ worldFile, running, tool, changeRunning, layersVisibility, activeLayer, activeSize, activeColor, unsafe, unsafeOnlyTiles, ignoreBounds }) {
    const canvasEl = useRef(null);
 
    useEffect(() => {
@@ -44,6 +44,10 @@ function Canvas({ worldFile, running, tool, changeRunning, layersVisibility, act
       changeCanvasUnsafeOnlyTiles(unsafeOnlyTiles);
    }, [unsafeOnlyTiles]);
 
+   useEffect(() => {
+      changeCanvasIgnoreBounds(ignoreBounds);
+   }, [ignoreBounds]);
+
    return (
       <div className="canvas-container">
          <div className={"canvas-container-inner" + (running ? "" : " hidden")}>
@@ -70,6 +74,7 @@ export default connect(state => {
       activeSize: state.app.optionbar.size,
       activeColor: state.app.optionbar.color,
       unsafe: state.app.unsafe,
-      unsafeOnlyTiles: state.app.unsafeOnlyTiles
+      unsafeOnlyTiles: state.app.unsafeOnlyTiles,
+      ignoreBounds: state.app.ignoreBounds
    }
 })(Canvas);

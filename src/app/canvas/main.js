@@ -18,7 +18,7 @@ let worldFile, world;
 let canvas, ctx;
 let worker = new Worker("./web-worker.js");;
 
-let unsafe, unsafeOnlyTiles;
+let unsafe, unsafeOnlyTiles, ignoreBounds;
 
 let layerImage;
 let layerCanvas = {};
@@ -87,6 +87,10 @@ const changeCanvasUnsafe = (_unsafe) => {
 
 const changeCanvasUnsafeOnlyTiles = (_unsafeOnlyTiles) => {
     unsafeOnlyTiles = _unsafeOnlyTiles;
+}
+
+const changeCanvasIgnoreBounds = (_ignoreBounds) => {
+    ignoreBounds = _ignoreBounds;
 }
 
 const getCanvasMapData = ({ name, imageUrlPng }) => {
@@ -216,7 +220,14 @@ function load() {
                     store.dispatch(stateChangeWorldFile(null));
 
                     if (data.error.name == "TerrariaWorldParserError") {
-                        store.dispatch(stateChangeError(data.error.onlyMessage + ". Check map loading menu settings"));
+                        if (data.error.onlyName == "RangeError")
+                            store.dispatch(stateChangeError("Your map file is corrupted and missing data. Check map loading menu settings"));
+                        else if (data.error.onlyMessage.includes("end offset"))
+                            store.dispatch(stateChangeError("Your map file is corrupted. Check map loading menu settings"));
+                        else if (data.error.onlyMessage == "Invalid file type" || data.error.onlyMessage == "Map version is older than 1.3.5.3 and cannot be parsed")
+                            store.dispatch(stateChangeError(data.error.onlyMessage));
+                        else
+                            store.dispatch(stateChangeError(data.error.onlyMessage + ". Check map loading menu settings"));
                     } else if (data.error.message.includes("memory")) {
                         store.dispatch(stateChangeError("You ran out of memory. Sorry, a lot of tiles."));
                     } else {
@@ -249,7 +260,8 @@ function load() {
         action: "PARSE_AND_RENDER_MAP_RETURN_WITHOUT_BLOCKS",
         file: worldFile,
         unsafe,
-        unsafeOnlyTiles
+        unsafeOnlyTiles,
+        ignoreBounds
     });
 }
 
@@ -675,6 +687,7 @@ export {
     changeCanvasActiveColor,
     changeCanvasUnsafe,
     changeCanvasUnsafeOnlyTiles,
+    changeCanvasIgnoreBounds,
     getCanvasMapData,
     getCanvasMapFile,
     verifyMapFile,

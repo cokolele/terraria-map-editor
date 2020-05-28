@@ -47,7 +47,6 @@ const onSaveImage = async () => {
 }
 
 const onSaveFile = async (e) => {
-    console.log(localSettings);
     if (!localSettings.savingDisclaimerChecked)
         store.dispatch(stateChangeModal("savingdisclaimer"));
 

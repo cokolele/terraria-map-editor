@@ -11,7 +11,7 @@ self.onmessage = async ({ data }) => {
     try {
         switch(data.action) {
             case "PARSE_AND_RENDER_MAP_RETURN_WITHOUT_BLOCKS":
-                world = await parse(data.file, data.unsafe, data.unsafeOnlyTiles);
+                world = await parse(data.file, data.unsafe, data.unsafeOnlyTiles, data.ignoreBounds);
                 const layerImage = render();
 
                 postMessage({
@@ -66,16 +66,14 @@ self.onmessage = async ({ data }) => {
         postMessage({
             action: "ERROR",
             error: {
-                name: error.name,
-                message: error.message,
-                onlyMessage: error.onlyMessage,
+                ...error,
                 stack: error.stack
             }
         });
     }
 }
 
-async function parse(file, unsafe, unsafeOnlyTiles) {
+async function parse(file, unsafe, unsafeOnlyTiles, ignoreBounds) {
     postMessage({
         action: "RETURN_PERCENTAGE_PARSING_INCOMING",
     });
@@ -85,6 +83,7 @@ async function parse(file, unsafe, unsafeOnlyTiles) {
         world = world.parse({
             sections: ["tiles", "necessary"],
             ignorePointers: unsafe,
+            ignoreBounds,
             progressCallback: (percentVal) => {
                 postMessage({
                     action: "RETURN_PERCENTAGE_PARSING",
@@ -106,6 +105,7 @@ async function parse(file, unsafe, unsafeOnlyTiles) {
     } else
         return world.parse({
             ignorePointers: unsafe,
+            ignoreBounds,
             progressCallback: (percentVal) => {
                 postMessage({
                     action: "RETURN_PERCENTAGE_PARSING",
