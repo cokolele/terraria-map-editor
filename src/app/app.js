@@ -15,10 +15,9 @@ function onPageLoad() {
     loadSessionLogin();
 }
 
-function resetWorld(openingAnotherMapRightAfter = false) {
+function resetWorld() {
     store.dispatch(stateChangeRunning(false));
-    if (!openingAnotherMapRightAfter)
-        store.dispatch(stateChangeWorldFile(null));
+    store.dispatch(stateChangeWorldFile(null));
     store.dispatch(stateChangeWorldObject(null));
     store.dispatch(stateChangePercentage(null));
     store.dispatch(stateChangeError(null));

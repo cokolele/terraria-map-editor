@@ -98,8 +98,20 @@ async function parse(file, unsafe, unsafeOnlyTiles, ignoreBounds) {
         };
         world.header = {
             maxTilesX: world.necessary.width,
-            maxTilesY: world.necessary.height
+            maxTilesY: world.necessary.height,
         };
+
+        //average calculated on sample of 383 small, 204 medium and 464 large worlds
+        if (world.necessary.width == 4200) {
+            world.header.worldSurface = 332;
+            world.header.rockLayer = 460;
+        } else if (world.necessary.width == 6400) {
+            world.header.worldSurface = 486;
+            world.header.rockLayer = 690;
+        } else if (world.necessary.width == 8400) {
+            world.header.worldSurface = 620;
+            world.header.rockLayer = 911;
+        }
 
         return world;
     } else

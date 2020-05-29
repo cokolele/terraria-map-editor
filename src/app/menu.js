@@ -23,7 +23,7 @@ const onNewFile = (e, file) => {
         });
         inputElHidden.click();
     } else {
-        resetWorld(true);
+        resetWorld();
         store.dispatch(stateChangeDescription("Loading map from file"));
         store.dispatch(stateChangeWorldFile(file));
     }

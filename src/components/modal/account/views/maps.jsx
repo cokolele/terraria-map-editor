@@ -88,7 +88,7 @@ function ModalAccountViewMap({ stateChangeWorldFile, stateChangeModal, stateChan
       }
 
       mapFile = new File([mapFile], maps[selectedRow].name);
-      resetWorld(true);
+      resetWorld();
       stateChangeWorldFile(mapFile);
    }
 
