@@ -2,7 +2,7 @@ import terrariaWorldParser from "/../terraria-world-file-js/src/browser/terraria
 import terrariaWorldSaver from "/../terraria-world-file-js/src/browser/terraria-world-saver.js";
 
 import "/utils/polyfills/polyfill-imageData.js";
-import colors from "/utils/dbs/colors.js";
+import colors, { getTileVariantIndex } from "/utils/dbs/colors.js";
 import LAYERS from "/utils/dbs/LAYERS.js";
 
 let world;
@@ -152,7 +152,7 @@ function render() {
 
 
     let position = 0;
-    const setLayerTileColor = (LAYER, color) => {
+    const setPointColor = (LAYER, color) => {
         if (!color) {
             color = {
                 r:0,
@@ -185,25 +185,30 @@ function render() {
         for (let x = 0; x < world.header.maxTilesX; x++) {
             const tile = world.tiles[x][y];
 
-            if (tile.blockId !== undefined)
-                setLayerTileColor(LAYERS.TILES, colors[LAYERS.TILES][tile.blockId]);
+            if (tile.blockId !== undefined) {
+                if (colors[LAYERS.TILES][tile.blockId].r)
+                    setPointColor(LAYERS.TILES, colors[LAYERS.TILES][tile.blockId]);
+                else {
+                    setPointColor(LAYERS.TILES, colors[LAYERS.TILES][tile.blockId][ getTileVariantIndex(tile.blockId, tile.frameX, tile.frameY) ]);
+                }
+            }
 
             if (tile.liquid)
-                setLayerTileColor(LAYERS.LIQUIDS, colors[LAYERS.LIQUIDS][tile.liquid.type]);
+                setPointColor(LAYERS.LIQUIDS, colors[LAYERS.LIQUIDS][tile.liquid.type]);
 
             if (tile.wallId !== undefined) {
-                setLayerTileColor(LAYERS.WALLS, colors[LAYERS.WALLS][tile.wallId]);
+                setPointColor(LAYERS.WALLS, colors[LAYERS.WALLS][tile.wallId]);
             }
 
             if (tile.wiring && tile.wiring.wires) {
                 if (tile.wiring.wires.red)
-                    setLayerTileColor(LAYERS.WIRES, colors[LAYERS.WIRES]["red"]);
+                    setPointColor(LAYERS.WIRES, colors[LAYERS.WIRES]["red"]);
                 if (tile.wiring.wires.green)
-                    setLayerTileColor(LAYERS.WIRES, colors[LAYERS.WIRES]["green"]);
+                    setPointColor(LAYERS.WIRES, colors[LAYERS.WIRES]["green"]);
                 if (tile.wiring.wires.blue)
-                    setLayerTileColor(LAYERS.WIRES, colors[LAYERS.WIRES]["blue"]);
+                    setPointColor(LAYERS.WIRES, colors[LAYERS.WIRES]["blue"]);
                 if (tile.wiring.wires.yellow)
-                    setLayerTileColor(LAYERS.WIRES, colors[LAYERS.WIRES]["yellow"]);
+                    setPointColor(LAYERS.WIRES, colors[LAYERS.WIRES]["yellow"]);
             }
 
             let color;
@@ -218,7 +223,7 @@ function render() {
             else if (y >= bgLayers.underworld)
                 color = colors[LAYERS.BACKGROUND].underworld;
 
-            setLayerTileColor(LAYERS.BACKGROUND, color);
+            setPointColor(LAYERS.BACKGROUND, color);
 
             position += 4;
         }
