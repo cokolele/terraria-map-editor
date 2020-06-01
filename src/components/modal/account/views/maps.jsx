@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import api from "/utils/api/api.js";
 import { connect } from "react-redux";
-import { stateChangeWorldFile, stateChangeModal } from "/state/modules/app.js";
-import { stateChangeDescription, stateChangeError } from "/state/modules/status.js";
+import { stateChange, stateTriggerResetWorld } from "/state/state.js";
 
 import Button from "/components/modal/account/button.jsx";
 
 import { verifyMapFile } from "/app/canvas/main.js";
-import { resetWorld } from "/app/app.js";
 
-function ModalAccountViewMap({ stateChangeWorldFile, stateChangeModal, stateChangeDescription, stateChangeError }) {
+function ModalAccountViewMap({ close, stateChange, stateTriggerResetWorld }) {
    const [maps, setMaps] = useState([]);
    const [selectedRow, setSelectedRow] = useState(null);
    const [error, setError] = useState("");
@@ -76,20 +74,20 @@ function ModalAccountViewMap({ stateChangeWorldFile, stateChangeModal, stateChan
    }
 
    const onLoadMap = async () => {
-      stateChangeDescription("Downloading map");
-      stateChangeModal(null);
+      stateChange(["status", "description"], "Downloading map");
+      close();
 
       let mapFile = await api.get("/user/maps/" + maps[selectedRow].id, "application/octet-stream");
 
       if (mapFile.status == "error") {
-         stateChangeDescription("Map download failed");
-         stateChangeError(mapFile.message);
+         stateChange(["status", "description"], "Map download failed");
+         stateChange(["status", "error"], mapFile.message);
          return;
       }
 
       mapFile = new File([mapFile], maps[selectedRow].name);
-      resetWorld();
-      stateChangeWorldFile(mapFile);
+      stateTriggerResetWorld();
+      stateChange(["canvas", "worldFile"], mapFile);
    }
 
    const onDeleteMap = async () => {
@@ -133,6 +131,6 @@ function ModalAccountViewMap({ stateChangeWorldFile, stateChangeModal, stateChan
 
 export default connect(
    null,
-   { stateChangeWorldFile, stateChangeModal, stateChangeDescription, stateChangeError }
+   { stateChange, stateTriggerResetWorld }
 )(ModalAccountViewMap);
 

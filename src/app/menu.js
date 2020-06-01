@@ -1,17 +1,9 @@
-import store from "/state/store.js";
-import { stateChangeWorldFile, stateChangeWorldObject, stateToggleViewOption, stateChangeRunning, stateChangeModal } from "/state/modules/app.js";
-import { stateChangePercentage, stateChangeDescription, stateChangeError } from "/state/modules/status.js";
 import { localSettings, saveToLocalSettings } from "/utils/localStorage.js";
+import store from "/state/store.js";
+import { stateChange, stateToggle, stateTriggerResetWorld } from "/state/state.js";
 import api from "/utils/api/api.js";
 
-import { resetWorld } from "/app/app.js";
 import { getCanvasMapData, getCanvasMapFile } from "/app/canvas/main.js";
-
-let worldObject;
-
-const setWorldObject = (_worldObject) => {
-    worldObject = _worldObject;
-}
 
 const onNewFile = (e, file) => {
     if (file == undefined) {
@@ -23,14 +15,14 @@ const onNewFile = (e, file) => {
         });
         inputElHidden.click();
     } else {
-        resetWorld();
-        store.dispatch(stateChangeDescription("Loading map from file"));
-        store.dispatch(stateChangeWorldFile(file));
+        store.dispatch(stateTriggerResetWorld());
+        store.dispatch(stateChange(["status", "description"], "Loading map from file"));
+        store.dispatch(stateChange(["canvas", "worldFile"], file));
     }
 }
 
 const onSaveImage = async () => {
-    const data = getCanvasMapData({ name: true, imageUrlPng: true });
+    const data = getCanvasMapData({ fileName: true, imageUrlPng: true });
 
     if (data !== null) {
         let mapBlob = await fetch(data.imageUrlPng);
@@ -40,7 +32,7 @@ const onSaveImage = async () => {
         const blobUrl = URL.createObjectURL(mapBlob);
 
         const link = document.createElement("a");
-        link.download = data.name.replace(" ", "_") + ".png";
+        link.download = data.fileName.replace(" ", "_") + ".png";
         link.href = blobUrl;
         link.click();
     }
@@ -48,9 +40,10 @@ const onSaveImage = async () => {
 
 const onSaveFile = async (e) => {
     if (!localSettings.savingDisclaimerChecked)
-        store.dispatch(stateChangeModal("savingdisclaimer"));
+        store.dispatch(stateChange("modal", "savingdisclaimer"));
 
-    const file = await getCanvasMapFile(worldObject);
+    const fileName = getCanvasMapData({ fileName: true });
+    const file = await getCanvasMapFile();
     if (!file) return;
 
     const link = document.createElement("a");
@@ -58,39 +51,38 @@ const onSaveFile = async (e) => {
     const url = window.URL.createObjectURL(blob);
 
     link.href = url;
-    link.download = worldObject.header.mapName + ".wld";
+    link.download = fileName + ".wld";
     link.click();
 
     window.URL.revokeObjectURL(url);
 }
 
 const onCloseFile = (e) => {
-    resetWorld();
-    store.dispatch(stateChangeDescription(null));
+    store.dispatch(stateTriggerResetWorld());
 }
 
 const onExampleMap = async (map) => {
-    store.dispatch(stateChangeDescription("Downloading the map"));
+    store.dispatch(stateChange(["status", "description"], "Downloading the map"));
     let mapFile = await api.get("/public/maps/" + map, "application/octet-stream");
 
     if (mapFile.status == "error") {
-        store.dispatch(stateChangeDescription("Map download failed"));
-        store.dispatch(stateChangeError(mapFile.message));
+        store.dispatch(stateChange(["status", "description"], "Map download failed"));
+        store.dispatch(stateChange(["status", "error"], mapFile.message));
         return;
     }
 
     mapFile = new File([mapFile], map + ".wld");
-    resetWorld();
-    store.dispatch(stateChangeWorldFile(mapFile));
+    store.dispatch(stateTriggerResetWorld());
+    store.dispatch(stateChange(["canvas", "worldFile"], mapFile));
 }
 
 const onToggleToolbar = (value) => {
-    store.dispatch(stateToggleViewOption("toolbar"));
+    store.dispatch(stateToggle(["view", "toolbar"]));
     saveToLocalSettings("toolbar", value);
 }
 
 const onToggleSidebar = (value) => {
-    store.dispatch(stateToggleViewOption("sidebar"));
+    store.dispatch(stateToggle(["view", "sidebar"]));
     saveToLocalSettings("sidebar", value);
 }
 
@@ -101,7 +93,5 @@ export default {
     onSaveImage,
     onSaveFile,
     onToggleSidebar,
-    onToggleToolbar,
-
-    setWorldObject
+    onToggleToolbar
 };

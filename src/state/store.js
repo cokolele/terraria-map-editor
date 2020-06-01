@@ -1,13 +1,7 @@
-import { combineReducers, createStore } from "redux";
+import { createStore } from "redux";
 
-import appReducer from "/state/modules/app.js";
-import statusReducer from "/state/modules/status.js";
+import appReducer from "/state/state.js";
 
-const rootReducer = combineReducers({
-    app: appReducer,
-    status: statusReducer
-});
-
-const store = createStore(rootReducer);
+const store = createStore(appReducer);
 
 export default store;

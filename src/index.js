@@ -26,13 +26,12 @@ import store from "/state/store.js";
 
 import Editor from "/pages/editor.jsx";
 
-import { onPageLoad } from "/app/app.js";
-
-onPageLoad();
+import Controller from "/components/__controller.jsx";
 
 render(
     <Provider store={store}>
-        <Editor />
+        <Controller/>
+        <Editor/>
     </Provider>,
     document.querySelector("#app")
 );

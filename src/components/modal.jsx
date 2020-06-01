@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { stateChangeModal } from "/state/modules/app.js";
+import { stateChange } from "/state/state.js";
 
 import { CrossIcon } from "/components/icon.jsx";
 import "/components/styles/modal.css";
+
 import ModalSignin from "/components/modal/signin.jsx";
 import ModalSignup from "/components/modal/signup.jsx";
 import ModalAccount from "/components/modal/account.jsx";
@@ -38,7 +39,7 @@ const config = {
    }
 };
 
-const Modal = ({ modalView, stateChangeModal }) => {
+const Modal = ({ modalView, stateChange }) => {
    if (modalView === null)
       return "";
 
@@ -49,13 +50,25 @@ const Modal = ({ modalView, stateChangeModal }) => {
       return "";
 
    const onClose = () => {
-      stateChangeModal(null);
+      stateChange("modal", null);
    }
 
    const onModalClick = (e) => {
       if (e.target.classList.contains("modal-background"))
          onClose();
    }
+
+   useEffect(() => {
+      const keyDownHandler = (e) => {
+         if (e.code == "Escape")
+            onClose();
+      };
+
+      window.addEventListener("keydown", keyDownHandler);
+      return () => {
+         window.removeEventListener("keydown", keyDownHandler);
+      };
+   }, []);
 
    return (
       <div className="modal-background" onClick={onModalClick}>
@@ -66,7 +79,7 @@ const Modal = ({ modalView, stateChangeModal }) => {
                   <CrossIcon size={28}/>
                </button>
             </div>
-            <View/>
+            <View close={onClose}/>
          </div>
       </div>
    );
@@ -75,8 +88,8 @@ const Modal = ({ modalView, stateChangeModal }) => {
 export default connect(
    state => {
       return {
-         modalView: state.app.modal
+         modalView: state.modal
       };
    },
-   { stateChangeModal }
+   { stateChange }
 )(Modal);

@@ -1250,17 +1250,17 @@ pointColors[LAYERS.WALLS_PAINTED] = {
 }*/
 
 pointColors[LAYERS.LIQUIDS] = {
-    "water": {r:51,g:133,b:255,a:155},
-    "lava": {r:212,g:17,b:17,a:155},
-    "honey": {r:255,g:255,b:0,a:155}
+    "water": {r:51,g:133,b:255,a:215},
+    "lava": {r:253,g:32,b:3,a:215},
+    "honey": {r:255,g:255,b:0,a:200}
 };
 
 pointColors[LAYERS.BACKGROUND] = {
     "space": {r:51,g:102,b:153,a:255},
     "sky": {r:155,g:209,b:255,a:255},
-    "ground": {r:84,g:57,b:42,a:255},
-    "cavern": {r:72,g:64,b:57,a:255},
-    "underworld": {r:51,g:0,b:0,a:255}
+    "ground": {r:88,g:61,b:46,a:255},
+    "cavern": {r:74,g:67,b:60,a:255},
+    "underworld": {r:50,g:44,b:38,a:255}
 };
 
 pointColors[LAYERS.WIRES] = {

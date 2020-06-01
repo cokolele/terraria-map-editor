@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { stateSetKey } from "/state/modules/app.js";
+import { stateChange } from "/state/state.js";
 
 import OptionbarInputSlider from "/components/inputs/input-slider.jsx";
 
-function OptionbarOptionSize({ stateSetKey, value, onChange }) {
+function OptionbarOptionSize({ stateChange, value, onChange }) {
    const [activeSize, setActiveSize] = useState(value);
 
    const _onChange = (size) => {
       size = parseInt(size);
       setActiveSize(size);
-      stateSetKey(["optionbar", "size"], size);
+      stateChange(["optionbar", "size"], size);
       onChange(size);
    }
 
@@ -23,5 +23,5 @@ function OptionbarOptionSize({ stateSetKey, value, onChange }) {
 
 export default connect(
    null,
-   { stateSetKey }
+   { stateChange }
 )(OptionbarOptionSize);

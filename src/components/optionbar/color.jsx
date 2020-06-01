@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { stateSetKey } from "/state/modules/app.js";
+import { stateChange } from "/state/state.js";
 
 import OptionbarInputSelect from "/components/inputs/input-select.jsx";
 import OptionbarInput from "/components/inputs/input-select.jsx";
@@ -16,14 +16,14 @@ const liquidsColors = ["water", "lava", "honey"];
 
 delete editableTiles, editableWalls;
 
-function OptionbarOptionLayer({ stateSetKey, value, onChange, LAYER }) {
+function OptionbarOptionLayer({ stateChange, value, onChange, LAYER }) {
    const [activeColor, setActiveColor] = useState(value);
 
    const _onChange = (color) => {
       if (LAYER == LAYERS.TILES || LAYER == LAYERS.WALLS)
          color = parseInt(color);
       setActiveColor(color);
-      stateSetKey(["optionbar", "color"], color);
+      stateChange(["optionbar", "color"], color);
       onChange(color);
    }
 
@@ -45,5 +45,5 @@ function OptionbarOptionLayer({ stateSetKey, value, onChange, LAYER }) {
 
 export default connect(
    null,
-   { stateSetKey }
+   { stateChange }
 )(OptionbarOptionLayer);

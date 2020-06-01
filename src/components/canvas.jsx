@@ -3,50 +3,14 @@ import { connect } from "react-redux";
 
 import "/components/styles/canvas.css";
 
-import init, { changeCanvasWorldFile, changeCanvasTool, changeCanvasLayersVisibility, changeCanvasActiveLayer, changeCanvasActiveSize, changeCanvasActiveColor, changeCanvasUnsafe, changeCanvasUnsafeOnlyTiles, changeCanvasIgnoreBounds } from "/app/canvas/main.js";
+import init from "/app/canvas/main.js";
 
-function Canvas({ worldFile, running, tool, changeRunning, layersVisibility, activeLayer, activeSize, activeColor, unsafe, unsafeOnlyTiles, ignoreBounds }) {
+function Canvas({ worldFile, running, stateForCanvas }) {
    const canvasEl = useRef(null);
 
    useEffect(() => {
       init(canvasEl.current);
    }, []);
-
-   useEffect(() => {
-      changeCanvasWorldFile(worldFile);
-   }, [worldFile]);
-
-   useEffect(() => {
-      changeCanvasTool(tool);
-   }, [tool]);
-
-   useEffect(() => {
-      changeCanvasLayersVisibility(layersVisibility);
-   }, [layersVisibility]);
-
-   useEffect(() => {
-      changeCanvasActiveLayer(activeLayer);
-   }, [activeLayer]);
-
-   useEffect(() => {
-      changeCanvasActiveSize(activeSize);
-   }, [activeSize]);
-
-   useEffect(() => {
-      changeCanvasActiveColor(activeColor);
-   }, [activeColor]);
-
-   useEffect(() => {
-      changeCanvasUnsafe(unsafe);
-   }, [unsafe]);
-
-   useEffect(() => {
-      changeCanvasUnsafeOnlyTiles(unsafeOnlyTiles);
-   }, [unsafeOnlyTiles]);
-
-   useEffect(() => {
-      changeCanvasIgnoreBounds(ignoreBounds);
-   }, [ignoreBounds]);
 
    return (
       <div className="canvas-container">
@@ -66,15 +30,7 @@ function Canvas({ worldFile, running, tool, changeRunning, layersVisibility, act
 
 export default connect(state => {
    return {
-      worldFile: state.app.worldFile,
-      running: state.app.running,
-      tool: state.app.toolbar.tool,
-      layersVisibility: state.app.layersVisibility,
-      activeLayer: state.app.optionbar.layer,
-      activeSize: state.app.optionbar.size,
-      activeColor: state.app.optionbar.color,
-      unsafe: state.app.unsafe,
-      unsafeOnlyTiles: state.app.unsafeOnlyTiles,
-      ignoreBounds: state.app.ignoreBounds
+      worldFile: state.canvas.worldFile,
+      running: state.canvas.running,
    }
 })(Canvas);

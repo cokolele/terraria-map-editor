@@ -4,33 +4,43 @@
 import "/utils/polyfills/polyfill-requestAnimationFrame.js";
 
 import store from "/state/store.js";
-import { stateChangeWorldObject, stateChangeWorldFile, stateChangeRunning } from "/state/modules/app.js";
-import { stateChangePercentage, stateChangeDescription, stateChangeError } from "/state/modules/status.js";
+import { stateChange, stateTriggerResetWorld } from "/state/state.js";
 import api from "/utils/api/api.js";
 import { map } from "/utils/number.js";
-import { resetWorld } from "/app/app.js";
 
 import LAYERS from "/utils/dbs/LAYERS.js";
 import colors from "/utils/dbs/colors.js";
 import sprite, { NPCsSprites } from "/utils/dbs/sprites.js";
+/*
+//javascripts one legged namespacing
+let main = new function() {
+    this.state;
+    this.canvas, this.ctx;
+    this.worker = new Worker("./worker");
 
-let worldFile, world;
+    this.layerImage, this.layerCanvas = {}
+}*/
+
+let state;
+const canvasChangeState = (_state) => {
+    state = _state;
+}
+
+const canvasOnWorldFileChange = () => {
+    if (canvas === undefined)
+        return //not yet initialized
+
+    if (state.canvas.worldFile === null)
+        stop();
+    else
+        load();
+}
+
 let canvas, ctx;
-let worker = new Worker("./web-worker.js");;
+let worker = new Worker("./worker.js");;
 
-let unsafe, unsafeOnlyTiles, ignoreBounds;
-
-let layerImage;
-let layerCanvas = {};
-let layerCtx = {};
-Object.values(LAYERS).forEach(LAYER => {
-    layerCanvas[LAYER] = document.createElement("canvas");
-    layerCtx[LAYER] = layerCanvas[LAYER].getContext("2d");
-});
-let layersVisibility;
-
-let running = false;
-let editBuffer = [];
+let layerImage = [];
+let layerCtx = Object.values(LAYERS).map(LAYER => document.createElement("canvas").getContext("2d"));
 
 let zoomLevel = 0;
 let zoomFactors = [];
@@ -40,8 +50,6 @@ let tilePixelRatio;
 let posX;
 let posY;
 
-let tool = "move";
-let activeLayer, activeSize, activeColor;
 const brush = new Image(1,1);
 brush.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkWPjfBwAENwHuUNRdVAAAAABJRU5ErkJggg==";
 
@@ -50,64 +58,24 @@ let deltaY = 0;
 let prevDragX = null;
 let prevDragY = null;
 
-let mouseX, mouseY;
+let mouseCanvasX, mouseCanvasY;
+let mouseImageX, mouseImageY;
 
-const changeCanvasWorldFile = (_worldFile) => {
-    worldFile = _worldFile;
-
-    if (worldFile === null)
-        stop();
-    else
-        load();
-}
-
-const changeCanvasTool = (_tool) => {
-    tool = _tool;
-}
-
-const changeCanvasLayersVisibility = (_layersVisibility) => {
-    layersVisibility = _layersVisibility;
-}
-
-const changeCanvasActiveLayer = (_activeLayer) => {
-    activeLayer = _activeLayer;
-}
-
-const changeCanvasActiveSize = (_activeSize) => {
-    activeSize = _activeSize;
-}
-
-const changeCanvasActiveColor = (_activeColor) => {
-    activeColor = _activeColor;
-}
-
-const changeCanvasUnsafe = (_unsafe) => {
-    unsafe = _unsafe;
-}
-
-const changeCanvasUnsafeOnlyTiles = (_unsafeOnlyTiles) => {
-    unsafeOnlyTiles = _unsafeOnlyTiles;
-}
-
-const changeCanvasIgnoreBounds = (_ignoreBounds) => {
-    ignoreBounds = _ignoreBounds;
-}
-
-const getCanvasMapData = ({ name, imageUrlPng }) => {
+const getCanvasMapData = ({ fileName, worldName, imageUrlPng }) => {
     let data = {};
 
-    if (name && running)
-        data.name = worldFile.name;
+    if (fileName && state.canvas.running)
+        data.fileName = state.canvas.worldFile.name;
 
-    if (imageUrlPng && running) {
+    if (imageUrlPng && state.canvas.running) {
         const _tmpCanvas = document.createElement("canvas");
         const _tmpCtx = _tmpCanvas.getContext("2d");
 
-        _tmpCanvas.width = world.header.maxTilesX;
-        _tmpCanvas.height = world.header.maxTilesY;
+        _tmpCanvas.width = state.canvas.worldObject.header.maxTilesX;
+        _tmpCanvas.height = state.canvas.worldObject.header.maxTilesY;
 
         Object.values(LAYERS).forEach(LAYER => {
-            _tmpCtx.drawImage(layerCanvas[LAYER], 0, 0);
+            _tmpCtx.drawImage(layerCtx[LAYER].canvas, 0, 0);
         });
 
         data.imageUrlPng = _tmpCanvas.toDataURL("image/png;base64");
@@ -118,38 +86,38 @@ const getCanvasMapData = ({ name, imageUrlPng }) => {
     return data;
 }
 
-const getCanvasMapFile = async (worldObject) => {
-    if (!running)
+const getCanvasMapFile = async () => {
+    if (!state.canvas.running)
         return null;
 
     return new Promise((resolve, reject) => {
         worker.onmessage = ({ data }) => {
             switch(data.action) {
                 case "RETURN_PERCENTAGE_SAVING":
-                    store.dispatch(stateChangePercentage(data.percentage));
+                    store.dispatch(stateChange(["status", "percent"], data.percentage));
                     break;
                 case "RETURN_MAP_FILE":
-                    store.dispatch(stateChangeDescription("Finished"));
+                    store.dispatch(stateChange(["status", "description"], "Finished"));
                     resolve(data.newWorldFile);
                     break;
                 case "ERROR":
                     if (data.error.name == "TerrariaWorldSaverError") {
-                        store.dispatch(stateChangeError(data.error.onlyMessage));
+                        store.dispatch(stateChange(["status", "error"], data.error.onlyMessage));
                     } else {
-                        store.dispatch(stateChangeError("See more info in console (please report the error to developer)"));
+                        store.dispatch(stateChange(["status", "error"], "See more info in console (please report the error to developer)"));
                     }
                     console.error("web worker error:", data.error);
                     api.post("/report/error-auto", {
                         text: "auto_line_184: " + JSON.stringify(data.error)
                     });
-                    store.dispatch(stateChangeDescription("Failed"));
+                    store.dispatch(stateChange(["status", "description"], "Failed"));
                     resolve(null);
                     break;
             }
         }
 
-        store.dispatch(stateChangeDescription("Generating"));
-        worker.postMessage({ action: "SAVE_MAP", worldObject });
+        store.dispatch(stateChange(["status", "description"], "Generating"));
+        worker.postMessage({ action: "SAVE_MAP", worldObject: state.canvas.worldObject });
     });
 }
 
@@ -185,53 +153,52 @@ function init(_canvas) {
 }
 
 function load() {
-    store.dispatch(stateChangeError(null));
+    store.dispatch(stateChange(["status", "error"], null));
 
     worker.onmessage = ({ data }) => {
         try {
             switch(data.action) {
                 case "RETURN_PERCENTAGE_PARSING_INCOMING":
-                    store.dispatch(stateChangeDescription("Parsing"));
+                    store.dispatch(stateChange(["status", "description"], "Parsing"));
                     break;
                 case "RETURN_PERCENTAGE_PARSING":
-                    store.dispatch(stateChangePercentage(data.percentage));
+                    store.dispatch(stateChange(["status", "percent"], data.percentage));
                     break;
                 case "RETURN_PERCENTAGE_RENDERING_INCOMING":
-                    store.dispatch(stateChangeDescription("Rendering"));
+                    store.dispatch(stateChange(["status", "description"], "Rendering"));
                     break;
                 case "RETURN_PERCENTAGE_RENDERING":
-                    store.dispatch(stateChangePercentage(data.percentage));
+                    store.dispatch(stateChange(["status", "percent"], data.percentage));
                     break;
                 case "RETURN_IMAGES_INCOMING":
-                    store.dispatch(stateChangeDescription("Copying"));
+                    store.dispatch(stateChange(["status", "description"], "Copying"));
                     break;
                 case "RETURN_IMAGES":
                     layerImage = data.layerImage;
                     break;
                 case "RETURN_WORLD_OBJECT":
-                    world = data.world;
-                    store.dispatch(stateChangeDescription("Re-rendering"));
-                    store.dispatch(stateChangeWorldObject(world));
+                    store.dispatch(stateChange(["status", "description"], "Re-rendering"));
+                    store.dispatch(stateChange(["canvas", "worldObject"], data.world));
                     start();
                     break;
                 case "ERROR":
-                    store.dispatch(stateChangeDescription("Failed"));
-                    store.dispatch(stateChangePercentage(null));
-                    store.dispatch(stateChangeWorldFile(null));
+                    store.dispatch(stateChange(["status", "description"], "Failed"));
+                    store.dispatch(stateChange(["status", "percent"], null));
+                    store.dispatch(stateChange(["canvas", "worldFile"], null));
 
                     if (data.error.name == "TerrariaWorldParserError") {
                         if (data.error.onlyName == "RangeError")
-                            store.dispatch(stateChangeError("Your map file is corrupted and missing data. Check map loading menu settings"));
+                            store.dispatch(stateChange(["status", "error"], "Your map file is corrupted and missing data. Check map loading menu settings"));
                         else if (data.error.onlyMessage.includes("end offset"))
-                            store.dispatch(stateChangeError("Your map file is corrupted. Check map loading menu settings"));
+                            store.dispatch(stateChange(["status", "error"], "Your map file is corrupted. Check map loading menu settings"));
                         else if (data.error.onlyMessage == "Invalid file type" || data.error.onlyMessage == "Map version is older than 1.3.5.3 and cannot be parsed")
-                            store.dispatch(stateChangeError(data.error.onlyMessage));
+                            store.dispatch(stateChange(["status", "error"], data.error.onlyMessage));
                         else
-                            store.dispatch(stateChangeError(data.error.onlyMessage + ". Check map loading menu settings"));
+                            store.dispatch(stateChange(["status", "error"], data.error.onlyMessage + ". Check map loading menu settings"));
                     } else if (data.error.message.includes("memory")) {
-                        store.dispatch(stateChangeError("You ran out of memory. Sorry, a lot of tiles."));
+                        store.dispatch(stateChange(["status", "error"], "You ran out of memory. Sorry, a lot of tiles."));
                     } else {
-                        store.dispatch(stateChangeError("Unexpected fatal worker error. Error message was sent to the developers and we hope it will be fixed soon."));
+                        store.dispatch(stateChange(["status", "error"], "Unexpected fatal worker error. Error message was sent to the developers and we hope it will be fixed soon."));
                     }
                     api.post("/report/error-auto", {
                         text: "auto_line_59: " + JSON.stringify(data.error)
@@ -251,28 +218,28 @@ function load() {
                     stack: e.stack
                 })
             });
-            store.dispatch(stateChangeError("Unexpected fatal main-to-worker error. Error message was sent to the developers and we hope it will be fixed soon."));
+            store.dispatch(stateChange(["status", "error"], "Unexpected fatal main-to-worker error. Error message was sent to the developers and we hope it will be fixed soon."));
             return;
         }
     }
 
     worker.postMessage({
         action: "PARSE_AND_RENDER_MAP_RETURN_WITHOUT_BLOCKS",
-        file: worldFile,
-        unsafe,
-        unsafeOnlyTiles,
-        ignoreBounds
+        file: state.canvas.worldFile,
+        unsafe: state.canvas.unsafe,
+        unsafeOnlyTiles: state.canvas.unsafeOnlyTiles,
+        ignoreBounds: state.canvas.ignoreBounds
     });
 }
 
 function onCanvasClick(e) {
     if (window.debug)
         onDebugClick(e);
-    else if (tool == "pencil")
+    else if (state.toolbar.tool == "pencil")
         onPencilClick(e);
-    else if (tool == "bucket")
+    else if (state.toolbar.tool == "bucket")
         onBucketClick(e);
-    else if (tool == "eraser")
+    else if (state.toolbar.tool == "eraser")
         onEraserClick(e);
 }
 
@@ -298,15 +265,18 @@ function onCanvasWheel(e) {
 }
 
 function onCanvasMouseMove(e) {
-    [mouseX, mouseY] = getMouseCanvasPosition(e);
+    [mouseCanvasX, mouseCanvasY] = getMouseCanvasPosition(e);
+    /*[mouseImageX, mouseImageY] = getMouseImagePosition(e);
+    store.dispatch(stateChange(["canvas", "mouseImagePosX"]), mouseImageX);
+    store.dispatch(stateChange(["canvas", "mouseImagePosY"]), mouseImageY);*/
 
-    if ((tool == "move" && e.buttons == 1) || e.buttons == 4) {
+    if ((state.toolbar.tool == "move" && e.buttons == 1) || e.buttons == 4) {
         canvas.classList.add("grabbed");
         onMoveDrag(e);
     }
-    else if (tool == "pencil" && e.buttons == 1)
+    else if (state.toolbar.tool == "pencil" && e.buttons == 1)
         onPencilDrag(e);
-    else if (tool == "eraser" && e.buttons == 1)
+    else if (state.toolbar.tool == "eraser" && e.buttons == 1)
         onEraserDrag(e);
 }
 
@@ -327,7 +297,7 @@ function getMouseImagePosition(e) {
 }
 
 function setLayerImagePointColor(LAYER, color, x, y, push = true) {
-    const offset = (world.header.maxTilesX * y + x) * 4;
+    const offset = (state.canvas.worldObject.header.maxTilesX * y + x) * 4;
     layerImage[LAYER].data[offset] = color.r;
     layerImage[LAYER].data[offset+1] = color.g;
     layerImage[LAYER].data[offset+2] = color.b;
@@ -338,7 +308,7 @@ function setLayerImagePointColor(LAYER, color, x, y, push = true) {
 }
 
 function getLayerImagePointColor(LAYER, x, y) {
-    const offset = (world.header.maxTilesX * y + x) * 4;
+    const offset = (state.canvas.worldObject.header.maxTilesX * y + x) * 4;
     return {
         r:layerImage[LAYER].data[offset],
         g:layerImage[LAYER].data[offset+1],
@@ -351,7 +321,7 @@ function setLayerImageRowColor(LAYER, color, x, y, length, push = true) {
     if (typeof color == "number" || typeof color == "string")
         color = colors[LAYER][color];
 
-    const offset = (world.header.maxTilesX * y + x) * 4;
+    const offset = (state.canvas.worldObject.header.maxTilesX * y + x) * 4;
     length = length  * 4;
 
     for (let i = 0; i < length; i += 4) {
@@ -366,7 +336,7 @@ function setLayerImageRowColor(LAYER, color, x, y, length, push = true) {
 }
 
 function getLayerImageRowColor(LAYER, x, y, length) {
-    const offset = (world.header.maxTilesX * y + x) * 4;
+    const offset = (state.canvas.worldObject.header.maxTilesX * y + x) * 4;
     length *= 4;
 
     const buffer = [];
@@ -399,7 +369,7 @@ function getLayerImageRectangleColor() {
     const buffer = [];
 
     for (let i = 0; i < height; i++) {
-        const offset = (world.header.maxTilesX * (y1 + i) + x1) * 4;
+        const offset = (state.canvas.worldObject.header.maxTilesX * (y1 + i) + x1) * 4;
         for (let j = 0; j < rowLength; j++) {
             buffer.push( layerImage[LAYER].data[offset + j] );
         }
@@ -501,9 +471,9 @@ function onDebugClick(e) {
 
 function onPencilClick(e) {
     const [x, y] = getMouseImagePosition(e);
-    const activeSizeHalf = activeSize / 2;
-    setLayerImageRectangleColor(activeLayer, activeColor, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
-    sendTilesRectangleChange(activeLayer, activeColor, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
+    const activeSizeHalf = state.optionbar.size / 2;
+    setLayerImageRectangleColor(state.optionbar.layer, state.optionbar.color, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
+    sendTilesRectangleChange(state.optionbar.layer, state.optionbar.color, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
 }
 
 function onPencilDrag(e) {
@@ -515,10 +485,10 @@ function onPencilDrag(e) {
         return;
     }
 
-    const activeSizeHalf = activeSize / 2;
-    setLayerImageRectangleColor(activeLayer, activeColor, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
-    sendTilesRectangleChange(activeLayer, activeColor, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
-    //setLayerImagePathColor(activeLayer, activeColor, [prevDragX, prevDragY], [x, y], 4);
+    const activeSizeHalf = state.optionbar.size / 2;
+    setLayerImageRectangleColor(state.optionbar.layer, state.optionbar.color, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
+    sendTilesRectangleChange(state.optionbar.layer, state.optionbar.color, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
+    //setLayerImagePathColor(state.optionbar.layer, state.optionbar.color, [prevDragX, prevDragY], [x, y], 4);
 
     prevDragX = x;
     prevDragY = y;
@@ -527,14 +497,14 @@ function onPencilDrag(e) {
 function onBucketClick(e) {
     const [x, y] = getMouseImagePosition(e);
 
-    sendSendTilesArrayChange( activeLayer, activeColor, setLayerImageFourwayFillColor(activeLayer, activeColor, x, y) );
+    sendSendTilesArrayChange( state.optionbar.layer, state.optionbar.color, setLayerImageFourwayFillColor(state.optionbar.layer, state.optionbar.color, x, y) );
 }
 
 function onEraserClick(e) {
     const [x, y] = getMouseImagePosition(e);
-    const activeSizeHalf = activeSize / 2;
-    setLayerImageRectangleColor(activeLayer, {r:0,g:0,b:0,a:0}, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)], true);
-    sendTilesRectangleChange(activeLayer, null, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
+    const activeSizeHalf = state.optionbar.size / 2;
+    setLayerImageRectangleColor(state.optionbar.layer, {r:0,g:0,b:0,a:0}, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)], true);
+    sendTilesRectangleChange(state.optionbar.layer, null, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
 }
 
 function onEraserDrag(e) {
@@ -543,9 +513,9 @@ function onEraserDrag(e) {
     if (prevDragX == null || (x != prevDragX || y != prevDragY)) {
         prevDragX = x;
         prevDragY = y;
-        const activeSizeHalf = activeSize / 2;
-        setLayerImageRectangleColor(activeLayer, {r:0,g:0,b:0,a:0}, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
-        sendTilesRectangleChange(activeLayer, null, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
+        const activeSizeHalf = state.optionbar.size / 2;
+        setLayerImageRectangleColor(state.optionbar.layer, {r:0,g:0,b:0,a:0}, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
+        sendTilesRectangleChange(state.optionbar.layer, null, [x-Math.floor(activeSizeHalf), y-Math.floor(activeSizeHalf)], [x+Math.ceil(activeSizeHalf), y+Math.ceil(activeSizeHalf)]);
     }
 }
 
@@ -556,17 +526,17 @@ function correctPositions() {
     if (posY < 0)
         posY = 0;
 
-    if (posY + viewHeightTiles > world.header.maxTilesY && posY > 0)
-        if (world.header.maxTilesY - viewHeightTiles < 0)
+    if (posY + viewHeightTiles > state.canvas.worldObject.header.maxTilesY && posY > 0)
+        if (state.canvas.worldObject.header.maxTilesY - viewHeightTiles < 0)
             posY = 0;
         else
-            posY = world.header.maxTilesY - viewHeightTiles;
+            posY = state.canvas.worldObject.header.maxTilesY - viewHeightTiles;
 
-    if (posX + viewWidthTiles > world.header.maxTilesX && posX > 0)
-        if (world.header.maxTilesX - viewWidthTiles < 0)
+    if (posX + viewWidthTiles > state.canvas.worldObject.header.maxTilesX && posX > 0)
+        if (state.canvas.worldObject.header.maxTilesX - viewWidthTiles < 0)
             posX = 0;
         else
-            posX = world.header.maxTilesX - viewWidthTiles;
+            posX = state.canvas.worldObject.header.maxTilesX - viewWidthTiles;
 }
 
 function pushLayerImage(LAYER) {
@@ -597,23 +567,22 @@ function refreshCanvas() {
 
 function start() {
     Object.values(LAYERS).forEach(LAYER => {
-        layerCanvas[LAYER].width = world.header.maxTilesX;
-        layerCanvas[LAYER].height = world.header.maxTilesY;
+        layerCtx[LAYER].canvas.width = state.canvas.worldObject.header.maxTilesX;
+        layerCtx[LAYER].canvas.height = state.canvas.worldObject.header.maxTilesY;
     });
     pushLayerImage();
-    store.dispatch(stateChangeDescription("Finished"));
-    running = true;
-    store.dispatch(stateChangeRunning(true));
+    store.dispatch(stateChange(["status", "description"], "Finished"));
+    store.dispatch(stateChange(["canvas", "running"], true));
     tick(0);
 
-    console.log(world);
+    console.log(state.canvas.worldObject);
 }
 
 function preRender() {
     posX = 0;
     posY = 0;
 
-    for (let i = world.header.maxTilesY; i > 10; i = Math.ceil(i * (3.5/5)))
+    for (let i = state.canvas.worldObject.header.maxTilesY; i > 10; i = Math.ceil(i * (3.5/5)))
         zoomFactors.push(i);
     zoomFactors.push(10);
     viewHeightTiles = zoomFactors[zoomLevel];
@@ -622,7 +591,6 @@ function preRender() {
 }
 
 function stop() {
-    running = false;
     zoomLevel = 0;
     zoomFactors = [];
     canvas.height++;
@@ -641,26 +609,26 @@ const tick = (T) => {
     correctPositions();
 
     Object.values(LAYERS).forEach(LAYER => {
-        if (layersVisibility[LAYER])
-            ctx.drawImage(layerCanvas[LAYER],
+        if (state.layersVisibility[LAYER])
+            ctx.drawImage(layerCtx[LAYER].canvas,
                 posX, posY,
                 viewWidthTiles, viewHeightTiles,
                 0, 0,
                 canvas.width, canvas.height);
     });
 
-    if (tool == "pencil" || tool == "eraser") {
-        temp0 = activeSize * tilePixelRatio;
-        ctx.drawImage(brush, 0, 0, 1, 1, mouseX - temp0/2, mouseY - temp0/2, temp0, temp0);
+    if (state.toolbar.tool == "pencil" || state.toolbar.tool == "eraser") {
+        temp0 = state.optionbar.size * tilePixelRatio;
+        ctx.drawImage(brush, 0, 0, 1, 1, mouseCanvasX - temp0/2, mouseCanvasY - temp0/2, temp0, temp0);
     }
 
-    if (world.NPCs && layersVisibility.NPCs)
-        world.NPCs.forEach(npc => {
+    if (state.canvas.worldObject.NPCs && state.layersVisibility.NPCs)
+        state.canvas.worldObject.NPCs.forEach(npc => {
             try {
                 temp0 = NPCsSprites[npc.id][2] * ( 2 + zoomLevel * 0.2 );
                 temp1 = NPCsSprites[npc.id][3] * ( 2 + zoomLevel * 0.2 );
 
-                if (npc.homePosition)
+                if (npc.townNPC)
                     ctx.drawImage(sprite,
                         NPCsSprites[npc.id][0], NPCsSprites[npc.id][1], NPCsSprites[npc.id][2], NPCsSprites[npc.id][3],
                         npc.homePosition.x * tilePixelRatio - posX * tilePixelRatio - temp0 / 2, npc.homePosition.y * tilePixelRatio - posY * tilePixelRatio - temp1, temp0, temp1);
@@ -673,21 +641,14 @@ const tick = (T) => {
             }
         });
 
-    if (running)
+    if (state.canvas.running)
         requestAnimationFrame(tick, canvas);
 }
 
 export default init;
 export {
-    changeCanvasWorldFile,
-    changeCanvasTool,
-    changeCanvasLayersVisibility,
-    changeCanvasActiveLayer,
-    changeCanvasActiveSize,
-    changeCanvasActiveColor,
-    changeCanvasUnsafe,
-    changeCanvasUnsafeOnlyTiles,
-    changeCanvasIgnoreBounds,
+    canvasChangeState,
+    canvasOnWorldFileChange,
     getCanvasMapData,
     getCanvasMapFile,
     verifyMapFile,

@@ -133,7 +133,7 @@ function render() {
         return;
     }
 
-    let layerImage = {};
+    let layerImage = [];
     Object.values(LAYERS).forEach(LAYER => {
         layerImage[LAYER] = new ImageData(world.header.maxTilesX, world.header.maxTilesY);
     })

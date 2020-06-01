@@ -21,7 +21,7 @@ const permValues = {
    }
 };
 
-function Optionbar({ show, selectedTool, stateChangeOptionbarLayer, stateSetKey, running }) {
+function Optionbar({ show, running, selectedTool }) {
    const ToolIcon = toolsConfig[selectedTool].icon;
    const stroke = toolsConfig[selectedTool].stroke;
 
@@ -62,8 +62,8 @@ function Optionbar({ show, selectedTool, stateChangeOptionbarLayer, stateSetKey,
 
 export default connect(state => {
    return {
-      show: state.app.view.toolbar,
-      selectedTool: state.app.toolbar.tool,
-      running: state.app.running
+      show: state.view.toolbar,
+      selectedTool: state.toolbar.tool,
+      running: state.canvas.running
    };
 })(Optionbar);

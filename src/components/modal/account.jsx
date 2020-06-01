@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { StateChangeUser, stateChangeModal } from "/state/modules/app.js";
 import api from "/utils/api/api.js";
 
 import ModalAccountViewSettings from "/components/modal/account/views/settings.jsx";
@@ -18,19 +17,7 @@ const config = [
    },
 ];
 
-function ModalAccount({ StateChangeUser, stateChangeModal }) {
-   useEffect(() => {
-      const keyDownHandler = (e) => {
-         if (e.code == "Escape")
-            stateChangeModal(null);
-      };
-
-      window.addEventListener("keydown", keyDownHandler);
-      return () => {
-         window.removeEventListener("keydown", keyDownHandler);
-      };
-   }, []);
-
+function ModalAccount({ close, stateChange }) {
    const [selectedCategory, setSelectedCategory] = useState(0);
    const ModalAccountCategoryView = config[selectedCategory].View;
 
@@ -50,14 +37,11 @@ function ModalAccount({ StateChangeUser, stateChangeModal }) {
             }
          </div>
          <div className="modal-account-view">
-            <ModalAccountCategoryView/>
+            <ModalAccountCategoryView close={close}/>
          </div>
       </div>
    );
 }
 
-export default connect(
-   null,
-   { StateChangeUser, stateChangeModal }
-)(ModalAccount);
+export default ModalAccount;
 

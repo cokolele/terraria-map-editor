@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { stateChangeModal } from "/state/modules/app.js";
 import api from "/utils/api/api.js";
 
 import ModalAccountButton from "/components/modal/account/button.jsx";
 
-function ModalErrorReport({ stateChangeModal }) {
+function ModalErrorReport({ close }) {
    const [text, setText] = useState("");
    const [contact, setContact] = useState("");
    const [error, setError] = useState("");
@@ -46,7 +45,7 @@ function ModalErrorReport({ stateChangeModal }) {
          await api.post("/report/error", { text: contact + ": " + text });
       if (fileData)
          api.post("/report/error/map", fileData, false);
-      stateChangeModal("");
+      close();
    }
 
    return (
@@ -67,8 +66,5 @@ function ModalErrorReport({ stateChangeModal }) {
    );
 }
 
-export default connect(
-   null,
-   { stateChangeModal }
-)(ModalErrorReport);
+export default ModalErrorReport;
 

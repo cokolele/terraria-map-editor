@@ -1,11 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { stateChangeUser, stateChangeModal } from "/state/modules/app.js";
+import { stateChange } from "/state/state.js";
 import auth from "/utils/api/auth.js";
 
 import Button from "/components/modal/account/button.jsx";
 
-function ModalAccountViewSettings({ stateChangeModal, stateChangeUser }) {
+function ModalAccountViewSettings({ close, stateChange }) {
    const onLogOut = async () => {
       const logout = await auth.post("/logout");
 
@@ -14,8 +14,8 @@ function ModalAccountViewSettings({ stateChangeModal, stateChangeUser }) {
          return;
       }
 
-      stateChangeUser(null);
-      stateChangeModal(null);
+      stateChange("user", null);
+      close()
    }
 
    return (
@@ -27,5 +27,5 @@ function ModalAccountViewSettings({ stateChangeModal, stateChangeUser }) {
 
 export default connect(
    null,
-   { stateChangeUser, stateChangeModal }
+   { stateChange }
 )(ModalAccountViewSettings);

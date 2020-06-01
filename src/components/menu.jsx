@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import menu from "/app/menu.js";
-import { stateChangeModal, stateToggleUnsafe, stateToggleUnsafeOnlyTiles, stateToggleIgnoreBounds } from "/state/modules/app.js";
+import { stateChange, stateToggle } from "/state/state.js";
 
 import MenuFolder from "/components/menu/folder.jsx";
 import MenuFolderButton from "/components/menu/folder-button.jsx";
 import { AccountBoxIcon, GithubIcon } from "/components/icon.jsx";
 import "/components/styles/menu.css";
 
-function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, unsafe, stateToggleUnsafe, unsafeOnlyTiles, stateToggleUnsafeOnlyTiles, ignoreBounds, stateToggleIgnoreBounds }) {
-   useEffect(() => {
-      menu.setWorldObject(worldObject);
-   }, [worldObject]);
-
+function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnlyTiles, ignoreBounds}) {
    const [currentTab, setCurrentTab] = useState(false);
 
    const DIVIDER = "__DIVIDER__";
@@ -73,17 +69,23 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, un
          "Disable checking sections offsets (helps with corrupted files)": {
             type: "checkbox",
             checked: unsafe,
-            onClick: stateToggleUnsafe
+            onClick: () => {
+               stateToggle(["canvas", "unsafe"]);
+            }
          },
          "Enable ignoring buffer bounds (helps with missing data in files)": {
             type: "checkbox",
             checked: ignoreBounds,
-            onClick: stateToggleIgnoreBounds
+            onClick: () => {
+               stateToggle(["canvas", "ignoreBounds"]);
+            }
          },
          "Enable loading only tiles (any valid >1.3.5.3 map viewing ONLY)": {
             type: "checkbox",
             checked: unsafeOnlyTiles,
-            onClick: stateToggleUnsafeOnlyTiles
+            onClick: () => {
+               stateToggle(["canvas", "unsafeOnlyTiles"]);
+            }
          },
          DIVIDER,
          "NOTE: Resaving the map in the latest Terraria should fix any problems": {
@@ -92,16 +94,16 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, un
          },
       },
       "Report": {
-         "Error": () => { stateChangeModal("errorreport") },
-         "Suggestions or feature requests": () => { stateChangeModal("suggestionreport") }
+         "Error": () => { stateChange("modal", "errorreport") },
+         "Suggestions or feature requests": () => { stateChange("modal", "suggestionreport") }
       }
    };
 
    const onAccountClick = () => {
-      if (!loggedIn)
-         stateChangeModal("signin");
+      if (user !== null)
+         stateChange("modal", "account");
       else
-         stateChangeModal("account");
+         stateChange("modal", "signin");
    }
 
    const onGithubClick = () => {
@@ -122,9 +124,9 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, un
          }
          </div>
          <div className="menu">
-            <MenuFolderButton label="version 2.2.6" onClick={() => {console.log("hey baby!")}}/>
+            <MenuFolderButton label="version 2.2.7" onClick={() => {console.log("hey baby!")}}/>
             <MenuFolderButton label="supported game version: 1.4.0.4" onClick={() => {console.log(";)")}}/>
-            <MenuFolderButton label={loggedIn ? user.username : "Account"} onClick={onAccountClick} Icon={AccountBoxIcon}/>
+            <MenuFolderButton label={user !== null ? user.username : "Account"} onClick={onAccountClick} Icon={AccountBoxIcon}/>
             <MenuFolderButton label="Github" onClick={onGithubClick} Icon={GithubIcon}/>
          </div>
       </div>
@@ -133,15 +135,13 @@ function Menu({ view, running, loggedIn, user, stateChangeModal, worldObject, un
 
 export default connect(state => {
       return {
-         view: state.app.view,
-         running: state.app.running,
-         loggedIn: state.app.loggedIn,
-         user: state.app.user,
-         worldObject: state.app.worldObject,
-         unsafe: state.app.unsafe,
-         unsafeOnlyTiles: state.app.unsafeOnlyTiles,
-         ignoreBounds: state.app.ignoreBounds
+         view: state.view,
+         user: state.user,
+         running: state.canvas.running,
+         unsafe: state.canvas.unsafe,
+         unsafeOnlyTiles: state.canvas.unsafeOnlyTiles,
+         ignoreBounds: state.canvas.ignoreBounds
       };
    },
-   { stateChangeModal, stateToggleUnsafe, stateToggleUnsafeOnlyTiles, stateToggleIgnoreBounds }
+   { stateChange, stateToggle }
 )(Menu);

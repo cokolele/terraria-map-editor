@@ -50,7 +50,7 @@ function Sidebar({ show, running }) {
 
 export default connect(state => {
    return {
-      show: state.app.view.sidebar,
-      running: state.app.running
+      show: state.view.sidebar,
+      running: state.canvas.running
    }
 })(Sidebar);

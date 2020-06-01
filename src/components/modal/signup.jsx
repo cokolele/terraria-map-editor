@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { stateChangeUser, stateChangeModal } from "/state/modules/app.js";
+import { stateChange } from "/state/state.js";
 import auth from "/utils/api/auth.js";
 
 import ModalSignInput from "/components/modal/sign/input.jsx";
@@ -8,7 +8,7 @@ import ModalSignButtonInlineText from "/components/modal/sign/button-inline-text
 import ModalSignButton from "/components/modal/sign/button.jsx";
 import "/components/styles/modal/sign.css";
 
-function ModalSignup({ stateChangeUser, stateChangeModal }) {
+function ModalSignup({ close, stateChange }) {
    const [username, setUsername] = useState("");
    const [password, setPassword] = useState("");
    const [password2, setPassword2] = useState("");
@@ -17,9 +17,7 @@ function ModalSignup({ stateChangeUser, stateChangeModal }) {
 
    useEffect(() => {
       const keyDownHandler = (e) => {
-         if (e.code == "Escape")
-            stateChangeModal(null);
-         else if (e.code == "Enter" || e.code == "NumpadEnter")
+         if (e.code == "Enter" || e.code == "NumpadEnter")
             onSubmit();
       };
 
@@ -88,12 +86,12 @@ function ModalSignup({ stateChangeUser, stateChangeModal }) {
          return;
       }
 
-      stateChangeUser(userRegistration.user);
-      stateChangeModal(null);
+      stateChange("user", userRegistration.user);
+      close();
    }
 
    const onClickSignIn = () => {
-      stateChangeModal("signin");
+      stateChange("modal", "signin");
    }
 
    return (
@@ -113,6 +111,6 @@ function ModalSignup({ stateChangeUser, stateChangeModal }) {
 
 export default connect(
    null,
-   { stateChangeUser, stateChangeModal }
+   { stateChange }
 )(ModalSignup);
 

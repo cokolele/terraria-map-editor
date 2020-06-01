@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { stateChangeWorldObject } from "/state/modules/app.js"
+import { stateChange } from "/state/state.js"
 
 import OptionbarInput from "/components/inputs/input.jsx";
 import OptionbarInputSlider from "/components/inputs/input-slider.jsx";
@@ -11,7 +11,7 @@ import "/components/styles/sidebar/views/general.css";
 import LAYERS from "/utils/dbs/LAYERS.js";
 import { setLayerImageRectangleColor } from "/app/canvas/main.js";
 
-function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject, unsafeOnlyTiles }) {
+function SidebarCategoryGeneral({ worldObject, stateChange, unsafeOnlyTiles }) {
    const [header, setHeader] = useState(worldObject.header);
    const version = worldObject.fileFormatHeader.version;
 
@@ -121,7 +121,7 @@ function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject, unsafeOnl
       }
 
       setHeader({...header});
-      stateChangeWorldObject({...worldObject, header});
+      stateChange(["canvas", "worldObject"], {...worldObject, header});
    }
 
    if (unsafeOnlyTiles)
@@ -569,9 +569,9 @@ function SidebarCategoryGeneral({ worldObject, stateChangeWorldObject, unsafeOnl
 export default connect(
    state => {
       return {
-         worldObject: state.app.worldObject,
-         unsafeOnlyTiles: state.app.unsafeOnlyTiles
+         worldObject: state.canvas.worldObject,
+         unsafeOnlyTiles: state.canvas.unsafeOnlyTiles
       };
    },
-   { stateChangeWorldObject }
+   { stateChange }
 )(SidebarCategoryGeneral);

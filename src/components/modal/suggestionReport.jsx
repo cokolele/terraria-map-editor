@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { stateChangeModal } from "/state/modules/app.js";
 import api from "/utils/api/api.js";
 
 import ModalAccountButton from "/components/modal/account/button.jsx";
 
-function ModalSuggestionReport({ stateChangeModal }) {
+function ModalSuggestionReport({ close }) {
    const [text, setText] = useState("");
    const [contact, setContact] = useState("");
 
    const onSubmit = async () => {
       if (text.trim())
          await api.post("/report/suggestion", { text: contact + ": " + text });
-      stateChangeModal("");
+      close();
    }
 
    return (
@@ -30,8 +29,5 @@ function ModalSuggestionReport({ stateChangeModal }) {
    );
 }
 
-export default connect(
-   null,
-   { stateChangeModal }
-)(ModalSuggestionReport);
+export default ModalSuggestionReport;
 
