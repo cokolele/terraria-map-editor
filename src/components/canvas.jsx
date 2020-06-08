@@ -3,13 +3,13 @@ import { connect } from "react-redux";
 
 import "/components/styles/canvas.css";
 
-import init from "/app/canvas/main.js";
+import Main from "/canvas/main.js";
 
-function Canvas({ worldFile, running, stateForCanvas }) {
+function Canvas({ worldFile, running }) {
    const canvasEl = useRef(null);
 
    useEffect(() => {
-      init(canvasEl.current);
+      Main.init(canvasEl.current);
    }, []);
 
    return (

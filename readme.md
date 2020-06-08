@@ -9,7 +9,7 @@
 
 Terraria world file editor in browser
 
-\- supports only maps generated in 1.3.5.3
+\- supports maps from 1.3.5.3 to 1.4.0.5
 
 Feel free to contribute 🌳
 
@@ -35,18 +35,5 @@ useBuiltIns: "usage",
 (changing getEnvPlugins options for babel to import only used polyfills)
 <br>\#>npm start
 
-#### API installation (mysql/mariadb)
+#### [API](https://github.com/cokolele/terraria-map-editor-api "terraria-map-editor-api")
 
-\#>cd express-server
-<br>\#>npm install
-<br>\>create a file */configs/secrets.js* with a content<br>
-```javascript
-module.exports = {
-    dbRootPass: "replace this with your local database password",
-    dbRootPassProd: "replace this with your production database password",
-    sessionSecret: "replace this with your express session secret",
-};
-```
-\>setup your profiles in */configs/profiles/*
-<br>\>run */configs/sql/twe_create.sql* in your database
-<br>\#>npm run api:start

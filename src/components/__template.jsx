@@ -1,5 +1,8 @@
 import React from "react";
 
+import { connect } from "react-redux";
+import { stateChange } from "/state/state.js";
+
 import "/components/styles/";
 
 function Template() {
@@ -20,10 +23,10 @@ export default connect(
          prop: state.prop,
       };
    },
-   { changeState }
+   { stateChange }
 )(Template);
 
 export default connect(
    null,
-   { changeState }
+   { stateChange }
 )(Template);

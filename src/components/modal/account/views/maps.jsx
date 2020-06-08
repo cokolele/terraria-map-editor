@@ -5,7 +5,7 @@ import { stateChange, stateTriggerResetWorld } from "/state/state.js";
 
 import Button from "/components/modal/account/button.jsx";
 
-import { verifyMapFile } from "/app/canvas/main.js";
+//import { verifyMapFile } from "/app/canvas/main.js";
 
 function ModalAccountViewMap({ close, stateChange, stateTriggerResetWorld }) {
    const [maps, setMaps] = useState([]);

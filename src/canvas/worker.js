@@ -10,38 +10,41 @@ let world;
 self.onmessage = async ({ data }) => {
     try {
         switch(data.action) {
-            case "PARSE_AND_RENDER_MAP_RETURN_WITHOUT_BLOCKS":
-                world = await parse(data.file, data.unsafe, data.unsafeOnlyTiles, data.ignoreBounds);
-                const layerImage = render();
 
-                postMessage({
-                    action: "RETURN_IMAGES_INCOMING",
-                });
-                postMessage({
-                    action: "RETURN_IMAGES",
-                    layerImage
-                });
-                postMessage({
-                    action: "RETURN_WORLD_OBJECT_INCOMING",
-                });
+            case "PARSE_WORLD_FILE":
+                world = await parse(data.worldFile, data.unsafe, data.unsafeOnlyTiles, data.ignoreBounds);
                 postMessage({
                     action: "RETURN_WORLD_OBJECT",
-                    world: {
+                    worldObject: {
                         ...world,
-                        tiles: null
+                        tiles: undefined
                     }
                 });
                 break;
-            case "SAVE_MAP":
+
+            case "RENDER_LAYERS_IMAGES":
+                const layersImages = render();
+                postMessage({
+                    action: "RETURN_LAYERS_IMAGES_INCOMING",
+                });
+                postMessage({
+                    action: "RETURN_LAYERS_IMAGES",
+                    layersImages
+                });
+                break;
+
+            case "SAVE_WORLD_FILE":
                 const newWorldFile = save({
                     ...data.worldObject,
                     tiles: world.tiles,
                 });
                 postMessage({
-                    action: "RETURN_MAP_FILE",
+                    action: "RETURN_NEW_WORLD_FILE",
                     newWorldFile
                 });
                 break;
+
+
             case "VERIFY_FILE":
                 const valid = await verify(data.file);
                 postMessage({
@@ -62,12 +65,13 @@ self.onmessage = async ({ data }) => {
                 })
                 break;
         }
-    } catch (error) {
+    } catch (e) {
+        console.error("worker error: ", e)
         postMessage({
             action: "ERROR",
             error: {
-                ...error,
-                stack: error.stack
+                ...e,
+                stack: e.stack
             }
         });
     }
@@ -75,7 +79,7 @@ self.onmessage = async ({ data }) => {
 
 async function parse(file, unsafe, unsafeOnlyTiles, ignoreBounds) {
     postMessage({
-        action: "RETURN_PERCENTAGE_PARSING_INCOMING",
+        action: "RETURN_PARSING_PERCENT_INCOMING",
     });
 
     let world = await new terrariaWorldParser().loadFile(file);
@@ -84,10 +88,10 @@ async function parse(file, unsafe, unsafeOnlyTiles, ignoreBounds) {
             sections: ["tiles", "necessary"],
             ignorePointers: unsafe,
             ignoreBounds,
-            progressCallback: (percentVal) => {
+            progressCallback: (percent) => {
                 postMessage({
-                    action: "RETURN_PERCENTAGE_PARSING",
-                    percentage: percentVal
+                    action: "RETURN_PARSING_PERCENT",
+                    percent: percent
                 });
             }
         });
@@ -118,10 +122,10 @@ async function parse(file, unsafe, unsafeOnlyTiles, ignoreBounds) {
         return world.parse({
             ignorePointers: unsafe,
             ignoreBounds,
-            progressCallback: (percentVal) => {
+            progressCallback: (percent) => {
                 postMessage({
-                    action: "RETURN_PERCENTAGE_PARSING",
-                    percentage: percentVal
+                    action: "RETURN_PARSING_PERCENT",
+                    percent: percent
                 });
             }
         });
@@ -129,13 +133,13 @@ async function parse(file, unsafe, unsafeOnlyTiles, ignoreBounds) {
 
 function render() {
     if (!world) {
-        throw new Error("web-worker: save: no world loaded");
+        throw new Error("worker error: render: no world loaded");
         return;
     }
 
-    let layerImage = [];
+    let layersImages = [];
     Object.values(LAYERS).forEach(LAYER => {
-        layerImage[LAYER] = new ImageData(world.header.maxTilesX, world.header.maxTilesY);
+        layersImages[LAYER] = new ImageData(world.header.maxTilesX, world.header.maxTilesY);
     })
 
     const bgLayers = {
@@ -147,7 +151,7 @@ function render() {
     };
 
     postMessage({
-        action: "RETURN_PERCENTAGE_RENDERING_INCOMING",
+        action: "RETURN_RENDERING_PERCENT_INCOMING",
     });
 
 
@@ -161,24 +165,24 @@ function render() {
                 a:0
             };
         }
-        layerImage[LAYER].data[position]     = color.r;
-        layerImage[LAYER].data[position + 1] = color.g;
-        layerImage[LAYER].data[position + 2] = color.b;
-        layerImage[LAYER].data[position + 3] = color.a;
+        layersImages[LAYER].data[position]     = color.r;
+        layersImages[LAYER].data[position + 1] = color.g;
+        layersImages[LAYER].data[position + 2] = color.b;
+        layersImages[LAYER].data[position + 3] = color.a;
     }
 
     let temp = [];
 
-    const drawPercentil = world.header.maxTilesY / 100;
-    let drawPercentilNext = 0;
-    let drawPercentage = 0;
+    const drawOnePercent = world.header.maxTilesY / 100;
+    let drawPercentNext = 0;
+    let drawPercent = 0;
     for (let y = 0; y < world.header.maxTilesY; y++) {
-        if (y > drawPercentilNext) {
-            drawPercentilNext += drawPercentil
-            drawPercentage++;
+        if (y > drawPercentNext) {
+            drawPercentNext += drawOnePercent;
+            drawPercent++;
             postMessage({
-                action: "RETURN_PERCENTAGE_RENDERING",
-                percentage: drawPercentage
+                action: "RETURN_RENDERING_PERCENT",
+                percent: drawPercent
             });
         }
 
@@ -229,7 +233,7 @@ function render() {
         }
     }
 
-    return layerImage;
+    return layersImages;
 }
 
 function save(world) {
@@ -238,13 +242,17 @@ function save(world) {
         return;
     }
 
+    postMessage({
+        action: "RETURN_SAVING_PERCENT_INCOMING",
+    });
+
     let file = new terrariaWorldSaver();
     return file.save({
         world,
-        progressCallback: (percentage) => {
+        progressCallback: (percent) => {
             postMessage({
-                action: "RETURN_PERCENTAGE_SAVING",
-                percentage
+                action: "RETURN_SAVING_PERCENT",
+                percent
             });
         }
     });

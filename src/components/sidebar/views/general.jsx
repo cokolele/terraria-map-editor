@@ -9,7 +9,7 @@ import OptionbarInputCheckbox from "/components/inputs/input-checkbox.jsx";
 import "/components/styles/sidebar/views/general.css";
 
 import LAYERS from "/utils/dbs/LAYERS.js";
-import { setLayerImageRectangleColor } from "/app/canvas/main.js";
+//import { setLayerImageRectangleColor } from "/app/canvas/main.js";
 
 function SidebarCategoryGeneral({ worldObject, stateChange, unsafeOnlyTiles }) {
    const [header, setHeader] = useState(worldObject.header);

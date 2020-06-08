@@ -3,7 +3,7 @@ import store from "/state/store.js";
 import { stateChange, stateToggle, stateTriggerResetWorld } from "/state/state.js";
 import api from "/utils/api/api.js";
 
-import { getCanvasMapData, getCanvasMapFile } from "/app/canvas/main.js";
+import Main from "/canvas/main.js";
 
 const onNewFile = (e, file) => {
     if (file == undefined) {
@@ -15,50 +15,55 @@ const onNewFile = (e, file) => {
         });
         inputElHidden.click();
     } else {
-        store.dispatch(stateTriggerResetWorld());
         store.dispatch(stateChange(["status", "description"], "Loading map from file"));
         store.dispatch(stateChange(["canvas", "worldFile"], file));
     }
 }
 
 const onSaveImage = async () => {
-    const data = getCanvasMapData({ fileName: true, imageUrlPng: true });
+    const worldImageUrl = Main.extensions.getImageUrl();
+    const worldFileName = Main.state.canvas.worldFile.name;
 
-    if (data !== null) {
-        let mapBlob = await fetch(data.imageUrlPng);
-        mapBlob = await mapBlob.blob();
-        mapBlob = new Blob([mapBlob], {type: "image/png"});
+    if (worldImageUrl === null)
+        return;
 
-        const blobUrl = URL.createObjectURL(mapBlob);
+    let worldPngBlob = await fetch(worldImageUrl);
+    worldPngBlob = await worldPngBlob.blob();
+    worldPngBlob = new Blob([worldPngBlob], { type: "image/png" });
 
-        const link = document.createElement("a");
-        link.download = data.fileName.replace(" ", "_") + ".png";
-        link.href = blobUrl;
-        link.click();
-    }
+    const worldPngBlobUrl = URL.createObjectURL(worldPngBlob);
+
+    const link = document.createElement("a");
+    link.download = worldFileName.replace(" ", "_") + ".png";
+    link.href = worldPngBlobUrl;
+    link.click();
+
+    URL.revokeObjectURL(worldPngBlobUrl);
 }
 
 const onSaveFile = async (e) => {
     if (!localSettings.savingDisclaimerChecked)
         store.dispatch(stateChange("modal", "savingdisclaimer"));
 
-    const fileName = getCanvasMapData({ fileName: true });
-    const file = await getCanvasMapFile();
-    if (!file) return;
+    const newWorldFile = await Main.extensions.saveWorldFile();
+    const newWorldFileName = Main.state.canvas.worldObject.header.mapName.replace(" ", "_") + ".wld";
+
+    if (newWorldFile === null)
+        return;
 
     const link = document.createElement("a");
-    const blob = new Blob([file], {type: "octet/stream"});
-    const url = window.URL.createObjectURL(blob);
+    const blob = new Blob([newWorldFile], { type: "octet/stream" });
+    const url = URL.createObjectURL(blob);
 
     link.href = url;
-    link.download = fileName + ".wld";
+    link.download = newWorldFileName;
     link.click();
 
-    window.URL.revokeObjectURL(url);
+    URL.revokeObjectURL(url);
 }
 
 const onCloseFile = (e) => {
-    store.dispatch(stateTriggerResetWorld());
+    store.dispatch(stateChange(["canvas", "worldFile"], null));
 }
 
 const onExampleMap = async (map) => {
@@ -71,8 +76,13 @@ const onExampleMap = async (map) => {
         return;
     }
 
+    if (mapFile.type == "") {
+        store.dispatch(stateChange(["status", "description"], "Map download failed"));
+        store.dispatch(stateChange(["status", "error"], "Unexpected network error"));
+        return;
+    }
+
     mapFile = new File([mapFile], map + ".wld");
-    store.dispatch(stateTriggerResetWorld());
     store.dispatch(stateChange(["canvas", "worldFile"], mapFile));
 }
 

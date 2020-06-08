@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { stateChange } from "/state/state.js";
 
-import OptionbarInputSelect from "/components/inputs/input-select.jsx";
+import InputSelect from "/components/inputs/input-select.jsx";
 
 import LAYERS from "/utils/dbs/LAYERS.js";
 
@@ -13,24 +13,20 @@ const LayersOptions = [
    ["Liquids", LAYERS.LIQUIDS],
 ]
 
-function OptionbarOptionLayer({ stateChange, value, onChange }) {
-   const [activeLayer, setActiveLayer] = useState(value);
-
-   const _onChange = (LAYER) => {
+function OptionbarOptionLayer({ stateChange, LAYER }) {
+   const onChange = (LAYER) => {
       LAYER = parseInt(LAYER);
-      setActiveLayer(LAYER);
       stateChange(["optionbar", "layer"], LAYER);
-      onChange(LAYER);
    }
 
-   useEffect(() => {
-      _onChange(value);
-   }, []);
-
-   return <OptionbarInputSelect label="Layer" options={LayersOptions} value={activeLayer} onChange={_onChange}/>;
+   return <InputSelect label="Layer" options={LayersOptions} value={LAYER} onChange={onChange}/>;
 }
 
 export default connect(
-   null,
+   state => {
+      return {
+         LAYER: state.optionbar.layer
+      };
+   },
    { stateChange }
 )(OptionbarOptionLayer);

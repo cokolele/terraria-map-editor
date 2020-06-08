@@ -7,18 +7,15 @@ import LAYERS from "/utils/dbs/LAYERS.js";
 
 const GENERAL_CHANGE = "twe/app/GENERAL_CHANGE";
 const GENERAL_TOGGLE = "twe/app/GENERAL_TOGGLE";
-const TRIGGER_RESET_WORLD = "twe/app/TRIGGER_RESET_WORLD";
 
 let defaultState = {
     canvas: {
         running: false,
-        worldFile: null,
+        worldFile: undefined,
         worldObject: null,
         unsafe: false,
         unsafeOnlyTiles: false,
         ignoreBounds: false,
-        mouseImagePosX: null,
-        mouseImagePosY: null
     },
     status: {
         description: null,
@@ -37,7 +34,7 @@ let defaultState = {
     optionbar: {
         layer: LAYERS.TILES,
         size: 6,
-        color: 0
+        id: 0
     },
     layersVisibility: {
         NPCs: true,
@@ -53,10 +50,12 @@ export default function app(state = defaultState, action) {
     switch (action.type) {
 
         case GENERAL_CHANGE:
+            if (window.statedebug)
+                console.log(JSON.stringify(action.args), state);
             if (typeof action.args[0] == "string") // key value pair
                 state[action.args[0]] = action.args[1];
             else {
-                if (action.args[1]) { //nested key value pair
+                if (action.args[1] !== undefined) { //nested key value pair
                     let _state = state, key = action.args[0].pop();
                     action.args[0].forEach(e => { _state = _state[e] });
                     _state[key] = action.args[1];
@@ -75,6 +74,8 @@ export default function app(state = defaultState, action) {
             return {...state};
 
         case GENERAL_TOGGLE:
+            if (window.statedebug)
+                console.log(JSON.stringify(action.args), state);
             if (typeof action.args[0] == "string") // key value pair
                 state[action.args[0]] = !state[action.args[0]];
             else { //nested key value pair
@@ -83,15 +84,6 @@ export default function app(state = defaultState, action) {
                 _state[key] = !_state[key];
             }
             return {...state};
-
-        case TRIGGER_RESET_WORLD:
-            state.canvas.running = false;
-            state.canvas.worldFile = null;
-            state.canvas.worldObject = null;
-            state.status.description = null;
-            state.status.percent = null;
-            state.status.error = null;
-            return { ...state };
 
         default:
             return {...state};
@@ -107,12 +99,7 @@ function stateToggle(...args) {
     return { type: GENERAL_TOGGLE, args };
 }
 
-function stateTriggerResetWorld() {
-    return { type: TRIGGER_RESET_WORLD };
-}
-
 export {
     stateChange,
-    stateToggle,
-    stateTriggerResetWorld
+    stateToggle
 };
