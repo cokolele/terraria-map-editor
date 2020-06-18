@@ -125,7 +125,7 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
          </div>
          <div className="menu">
             <MenuFolderButton label="version 2.2.7" onClick={() => {console.log("hey baby!")}}/>
-            <MenuFolderButton label="supported game version: 1.4.0.4" onClick={() => {console.log(";)")}}/>
+            <MenuFolderButton label="supported game version: 1.4.0.5" onClick={() => {console.log(";)")}}/>
             <MenuFolderButton label={user !== null ? user.username : "Account"} onClick={onAccountClick} Icon={AccountBoxIcon}/>
             <MenuFolderButton label="Github" onClick={onGithubClick} Icon={GithubIcon}/>
          </div>

@@ -58,4 +58,6 @@
     padding-left: 8px;
     font-size: 0.77rem;
     border: none;
+    position: relative;
+    z-index: 1000;
 }
