@@ -1,22 +1,18 @@
-import WorkerError from "/app/canvas/workerInterfaces/errors/WorkerError.js";
-import WorkerInterfaceError from "/app/canvas/workerInterfaces/errors/WorkerInterfaceError.js";
-import Main from "/app/canvas/main.js";
+import Main from "/canvas/main.js";
+
+import WorkerError from "/canvas/workerInterfaces/errors/WorkerError.js";
 
 //basic
 export default function() {
     Main.worker.onmessage = ({ data }) => {
-        try {
-            switch(data.action) {
-                case "ERROR":
-                    WorkerError("basic", data.e);
-                    break;
-            }
-        } catch(e) {
-            WorkerInterfaceError("basic", e);
+        switch(data.action) {
+            case "ERROR":
+                WorkerError("basic", data.error);
+                break;
         }
     }
 
-    worker.postMessage({
+    Main.worker.postMessage({
         action: "none"
     });
 }
@@ -25,21 +21,16 @@ export default function() {
 export default function() {
     return new Promise((resolve, reject) => {
         Main.worker.onmessage = ({ data }) => {
-            try {
-                switch(data.action) {
-                    case "ERROR":
-                        WorkerError("returning", data.e);
-                        resolve(null);
-                        break;
-                }
-            } catch(e) {
-                WorkerInterfaceError("returning", e);
-                resolve(null);
+            switch(data.action) {
+                case "ERROR":
+                    WorkerError("returning", data.e);
+                    resolve(null);
+                    break;
             }
         }
 
-        worker.postMessage({
+        Main.worker.postMessage({
             action: "none"
         });
-    }
+    });
 }

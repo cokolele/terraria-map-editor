@@ -1,8 +1,8 @@
 import LAYERS from "/utils/dbs/LAYERS.js";
 
-let pointColors = {};
+let colors = {};
 
-pointColors[LAYERS.TILES] = [
+colors[LAYERS.TILES] = [
     {r:151,g:107,b:75,a:255},
     {r:128,g:128,b:128,a:255},
     {r:28,g:216,b:94,a:255},
@@ -919,7 +919,7 @@ pointColors[LAYERS.TILES] = [
     {r:235,g:235,b:249,a:255},
 ]
 
-pointColors[LAYERS.WALLS] = [
+colors[LAYERS.WALLS] = [
     {r:0,g:0,b:0,a:0},
     {r:52,g:52,b:52,a:255},
     {r:88,g:61,b:46,a:255},
@@ -1239,7 +1239,7 @@ pointColors[LAYERS.WALLS] = [
 ]
 
 /*
-pointColors[LAYERS.WALLS_PAINTED] = {
+colors[LAYERS.WALLS_PAINTED] = {
     {r:210,g:144,b:45,a:125},
     {r:255,g:30,b:30,a:125},
     {r:255,g:30,b:30,a:175},
@@ -1249,13 +1249,13 @@ pointColors[LAYERS.WALLS_PAINTED] = {
     {r:255,g:255,b:0,a:175},
 }*/
 
-pointColors[LAYERS.LIQUIDS] = {
+colors[LAYERS.LIQUIDS] = {
     "water": {r:51,g:133,b:255,a:215},
     "lava": {r:253,g:32,b:3,a:215},
     "honey": {r:255,g:255,b:0,a:200}
 };
 
-pointColors[LAYERS.BACKGROUND] = {
+colors[LAYERS.BACKGROUND] = {
     "space": {r:51,g:102,b:153,a:255},
     "sky": {r:155,g:209,b:255,a:255},
     "ground": {r:88,g:61,b:46,a:255},
@@ -1263,7 +1263,7 @@ pointColors[LAYERS.BACKGROUND] = {
     "underworld": {r:50,g:44,b:38,a:255}
 };
 
-pointColors[LAYERS.WIRES] = {
+colors[LAYERS.WIRES] = {
     "red": {r:255,g:0,b:0,a:100},
     "green": {r:0,g:255,b:0,a:100},
     "blue": {r:0,g:0,b:255,a:100},
@@ -1606,7 +1606,7 @@ function getTileVariantIndex(id, frameX, frameY) {
     }
 }
 
-export default pointColors;
+export default colors;
 export {
     getTileVariantIndex
 };

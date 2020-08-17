@@ -2,15 +2,21 @@ import React, { useState } from "react";
 
 import "/components/styles/input.css";
 
-function Input({ value, onChange, width, int, float, min, max, roundTo = 2, className }) {
+function Input({ value, onChange, width, int, float, min, max, roundTo = 2, className, canBeNull = false }) {
    const _onChange = (e) => {
       if (((float || int) && isNaN(e.target.value)) || (min !== undefined && e.target.value < min) || (max !== undefined && e.target.value > max))
          return;
 
       if (float)
-         onChange(Math.round(e.target.value * (10 * roundTo)) / 100);
+         if (canBeNull && e.target.value === "")
+            onChange("");
+         else
+            onChange(Math.round(e.target.value * (10 * roundTo)) / 100);
       else if (int)
-         onChange(Math.round(e.target.value));
+         if (canBeNull && e.target.value === "")
+            onChange("");
+         else
+            onChange(Math.round(e.target.value));
       else
          onChange(e.target.value);
    };

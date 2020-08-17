@@ -7,7 +7,10 @@ export default async function() {
     if (Main.state.canvas.running)
         Main.loop.stop();
 
-    store.dispatch(stateChange(["status", "error"], null));
+    store.dispatch(stateChange([
+        [["status", "error"], null],
+        [["status", "loading"], true]
+    ]));
 
     const worldObject = await Main.workerInterfaces.parseWorldFile({
         worldFile: Main.state.canvas.worldFile,
@@ -53,5 +56,8 @@ export default async function() {
 
     Main.layersImages = layersImages;
     Main.loop.start();
-    store.dispatch(stateChange(["status", "description"], "Finished"));
+    store.dispatch(stateChange([
+        [["status", "description"], "Finished"],
+        [["status", "loading"], false]
+    ]));
 }

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import api from "/utils/api/api.js";
 import { connect } from "react-redux";
-import { stateChange, stateTriggerResetWorld } from "/state/state.js";
+import { stateChange } from "/state/state.js";
 
 import Button from "/components/modal/account/button.jsx";
 
-//import { verifyMapFile } from "/app/canvas/main.js";
+import verifyWorldFileFormat from "/canvas/extensions/verifyWorldFileFormat.js";
 
-function ModalAccountViewMap({ close, stateChange, stateTriggerResetWorld }) {
+function ModalAccountViewMap({ close, stateChange }) {
    const [maps, setMaps] = useState([]);
    const [selectedRow, setSelectedRow] = useState(null);
    const [error, setError] = useState("");
@@ -49,14 +49,9 @@ function ModalAccountViewMap({ close, stateChange, stateTriggerResetWorld }) {
             return;
          }
 
-         const valid = await verifyMapFile(file);
-         if (valid !== true) {
-            if (valid.name == "TerrariaWorldParserError")
-               setError(valid.messageOnly);
-            else
-               setError("Unexpected error while verifying the map");
-            return;
-         }
+         const valid = await verifyWorldFileFormat(file);
+         if (!valid)
+            setError("Invalid world file format");
 
          const fileData = new FormData();
          fileData.append("map", file);
@@ -86,7 +81,6 @@ function ModalAccountViewMap({ close, stateChange, stateTriggerResetWorld }) {
       }
 
       mapFile = new File([mapFile], maps[selectedRow].name);
-      stateTriggerResetWorld();
       stateChange(["canvas", "worldFile"], mapFile);
    }
 
@@ -131,6 +125,6 @@ function ModalAccountViewMap({ close, stateChange, stateTriggerResetWorld }) {
 
 export default connect(
    null,
-   { stateChange, stateTriggerResetWorld }
+   { stateChange }
 )(ModalAccountViewMap);
 

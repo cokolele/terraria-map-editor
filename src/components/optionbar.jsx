@@ -21,7 +21,7 @@ function Optionbar({ show, running, selectedTool }) {
             </div>
             <div className="optionbar-divider"></div>
             {
-               running && selectedTool != "move" && selectedTool != "select" &&
+               running && selectedTool != "move" && selectedTool != "select" && selectedTool != "tileInfo" &&
                <>
                   <OptionbarOptionLayer/>
                   {

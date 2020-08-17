@@ -24,6 +24,13 @@ const ToolMoveIcon = ({ size=24 }) => (
    </svg>
 );
 
+const ToolTileInfo = ({ size=24 }) => (
+   <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24">
+      <path d="M12.9,10.7l-7.2,0.7L0,17V0L12.9,10.7z"/>
+      <path d="M17,19.2c-0.1-0.4-0.2-0.8-0.2-1.2c0-1,0.5-1.9,1.4-2.7c0.6-0.5,1-0.9,1.2-1.2s0.3-0.7,0.3-1.1c0-0.4-0.1-0.8-0.4-1c-0.3-0.3-0.7-0.4-1.1-0.4c-1.1,0-2.1,0.4-3,1.2v-2.7c1-0.6,2.1-0.9,3.3-0.9c1.3,0,2.3,0.3,3,0.9s1.1,1.4,1.1,2.5c0,0.7-0.1,1.2-0.4,1.8s-0.8,1.1-1.6,1.7c-0.6,0.5-1,0.9-1.1,1.2s-0.2,0.6-0.2,0.9c0,0.3,0.1,0.6,0.2,0.9H17z M16.7,21.8c0-0.4,0.2-0.8,0.5-1.1s0.7-0.4,1.2-0.4c0.5,0,0.8,0.1,1.2,0.4c0.3,0.3,0.5,0.6,0.5,1.1c0,0.4-0.2,0.8-0.5,1.1c-0.3,0.3-0.7,0.4-1.1,0.4c-0.5,0-1-0.1-1.3-0.4S16.7,22.2,16.7,21.8z"/>
+   </svg>
+);
+
 const ToolSelectIcon = ({ size=24 }) => (
    <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24">
       <path d="M1.5,14.5H0v-5h1.5V14.5z M6.5,22v-1.5h-5V22H6.5z M14.5,22v-1.5h-5V22H14.5z M22.5,22v-1.5h-5V22H22.5zM6.5,3.5V2h-5v1.5H6.5z M14.5,3.5V2h-5v1.5H14.5z M22.5,3.5V2h-5v1.5H22.5z M1.5,2H0v4h1.5V2z M1.5,18H0v4h1.5V18z M24,9.5h-1.5v5H24V9.5z M24,2h-1.5v4H24V2z M24,18h-1.5v4H24V18z"/>
@@ -79,6 +86,7 @@ export {
    CrossIcon,
    ErrorOutlineIcon,
    ToolMoveIcon,
+   ToolTileInfo,
    ToolSelectIcon,
    ToolPencilIcon,
    ToolBucketIcon,

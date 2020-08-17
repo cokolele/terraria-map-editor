@@ -16,10 +16,12 @@ export default function(_interface, e) {
             store.dispatch(stateChange(["status", "error"], e.onlyFriendlyMessage + ": " + e.onlyMessage + ". Check map loading menu settings"));
     } else if (e.name == "TerrariaWorldSaverError")
         store.dispatch(stateChange(["status", "error"], e.onlyFriendlyMessage + ": " + e.onlyMessage + ". Error was sent to us and we hope it will be fixed soon."));
-    else if (e.message.includes("memory"))
+    else if (e.message && e.message.includes("memory"))
         store.dispatch(stateChange(["status", "error"], "You ran out of memory. Sorry, a lot of tiles."));
     else
         store.dispatch(stateChange(["status", "error"], "Unexpected worker error. Error was sent to us and we hope it will be fixed soon."));
+
+    store.dispatch(stateChange(["status", "loading"], false));
 
     api.post("/report/error-auto", {
         text: _interface + ": " + JSON.stringify(e)

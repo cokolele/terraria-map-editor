@@ -1,0 +1,78 @@
+/*
+    stolen from here:
+    https://loading.io/css/
+*/
+
+.statusbar-loading {
+    padding: 0.55rem 0.55rem 0;
+    position: relative;
+    width: 1.15rem;
+    margin: 0 0.1rem;
+}
+
+.statusbar-loading div {
+    animation: statusbar-loading 0.8s linear infinite;
+}
+
+.statusbar-loading div:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 3px;
+    width: 1px;
+    height: 3px;
+    background-color: #fff;
+}
+
+.statusbar-loading--hidden div:after {
+    background-color: transparent;
+}
+
+.statusbar-loading div:nth-child(1) {
+    transform: rotate(0deg);
+    animation-delay: -0.8s;
+}
+
+.statusbar-loading div:nth-child(2) {
+    transform: rotate(45deg);
+    animation-delay: -0.7s;
+}
+
+.statusbar-loading div:nth-child(3) {
+    transform: rotate(90deg);
+    animation-delay: -0.6s;
+}
+
+.statusbar-loading div:nth-child(4) {
+    transform: rotate(135deg);
+    animation-delay: -0.5s;
+}
+
+.statusbar-loading div:nth-child(5) {
+    transform: rotate(180deg);
+    animation-delay: -0.4s;
+}
+
+.statusbar-loading div:nth-child(6) {
+    transform: rotate(225deg);
+    animation-delay: -0.3s;
+}
+
+.statusbar-loading div:nth-child(7) {
+    transform: rotate(270deg);
+    animation-delay: -0.2s;
+}
+
+.statusbar-loading div:nth-child(8) {
+    transform: rotate(315deg);
+    animation-delay: -0.1s;
+}
+
+@keyframes statusbar-loading {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}

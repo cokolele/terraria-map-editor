@@ -1,7 +1,7 @@
 /*
  *  basics
  */
-canvas rendering is based on loop. every tick redraws defined canvas content. loop runs on 60fps max.
+canvas rendering is based on loop. loop runs on 60fps max.
 loop is started and stopped through main namespace (module pattern) extensions loadMap and closeMap
 
 /*
@@ -21,8 +21,10 @@ main namespace contains everything canvas related and can be imported.
      */
     using worker completely removes the site unresponsiveness during map loading and other expensive operations, but introduces complexity.
     any worker job is done with worker interface.
-    workerInterface ONLY communicates with the worker, nothing else.
+    main's workerInterfaces communicate with the worker, nothing else
     accessible through Main.workerInterfaces.[workerInterface]
+    worker's workerInterfaces are functions that do anything with the worker namespace
+    interfaces are basically request-response models between main and worker
 
     /*
      * basics of rendering the map

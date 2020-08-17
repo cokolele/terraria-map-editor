@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { stateChange } from "/state/state.js";
 import { localSettings, saveToLocalSettings } from "/utils/localStorage.js";
@@ -30,6 +30,29 @@ function OptionbarOptionId({ stateChange, id, LAYER }) {
       setOrdered(ordered);
       saveToLocalSettings("optionbarIdOrdered", ordered);
    }
+
+   useEffect(() => {
+      switch(LAYER) {
+         case LAYERS.TILES:
+            if (ordered)
+               stateChange(["optionbar", "id"], tilesOrdered[0][1]);
+            else
+               stateChange(["optionbar", "id"], tiles[0][1]);
+            break;
+         case LAYERS.WALLS:
+            if (ordered)
+               stateChange(["optionbar", "id"], wallsOrdered[0][1]);
+            else
+               stateChange(["optionbar", "id"], walls[0][1]);
+            break;
+         case LAYERS.WIRES:
+            stateChange(["optionbar", "id"], wires[0]);
+            break;
+         case LAYERS.LIQUIDS:
+            stateChange(["optionbar", "id"], liquids[0]);
+            break;
+      }
+   }, [LAYER, ordered]);
 
    let IdInputByLayer;
    switch(LAYER) {

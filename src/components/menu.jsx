@@ -8,6 +8,8 @@ import MenuFolderButton from "/components/menu/folder-button.jsx";
 import { AccountBoxIcon, GithubIcon } from "/components/icon.jsx";
 import "/components/styles/menu.css";
 
+import { appVersion, ingameSupportedVersion } from "/version.json";
+
 function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnlyTiles, ignoreBounds}) {
    const [currentTab, setCurrentTab] = useState(false);
 
@@ -124,8 +126,8 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
          }
          </div>
          <div className="menu">
-            <MenuFolderButton label="version 2.2.7" onClick={() => {console.log("hey baby!")}}/>
-            <MenuFolderButton label="supported game version: 1.4.0.5" onClick={() => {console.log(";)")}}/>
+            <MenuFolderButton label={"version: " + appVersion} onClick={() => {console.log("hey baby!")}}/>
+            <MenuFolderButton label={"supported game version: " + ingameSupportedVersion} onClick={() => {console.log(";)")}}/>
             <MenuFolderButton label={user !== null ? user.username : "Account"} onClick={onAccountClick} Icon={AccountBoxIcon}/>
             <MenuFolderButton label="Github" onClick={onGithubClick} Icon={GithubIcon}/>
          </div>

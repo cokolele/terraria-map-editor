@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 
 import SidebarViewGeneral from "/components/sidebar/views/general.jsx";
 import SidebarViewLayers from "/components/sidebar/views/layers.jsx";
+import SidebarViewTileInfo from "/components/sidebar/views/tileInfo.jsx";
 import "/components/styles/sidebar.css";
 
 const config = [
@@ -13,16 +14,25 @@ const config = [
    {
       label: "Layers",
       View: SidebarViewLayers
-   }
+   },/*
+   {
+      label: "Tile Info",
+      View: SidebarViewTileInfo
+   }*/
 ];
 
-function Sidebar({ show, running }) {
+function Sidebar({ show, running, tool }) {
    const [currentTab, setCurrentTab] = useState(0);
    const View = config[currentTab].View;
 
    const onTabClick = (index) => {
       setCurrentTab(index);
    }
+
+   useEffect(() => {
+      if (tool == "tileInfo")
+         setCurrentTab(2);
+   }, [tool]);
 
    if (show)
       return (
@@ -51,6 +61,7 @@ function Sidebar({ show, running }) {
 export default connect(state => {
    return {
       show: state.view.sidebar,
-      running: state.canvas.running
+      running: state.canvas.running,
+      tool: state.toolbar.tool
    }
 })(Sidebar);

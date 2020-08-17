@@ -48,17 +48,40 @@ let Main = new function() {
     }
 
     this.initListeners = () => {
-        this.canvas.addEventListener("mousemove", (e) => {
+        this.canvas.addEventListener("mousemove", async (e) => {
             [this.mousePosImageX, this.mousePosImageY, this.mousePosElementX, this.mousePosElementY] = this.extensions.getMousePosImage(e, true);
         });
 
+/*
+        this.canvas.addEventListener("mouseenter", async (e) => {
+            if (this.state.toolbar.tool == "tileInfo" && !this.listeners.infoCursor) {
+                Main.canvas.classList.add("cursorInfo");
+                this.listeners.infoCursor = true;
+            }
+        });
+
+        this.canvas.addEventListener("mouseleave", async (e) => {
+            if (this.state.toolbar.tool != "tileInfo" && this.listeners.infoCursor) {
+                Main.canvas.classList.remove("cursorInfo");
+                this.listeners.infoCursor = false;
+            }
+        });
+
+        this.canvas.addEventListener("click", async (e) => {
+            if (this.state.toolbar.tool == "tileInfo") {
+                let tileData = await this.workerInterfaces.getTileData(this.mousePosImageX, this.mousePosImageY);
+                store.dispatch(stateChange("tileData", tileData));
+            }
+        });
+*/
+
         this.canvas.addEventListener("mousedown", (e) => {
             if (e.buttons == 4 || (e.buttons == 1 && Main.state.toolbar.tool == "move"))
-                Main.canvas.classList.add("grabbed");
+                Main.canvas.classList.add("cursorGrabbed");
         });
 
         this.canvas.addEventListener("mouseup", (e) => {
-            Main.canvas.classList.remove("grabbed");
+            Main.canvas.classList.remove("cursorGrabbed");
         });
 
         this.canvas.addEventListener("click", onCanvasClick);
@@ -76,7 +99,7 @@ let Main = new function() {
     }
 
     this.loop = {};
-    let temp0, temp1;
+    let temp0, temp1, temp2, temp3;
 
     this.loop.start = () => {
         this.layersCtxs = Object.values(LAYERS).map(LAYER => {
@@ -97,10 +120,7 @@ let Main = new function() {
         this.viewHeightTiles = this.zoomFactors[0];
 
         this.state.canvas.running = true;
-        if (window.tickdebug)
-            this.loop.timedTick();
-        else
-            this.loop.tick();
+        this.loop.tick();
         store.dispatch(stateChange(["canvas", "running"], true));
     }
 
@@ -109,11 +129,6 @@ let Main = new function() {
         delete this.layersImages;
         delete this.layersCtxs;
         this.resetWorker();
-
-        if (window.tickdebug) {
-            console.log(performance);
-            performance = [[],[],[],[],[]];
-        }
         store.dispatch(stateChange(["canvas", "running"], false));
     }
 
@@ -131,36 +146,6 @@ let Main = new function() {
             this.loop.drawBrush();
 
         requestAnimationFrame(this.loop.tick, this.canvas);
-    }
-
-    let performanceTemp, performance = [[],[],[],[],[]];
-    this.loop.timedTick = () => {
-        if (!this.state.canvas.running)
-            return;
-
-        performanceTemp = Date.now();
-        this.loop.refreshCanvas();
-        performance[0].push(Date.now() - performanceTemp);
-
-        performanceTemp = Date.now();
-        this.loop.updateViewTiles();
-        performance[1].push(Date.now() - performanceTemp);
-
-        performanceTemp = Date.now();
-        this.loop.correntPositions();
-        performance[2].push(Date.now() - performanceTemp);
-
-        performanceTemp = Date.now();
-        this.loop.drawLayers();
-        performance[3].push(Date.now() - performanceTemp);
-
-        if (this.state.toolbar.tool == "pencil" || this.state.toolbar.tool == "eraser") {
-            performanceTemp = Date.now();
-            this.loop.drawBrush();
-            performance[4].push(Date.now() - performanceTemp);
-        }
-
-        requestAnimationFrame(this.loop.timedTick, this.canvas);
     }
 
     this.loop.refreshCanvas = () => {
@@ -227,8 +212,39 @@ let Main = new function() {
     }
 
     this.loop.drawBrush = () => {
-        temp0 = this.state.optionbar.size * this.tilePixelRatio;
-        this.ctx.drawImage(this.brush, 0, 0, 1, 1, this.mousePosElementX - temp0/2, this.mousePosElementY - temp0/2, temp0, temp0);
+        if (typeof this.state.optionbar.size == "number") {
+            temp0 = this.state.optionbar.size * this.tilePixelRatio;
+            temp1 = temp0 / 2;
+
+            if (this.state.optionbar.size % 2 == 0)
+                temp1 += this.tilePixelRatio / 2;
+
+            this.ctx.drawImage(
+                this.brush,
+                0, 0, 1, 1,
+                this.mousePosElementX - temp1, this.mousePosElementY - temp1,
+                temp0, temp0
+            );
+        } else {
+            temp0 = this.state.optionbar.size[0] * this.tilePixelRatio;
+            temp1 = temp0 / 2;
+
+            if (this.state.optionbar.size[0] % 2 == 0)
+                temp1 += this.tilePixelRatio / 2;
+
+            temp2 = this.state.optionbar.size[1] * this.tilePixelRatio;
+            temp3 = temp2 / 2;
+
+            if (this.state.optionbar.size[1] % 2 == 0)
+                temp3 += this.tilePixelRatio / 2;
+
+            this.ctx.drawImage(
+                this.brush,
+                0, 0, 1, 1,
+                this.mousePosElementX - temp1, this.mousePosElementY - temp3,
+                temp0, temp2
+            );
+        }
     }
 }
 

@@ -36,11 +36,16 @@ canvas {
     border: 1px solid #383838;
 }
 
-.grabbed {
-    cursor: move;
+.cursorGrabbed {
     cursor: grabbing;
     cursor: -moz-grabbing;
     cursor: -webkit-grabbing;
+}
+
+.cursorInfo {
+    cursor: help;
+    cursor: -moz-help;
+    cursor: -webkit-help;
 }
 
 .canvas-placeholder {

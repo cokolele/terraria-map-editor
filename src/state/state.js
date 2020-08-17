@@ -15,12 +15,14 @@ let defaultState = {
         worldObject: null,
         unsafe: false,
         unsafeOnlyTiles: false,
-        ignoreBounds: false,
+        ignoreBounds: false
     },
+    tileData: null,
     status: {
         description: null,
         percent: null,
-        error: null
+        error: null,
+        loading: false
     },
     user: null,
     modal: null,

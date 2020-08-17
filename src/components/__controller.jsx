@@ -19,7 +19,7 @@ function Controller(props) {
       }
 
       loadSession();
-   });
+   }, []);
 
    //canvas
    useEffect(() => {
@@ -40,7 +40,7 @@ function Controller(props) {
          Main.extensions.closeMap();
       else
          Main.extensions.loadMap();
-   });
+   }, [props.worldFile]);
 
    return null;
 }
