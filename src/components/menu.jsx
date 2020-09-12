@@ -67,6 +67,13 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
             onClick: menu.onToggleSidebar
          }
       },
+      Plugins: {
+         "Block swap": {
+            type: "default",
+            enabled: running,
+            onClick: menu.onPluginBlockSwap
+         }
+      },
       "Map loading": {
          "Disable checking sections offsets (helps with corrupted files)": {
             type: "checkbox",
@@ -95,7 +102,7 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
             enabled: false
          },
       },
-      "Report": {
+      Report: {
          "Error": () => { stateChange("modal", "errorreport") },
          "Suggestions or feature requests": () => { stateChange("modal", "suggestionreport") }
       }

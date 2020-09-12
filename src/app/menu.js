@@ -96,6 +96,14 @@ const onToggleSidebar = (value) => {
     saveToLocalSettings("sidebar", value);
 }
 
+const onPluginBlockSwap = () => {
+    try {
+        Main.extensions.blockSwap();
+    } catch(e) {
+
+    }
+}
+
 export default {
     onNewFile,
     onExampleMap,
@@ -103,5 +111,6 @@ export default {
     onSaveImage,
     onSaveFile,
     onToggleSidebar,
-    onToggleToolbar
+    onToggleToolbar,
+    onPluginBlockSwap
 };

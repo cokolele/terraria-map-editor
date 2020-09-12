@@ -25,12 +25,16 @@ let Worker = new function() {
                     break;
 
                 case "EDIT_TILES":
-                    this.workerInterfaces.editTiles(data);
+                    await this.workerInterfaces.editTiles(data);
                     break;
 
                 case "GET_TILE_DATA":
-                    this.workerInterfaces.getTileData(data);
+                    await this.workerInterfaces.getTileData(data);
                     break;
+
+                case "BLOCKSWAP":
+                    await this.workerInterfaces.blockSwap(data);
+                    return;
 
             }
         } catch (e) {

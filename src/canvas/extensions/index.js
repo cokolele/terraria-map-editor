@@ -4,6 +4,7 @@ import { getMousePosElement, getMousePosImage } from "/canvas/extensions/getMous
 import getImageUrl from "/canvas/extensions/getImageUrl.js";
 import saveWorldFile from "/canvas/extensions/saveWorldFile.js";
 import { getTileColor } from "/canvas/extensions/getTileInfo.js";
+import blockSwap from "/canvas/extensions/blockSwap.js";
 
 export default {
     loadMap,
@@ -12,5 +13,6 @@ export default {
     getMousePosImage,
     getImageUrl,
     saveWorldFile,
-    getTileColor
+    getTileColor,
+    blockSwap
 }
