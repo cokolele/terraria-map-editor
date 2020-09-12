@@ -9,7 +9,7 @@ import OptionbarInputCheckbox from "/components/inputs/input-checkbox.jsx";
 import "/components/styles/sidebar/views/general.css";
 
 import LAYERS from "/utils/dbs/LAYERS.js";
-//import { setLayerImageRectangleColor } from "/app/canvas/main.js";
+//import editTiles from "/canvas/extensions/editTiles.js";
 
 function SidebarCategoryGeneral({ worldObject, stateChange, unsafeOnlyTiles }) {
    const [header, setHeader] = useState(worldObject.header);
@@ -17,20 +17,22 @@ function SidebarCategoryGeneral({ worldObject, stateChange, unsafeOnlyTiles }) {
 
    const setHeaderKey = (key, value, index) => {
       if (key == "worldSurface") {
+         /*
          if (value > header.worldSurface)
-            setLayerImageRectangleColor(LAYERS.BACKGROUND, "sky", [0, header.worldSurface], [header.maxTilesX, value]);
+            editTiles(LAYERS.BACKGROUND, "sky", [0, header.worldSurface], [header.maxTilesX, value]);
          else
-            setLayerImageRectangleColor(LAYERS.BACKGROUND, "ground", [0, value], [header.maxTilesX, header.worldSurface]);
-
+            editTiles(LAYERS.BACKGROUND, "ground", [0, value], [header.maxTilesX, header.worldSurface]);
+         */
          if (value >= header.rockLayer)
             header.rockLayer = value;
       }
       else if (key == "rockLayer") {
+         /*
          if (value > header.rockLayer)
-            setLayerImageRectangleColor(LAYERS.BACKGROUND, "ground", [0, header.rockLayer], [header.maxTilesX, value]);
+            editTiles(LAYERS.BACKGROUND, "ground", [0, header.rockLayer], [header.maxTilesX, value]);
          else
-            setLayerImageRectangleColor(LAYERS.BACKGROUND, "cavern", [0, value], [header.maxTilesX, header.rockLayer]);
-
+            editTiles(LAYERS.BACKGROUND, "cavern", [0, value], [header.maxTilesX, header.rockLayer]);
+         */
          if (value <= header.worldSurface)
             header.worldSurface = value;
       }

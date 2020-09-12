@@ -4,24 +4,24 @@ let Worker = new function() {
     this.worldObject;
     this.workerInterfaces = workerInterfaces;
 
-    this.interfacesController = ({ data }) => {
+    this.interfacesController = async ({ data }) => {
         try {
             switch(data.action) {
 
                 case "PARSE_WORLD_FILE":
-                    this.workerInterfaces.parseWorldFile(data);
+                    await this.workerInterfaces.parseWorldFile(data);
                     break;
 
                 case "RENDER_LAYERS_IMAGES":
-                    this.workerInterfaces.renderLayersImages(data);
+                    await this.workerInterfaces.renderLayersImages(data);
                     break;
 
                 case "SAVE_WORLD_FILE":
-                    this.workerInterfaces.saveWorldFile(data);
+                    await this.workerInterfaces.saveWorldFile(data);
                     break;
 
                 case "VERIFY_WORLD_FILE_FORMAT":
-                    this.workerInterfaces.verifyWorldFileFormat(data);
+                    await this.workerInterfaces.verifyWorldFileFormat(data);
                     break;
 
                 case "EDIT_TILES":
