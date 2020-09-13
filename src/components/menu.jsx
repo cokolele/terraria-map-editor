@@ -68,7 +68,7 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
          }
       },
       Plugins: {
-         "Block swap": {
+         "Block randomizer": {
             type: "default",
             enabled: running,
             onClick: menu.onPluginBlockSwap

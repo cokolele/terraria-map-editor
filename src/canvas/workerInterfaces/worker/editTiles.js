@@ -39,7 +39,7 @@ function changeTile(LAYER, x, y, newId) {
     } else {
         switch(LAYER) {
             case LAYERS.TILES:
-                Worker.worldObject.tiles[x][y].blockId = newId;
+                Worker.worldObject.tiles[x][y].blockId = parseInt(newId);
                 delete Worker.worldObject.tiles[x][y].frameX;
                 delete Worker.worldObject.tiles[x][y].frameY;
                 delete Worker.worldObject.tiles[x][y].slope;
@@ -47,7 +47,7 @@ function changeTile(LAYER, x, y, newId) {
                 break;
 
             case LAYERS.WALLS:
-                Worker.worldObject.tiles[x][y].wallId = newId;
+                Worker.worldObject.tiles[x][y].wallId = parseInt(newId);
                 delete Worker.worldObject.tiles[x][y].wallColor;
                 break;
 
@@ -57,7 +57,7 @@ function changeTile(LAYER, x, y, newId) {
 
             case LAYERS.LIQUIDS:
                 Worker.worldObject.tiles[x][y].liquidType = newId;
-                Worker.worldObject.tiles[x][y].liquidAmount = { amount: 255 };
+                Worker.worldObject.tiles[x][y].liquidAmount = 255;
                 break;
         }
     }
@@ -65,8 +65,8 @@ function changeTile(LAYER, x, y, newId) {
 
 export default function({ LAYER, editType, editArgs, newId }) {
     if (editType == "rectangle") {
-        for (let x = editArgs[0][0]; x < editArgs[1][0]; x++)
-            for (let y = editArgs[0][1]; y < editArgs[1][1]; y++)
+        for (let x = editArgs[0][0]; x <= editArgs[1][0]; x++)
+            for (let y = editArgs[0][1]; y <= editArgs[1][1]; y++)
                 changeTile(LAYER, x, y, newId);
 
         postMessage({
