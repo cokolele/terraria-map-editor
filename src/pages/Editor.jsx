@@ -7,6 +7,7 @@ import Canvas from "/components/canvas.jsx";
 import Sidebar from "/components/sidebar.jsx";
 import Statusbar from "/components/statusbar.jsx";
 import Modal from "/components/modal.jsx";
+import Appbar from "/components/appbar.jsx";
 import "./editor.css";
 
 function Editor() {
@@ -19,6 +20,7 @@ function Editor() {
          <Sidebar/>
          <Statusbar/>
          <Modal/>
+         <Appbar/>
       </div>
    )
 }

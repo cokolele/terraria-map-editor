@@ -10,7 +10,7 @@ import { stateChange } from "/state/state.js";
 import Main from "/canvas/main.js";
 
 function Controller(props) {
-    //page load
+   //page load
    useEffect(() => {
       async function loadSession() {
          const getUser = await auth.get("/user");
@@ -20,6 +20,17 @@ function Controller(props) {
 
       loadSession();
    }, []);
+
+   //resize listener
+   useEffect(() => {
+      window.onresize = () => {
+         if (!props.mobile && window.innerWidth <= 960)
+            props.stateChange("mobile", true);
+         else if (props.mobile && window.innerWidth > 960)
+            props.stateChange("mobile", false);
+      };
+      window.onresize();
+   }, [props.mobile]);
 
    //canvas
    useEffect(() => {
@@ -52,7 +63,8 @@ export default connect(
          toolbar: state.toolbar,
          optionbar: state.optionbar,
          layersVisibility: state.layersVisibility,
-         worldFile: state.canvas.worldFile
+         worldFile: state.canvas.worldFile,
+         mobile: state.mobile
       };
    },
    { stateChange }

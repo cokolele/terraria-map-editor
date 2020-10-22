@@ -44,3 +44,56 @@
     top: -0.3rem;
     left: calc(100% - 0.1rem);
 }
+
+@media (max-width: 960px)
+{
+    .menu-folder-container {
+        max-width: 100%;
+        box-sizing: border-box;
+        padding: 13px 0 13px 24px;
+        font-size: 15px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        border-radius: 0;
+        border: 0;
+
+        transition: background-color 0.16s ease-out;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .menu-folder-container--opened {
+        background-color: rgba(0,0,0,0) !important;
+        border: 0 !important;
+    }
+
+    .menu-folder-container:hover {
+        outline: none;
+        background-color: initial;
+        border: 0;
+    }
+
+    .menu-folder {
+        top: 13px;
+        margin-left: -24px;
+        padding: 0;
+        width: calc(100% + 24px);
+        max-width: calc(100% + 24px);
+        border: 0;
+
+        position: relative;
+        background-color: #383838;
+
+        max-height: 0;
+        transition: max-height 0.3s ease;
+        overflow-y: hidden;
+    }
+
+    .menu-folder--nested {
+        left: 12px;
+        max-height: initial;
+    }
+
+    .menu-folder--hasMenu {
+        padding: 0;
+    }
+}

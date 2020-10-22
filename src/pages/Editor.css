@@ -2,11 +2,19 @@ body {
     background-color: #282828;
 }
 
+/*
+   extra-small: 0px or larger
+   small: 600px or larger
+   medium: 960px or larger
+   large: 1280px or larger
+   xlarge: 1920px or larger
+*/
+
 .editor {
     font-family: "Lato", sans-serif;
 
+    position: relative;
     min-height: 100%;
-    min-width: 100%;
     box-sizing: border-box;
     border: 1px solid #383838;
 
@@ -24,3 +32,29 @@ body {
 .sidebar-container { grid-area: 2 / 3 / 4 / 4; }
 .statusbar-container { grid-area: 4 / 2 / 5 / 4; }
 .modal-background { grid-area: 1 / 1 / 5 / 4; }
+
+.appbar-container {
+    display: none;
+}
+
+@media (max-width: 960px)
+{
+
+    .editor {
+        overflow: hidden;
+    }
+
+    .appbar-container {
+        display: block;
+    }
+
+    .toolbar-container, .optionbar-container {
+        display: none;
+    }
+
+    .menu-container { grid-area: 1 / 1 / 5 / 2; }
+    .appbar-container { grid-area: 1 / 2 / 2 / 3; }
+    .canvas-container { grid-area: 2 / 2 / 4 / 3; }
+    .statusbar-container { grid-area: 4 / 2 / 5 / 3; }
+    .sidebar-container { grid-area: 1 / 3 / 5 / 4; }
+}

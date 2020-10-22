@@ -57,3 +57,34 @@ canvas {
     user-select: none;
     -moz-user-select: none;
 }
+
+@media (max-width: 960px)
+{
+    .canvas-container {
+        padding: 0;
+    }
+
+    .canvas-container-inner {
+        min-width: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .canvas-container-label {
+        height: 0;
+        padding: 0;
+    }
+
+    canvas {
+        border: 0;
+        min-height: 1px;
+        min-width: 1px;
+    }
+
+    .canvas-placeholder {
+        min-width: 0;
+        word-spacing: 100vw;
+        line-height: 4rem;
+    }
+}

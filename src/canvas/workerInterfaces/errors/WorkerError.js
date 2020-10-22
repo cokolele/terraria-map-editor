@@ -21,7 +21,11 @@ export default function(_interface, e) {
     else
         store.dispatch(stateChange(["status", "error"], "Unexpected worker error. Error was sent to us and we hope it will be fixed soon."));
 
-    store.dispatch(stateChange(["status", "loading"], false));
+    store.dispatch(stateChange([
+        [["status", "loading"], false],
+        [["status", "description"], "Failed"],
+        [["status", "percent"], null]
+    ]));
 
     api.post("/report/error-auto", {
         text: _interface + ": " + JSON.stringify(e)

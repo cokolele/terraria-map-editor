@@ -41,6 +41,10 @@ let defaultState = {
     layersVisibility: {
         NPCs: true,
     },
+    mobile: false,
+    appbar: {
+        drawer: null
+    }
 };
 
 Object.values(LAYERS).forEach(LAYER => {

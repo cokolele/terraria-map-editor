@@ -81,7 +81,19 @@
     outline: none;
 }
 
-.input-slider::-webkit-slider-thumb, .input-slider::-moz-range-thumb {
+.input-slider::-moz-range-thumb {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    border-radius: 0.1rem;
+    width: 4px;
+    height: 11px;
+    background: #f0f0f0;
+    cursor: pointer;
+}
+
+.input-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;

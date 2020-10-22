@@ -1,0 +1,21 @@
+.appbar-container {
+    height: 56px;
+    background-color: #535353;
+    border: 0 solid #383838;
+    border-bottom-width: 1px;
+}
+
+@media screen and (orientation:landscape) {
+    .appbar-container {
+        height: 40px;
+    }
+}
+
+.appbar {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #f0f0f0;
+    font-size: 1.3rem;
+}

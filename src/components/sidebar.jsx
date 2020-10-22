@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { stateChange } from "/state/state.js";
 
+import { CrossIcon } from "/components/icon.jsx";
+
+import AppbarButton from "/components/appbar/button.jsx";
 import SidebarViewGeneral from "/components/sidebar/views/general.jsx";
 import SidebarViewLayers from "/components/sidebar/views/layers.jsx";
 import SidebarViewTileInfo from "/components/sidebar/views/tileInfo.jsx";
@@ -21,12 +25,16 @@ const config = [
    }*/
 ];
 
-function Sidebar({ show, running, tool }) {
+function Sidebar({ show, running, tool, drawer, mobile, stateChange }) {
    const [currentTab, setCurrentTab] = useState(0);
    const View = config[currentTab].View;
 
    const onTabClick = (index) => {
       setCurrentTab(index);
+   }
+
+   const onMobileCloseClick = () => {
+      stateChange(["appbar", "drawer"], null);
    }
 
    useEffect(() => {
@@ -36,7 +44,15 @@ function Sidebar({ show, running, tool }) {
 
    if (show)
       return (
-         <div className="sidebar-container">
+         <div className={"sidebar-container" + (drawer == "sidebar" ? " drawer" : "")}>
+            {
+               mobile &&
+               <div className="appbar-container">
+                  <div className="appbar">
+                     <AppbarButton Icon={CrossIcon} onClick={onMobileCloseClick}/>
+                  </div>
+               </div>
+            }
             <div className="sidebar-tabs">
                {
                   config.map(({ label }, i) =>
@@ -58,10 +74,15 @@ function Sidebar({ show, running, tool }) {
       return "";
 }
 
-export default connect(state => {
-   return {
-      show: state.view.sidebar,
-      running: state.canvas.running,
-      tool: state.toolbar.tool
-   }
-})(Sidebar);
+export default connect(
+   state => {
+      return {
+         show: state.view.sidebar,
+         running: state.canvas.running,
+         tool: state.toolbar.tool,
+         drawer: state.appbar.drawer,
+         mobile: state.mobile
+      };
+   },
+   { stateChange }
+)(Sidebar);

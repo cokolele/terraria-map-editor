@@ -1,3 +1,9 @@
+/*
+   !
+   needs rework
+   is a mess
+*/
+
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import menu from "/app/menu.js";
@@ -5,12 +11,12 @@ import { stateChange, stateToggle } from "/state/state.js";
 
 import MenuFolder from "/components/menu/folder.jsx";
 import MenuFolderButton from "/components/menu/folder-button.jsx";
-import { AccountBoxIcon, GithubIcon } from "/components/icon.jsx";
+import { LogoIcon, AccountBoxIcon, GithubIcon } from "/components/icon.jsx";
 import "/components/styles/menu.css";
 
 import { appVersion, ingameSupportedVersion } from "/version.json";
 
-function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnlyTiles, ignoreBounds}) {
+function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnlyTiles, ignoreBounds, drawer, mobile}) {
    const [currentTab, setCurrentTab] = useState(false);
 
    const DIVIDER = "__DIVIDER__";
@@ -44,6 +50,7 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
          },
       },
       Edit: {
+         mobile: false,
          "Undo": {
             type: "default",
             enabled: false,
@@ -56,6 +63,7 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
          }
       },
       View: {
+         mobile: false,
          Toolbar: {
             type: "checkbox",
             checked: view.toolbar,
@@ -120,21 +128,29 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
       win.focus();
    }
 
+   //for closing the drawer
+   const onContainerClick = (e) => {
+      if (e.clientX > e.currentTarget.getBoundingClientRect().width)
+         stateChange(["appbar", "drawer"], null);
+   }
+
    return (
-      <div className="menu-container">
+      <div className={"menu-container" + (drawer == "menu" ? " drawer" : "")} onClick={onContainerClick}>
          <div className="menu">
-         {
-            Object.keys(config).map((label, i) => {
-               if (typeof config[label] == "object" && config[label].type && config[label].type == "button")
-                  return <MenuFolderButton label={label} onClick={config[label].onClick} index={i+1} key={i}/>
-               else
-                  return <MenuFolder label={label} options={config[label]} currentTab={currentTab} setCurrentTab={setCurrentTab} index={i+1} key={i}/>
-            })
-         }
-         </div>
-         <div className="menu">
-            <MenuFolderButton label={"version: " + appVersion} onClick={() => {console.log("hey baby!")}}/>
-            <MenuFolderButton label={"supported game version: " + ingameSupportedVersion} onClick={() => {console.log(";)")}}/>
+            <div className="menu-logo">
+               <LogoIcon/>
+            </div>
+            {
+               Object.keys(config).map((label, i) => {
+                  if (typeof config[label] == "object" && config[label].mobile === false && mobile)
+                     return;
+                  if (typeof config[label] == "object" && config[label].type && config[label].type == "button")
+                     return <MenuFolderButton label={label} onClick={config[label].onClick} index={i+1} key={i}/>
+                  else
+                     return <MenuFolder label={label} options={config[label]} currentTab={currentTab} setCurrentTab={setCurrentTab} index={i+1} key={i}/>
+               })
+            }
+            <div className="flex-filler"></div>
             <MenuFolderButton label={user !== null ? user.username : "Account"} onClick={onAccountClick} Icon={AccountBoxIcon}/>
             <MenuFolderButton label="Github" onClick={onGithubClick} Icon={GithubIcon}/>
          </div>
@@ -149,7 +165,9 @@ export default connect(state => {
          running: state.canvas.running,
          unsafe: state.canvas.unsafe,
          unsafeOnlyTiles: state.canvas.unsafeOnlyTiles,
-         ignoreBounds: state.canvas.ignoreBounds
+         ignoreBounds: state.canvas.ignoreBounds,
+         drawer: state.appbar.drawer,
+         mobile: state.mobile
       };
    },
    { stateChange, stateToggle }

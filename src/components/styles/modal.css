@@ -54,3 +54,11 @@
     font-weight: 900;
     padding-bottom: 22px;
 }
+
+@media (max-width: 960px)
+{
+    .modal-container {
+        padding: 36px;
+        max-width: 90vw !important;
+    }
+}

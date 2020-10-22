@@ -43,7 +43,8 @@ let Worker = new function() {
                 action: "ERROR",
                 error: {
                     ...e,
-                    stack: e.stack
+                    stack: e.stack,
+                    message: e.message
                 }
             });
         }

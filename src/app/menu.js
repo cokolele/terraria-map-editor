@@ -1,6 +1,6 @@
 import { localSettings, saveToLocalSettings } from "/utils/localStorage.js";
 import store from "/state/store.js";
-import { stateChange, stateToggle, stateTriggerResetWorld } from "/state/state.js";
+import { stateChange, stateToggle } from "/state/state.js";
 import api from "/utils/api/api.js";
 
 import Main from "/canvas/main.js";

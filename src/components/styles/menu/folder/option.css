@@ -48,3 +48,60 @@
     right: 0.3rem;
     top: -0.05rem;
 }
+
+@media (max-width: 960px)
+{
+    .menu-option {
+        height: auto;
+        box-sizing: border-box;
+        padding: 13px 10px 13px 30px;
+        font-size: 15px;
+
+        max-width: 100%;
+        overflow-x: hidden;
+        white-space: pre-wrap;
+
+        color: #f0f0f0;
+    }
+
+
+    .menu-option-divider {
+        height: 0;
+        margin: 0;
+    }
+
+    .menu-option:hover {
+        background-color: rgba(0,0,0,0);
+        color: white;
+    }
+
+    .menu-option--disabled, .menu-option--disabled:hover {
+        color: #6d6d6d;
+    }
+
+    .menu-option--menu:after {
+        position: absolute;
+        content: "›";
+        height: 42px;
+        display: flex;
+        align-items: center;
+        top: -2px;
+        right: 10px;
+
+        transition: transform 0.2s ease, top 0.2s ease;
+    }
+
+    .menu-option--checked:before {
+        font-size: 12px;
+        left: 10px;
+        display: flex;
+        align-items: center;
+        height: 100%;
+    }
+
+    .menu-option--menu-opened:after {
+        transform-origin: center;
+        transform: rotate(90deg);
+        top: 1px;
+    }
+}

@@ -24,9 +24,8 @@ import { render } from "react-dom";
 import { Provider } from "react-redux";
 import store from "/state/store.js";
 
-import Editor from "/pages/editor.jsx";
-
 import Controller from "/components/__controller.jsx";
+import Editor from "/pages/editor.jsx";
 
 render(
     <Provider store={store}>

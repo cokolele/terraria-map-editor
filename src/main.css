@@ -12,17 +12,8 @@ svg {
     display: block;
 }
 
-.debug_rotated_text {
-    color: white;
-    transform: rotate(90deg) translate(50%);
-}
-
 .hidden {
     display: none !important;
-}
-
-.italics {
-    font-style: italic;
 }
 
 button, input[type="submit"], input[type="reset"] {

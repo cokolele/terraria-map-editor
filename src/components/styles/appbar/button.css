@@ -1,0 +1,20 @@
+.appbar-button svg {
+    fill: #f0f0f0;
+}
+
+.appbar-button {
+    padding: 8px;
+    margin: 0 6px;
+    border-radius: 50%;
+    background-color: rgba(0,0,0,0);
+
+    transition: background-color 0.16s ease-out;
+
+    -moz-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.appbar-button:active {
+    background-color: rgba(255, 255, 255, 0.14);
+}

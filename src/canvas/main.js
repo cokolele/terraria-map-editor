@@ -9,9 +9,15 @@ import sprite, { NPCsSprites } from "/utils/dbs/sprites.js";
 import extensions from "/canvas/extensions/index.js";
 import workerInterfaces from "/canvas/workerInterfaces/main/index.js";
 
+import listenerWrapper from "/canvas/listeners/listenerWrapper.js";
 import onCanvasClick from "/canvas/listeners/click.js";
-import onCanvasMove from "/canvas/listeners/move.js";
+import onCanvasMouseMove from "/canvas/listeners/mousemove.js";
+import onCanvasTouchMove from "/canvas/listeners/touchmove.js";
 import onCanvasWheel from "/canvas/listeners/wheel.js";
+import onCanvasTouchStart from "/canvas/listeners/touchstart.js";
+import onCanvasTouchEnd from "/canvas/listeners/touchend.js";
+import onCanvasMouseDown from "/canvas/listeners/mousedown.js";
+import onCanvasMouseUp from "/canvas/listeners/mouseup.js";
 
 let Main = new function() {
     this.state;
@@ -48,10 +54,6 @@ let Main = new function() {
     }
 
     this.initListeners = () => {
-        this.canvas.addEventListener("mousemove", async (e) => {
-            [this.mousePosImageX, this.mousePosImageY, this.mousePosElementX, this.mousePosElementY] = this.extensions.getMousePosImage(e, true);
-        });
-
 /*
         this.canvas.addEventListener("mouseenter", async (e) => {
             if (this.state.toolbar.tool == "tileInfo" && !this.listeners.infoCursor) {
@@ -74,19 +76,15 @@ let Main = new function() {
             }
         });
 */
+            this.canvas.addEventListener("click", listenerWrapper(onCanvasClick));
+            this.canvas.addEventListener("wheel", listenerWrapper(onCanvasWheel));
+            this.canvas.addEventListener("mousedown", listenerWrapper(onCanvasMouseDown));
+            this.canvas.addEventListener("mouseup", listenerWrapper(onCanvasMouseUp));
+            this.canvas.addEventListener("mousemove", listenerWrapper(onCanvasMouseMove));
 
-        this.canvas.addEventListener("mousedown", (e) => {
-            if (e.buttons == 4 || (e.buttons == 1 && Main.state.toolbar.tool == "move"))
-                Main.canvas.classList.add("cursorGrabbed");
-        });
-
-        this.canvas.addEventListener("mouseup", (e) => {
-            Main.canvas.classList.remove("cursorGrabbed");
-        });
-
-        this.canvas.addEventListener("click", onCanvasClick);
-        this.canvas.addEventListener("mousemove", onCanvasMove);
-        this.canvas.addEventListener("wheel", onCanvasWheel);
+            this.canvas.addEventListener("touchmove", listenerWrapper(onCanvasTouchMove));
+            this.canvas.addEventListener("touchstart", listenerWrapper(onCanvasTouchStart));
+            this.canvas.addEventListener("touchend", listenerWrapper(onCanvasTouchEnd));
     }
 
     this.updateLayers = (LAYER) => {
@@ -114,7 +112,7 @@ let Main = new function() {
         this.posY = 0;
         this.zoomLevel = 0;
         this.zoomFactors = [];
-        for (let i = this.state.canvas.worldObject.header.maxTilesY; i > 10; i = Math.ceil(i * (3.5/5)))
+        for (let i = this.state.canvas.worldObject.header.maxTilesY; i > 10; i = Math.ceil(i * 0.7))
             this.zoomFactors.push(i);
         this.zoomFactors.push(10);
         this.viewHeightTiles = this.zoomFactors[0];
@@ -165,6 +163,13 @@ let Main = new function() {
     }
 
     this.loop.correntPositions = () => {
+        if (this.listeners.moveMomentum && this.listeners.noTouches) {
+            this.listeners.moveMomentum.x *= 0.86;
+            this.listeners.moveMomentum.y *= 0.86;
+            this.posX -= this.listeners.moveMomentum.x / this.tilePixelRatio;
+            this.posY -= this.listeners.moveMomentum.y / this.tilePixelRatio;
+        }
+
         if (this.posX < 0)
             this.posX = 0;
         if (this.posY < 0)

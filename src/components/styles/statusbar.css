@@ -6,25 +6,22 @@
     user-select: none;
     -moz-user-select: none;
     background-color: #4a4a4a;
-
+    box-sizing: border-box;
     border: 0 solid #383838;
     border-right-width: 1px;
 }
 
 .statusbar {
-    display: inline-flex;
-    vertical-align: top;
+    display: flex;
 }
 
 .statusbar > * {
     box-sizing: border-box;
 
-    font-family: "Lato", sans-serif;
     color: white;
     font-size: 0.7rem;
-    text-align: center;
     letter-spacing: 0.4px;
-    line-height: 1.08rem;
+    line-height: 1.05rem;
 }
 
 .status-zoom {
@@ -38,6 +35,7 @@
     position: relative;
     width: 14rem;
     background-color: #535353;
+    text-align: center;
 }
 
 .status-action > span {
@@ -60,4 +58,34 @@
     border: none;
     position: relative;
     z-index: 1000;
+}
+
+@media (max-width: 960px)
+{
+    .statusbar-container {
+        border: 0 solid #383838;
+        border-top-width: 1px;
+    }
+
+    .status-zoom {
+        width: 0;
+    }
+
+    .status-action {
+        width: 40vw;
+        max-width: 14rem;
+        border-top-width: 0;
+    }
+
+    .statusbar-loading {
+        display: none;
+    }
+
+    .status-error {
+        min-width: 59vw;
+        max-width: 59vw;
+        white-space: nowrap;
+        overflow-x: scroll;
+        font-size: 0.75rem;
+    }
 }
