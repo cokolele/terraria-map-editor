@@ -138,7 +138,6 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
       <div className={"menu-container" + (drawer == "menu" ? " drawer" : "")} onClick={onContainerClick}>
          <div className="menu">
             <div className="menu-logo">
-               <LogoIcon/>
             </div>
             {
                Object.keys(config).map((label, i) => {

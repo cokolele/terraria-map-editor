@@ -53,11 +53,6 @@ function ModalSignin({ close, stateChange }) {
       return Object.entries(errors).length === 0 ? true : false;
    }
 
-   const onInputBlur = (e) => {
-      if (e.relatedTarget === null)
-         checkInputsErrors();
-   }
-
    const onSubmit = async () => {
       if (!checkInputsErrors())
          return;
@@ -83,8 +78,8 @@ function ModalSignin({ close, stateChange }) {
 
    return (
       <div className="modal-sign">
-         <ModalSignInput label="username" value={username} onChange={setUsername} onBlur={onInputBlur} error={errors.username}/>
-         <ModalSignInput label="password" value={password} onChange={setPassword} onBlur={onInputBlur} error={errors.password} password />
+         <ModalSignInput label="username" value={username} onChange={setUsername} error={errors.username}/>
+         <ModalSignInput label="password" value={password} onChange={setPassword} error={errors.password} password />
          <ModalSignButton label="SIGN IN" onClick={onSubmit} error={errors.submit}/>
          <span className="modal-sign-text">
             <ModalSignButtonInlineText link label="Forgot username" onClick={e => {console.log("clicked")}}/>

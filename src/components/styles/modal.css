@@ -21,6 +21,9 @@
 .modal-container {
     min-width: 300px;
     min-height: 28px;
+    max-width: 90vw;
+    max-height: 90vh;
+    box-sizing: border-box;
     position: relative;
     z-index: 6000;
     background-color: #535353;
@@ -59,6 +62,5 @@
 {
     .modal-container {
         padding: 36px;
-        max-width: 90vw !important;
     }
 }

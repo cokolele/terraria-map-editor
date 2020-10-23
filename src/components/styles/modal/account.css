@@ -98,3 +98,86 @@
 .modal-account-row-text--bold {
     font-weight: 700;
 }
+
+@media (max-width: 960px)
+{
+
+    .modal-account {
+        flex-direction: column;
+        min-width: 0;
+        min-height: 0;
+        width: auto;
+    }
+
+    .modal-account-menu {
+        width: 100%;
+        max-width: 100%;
+        flex-direction: row;
+        border-right: 0;
+        border-bottom: 1px solid #424242;
+        margin-bottom: 22px;
+    }
+
+    .modal-account-menu-option:hover {
+        padding: 10px 18px;
+    }
+
+    .modal-account-menu-option--selected {
+        padding: 10px 18px;
+        border-radius: 4px;
+    }
+
+    .modal-account-menu-option--selected:after {
+        right: 0;
+        top: auto;
+        bottom: -1px;
+        height: 2px;
+        width: 100%;
+        border-radius: 2px;
+    }
+
+    .modal-account-view {
+        margin-left: 5px;
+    }
+
+    .modal-account-button-container{
+        margin: 12px 0 0 6px;
+        display: flex;
+    }
+
+    .modal-account-row:first-of-type {
+        border-top: 1px solid #6d6d6d;
+    }
+
+    .modal-account-row {
+        height: 3.4rem;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #6d6d6d;
+        padding: 0 6px;
+        cursor: pointer;
+    }
+
+    .modal-account-row:focus {
+        outline: none;
+    }
+
+    .modal-account-row--selected {
+        background-color: #424242;
+    }
+
+    .modal-account-row-text--header-disabled {
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: #8c8a8a;
+    }
+
+    .modal-account-row-text {
+        margin-right: 6px;
+        color: #f0f0f0;
+    }
+
+    .modal-account-row-text--bold {
+        font-weight: 700;
+    }
+}

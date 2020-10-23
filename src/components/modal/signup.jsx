@@ -51,7 +51,7 @@ function ModalSignup({ close, stateChange }) {
          delete errors.password;
 
       if (password2 !== password)
-         errors.password2 = "Password don't match";
+         errors.password2 = "Passwords don't match";
       else
          delete errors.password2;
 
@@ -63,11 +63,6 @@ function ModalSignup({ close, stateChange }) {
       setErrors({...errors});
       delete errors.submit;
       return Object.entries(errors).length === 0 ? true : false;
-   }
-
-   const onInputBlur = (e) => {
-      if (e.relatedTarget === null)
-         checkInputsErrors();
    }
 
    const onSubmit = async () => {
@@ -96,10 +91,10 @@ function ModalSignup({ close, stateChange }) {
 
    return (
       <div className="modal-sign">
-         <ModalSignInput label="username" value={username} onChange={setUsername} onBlur={onInputBlur} error={errors.username}/>
-         <ModalSignInput label="password" value={password} onChange={setPassword} onBlur={onInputBlur} error={errors.password} password />
-         <ModalSignInput label="password again" value={password2} onChange={setPassword2} onBlur={onInputBlur} error={errors.password2} password />
-         <ModalSignInput label="e-mail address" value={email} onChange={setEmail} onBlur={onInputBlur} error={errors.email}/>
+         <ModalSignInput label="username" value={username} onChange={setUsername} error={errors.username}/>
+         <ModalSignInput label="password" value={password} onChange={setPassword} error={errors.password} password />
+         <ModalSignInput label="password again" value={password2} onChange={setPassword2} error={errors.password2} password />
+         <ModalSignInput label="e-mail address" value={email} onChange={setEmail} error={errors.email}/>
          <ModalSignButton label="SIGN IN" onClick={onSubmit} error={errors.submit}/>
          <span className="modal-sign-text">
             <span>Already have an account ?</span>

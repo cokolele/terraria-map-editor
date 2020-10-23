@@ -60,6 +60,7 @@
         max-width: 100%;
         overflow-x: hidden;
         white-space: pre-wrap;
+        line-height: 20px;
 
         color: #f0f0f0;
     }
