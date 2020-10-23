@@ -141,8 +141,11 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
             </div>
             {
                Object.keys(config).map((label, i) => {
-                  if (typeof config[label] == "object" && config[label].mobile === false && mobile)
-                     return;
+                  if (typeof config[label] == "object" && config[label].mobile === false)
+                     if (mobile)
+                        return;
+                     else
+                        delete config[label].mobile;
                   if (typeof config[label] == "object" && config[label].type && config[label].type == "button")
                      return <MenuFolderButton label={label} onClick={config[label].onClick} index={i+1} key={i}/>
                   else
