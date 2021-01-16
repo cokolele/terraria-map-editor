@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { localSettings, saveToLocalSettings } from "/utils/localStorage.js";
+import localSettings from "/utils/localSettings.js";
 import useToggle from "/utils/hooks/useToggle.js";
 
 import InputCheckbox from "/components/inputs/input-checkbox.jsx";
 import ModalAccountButton from "/components/modal/account/button.jsx";
 
 function ModalSavingDisclaimer({ close }) {
-   const [checked, setChecked] = useState(localSettings.savingDisclaimerChecked ? true : false);
+   const [checked, setChecked] = useState(localSettings.get("savingDisclaimerChecked", false));
 
    const onBoxClick = (value) => {
       setChecked(value);
-      saveToLocalSettings("savingDisclaimerChecked", value);
+      localSettings.set("savingDisclaimerChecked", value);
    }
 
    return (

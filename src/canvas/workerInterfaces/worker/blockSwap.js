@@ -13,7 +13,7 @@ const arrayShuffle = (array) => {
     return array;
 }
 
-export default async function({ onProgress }) {
+export default async function() {
     let swappedTileIds = {},
         swappedWallIds = {};
 

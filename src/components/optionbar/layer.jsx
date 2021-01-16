@@ -1,32 +1,21 @@
 import React from "react";
-import { connect } from "react-redux";
-import { stateChange } from "/state/state.js";
-
-import InputSelect from "/components/inputs/input-select.jsx";
 
 import LAYERS from "/utils/dbs/LAYERS.js";
+import InputSelect from "/components/inputs/input-select.jsx";
 
-const LayersOptions = [
+const options = [
    ["Tiles", LAYERS.TILES],
    ["Walls", LAYERS.WALLS],
    ["Wires", LAYERS.WIRES],
-   ["Liquids", LAYERS.LIQUIDS],
+   ["Liquids", LAYERS.LIQUIDS]
 ]
 
-function OptionbarOptionLayer({ stateChange, LAYER }) {
-   const onChange = (LAYER) => {
-      LAYER = parseInt(LAYER);
-      stateChange(["optionbar", "layer"], LAYER);
-   }
+function OptionbarOptionLayer({ state, setState, addAllOption }) {
+   const onChange = (layer) => {
+      setState({ ...state, id: null, layer: parseInt(layer) });
+   };
 
-   return <InputSelect label="Layer" options={LayersOptions} value={LAYER} onChange={onChange}/>;
+   return <InputSelect label="Layer" options={addAllOption ? [...options, ["All", 100]] : options} value={state.layer} onChange={onChange}/>;
 }
 
-export default connect(
-   state => {
-      return {
-         LAYER: state.optionbar.layer
-      };
-   },
-   { stateChange }
-)(OptionbarOptionLayer);
+export default OptionbarOptionLayer;

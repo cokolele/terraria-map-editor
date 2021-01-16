@@ -18,7 +18,12 @@ function Controller(props) {
             props.stateChange("user", getUser);
       }
 
+      function setHtmlFontSize() {
+         document.getElementsByTagName("html")[0].style.fontSize = props.htmlFontSize + "%";
+      }
+
       loadSession();
+      setHtmlFontSize();
    }, []);
 
    //resize listener
@@ -64,7 +69,8 @@ export default connect(
          optionbar: state.optionbar,
          layersVisibility: state.layersVisibility,
          worldFile: state.canvas.worldFile,
-         mobile: state.mobile
+         mobile: state.mobile,
+         htmlFontSize: state.htmlFontSize
       };
    },
    { stateChange }

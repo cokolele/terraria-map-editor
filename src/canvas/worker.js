@@ -32,10 +32,13 @@ let Worker = new function() {
                     await this.workerInterfaces.getTileData(data);
                     break;
 
-                case "BLOCKSWAP":
+                case "BLOCK_SWAP":
                     await this.workerInterfaces.blockSwap(data);
                     return;
 
+                case "BLOCK_REPLACE":
+                    await this.workerInterfaces.blockReplace(data);
+                    return;
             }
         } catch (e) {
             console.error("worker error: ", e);

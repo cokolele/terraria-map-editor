@@ -1,4 +1,4 @@
-import { localSettings, saveToLocalSettings } from "/utils/localStorage.js";
+import localSettings from "/utils/localSettings.js";
 import store from "/state/store.js";
 import { stateChange, stateToggle } from "/state/state.js";
 import api from "/utils/api/api.js";
@@ -42,7 +42,7 @@ const onSaveImage = async () => {
 }
 
 const onSaveFile = async (e) => {
-    if (!localSettings.savingDisclaimerChecked)
+    if (!localSettings.get("savingDisclaimerChecked", false))
         store.dispatch(stateChange("modal", "savingdisclaimer"));
 
     const newWorldFile = await Main.extensions.saveWorldFile();
@@ -88,12 +88,12 @@ const onExampleMap = async (map) => {
 
 const onToggleToolbar = (value) => {
     store.dispatch(stateToggle(["view", "toolbar"]));
-    saveToLocalSettings("toolbar", value);
+    localSettings.set("toolbar", value);
 }
 
 const onToggleSidebar = (value) => {
     store.dispatch(stateToggle(["view", "sidebar"]));
-    saveToLocalSettings("sidebar", value);
+    localSettings.set("sidebar", value);
 }
 
 const onPluginBlockSwap = () => {
@@ -104,6 +104,21 @@ const onPluginBlockSwap = () => {
     }
 }
 
+const onWebsiteZoom = (option) => {
+    const htmlEl = document.getElementsByTagName("html")[0];
+    let size = parseFloat(htmlEl.style.fontSize.replace("%", ""));
+
+    if (option == "in")
+        size += 12.5;
+    else if (option == "out")
+        size -= 12.5;
+    else if (option == "reset")
+        size = 87.5;
+
+    htmlEl.style.fontSize = size + "%";
+    localSettings.set("htmlFontSize", size);
+}
+
 export default {
     onNewFile,
     onExampleMap,
@@ -112,5 +127,6 @@ export default {
     onSaveFile,
     onToggleSidebar,
     onToggleToolbar,
-    onPluginBlockSwap
+    onPluginBlockSwap,
+    onWebsiteZoom
 };

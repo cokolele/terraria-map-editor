@@ -16,6 +16,15 @@
     margin: 0 5%;
 }
 
+.sidebar-view-general .input-container {
+    flex-grow: 1;
+}
+
+.sidebar-view-general .input-slider {
+    width: 0;
+    flex: 1 1 0;
+}
+
 .sidebar-view-general .optiobar-input-container {
     display: block;
 }

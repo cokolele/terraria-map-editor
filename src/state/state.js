@@ -1,4 +1,4 @@
-import { localSettings } from "/utils/localStorage.js";
+import localSettings from "/utils/localSettings.js";
 import LAYERS from "/utils/dbs/LAYERS.js";
 
 /*
@@ -27,31 +27,34 @@ let defaultState = {
     user: null,
     modal: null,
     view: {
-        toolbar:  localSettings.toolbar !== undefined ? localSettings.toolbar : true,
-        sidebar: localSettings.sidebar !== undefined ? localSettings.sidebar : true
+        toolbar: localSettings.get("toolbar", true),
+        sidebar: localSettings.get("sidebar", true)
     },
     toolbar: {
         tool: "move"
     },
-    optionbar: {
+    optionbar: localSettings.get("optionbarState", {
         layer: LAYERS.TILES,
-        size: 6,
-        id: 0
-    },
+        size: [6, 6],
+        id: null,
+        ordered: false,
+        locked: true,
+    }),
     layersVisibility: {
         NPCs: true,
     },
     mobile: false,
     appbar: {
         drawer: null
-    }
+    },
+    htmlFontSize: localSettings.get("htmlFontSize", "87.5")
 };
 
 Object.values(LAYERS).forEach(LAYER => {
     defaultState.layersVisibility[LAYER] = true;
 });
 
-// Reducer
+// Reducer (sorry)
 export default function app(state = defaultState, action) {
     switch (action.type) {
 

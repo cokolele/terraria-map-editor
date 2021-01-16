@@ -1,5 +1,7 @@
 import Main from "/canvas/main.js";
 
+import LAYERS from "/utils/dbs/LAYERS.js";
+
 import store from "/state/store.js";
 import { stateChange } from "/state/state.js";
 
@@ -30,16 +32,28 @@ const onEraserClick = async (e) => {
                     tilesArray.push([x,y]);
     }
 
-    let offset;
-    tilesArray.forEach(([x, y]) => {
-        offset = (Main.state.canvas.worldObject.header.maxTilesX * y + x) * 4;
-        Main.layersImages[Main.state.optionbar.layer].data[offset] = 0;
-        Main.layersImages[Main.state.optionbar.layer].data[offset+1] = 0;
-        Main.layersImages[Main.state.optionbar.layer].data[offset+2] = 0;
-        Main.layersImages[Main.state.optionbar.layer].data[offset+3] = 0;
-    });
-
-    Main.updateLayers(Main.state.optionbar.layer);
+    let offset, allLayers = [LAYERS.TILES, LAYERS.WALLS, LAYERS.WIRES, LAYERS.LIQUIDS];
+    if (Main.state.optionbar.layer == 100) { // 100 = all
+        tilesArray.forEach(([x, y]) => {
+            allLayers.forEach(LAYER => {
+                offset = (Main.state.canvas.worldObject.header.maxTilesX * y + x) * 4;
+                Main.layersImages[LAYER].data[offset] = 0;
+                Main.layersImages[LAYER].data[offset+1] = 0;
+                Main.layersImages[LAYER].data[offset+2] = 0;
+                Main.layersImages[LAYER].data[offset+3] = 0;
+            });
+        });
+        Main.updateLayers();
+    } else {
+        tilesArray.forEach(([x, y]) => {
+            offset = (Main.state.canvas.worldObject.header.maxTilesX * y + x) * 4;
+            Main.layersImages[Main.state.optionbar.layer].data[offset] = 0;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+1] = 0;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+2] = 0;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+3] = 0;
+        });
+        Main.updateLayers(Main.state.optionbar.layer);
+    }
 
     await Main.workerInterfaces.editTiles(
         Main.state.optionbar.layer,
@@ -82,16 +96,28 @@ const onEraserDrag = async (e) => {
                     tilesArray.push([x,y]);
     }
 
-    let offset;
-    tilesArray.forEach(([x, y]) => {
-        offset = (Main.state.canvas.worldObject.header.maxTilesX * y + x) * 4;
-        Main.layersImages[Main.state.optionbar.layer].data[offset] = 0;
-        Main.layersImages[Main.state.optionbar.layer].data[offset+1] = 0;
-        Main.layersImages[Main.state.optionbar.layer].data[offset+2] = 0;
-        Main.layersImages[Main.state.optionbar.layer].data[offset+3] = 0;
-    });
-
-    Main.updateLayers(Main.state.optionbar.layer);
+    let offset, allLayers = [LAYERS.TILES, LAYERS.WALLS, LAYERS.WIRES, LAYERS.LIQUIDS];
+    if (Main.state.optionbar.layer == 100) { // 100 = all
+        tilesArray.forEach(([x, y]) => {
+            allLayers.forEach(LAYER => {
+                offset = (Main.state.canvas.worldObject.header.maxTilesX * y + x) * 4;
+                Main.layersImages[LAYER].data[offset] = 0;
+                Main.layersImages[LAYER].data[offset+1] = 0;
+                Main.layersImages[LAYER].data[offset+2] = 0;
+                Main.layersImages[LAYER].data[offset+3] = 0;
+            });
+        });
+        Main.updateLayers();
+    } else {
+        tilesArray.forEach(([x, y]) => {
+            offset = (Main.state.canvas.worldObject.header.maxTilesX * y + x) * 4;
+            Main.layersImages[Main.state.optionbar.layer].data[offset] = 0;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+1] = 0;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+2] = 0;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+3] = 0;
+        });
+        Main.updateLayers(Main.state.optionbar.layer);
+    }
 
     await Main.workerInterfaces.editTiles(
         Main.state.optionbar.layer,

@@ -5,6 +5,7 @@ import getImageUrl from "/canvas/extensions/getImageUrl.js";
 import saveWorldFile from "/canvas/extensions/saveWorldFile.js";
 import { getTileColor } from "/canvas/extensions/getTileInfo.js";
 import blockSwap from "/canvas/extensions/blockSwap.js";
+import blockReplace from "/canvas/extensions/blockReplace.js";
 
 export default {
     loadMap,
@@ -14,5 +15,6 @@ export default {
     getImageUrl,
     saveWorldFile,
     getTileColor,
-    blockSwap
+    blockSwap,
+    blockReplace
 }

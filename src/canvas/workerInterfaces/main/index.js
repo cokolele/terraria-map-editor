@@ -5,6 +5,7 @@ import verifyWorldFileFormat from "/canvas/workerInterfaces/main/verifyWorldFile
 import editTiles from "/canvas/workerInterfaces/main/editTiles.js";
 import getTileData from "/canvas/workerInterfaces/main/getTileData.js";
 import blockSwap from "/canvas/workerInterfaces/main/blockSwap.js";
+import blockReplace from "/canvas/workerInterfaces/main/blockReplace.js";
 
 export default {
     parseWorldFile,
@@ -13,5 +14,6 @@ export default {
     verifyWorldFileFormat,
     editTiles,
     getTileData,
-    blockSwap
+    blockSwap,
+    blockReplace
 }

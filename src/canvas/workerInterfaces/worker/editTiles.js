@@ -9,6 +9,10 @@ function changeTile(LAYER, x, y, newId) {
 
     if (newId == "delete") {
         switch(LAYER) {
+            case 100: //all
+                Worker.worldObject.tiles[x][y] = {};
+                break;
+
             case LAYERS.TILES:
                 delete Worker.worldObject.tiles[x][y].blockId;
                 delete Worker.worldObject.tiles[x][y].frameX;

@@ -73,36 +73,39 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
             type: "checkbox",
             checked: view.sidebar,
             onClick: menu.onToggleSidebar
-         }
+         },
+         DIVIDER,
+         "Zoom website in": () => { menu.onWebsiteZoom("in") },
+         "Zoom website out": () => { menu.onWebsiteZoom("out") },
+         "Reset website zoom": () => { menu.onWebsiteZoom("reset") }
       },
       Plugins: {
          "Block randomizer": {
             type: "default",
             enabled: running,
             onClick: menu.onPluginBlockSwap
+         },
+         "Replace block": {
+            type: "default",
+            enabled: running,
+            onClick: () => { stateChange("modal", "replaceblock") }
          }
       },
       "Map loading": {
-         "Disable checking sections offsets (helps with corrupted files)": {
+         "Ignore section offset check (corrupted data fix)": {
             type: "checkbox",
             checked: unsafe,
-            onClick: () => {
-               stateToggle(["canvas", "unsafe"]);
-            }
+            onClick: () => { stateToggle(["canvas", "unsafe"]) }
          },
-         "Enable ignoring buffer bounds (helps with missing data in files)": {
+         "Ignore buffer bounds (missing data fix)": {
             type: "checkbox",
             checked: ignoreBounds,
-            onClick: () => {
-               stateToggle(["canvas", "ignoreBounds"]);
-            }
+            onClick: () => { stateToggle(["canvas", "ignoreBounds"]) }
          },
-         "Enable loading only tiles (any valid >1.3.5.3 map viewing ONLY)": {
+         "Load only tiles data": {
             type: "checkbox",
             checked: unsafeOnlyTiles,
-            onClick: () => {
-               stateToggle(["canvas", "unsafeOnlyTiles"]);
-            }
+            onClick: () => { stateToggle(["canvas", "unsafeOnlyTiles"]) }
          },
          DIVIDER,
          "NOTE: Resaving the map in the latest Terraria should fix any problems": {

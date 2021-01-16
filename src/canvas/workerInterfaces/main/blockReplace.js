@@ -2,26 +2,29 @@ import Main from "/canvas/main.js";
 
 import WorkerError from "/canvas/workerInterfaces/errors/WorkerError.js";
 
-export default function({ onProgress }) {
+export default function({ from, to, onProgress }) {
     return new Promise((resolve, reject) => {
         Main.worker.onmessage = ({ data }) => {
             switch(data.action) {
-                case "ERROR":
-                    WorkerError("blockSwap", data.error);
-                    resolve(null);
-                    break;
-
                 case "RETURN_PROGRESS":
                     onProgress(data.percent);
                     break;
                 case "RETURN_DONE":
+                console.log(data);
+                    resolve(data.replacedBlocks);
+                    break;
+
+                case "ERROR":
+                    WorkerError("blockReplace", data.e);
                     resolve(null);
                     break;
             }
-        };
+        }
 
         Main.worker.postMessage({
-            action: "BLOCK_SWAP"
+            action: "BLOCK_REPLACE",
+            from,
+            to
         });
     });
 }

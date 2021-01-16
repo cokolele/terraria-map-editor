@@ -11,6 +11,7 @@ import ModalAccount from "/components/modal/account.jsx";
 import ErrorReport from "/components/modal/errorReport.jsx";
 import SuggestionReport from "/components/modal/suggestionReport.jsx";
 import SavingDisclaimer from "/components/modal/savingDisclaimer.jsx";
+import ReplaceBlock from "/components/modal/replaceBlock.jsx";
 
 const config = {
    signin: {
@@ -36,6 +37,10 @@ const config = {
    savingdisclaimer: {
       label: "Please be careful",
       View: SavingDisclaimer
+   },
+   replaceblock: {
+      label: "Replace block type",
+      View: ReplaceBlock
    }
 };
 
