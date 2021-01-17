@@ -7,8 +7,6 @@ export default async function({ from, to, onProgress }) {
     let newProperties = {};
     let fromWire = from.layer == LAYERS.WIRES ? "wire" + from.id.charAt(0).toUpperCase() + from.id.slice(1) : null;
 
-    console.log(from, to);
-
     switch (to.layer) {
         case LAYERS.TILES:
             newProperties.blockId = to.id;
@@ -24,8 +22,6 @@ export default async function({ from, to, onProgress }) {
             newProperties.liquidAmount = 255;
             break;
     }
-
-    console.log(newProperties, fromWire);
 
     let tile;
     const swapOnePercent = Worker.worldObject.header.maxTilesY / 100;

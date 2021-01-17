@@ -387,51 +387,54 @@ function SidebarCategoryGeneral({ worldObject, stateChange, unsafeOnlyTiles }) {
             <OptionbarInputSelect value={header.treeStyle[2]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5]} onChange={(value) => {setHeaderKey("treeStyle", value, 2)}}/>
             <OptionbarInputSelect value={header.treeStyle[3]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5]} onChange={(value) => {setHeaderKey("treeStyle", value, 3)}}/>
          </div>
-         <span>{version >= 225 ? "Forest 1 background" : "Forest background"}</span>
+
+         <div className="sidebar-view-general-row-divider"><span>Backgrounds:</span></div>
+
+         <span>{version >= 225 ? "Forest 1" : "Forest"}</span>
          <OptionbarInputSelect value={header.setBG0} options={version >= 225 ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73] : [0, 1, 2, 3, 4, 5, 6, 7, 8, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBG0", value)}} width="6ch"/>
          {
             version >= 225 &&
             <>
-               <span>Forest 2 background</span>
+               <span>Forest 2</span>
                <OptionbarInputSelect value={header.setBG10} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBG0", value)}} width="6ch"/>
-               <span>Forest 3 background</span>
+               <span>Forest 3</span>
                <OptionbarInputSelect value={header.setBG11} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBG0", value)}} width="6ch"/>
-               <span>Forest 4 background</span>
+               <span>Forest 4</span>
                <OptionbarInputSelect value={header.setBG12} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBG0", value)}} width="6ch"/>
             </>
          }
-         <span>Corruption background</span>
+         <span>Corruption</span>
          <OptionbarInputSelect value={header.setBG1} options={version >= 225 ? [0, 1, 2, 3, 4] : [0, 1]} onChange={(value) => {setHeaderKey("setBG1", value)}} width="6ch"/>
-         <span>Jungle background</span>
+         <span>Jungle</span>
          <OptionbarInputSelect value={header.setBG2} options={version >= 225 ? [0, 1, 2, 3, 4, 5] : [0, 1]} onChange={(value) => {setHeaderKey("setBG2", value)}} width="6ch"/>
-         <span>Deep jungle background</span>
+         <span>Deep jungle</span>
          <OptionbarInputSelect value={header.jungleBackStyle} options={[0, 1]} onChange={(value) => {setHeaderKey("jungleBackStyle", value)}} width="6ch"/>
-         <span>Snow background</span>
+         <span>Snow</span>
          <OptionbarInputSelect value={header.setBG3} options={version >= 225 ? [0, 1, 2, 3, 4, 5, 6, 7, 21, 22, 31, 32, 41, 42] : [0, 1, 2, 3, 4, 21, 22, 31, 32, 41, 42]} onChange={(value) => {setHeaderKey("setBG3", value)}} width="6ch"/>
-         <span>Deep snow background</span>
+         <span>Deep snow</span>
          <OptionbarInputSelect value={header.iceBackStyle} options={[0, 1, 2, 3]} onChange={(value) => {setHeaderKey("iceBackStyle", value)}} width="6ch"/>
-         <span>Hallow background</span>
+         <span>Hallow</span>
          <OptionbarInputSelect value={header.setBG4} options={version >= 225 ? [0, 1, 2, 3, 4] : [0, 1]} onChange={(value) => {setHeaderKey("setBG4", value)}} width="6ch"/>
-         <span>Crimson background</span>
+         <span>Crimson</span>
          <OptionbarInputSelect value={header.setBG5} options={version >= 225 ? [0, 1, 2, 3, 4, 5] : [0, 1, 2]} onChange={(value) => {setHeaderKey("setBG5", value)}} width="6ch"/>
-         <span>Desert background</span>
+         <span>Desert</span>
          <OptionbarInputSelect value={header.setBG6} options={version >= 225 ? [0, 1, 2, 3, 4] : [0, 1]} onChange={(value) => {setHeaderKey("setBG6", value)}} width="6ch"/>
-         <span>Ocean background</span>
+         <span>Ocean</span>
          <OptionbarInputSelect value={header.setBG7} options={version >= 225 ? [0, 1, 2, 3, 4, 5] : [0, 1, 2]} onChange={(value) => {setHeaderKey("setBG7", value)}} width="6ch"/>
          {
             version >= 225 &&
             <>
-               <span>Mushroom background</span>
+               <span>Mushroom</span>
                <OptionbarInputSelect value={header.setBG8} options={[0, 1, 2, 3]} onChange={(value) => {setHeaderKey("setBG8", value)}} width="6ch"/>
             </>
          }
-         <span>Underground backgrounds X 1</span>
+         <span>Underground X 1</span>
          <OptionbarInputSlider value={header.caveBackX[0]} onChange={(value) => {setHeaderKey("caveBackX", value, 0)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
-         <span>Underground backgrounds X 2</span>
+         <span>Underground X 2</span>
          <OptionbarInputSlider value={header.caveBackX[1]} onChange={(value) => {setHeaderKey("caveBackX", value, 1)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
-         <span>Underground backgrounds X 3</span>
+         <span>Underground X 3</span>
          <OptionbarInputSlider value={header.caveBackX[2]} onChange={(value) => {setHeaderKey("caveBackX", value, 2)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
-         <span>Underground background</span>
+         <span>Underground</span>
          <div className="sidebar-view-general-row-spanner">
             <OptionbarInputSelect value={header.caveBackStyle[0]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5, 6, 7]} onChange={(value) => {setHeaderKey("caveBackStyle", value, 0)}}/>
             <OptionbarInputSelect value={header.caveBackStyle[1]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5, 6, 7]} onChange={(value) => {setHeaderKey("caveBackStyle", value, 1)}}/>
@@ -441,11 +444,11 @@ function SidebarCategoryGeneral({ worldObject, stateChange, unsafeOnlyTiles }) {
          {
             version >= 225 &&
             <>
-               <span>Underworld background</span>
+               <span>Underworld</span>
                <OptionbarInputSelect value={header.setBG9} options={[0, 1, 2]} onChange={(value) => {setHeaderKey("setBG9", value)}} width="6ch"/>
             </>
          }
-         <span>Underworld walls background</span>
+         <span>Underworld walls</span>
          <OptionbarInputSelect value={header.hellBackStyle} options={[0, 1, 2]} onChange={(value) => {setHeaderKey("hellBackStyle", value)}} width="6ch"/>
 
          {

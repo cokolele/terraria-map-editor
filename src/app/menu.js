@@ -4,6 +4,7 @@ import { stateChange, stateToggle } from "/state/state.js";
 import api from "/utils/api/api.js";
 
 import Main from "/canvas/main.js";
+import completeBestiary from "/utils/dbs/completeBestiary.js";
 
 const onNewFile = (e, file) => {
     if (file == undefined) {
@@ -15,7 +16,7 @@ const onNewFile = (e, file) => {
         });
         inputElHidden.click();
     } else {
-        store.dispatch(stateChange(["status", "description"], "Loading map from file"));
+        store.dispatch(stateChange(["status", "description"], "Loading data from file"));
         store.dispatch(stateChange(["canvas", "worldFile"], file));
     }
 }
@@ -34,7 +35,7 @@ const onSaveImage = async () => {
     const worldPngBlobUrl = URL.createObjectURL(worldPngBlob);
 
     const link = document.createElement("a");
-    link.download = worldFileName.replace(" ", "_") + ".png";
+    link.download = worldFileName.replaceAll(" ", "_") + ".png";
     link.href = worldPngBlobUrl;
     link.click();
 
@@ -46,7 +47,7 @@ const onSaveFile = async (e) => {
         store.dispatch(stateChange("modal", "savingdisclaimer"));
 
     const newWorldFile = await Main.extensions.saveWorldFile();
-    const newWorldFileName = Main.state.canvas.worldObject.header.mapName.replace(" ", "_") + ".wld";
+    const newWorldFileName = Main.state.canvas.worldObject.header.mapName.replaceAll(" ", "_") + ".wld";
 
     if (newWorldFile === null)
         return;
@@ -119,6 +120,64 @@ const onWebsiteZoom = (option) => {
     localSettings.set("htmlFontSize", size);
 }
 
+const onBestiaryExport = () => {
+    const state = store.getState();
+
+    const link = document.createElement("a");
+    const blob = new Blob([JSON.stringify(state.canvas.worldObject.bestiary, null, 2)], {type : "application/json"});
+    const url = URL.createObjectURL(blob);
+
+    link.href = url;
+    link.download = state.canvas.worldObject.header.mapName.replaceAll(" ", "_") + "_bestiaryData.json";
+    link.click();
+
+    URL.revokeObjectURL(url);
+}
+
+const onBestiaryImport = async (e, file) => {
+    if (file == undefined) {
+        const inputElHidden = document.createElement("input");
+        inputElHidden.setAttribute("type", "file");
+        inputElHidden.setAttribute("accept", ".json");
+        inputElHidden.addEventListener("input", async () => {
+           onBestiaryImport(null, inputElHidden.files[0]);
+        });
+        inputElHidden.click();
+    } else {
+        store.dispatch(stateChange(["status", "description"], "Loading data from file"));
+
+        try {
+            const data = await file.text();
+            let bestiary = JSON.parse(data);
+
+            bestiary = {
+                NPCKills: bestiary.NPCKills ?? {},
+                NPCSights: bestiary.NPCSights ?? {},
+                NPCChats: bestiary.NPCChats ?? {}
+            };
+
+            store.dispatch(stateChange(["canvas", "worldObject", "bestiary"], bestiary));
+            store.dispatch(stateChange(["status", "description"], "Done"));
+        } catch(e) {
+            console.error(e);
+            store.dispatch(stateChange(["status", "description"], "Failed"));
+        }
+    }
+}
+
+const onBestiaryFill = () => {
+    store.dispatch(stateChange("modal", ["confirmation", {
+        text: "Completing the bestionary will overwrite your current bestionary. Are you sure?",
+        textButton: "Yes, overwrite",
+        onConfirm: () => {
+            store.dispatch(stateChange([
+                [["canvas", "worldObject", "bestiary"], completeBestiary],
+                [["status", "description"], "Done"]
+            ]));
+        }
+    }]));
+}
+
 export default {
     onNewFile,
     onExampleMap,
@@ -128,5 +187,8 @@ export default {
     onToggleSidebar,
     onToggleToolbar,
     onPluginBlockSwap,
-    onWebsiteZoom
+    onWebsiteZoom,
+    onBestiaryExport,
+    onBestiaryImport,
+    onBestiaryFill
 };

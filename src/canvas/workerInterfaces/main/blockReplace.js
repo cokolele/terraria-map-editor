@@ -10,7 +10,6 @@ export default function({ from, to, onProgress }) {
                     onProgress(data.percent);
                     break;
                 case "RETURN_DONE":
-                console.log(data);
                     resolve(data.replacedBlocks);
                     break;
 

@@ -80,15 +80,31 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
          "Reset website zoom": () => { menu.onWebsiteZoom("reset") }
       },
       Plugins: {
+         "Replace block": {
+            type: "default",
+            enabled: running,
+            onClick: () => { stateChange("modal", "replaceblock") }
+         },
          "Block randomizer": {
             type: "default",
             enabled: running,
             onClick: menu.onPluginBlockSwap
          },
-         "Replace block": {
+         DIVIDER,
+         "Export bestiary": {
             type: "default",
             enabled: running,
-            onClick: () => { stateChange("modal", "replaceblock") }
+            onClick: menu.onBestiaryExport
+         },
+         "Import bestiary": {
+            type: "default",
+            enabled: running,
+            onClick: menu.onBestiaryImport
+         },
+         "Complete the bestiary": {
+            type: "default",
+            enabled: running,
+            onClick: menu.onBestiaryFill
          }
       },
       "Map loading": {

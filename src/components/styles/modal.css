@@ -29,6 +29,7 @@
     background-color: #535353;
     padding: 30px 50px;
     border-radius: 5px;
+    overflow-y: auto;
 }
 
 .modal-button-close {

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
 import localSettings from "/utils/localSettings.js";
-import useToggle from "/utils/hooks/useToggle.js";
 
 import InputCheckbox from "/components/inputs/input-checkbox.jsx";
 import ModalAccountButton from "/components/modal/account/button.jsx";
