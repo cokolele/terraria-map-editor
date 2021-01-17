@@ -1,7 +1,7 @@
 /*
  *  basics
  */
-canvas rendering is based on loop. loop runs on 60fps max.
+canvas map rendering is requestAnimationFrame loop.
 loop is started and stopped through main namespace (module pattern) extensions loadMap and closeMap
 
 /*
@@ -29,8 +29,7 @@ main namespace contains everything canvas related and can be imported.
     /*
      * basics of rendering the map
      */
-    main content of the canvas is the map, and map consists of layers.
-    layers are defined in /utils/dbs/LAYERS.js (enum).
+    map consists of layers defined in /utils/dbs/LAYERS.js (enum).
     every layer has its own ImageData - array of rgba bytes, 4 * mapWidth * mapHeight. You can edit this ImageData directly through Main.layersImages[LAYER] or extensions (preferably).
     editing a layer image wont result in canvas change. to update a layer you have to push its image to a layer context. you can do it through Main.updateLayers([layer]). this is useful because you can avoid somewhat expensive layers updates when doing many operations and only need to show the result.
     all layer contexts are copied to the main canvas context every tick, their order is based on the LAYERS object order, NOT their value in the object.
@@ -39,5 +38,3 @@ main namespace contains everything canvas related and can be imported.
      * editing the map tiles
      */
     copying the tiles from the worker to the main takes some time and renders the site unresponsive. since it would defeat the purpose of the worker and make site laggy, world tiles (map width * map height 2d array of tile objects) are not being sent back to the main with the rest of the parsed map. because of this you need to use extension/workerInterface to edit the tiles.
-
-this basic explanation should help you make at least some sense of the canvas code

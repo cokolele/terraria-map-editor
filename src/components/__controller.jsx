@@ -35,7 +35,7 @@ function Controller(props) {
             props.stateChange("mobile", false);
       };
       window.onresize();
-   }, [props.mobile]);
+   }, []);
 
    //canvas
    useEffect(() => {
