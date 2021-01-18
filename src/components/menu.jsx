@@ -14,8 +14,6 @@ import MenuFolderButton from "/components/menu/folder-button.jsx";
 import { LogoIcon, AccountBoxIcon, GithubIcon } from "/components/icon.jsx";
 import "/components/styles/menu.css";
 
-import { appVersion, ingameSupportedVersion } from "/version.json";
-
 function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnlyTiles, ignoreBounds, drawer, mobile}) {
    const [currentTab, setCurrentTab] = useState(false);
 
@@ -172,6 +170,7 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
                })
             }
             <div className="flex-filler"></div>
+            <MenuFolderButton label="Change Log" onClick={() => { stateChange("modal", "changelog") }}/>
             <MenuFolderButton label={user !== null ? user.username : "Account"} onClick={onAccountClick} Icon={AccountBoxIcon}/>
             <MenuFolderButton label="Github" onClick={onGithubClick} Icon={GithubIcon}/>
          </div>

@@ -1,0 +1,36 @@
+{
+    "appVersion": "3.1.4",
+    "ingameSupportedVersion": "1.4.1.2",
+    "changelog": {
+        "3.1.4": {
+            "date": "January 18, 2021",
+            "changes": [
+                "Added creative powers options to General tab (they work even on non-journey worlds)",
+                "Added changelog"
+            ]
+        },
+        "3.1.3": {
+            "date": "January 17, 2021",
+            "changes": [
+                "Added bestionary import, export, completion"
+            ]
+        },
+        "3.1": {
+            "date": "January 16, 2021",
+            "changes": [
+                "Added block replace plugin",
+                "Added website zoom (Menu > View)",
+                "Added all layers option for eraser tool",
+                "Fixed optionbar options being reset when tool changes"
+            ]
+        },
+        "3.0": {
+            "date": "October 23, 2020",
+            "changes": [
+                "Added mobile UI",
+                "Added new NPC sprite",
+                "Fixed menu crashes"
+            ]
+        }
+    }
+}

@@ -11,11 +11,11 @@ import "/components/styles/sidebar/views/general.css";
 import LAYERS from "/utils/dbs/LAYERS.js";
 //import editTiles from "/canvas/extensions/editTiles.js";
 
-function SidebarCategoryGeneral({ worldObject, stateChange, unsafeOnlyTiles }) {
-   const [header, setHeader] = useState(worldObject.header);
-   const version = worldObject.fileFormatHeader.version;
+function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeOnlyTiles, creativePowers }) {
+   const version = fileFormatHeader.version;
 
    const setHeaderKey = (key, value, index) => {
+
       if (key == "worldSurface") {
          /*
          if (value > header.worldSurface)
@@ -115,18 +115,20 @@ function SidebarCategoryGeneral({ worldObject, stateChange, unsafeOnlyTiles }) {
          }
       }
 
-      if (index !== undefined) {
+      if (index !== undefined)
          header[key][index] = value;
-      }
-      else {
+      else
          header[key] = value;
-      }
 
-      setHeader({...header});
-      stateChange(["canvas", "worldObject"], {...worldObject, header});
+      stateChange(["canvas", "worldObject", "header"], { ...header });
    }
 
-   if (unsafeOnlyTiles)
+   const setCreativePower = (key, val) => {
+      creativePowers[key] = val;
+      stateChange(["canvas", "worldObject", "creativePowers"], { ...creativePowers });
+   }
+
+   if (unsafeOnlyTiles || header.length < 10)
       return (
          <div className="sidebar-view-general--disabled">
             <div style={{fontSize: "5rem"}}>:(</div>
@@ -146,7 +148,7 @@ function SidebarCategoryGeneral({ worldObject, stateChange, unsafeOnlyTiles }) {
          <span>Seed</span>
          <div className="sidebar-view-general-row-value">{header.seedText}</div>
          <span>Revision</span>
-         <div className="sidebar-view-general-row-value">{worldObject.fileFormatHeader.revision}</div>
+         <div className="sidebar-view-general-row-value">{fileFormatHeader.revision}</div>
          <span>World size in block</span>
          <div className="sidebar-view-general-row-value">{`${header.maxTilesX} x ${header.maxTilesY}`}</div>
          <span>World size in pixels</span>
@@ -213,8 +215,30 @@ function SidebarCategoryGeneral({ worldObject, stateChange, unsafeOnlyTiles }) {
             </>
          }
 
-         <div className="sidebar-view-general-row-divider"><span>Flags:</span></div>
+         <div className="sidebar-view-general-row-divider"><span>Creative Powers:</span></div>
 
+         <span>Time freeze</span>
+         <OptionbarInputCheckbox value={creativePowers.freezeTime} onChange={(value) => {setCreativePower("freezeTime", value)}} />
+         <span>Time speed</span>
+         <div className="sidebar-view-general-row-spanner">
+            1x
+            <OptionbarInputSlider value={creativePowers.modifyTimeRate} onChange={(value) => {setCreativePower("modifyTimeRate", value)}} min={0} max={1} float />
+            24x
+         </div>
+         <span>Rain change</span>
+         <OptionbarInputCheckbox value={!creativePowers.freezeRainPower} onChange={(value) => {setCreativePower("freezeRainPower", !value)}} />
+         <span>Wind change</span>
+         <OptionbarInputCheckbox value={!creativePowers.freezeWindDirectionAndStrength} onChange={(value) => {setCreativePower("freezeWindDirectionAndStrength", !value)}} />
+         <span>Corruption spread</span>
+         <OptionbarInputCheckbox value={!creativePowers.stopBiomeSpreadPower} onChange={(value) => {setCreativePower("stopBiomeSpreadPower", !value)}} />
+         <span>difficultySliderPower</span>
+         <div className="sidebar-view-general-row-spanner">
+            0.5x
+            <OptionbarInputSlider value={creativePowers.difficultySliderPower} onChange={(value) => {setCreativePower("difficultySliderPower", value)}} min={0} max={1} float />
+            3x
+         </div>
+
+         <div className="sidebar-view-general-row-divider"><span>Flags:</span></div>
          {
             version >= 225 ?
                <>
@@ -574,8 +598,10 @@ function SidebarCategoryGeneral({ worldObject, stateChange, unsafeOnlyTiles }) {
 export default connect(
    state => {
       return {
-         worldObject: state.canvas.worldObject,
-         unsafeOnlyTiles: state.canvas.unsafeOnlyTiles
+         fileFormatHeader: state.canvas.worldObject.fileFormatHeader,
+         header: state.canvas.worldObject.header,
+         unsafeOnlyTiles: state.canvas.unsafeOnlyTiles,
+         creativePowers: state.canvas.worldObject.creativePowers
       };
    },
    { stateChange }

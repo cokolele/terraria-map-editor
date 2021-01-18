@@ -14,6 +14,7 @@ import SuggestionReport from "/components/modal/suggestionReport.jsx";
 import SavingDisclaimer from "/components/modal/savingDisclaimer.jsx";
 import ReplaceBlock from "/components/modal/replaceBlock.jsx";
 import ModalConfirmation from "/components/modal/confirmation.jsx";
+import ModalChangelog from "/components/modal/changelog.jsx";
 
 const config = {
    signin: {
@@ -47,6 +48,10 @@ const config = {
    confirmation: {
       label: "Confirmation",
       View: ModalConfirmation
+   },
+   changelog: {
+      label: "Change Log",
+      View: ModalChangelog
    }
 };
 

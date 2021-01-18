@@ -30,6 +30,10 @@
     padding: 30px 50px;
     border-radius: 5px;
     overflow-y: auto;
+
+    letter-spacing: 0.01rem;
+    line-height: 1.4rem;
+    font-size: 1rem;
 }
 
 .modal-button-close {
@@ -70,8 +74,16 @@
 ---
 */
 
+.modal-text {
+    margin-top: 12px;
+}
+
 .modal-text--center {
     text-align: center;
+}
+
+.modal-text--right {
+    text-align: right;
 }
 
 .modal-text--h2 {
@@ -79,4 +91,14 @@
     font-size: 1.1rem;
     font-weight: 700;
     margin: 0.6rem 0;
+}
+
+.modal-text--italic {
+    font-style: italic;
+}
+
+.modal-dividerLine {
+    height: 1px;
+    background-color: #424242;
+    margin: 1.5rem 1rem 1rem;
 }
