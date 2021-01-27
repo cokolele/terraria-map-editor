@@ -6,9 +6,33 @@
     margin: 0 2rem;
 }
 
+.modal-changelog-change-header {
+    display: flex;
+    align-items: center;
+}
+
+.modal-changelog-change-version {
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 0.3rem 0.4rem;
+    border-radius: 4px;
+    background-color: #0079d3;
+}
+
+.modal-changelog-change-date {
+    margin-left: 1rem;
+    color: #b8b8b8;
+    font-style: italic;
+}
+
 @media (max-width: 960px)
 {
     .modal-changelog {
         width: auto;
+    }
+
+    .modal-changelog-changes-container {
+        margin: 0 0.5rem;
     }
 }

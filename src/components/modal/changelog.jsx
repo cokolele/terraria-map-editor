@@ -15,10 +15,10 @@ function ModalChangelog({ close }) {
             {
                Object.entries(changelog).map(([version, record]) => (
                   <div>
-                     <span>
-                        <span className="modal-text--h2">{version}</span>
-                        <span className="modal-text--italic" style={{marginLeft: "1rem"}}>{record.date}</span>
-                     </span>
+                     <div className="modal-changelog-change-header">
+                        <div className="modal-changelog-change-version">{version}</div>
+                        <div className="modal-changelog-change-date">{record.date}</div>
+                     </div>
                      <ul>
                         {
                            record.changes.map(detail =>

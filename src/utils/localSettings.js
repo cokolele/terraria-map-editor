@@ -7,5 +7,9 @@ export default {
     },
     get: (key, _default) => {
         return localSettings[key] ?? _default;
+    },
+    delete: (key) => {
+        delete localSettings[key];
+        localStorage.removeItem(key);
     }
 }

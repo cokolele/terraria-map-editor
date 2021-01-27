@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { ArrowDownIcon } from "/components/icon.jsx";
 import "/components/styles/input.css";

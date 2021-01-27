@@ -27,7 +27,7 @@ function ModalSignup({ close, stateChange }) {
       };
    }, [username, password, password2, email]);
 
-   const usernameRegexp = /^[a-z0-9_-]{3,16}$/;
+   const usernameRegexp = /^[A-Za-z0-9_-]{3,16}$/;
    const checkInputsErrors = () => {
       const usernameLength = username.trim().length;
       const passwordLength = password.trim().length;

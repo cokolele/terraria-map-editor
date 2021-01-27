@@ -8,6 +8,7 @@ import AppbarButton from "/components/appbar/button.jsx";
 import SidebarViewGeneral from "/components/sidebar/views/general.jsx";
 import SidebarViewLayers from "/components/sidebar/views/layers.jsx";
 import SidebarViewTileInfo from "/components/sidebar/views/tileInfo.jsx";
+import SidebarViewNPCs from "/components/sidebar/views/NPCs.jsx";
 import "/components/styles/sidebar.css";
 
 const config = [
@@ -22,6 +23,10 @@ const config = [
    {
       label: "Tile Info",
       View: SidebarViewTileInfo
+   }*/
+   /*{
+      label: "NPCs",
+      View: SidebarViewNPCs
    }*/
 ];
 

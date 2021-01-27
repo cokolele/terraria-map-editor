@@ -1,0 +1,70 @@
+.sidebar-view-npcs-search {
+    fill: #b7b7b7;
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1.6rem;
+    margin-bottom: 1rem;
+}
+
+.sidebar-view-npcs-searchInput {
+    margin-right: 2rem;
+    position: relative;
+}
+
+.sidebar-view-npcs-searchInput input {
+    width: 5rem;
+    background-color: #535353;
+    padding: 0.2rem 0.5rem;
+    border: 0;
+    color: #b7b7b7;
+    font-weight: 700;
+    font-size: 1.1rem;
+    transition: width 0.3s ease, color 0.3s ease;
+}
+
+.sidebar-view-npcs-searchInput input:focus {
+    width: 19rem;
+    outline: none;
+    color: #f0f0f0;
+}
+
+.sidebar-view-npcs-searchInput::after {
+    content: "";
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: -3px;
+
+    height: 2px;
+    width: 100%;
+    border-radius: 1rem;
+    background-color: #b7b7b7;
+}
+
+.sidebar-view-npcs-row {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1.6rem;
+    margin-bottom: 2px;
+
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+    border-radius: 0.6rem;
+    margin: 0 0.6rem 2px;
+}
+
+.sidebar-view-npcs-row:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-view-npcs-row-type {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #f0f0f0;
+}
+
+.sidebar-view-npcs-row-name {
+    margin-left: 1rem;
+    font-size: 1rem;
+    color: #dddddd;
+}

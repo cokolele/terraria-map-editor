@@ -1,4 +1,4 @@
-import { ToolMoveIcon, ToolTileInfo, ToolSelectIcon, ToolPencilIcon, ToolBucketIcon, ToolEraserIcon } from "/components/icon.jsx";
+import { ToolMoveIcon, ToolTileInfo, ToolSelectIcon, ToolPencilIcon, ToolBucketIcon, ToolEraserIcon, ToolPointIcon } from "/components/icon.jsx";
 
 export default {
     move: {
@@ -26,5 +26,9 @@ export default {
     eraser: {
         title: "Eraser tool",
         icon: ToolEraserIcon
+    },
+    worldPoint: {
+        title: "World point tool",
+        icon: ToolPointIcon
     }
 };

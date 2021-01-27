@@ -8,6 +8,7 @@ import LAYERS from "/utils/dbs/LAYERS.js";
 import OptionbarOptionLayer from "/components/optionbar/layer.jsx";
 import OptionbarOptionSize from "/components/optionbar/size.jsx";
 import OptionbarOptionId from "/components/optionbar/id.jsx";
+import OptionbarOptionWorldPoint from "/components/optionbar/worldPoint.jsx";
 
 import "/components/styles/optionbar.css";
 
@@ -33,7 +34,7 @@ function Optionbar({ stateChange, show, running, selectedTool, optionbarState })
             </div>
             <div className="optionbar-divider"></div>
             {
-               running && selectedTool != "move" && selectedTool != "select" && selectedTool != "tileInfo" &&
+               running && (selectedTool == "pencil" || selectedTool == "eraser" || selectedTool == "bucket") &&
                <>
                   <OptionbarOptionLayer state={state} setState={setState} addAllOption={selectedTool == "eraser" ? true : false}/>
                   {
@@ -51,6 +52,10 @@ function Optionbar({ stateChange, show, running, selectedTool, optionbarState })
                      </>
                   }
                </>
+            }
+            {
+               running && selectedTool == "worldPoint" &&
+               <OptionbarOptionWorldPoint state={state} setState={setState}/>
             }
          </div>
       </div>

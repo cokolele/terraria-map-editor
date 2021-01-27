@@ -1,7 +1,14 @@
 {
-    "appVersion": "3.1.4",
+    "appVersion": "3.1.5",
     "ingameSupportedVersion": "1.4.1.2",
     "changelog": {
+        "3.1.5": {
+            "date": "January 28, 2021",
+            "changes": [
+                "Added world points tool for locating and moving points and NPCs",
+                "Fixed account name not allowing uppercase characters"
+            ]
+        },
         "3.1.4": {
             "date": "January 18, 2021",
             "changes": [

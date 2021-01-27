@@ -215,28 +215,33 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
             </>
          }
 
-         <div className="sidebar-view-general-row-divider"><span>Creative Powers:</span></div>
+         {
+            creativePowers &&
+            <>
+               <div className="sidebar-view-general-row-divider"><span>Creative Powers:</span></div>
 
-         <span>Time freeze</span>
-         <OptionbarInputCheckbox value={creativePowers.freezeTime} onChange={(value) => {setCreativePower("freezeTime", value)}} />
-         <span>Time speed</span>
-         <div className="sidebar-view-general-row-spanner">
-            1x
-            <OptionbarInputSlider value={creativePowers.modifyTimeRate} onChange={(value) => {setCreativePower("modifyTimeRate", value)}} min={0} max={1} float />
-            24x
-         </div>
-         <span>Rain change</span>
-         <OptionbarInputCheckbox value={!creativePowers.freezeRainPower} onChange={(value) => {setCreativePower("freezeRainPower", !value)}} />
-         <span>Wind change</span>
-         <OptionbarInputCheckbox value={!creativePowers.freezeWindDirectionAndStrength} onChange={(value) => {setCreativePower("freezeWindDirectionAndStrength", !value)}} />
-         <span>Corruption spread</span>
-         <OptionbarInputCheckbox value={!creativePowers.stopBiomeSpreadPower} onChange={(value) => {setCreativePower("stopBiomeSpreadPower", !value)}} />
-         <span>difficultySliderPower</span>
-         <div className="sidebar-view-general-row-spanner">
-            0.5x
-            <OptionbarInputSlider value={creativePowers.difficultySliderPower} onChange={(value) => {setCreativePower("difficultySliderPower", value)}} min={0} max={1} float />
-            3x
-         </div>
+               <span>Time freeze</span>
+               <OptionbarInputCheckbox value={creativePowers.freezeTime} onChange={(value) => {setCreativePower("freezeTime", value)}} />
+               <span>Time speed</span>
+               <div className="sidebar-view-general-row-spanner">
+                  1x
+                  <OptionbarInputSlider value={creativePowers.modifyTimeRate} onChange={(value) => {setCreativePower("modifyTimeRate", value)}} min={0} max={1} float />
+                  24x
+               </div>
+               <span>Rain change</span>
+               <OptionbarInputCheckbox value={!creativePowers.freezeRainPower} onChange={(value) => {setCreativePower("freezeRainPower", !value)}} />
+               <span>Wind change</span>
+               <OptionbarInputCheckbox value={!creativePowers.freezeWindDirectionAndStrength} onChange={(value) => {setCreativePower("freezeWindDirectionAndStrength", !value)}} />
+               <span>Corruption spread</span>
+               <OptionbarInputCheckbox value={!creativePowers.stopBiomeSpreadPower} onChange={(value) => {setCreativePower("stopBiomeSpreadPower", !value)}} />
+               <span>Enemy Difficulty</span>
+               <div className="sidebar-view-general-row-spanner">
+                  0.5x
+                  <OptionbarInputSlider value={creativePowers.difficultySliderPower} onChange={(value) => {setCreativePower("difficultySliderPower", value)}} min={0} max={1} float />
+                  3x
+               </div>
+            </>
+         }
 
          <div className="sidebar-view-general-row-divider"><span>Flags:</span></div>
          {

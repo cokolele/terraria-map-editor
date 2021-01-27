@@ -16,6 +16,10 @@ function SidebarCategoryLayers({ layersVisibility, stateToggle }) {
    return (
       <>
          <div className="sidebar-tab-layers-layer">
+            <SidebarCategoryLayersButton onClick={() => {onLayerClick("WorldPoints")}} visible={layersVisibility.WorldPoints}/>
+            <div className="sidebar-tab-layers-layer-label">World points</div>
+         </div>
+         <div className="sidebar-tab-layers-layer">
             <SidebarCategoryLayersButton onClick={() => {onLayerClick("NPCs")}} visible={layersVisibility.NPCs}/>
             <div className="sidebar-tab-layers-layer-label">NPCs</div>
          </div>

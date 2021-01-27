@@ -7,6 +7,7 @@ import LAYERS from "/utils/dbs/LAYERS.js";
 
 const GENERAL_CHANGE = "twe/app/GENERAL_CHANGE";
 const GENERAL_TOGGLE = "twe/app/GENERAL_TOGGLE";
+const GENERAL_FIRE = "twe/app/GENERAL_FIRE";
 
 let defaultState = {
     canvas: {
@@ -15,9 +16,11 @@ let defaultState = {
         worldObject: null,
         unsafe: false,
         unsafeOnlyTiles: false,
-        ignoreBounds: false
+        ignoreBounds: false,
+        events: {
+            click: 0
+        }
     },
-    tileData: null,
     status: {
         description: null,
         percent: null,
@@ -39,9 +42,11 @@ let defaultState = {
         id: null,
         ordered: false,
         locked: true,
+        worldPoint: 0
     }),
     layersVisibility: {
         NPCs: true,
+        WorldPoints: true
     },
     mobile: false,
     appbar: {
@@ -56,11 +61,12 @@ Object.values(LAYERS).forEach(LAYER => {
 
 // Reducer (sorry)
 export default function app(state = defaultState, action) {
+    if (window.statedebug)
+        console.log(JSON.stringify(action.args), state);
+
     switch (action.type) {
 
         case GENERAL_CHANGE:
-            if (window.statedebug)
-                console.log(JSON.stringify(action.args), state);
             if (typeof action.args[0] == "string") // key value pair
                 state[action.args[0]] = action.args[1];
             else {
@@ -83,14 +89,22 @@ export default function app(state = defaultState, action) {
             return {...state};
 
         case GENERAL_TOGGLE:
-            if (window.statedebug)
-                console.log(JSON.stringify(action.args), state);
             if (typeof action.args[0] == "string") // key value pair
                 state[action.args[0]] = !state[action.args[0]];
             else { //nested key value pair
                 let _state = state, key = action.args[0].pop();
                 action.args[0].forEach(e => { _state = _state[e] });
                 _state[key] = !_state[key];
+            }
+            return {...state};
+
+        case GENERAL_FIRE:
+            if (typeof action.args[0] == "string")
+                state[action.args[0]]++;
+            else {
+                let _state = state, key = action.args[0].pop();
+                action.args[0].forEach(e => { _state = _state[e] });
+                _state[key]++;
             }
             return {...state};
 
@@ -108,7 +122,12 @@ function stateToggle(...args) {
     return { type: GENERAL_TOGGLE, args };
 }
 
+function stateFire(...args) {
+    return { type: GENERAL_FIRE, args };
+}
+
 export {
     stateChange,
-    stateToggle
+    stateToggle,
+    stateFire
 };

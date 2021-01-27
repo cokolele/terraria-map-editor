@@ -93,6 +93,11 @@
     cursor: pointer;
 }
 
+.input-slider:focus::-moz-range-thumb {
+    outline: none;
+    box-shadow: 0 0 0 2px #0078d7;
+}
+
 .input-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -105,6 +110,11 @@
     cursor: pointer;
 }
 
+.input-slider:focus::-webkit-slider-thumb {
+    outline: none;
+    box-shadow: 0 0 0 2px #0078d7;
+}
+
 .input-slider + .input {
     margin-left: 6px;
 }
@@ -115,6 +125,12 @@
     width: 0.8rem;
     border-radius: 0.15rem;
     background-color: #d4d4d4;
+    cursor: pointer;
+}
+
+.input-checkbox:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #0078d7;
 }
 
 .input-checkbox--checked:after {
@@ -126,4 +142,45 @@
     font-weight: 800;
     font-size: 0.8rem;
     line-height: 0.8rem;
+}
+
+.input-button {
+    height: 1.5rem;
+    padding: 0 0.25rem;
+    box-sizing: border-box;
+    border: 1px solid #666666;
+    border-radius: 0.2rem;
+
+    display: flex;
+    align-items: center;
+
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.input-button svg {
+    fill: #f1f1f1;
+}
+
+.input-button:hover {
+    outline: none;
+    background-color: #454545;
+}
+
+.input-button:active {
+    background-color: #383838;
+}
+
+.input-button:focus {
+    box-shadow: 1px 1px 2px rgba(0,0,0, 0.3);
+    outline: none;
+}
+
+.input-label--button {
+    line-height: 1.34rem;
+    margin: 0 0.2rem;
+    letter-spacing: 0.02rem;
+    color: #f0f0f0;
+    font-size: 0.84rem;
 }

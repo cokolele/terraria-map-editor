@@ -6,8 +6,6 @@
 
 .optionbar {
     height: 2.3rem;
-    margin-left: 0.6rem;
-
     display: inline-flex;
     align-items: center;
 }
@@ -17,6 +15,7 @@
 }
 
 .optionbar-icon {
+    margin-left: 0.6rem;
     display: flex;
     justify-content: center;
     fill: #dddddd;

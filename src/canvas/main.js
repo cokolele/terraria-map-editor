@@ -4,7 +4,7 @@ import store from "/state/store.js";
 import { stateChange } from "/state/state.js";
 
 import LAYERS from "/utils/dbs/LAYERS.js";
-import sprite, { NPCsSprites } from "/utils/dbs/sprites.js";
+import sprite, { NPCsSprites, WorldPointsSprites } from "/utils/dbs/sprites.js";
 
 import extensions from "/canvas/extensions/index.js";
 import workerInterfaces from "/canvas/workerInterfaces/main/index.js";
@@ -18,6 +18,8 @@ import onCanvasTouchStart from "/canvas/listeners/touchstart.js";
 import onCanvasTouchEnd from "/canvas/listeners/touchend.js";
 import onCanvasMouseDown from "/canvas/listeners/mousedown.js";
 import onCanvasMouseUp from "/canvas/listeners/mouseup.js";
+import onCanvasMouseOver from "/canvas/listeners/mouseover.js";
+import onCanvasMouseLeave from "/canvas/listeners/mouseleave.js";
 
 let Main = new function() {
     this.state;
@@ -54,33 +56,13 @@ let Main = new function() {
     }
 
     this.initListeners = () => {
-/*
-        this.canvas.addEventListener("mouseenter", async (e) => {
-            if (this.state.toolbar.tool == "tileInfo" && !this.listeners.infoCursor) {
-                Main.canvas.classList.add("cursorInfo");
-                this.listeners.infoCursor = true;
-            }
-        });
-
-        this.canvas.addEventListener("mouseleave", async (e) => {
-            if (this.state.toolbar.tool != "tileInfo" && this.listeners.infoCursor) {
-                Main.canvas.classList.remove("cursorInfo");
-                this.listeners.infoCursor = false;
-            }
-        });
-
-        this.canvas.addEventListener("click", async (e) => {
-            if (this.state.toolbar.tool == "tileInfo") {
-                let tileData = await this.workerInterfaces.getTileData(this.mousePosImageX, this.mousePosImageY);
-                store.dispatch(stateChange("tileData", tileData));
-            }
-        });
-*/
             this.canvas.addEventListener("click", listenerWrapper(onCanvasClick));
             this.canvas.addEventListener("wheel", listenerWrapper(onCanvasWheel));
             this.canvas.addEventListener("mousedown", listenerWrapper(onCanvasMouseDown));
             this.canvas.addEventListener("mouseup", listenerWrapper(onCanvasMouseUp));
             this.canvas.addEventListener("mousemove", listenerWrapper(onCanvasMouseMove));
+            this.canvas.addEventListener("mouseover", listenerWrapper(onCanvasMouseOver));
+            this.canvas.addEventListener("mouseleave", listenerWrapper(onCanvasMouseLeave));
 
             this.canvas.addEventListener("touchmove", listenerWrapper(onCanvasTouchMove));
             this.canvas.addEventListener("touchstart", listenerWrapper(onCanvasTouchStart));
@@ -196,23 +178,40 @@ let Main = new function() {
                     this.canvas.width, this.canvas.height);
         });
 
+        if (this.state.layersVisibility.WorldPoints) {
+            temp1 = WorldPointsSprites.dungeon[2] * ( 2 + this.zoomLevel * 0.2 );
+            temp2 = WorldPointsSprites.dungeon[3] * ( 2 + this.zoomLevel * 0.2 );
+
+            this.ctx.drawImage(sprite,
+                WorldPointsSprites.dungeon[0], WorldPointsSprites.dungeon[1], WorldPointsSprites.dungeon[2], WorldPointsSprites.dungeon[3],
+                this.state.canvas.worldObject.header.dungeonX * this.tilePixelRatio - this.posX * this.tilePixelRatio - temp1 / 2 + this.tilePixelRatio / 2, this.state.canvas.worldObject.header.dungeonY * this.tilePixelRatio - this.posY * this.tilePixelRatio - temp2, temp1, temp2);
+
+            temp1 = WorldPointsSprites.spawn[2] * ( 2 + this.zoomLevel * 0.2 );
+            temp2 = WorldPointsSprites.spawn[3] * ( 2 + this.zoomLevel * 0.2 );
+
+            this.ctx.drawImage(sprite,
+                WorldPointsSprites.spawn[0], WorldPointsSprites.spawn[1], WorldPointsSprites.spawn[2], WorldPointsSprites.spawn[3],
+                this.state.canvas.worldObject.header.spawnTileX * this.tilePixelRatio - this.posX * this.tilePixelRatio - temp1 / 2 + this.tilePixelRatio / 2, this.state.canvas.worldObject.header.spawnTileY * this.tilePixelRatio - this.posY * this.tilePixelRatio - temp2, temp1, temp2);
+        }
+
         if (this.state.canvas.worldObject.NPCs && this.state.layersVisibility.NPCs)
             this.state.canvas.worldObject.NPCs.forEach(npc => {
-                try {
-                    temp0 = NPCsSprites[npc.id][2] * ( 2 + this.zoomLevel * 0.2 );
-                    temp1 = NPCsSprites[npc.id][3] * ( 2 + this.zoomLevel * 0.2 );
+                if (npc.variationIndex && typeof NPCsSprites[npc.id][npc.variationIndex] == "object")
+                    temp0 = NPCsSprites[npc.id][npc.variationIndex];
+                else
+                    temp0 = NPCsSprites[npc.id];
 
-                    if (npc.townNPC)
-                        this.ctx.drawImage(sprite,
-                            NPCsSprites[npc.id][0], NPCsSprites[npc.id][1], NPCsSprites[npc.id][2], NPCsSprites[npc.id][3],
-                            npc.homePosition.x * this.tilePixelRatio - this.posX * this.tilePixelRatio - temp0 / 2, npc.homePosition.y * this.tilePixelRatio - this.posY * this.tilePixelRatio - temp1, temp0, temp1);
-                    else
-                        this.ctx.drawImage(sprite,
-                            NPCsSprites[npc.id][0], NPCsSprites[npc.id][1], NPCsSprites[npc.id][2], NPCsSprites[npc.id][3],
-                            (npc.position.x / 16) * this.tilePixelRatio - this.posX * this.tilePixelRatio - temp0 / 2, (npc.position.y / 16) * this.tilePixelRatio - this.posY * this.tilePixelRatio - temp1, temp0, temp1);
-                    }
-                catch(e) {
-                }
+                temp1 = temp0[2] * ( 2 + this.zoomLevel * 0.2 );
+                temp2 = temp0[3] * ( 2 + this.zoomLevel * 0.2 );
+
+                if (npc.homePosition)
+                    this.ctx.drawImage(sprite,
+                        temp0[0], temp0[1], temp0[2], temp0[3],
+                        npc.homePosition.x * this.tilePixelRatio - this.posX * this.tilePixelRatio - temp1 / 2 + this.tilePixelRatio / 2,npc.homePosition.y * this.tilePixelRatio - this.posY * this.tilePixelRatio - temp2,temp1, temp2);
+                else
+                    this.ctx.drawImage(sprite,
+                        temp0[0], temp0[1], temp0[2], temp0[3],
+                        (npc.position.x / 16) * this.tilePixelRatio - this.posX * this.tilePixelRatio - temp1 / 2 + this.tilePixelRatio / 2, (npc.position.y / 16) * this.tilePixelRatio - this.posY * this.tilePixelRatio - temp2, temp1, temp2);
             });
     }
 

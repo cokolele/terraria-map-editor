@@ -34,18 +34,31 @@ canvas {
     flex-grow: 1;
     box-sizing: border-box;
     border: 1px solid #383838;
+
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -o-crisp-edges;
+    image-rendering: optimize-contrast;
+    -ms-interpolation-mode: nearest-neighbor;
 }
 
 .cursorGrabbed {
-    cursor: grabbing;
-    cursor: -moz-grabbing;
-    cursor: -webkit-grabbing;
+    cursor: grabbing !important;
+    cursor: -moz-grabbing !important;
+    cursor: -webkit-grabbing !important;
 }
 
 .cursorInfo {
     cursor: help;
     cursor: -moz-help;
     cursor: -webkit-help;
+}
+
+.cursorCopy {
+    cursor: copy;
+    cursor: -moz-copy;
+    cursor: -webkit-copy;
 }
 
 .canvas-placeholder {
