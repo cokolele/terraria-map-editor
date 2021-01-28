@@ -5,6 +5,10 @@
     position: relative;
 }
 
+.input-container--no-grow {
+    flex-grow: 0 !important;
+}
+
 .input-label {
     color: #d6d6d6;
     font-size: 0.84rem;

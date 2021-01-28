@@ -122,8 +122,15 @@ let Main = new function() {
         this.loop.correntPositions();
         this.loop.drawLayers();
 
-        if (this.state.toolbar.tool == "pencil" || this.state.toolbar.tool == "eraser")
-            this.loop.drawBrush();
+        switch (this.state.toolbar.tool) {
+            case "pencil":
+            case "eraser":
+                this.loop.drawBrush();
+                break;
+            case "worldPoint":
+                this.loop.drawLocation();
+                break;
+        }
 
         requestAnimationFrame(this.loop.tick, this.canvas);
     }
@@ -249,6 +256,19 @@ let Main = new function() {
                 temp0, temp2
             );
         }
+    }
+
+    this.loop.drawLocation = () => {
+        this.ctx.beginPath();
+        this.ctx.lineWidth = 1;
+        this.ctx.strokeStyle = "#ff0000";
+        this.ctx.translate(0.5, 0.5);
+        this.ctx.moveTo(Main.mousePosElementX, 0);
+        this.ctx.lineTo(Main.mousePosElementX, Main.canvas.clientHeight);
+        this.ctx.stroke();
+        this.ctx.moveTo(0, Main.mousePosElementY);
+        this.ctx.lineTo(Main.canvas.clientWidth, Main.mousePosElementY);
+        this.ctx.stroke();
     }
 }
 

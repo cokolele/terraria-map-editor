@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 
 import "/components/styles/input.css";
 
-function InputButton({ label, onClick, IconLeft, IconRight, className }) {
+function InputButton({ label, onClick, IconLeft, IconRight, Icon, className }) {
    return (
-      <div className={"input-container" + (className ? " " + className : "")}>
+      <div className={"input-container input-container--no-grow" + (className ? " " + className : "")}>
          <button type="button" className={"input-button"} onClick={onClick}>
             {
                IconLeft &&
@@ -17,6 +17,10 @@ function InputButton({ label, onClick, IconLeft, IconRight, className }) {
             {
                IconRight &&
                <IconRight size={12} style={{marginLeft: "0.15rem"}}/>
+            }
+            {
+               Icon &&
+               <Icon size={12}/>
             }
          </button>
       </div>

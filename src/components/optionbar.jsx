@@ -17,13 +17,10 @@ import toolsConfig from "/app/tools.js";
 function Optionbar({ stateChange, show, running, selectedTool, optionbarState }) {
    const ToolIcon = toolsConfig[selectedTool].icon;
 
-   //this creates a copy of app states optionbar, but the inputs don't manage apps state directly anymore
-   const [state, setState] = useState(optionbarState);
-
-   useEffect(() => {
-      stateChange("optionbar", state);
-      localSettings.set("optionbarState", state);
-   }, [state]);
+   const setState = (newState) => {
+      stateChange("optionbar", newState);
+      localSettings.set("optionbarState", newState);
+   }
 
    return (
       show &&
@@ -36,26 +33,26 @@ function Optionbar({ stateChange, show, running, selectedTool, optionbarState })
             {
                running && (selectedTool == "pencil" || selectedTool == "eraser" || selectedTool == "bucket") &&
                <>
-                  <OptionbarOptionLayer state={state} setState={setState} addAllOption={selectedTool == "eraser" ? true : false}/>
+                  <OptionbarOptionLayer state={optionbarState} setState={setState} addAllOption={selectedTool == "eraser" ? true : false}/>
                   {
                      selectedTool != "bucket" &&
                      <>
                         <div className="optionbar-divider"></div>
-                        <OptionbarOptionSize state={state} setState={setState}/>
+                        <OptionbarOptionSize state={optionbarState} setState={setState}/>
                      </>
                   }
                   {
                      selectedTool != "eraser" &&
                      <>
                         <div className="optionbar-divider"></div>
-                        <OptionbarOptionId state={state} setState={setState}/>
+                        <OptionbarOptionId state={optionbarState} setState={setState}/>
                      </>
                   }
                </>
             }
             {
                running && selectedTool == "worldPoint" &&
-               <OptionbarOptionWorldPoint state={state} setState={setState}/>
+               <OptionbarOptionWorldPoint state={optionbarState} setState={setState}/>
             }
          </div>
       </div>
@@ -68,7 +65,14 @@ export default connect(
          show: state.view.toolbar,
          selectedTool: state.toolbar.tool,
          running: state.canvas.running,
-         optionbarState: state.optionbar
+         optionbarState: {
+            layer: state.optionbar.layer,
+            size: state.optionbar.size,
+            id: state.optionbar.id,
+            ordered: state.optionbar.ordered,
+            locked: state.optionbar.locked,
+            worldPoint: state.optionbar.worldPoint,
+         }
       };
    },
    { stateChange }

@@ -6,126 +6,48 @@ import OptionbarInput from "/components/inputs/input.jsx";
 import OptionbarInputSlider from "/components/inputs/input-slider.jsx";
 import OptionbarInputSelect from "/components/inputs/input-select.jsx";
 import OptionbarInputCheckbox from "/components/inputs/input-checkbox.jsx";
+import OptionbarInputLocation from "/components/inputs/input-location.jsx";
 import "/components/styles/sidebar/views/general.css";
 
 import LAYERS from "/utils/dbs/LAYERS.js";
-//import editTiles from "/canvas/extensions/editTiles.js";
+import { sharedRestrainedRangeChange } from "/utils/number.js";
 
-function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeOnlyTiles, creativePowers }) {
+function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeOnlyTiles, creativePowers, mobile }) {
    const version = fileFormatHeader.version;
 
    const setHeaderKey = (key, value, index) => {
-
       if (key == "worldSurface") {
-         /*
-         if (value > header.worldSurface)
-            editTiles(LAYERS.BACKGROUND, "sky", [0, header.worldSurface], [header.maxTilesX, value]);
-         else
-            editTiles(LAYERS.BACKGROUND, "ground", [0, value], [header.maxTilesX, header.worldSurface]);
-         */
-         if (value >= header.rockLayer)
-            header.rockLayer = value;
-      }
-      else if (key == "rockLayer") {
-         /*
-         if (value > header.rockLayer)
-            editTiles(LAYERS.BACKGROUND, "ground", [0, header.rockLayer], [header.maxTilesX, value]);
-         else
-            editTiles(LAYERS.BACKGROUND, "cavern", [0, value], [header.maxTilesX, header.rockLayer]);
-         */
-         if (value <= header.worldSurface)
-            header.worldSurface = value;
-      }
-      else if (key == "treeX") {
-         switch (index) {
-            case 0:
-               if (value >= header.treeX[1] && value < header.maxTilesX - 2) {
-                  header.treeX[1] = value + 1;
-                  if (header.treeX[1] >= header.treeX[2])
-                     header.treeX[2] = value + 2;
-               } else if (value > header.maxTilesX - 2) {
-                  value = header.maxTilesX - 2;
-                  header.treeX[1] = value + 1;
-                  header.treeX[2] = value + 2;
-               }
-               break;
-            case 1:
-               if (value <= header.treeX[0] && value > 1) {
-                  header.treeX[0] = value - 1;
-               } else if (value < 1) {
-                  header.treeX[0] = 0;
-                  value = 1;
-               } else if (value >= header.treeX[2] && value < header.maxTilesX - 1) {
-                  header.treeX[2] = value + 1;
-               } else if (value > header.maxTilesX - 1) {
-                  value = header.maxTilesX - 1;
-                  header.treeX[2] = header.maxTilesX;
-               }
-               break;
-            case 2:
-               if (value <= header.treeX[1] && value > 2) {
-                  header.treeX[1] = value - 1;
-                  if (header.treeX[1] <= header.treeX[0])
-                     header.treeX[0] = value - 2;
-               } else if (value < 2) {
-                  value = 2;
-                  header.treeX[1] = 1;
-                  header.treeX[0] = 0;
-               }
-               break;
-         }
-      }
-      else if (key == "caveBackX") {
-         switch (index) {
-            case 0:
-               if (value >= header.caveBackX[1] && value < header.maxTilesX - 2) {
-                  header.caveBackX[1] = value + 1;
-                  if (header.caveBackX[1] >= header.caveBackX[2])
-                     header.caveBackX[2] = value + 2;
-               } else if (value > header.maxTilesX - 2) {
-                  value = header.maxTilesX - 2;
-                  header.caveBackX[1] = value + 1;
-                  header.caveBackX[2] = value + 2;
-               }
-               break;
-            case 1:
-               if (value <= header.caveBackX[0] && value > 1) {
-                  header.caveBackX[0] = value - 1;
-               } else if (value < 1) {
-                  header.caveBackX[0] = 0;
-                  value = 1;
-               } else if (value >= header.caveBackX[2] && value < header.maxTilesX - 1) {
-                  header.caveBackX[2] = value + 1;
-               } else if (value > header.maxTilesX - 1) {
-                  value = header.maxTilesX - 1;
-                  header.caveBackX[2] = header.maxTilesX;
-               }
-               break;
-            case 2:
-               if (value <= header.caveBackX[1] && value > 2) {
-                  header.caveBackX[1] = value - 1;
-                  if (header.caveBackX[1] <= header.caveBackX[0])
-                     header.caveBackX[0] = value - 2;
-               } else if (value < 2) {
-                  value = 2;
-                  header.caveBackX[1] = 1;
-                  header.caveBackX[0] = 0;
-               }
-               break;
-         }
+         const values = sharedRestrainedRangeChange(value, 0, 0, header.maxTilesY, header.worldSurface, header.rockLayer);
+         stateChange(["canvas", "worldObject", "header", "worldSurface"], values[0]);
+         stateChange(["canvas", "worldObject", "header", "rockLayer"], values[1]);
+         return;
       }
 
-      if (index !== undefined)
-         header[key][index] = value;
+      if (key == "rockLayer") {
+         const values = sharedRestrainedRangeChange(value, 1, 0, header.maxTilesY, header.worldSurface, header.rockLayer);
+         stateChange(["canvas", "worldObject", "header", "worldSurface"], values[0]);
+         stateChange(["canvas", "worldObject", "header", "rockLayer"], values[1]);
+         return;
+      }
+
+      if (key == "treeX") {
+         stateChange(["canvas", "worldObject", "header", "treeX"], sharedRestrainedRangeChange(value, index, 0, header.maxTilesX, ...header.treeX));
+         return;
+      }
+
+      if (key == "caveBackX") {
+         stateChange(["canvas", "worldObject", "header", "caveBackX"], sharedRestrainedRangeChange(value, index, 0, header.maxTilesX, ...header.caveBackX));
+         return;
+      }
+
+      if (index)
+         stateChange(["canvas", "worldObject", "header", key, index], value);
       else
-         header[key] = value;
-
-      stateChange(["canvas", "worldObject", "header"], { ...header });
+         stateChange(["canvas", "worldObject", "header", key], value);
    }
 
-   const setCreativePower = (key, val) => {
-      creativePowers[key] = val;
-      stateChange(["canvas", "worldObject", "creativePowers"], { ...creativePowers });
+   const setLocationKey = (key, x, y) => {
+
    }
 
    if (unsafeOnlyTiles || header.length < 10)
@@ -159,6 +81,10 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
             <OptionbarInput value={header.spawnTileX} onChange={(value) => {setHeaderKey("spawnTileX", value)}} int min={0} max={header.maxTilesX}/>
             y:
             <OptionbarInput value={header.spawnTileY} onChange={(value) => {setHeaderKey("spawnTileY", value)}} int min={0} max={header.maxTilesY}/>
+            {
+               !mobile &&
+               <OptionbarInputLocation icon worldPoint="Spawn point"/>
+            }
          </div>
          <span>Dungeon point</span>
          <div className="sidebar-view-general-row-spanner">
@@ -166,11 +92,27 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
             <OptionbarInput value={header.dungeonX} onChange={(value) => {setHeaderKey("dungeonX", value)}} int min={0} max={header.maxTilesX}/>
             y:
             <OptionbarInput value={header.dungeonY} onChange={(value) => {setHeaderKey("dungeonY", value)}} int min={0} max={header.maxTilesY}/>
+            {
+               !mobile &&
+               <OptionbarInputLocation icon worldPoint="Dungeon point"/>
+            }
          </div>
          <span>Cavern level</span>
-         <OptionbarInputSlider value={header.worldSurface} onChange={(value) => {setHeaderKey("worldSurface", value)}} min={0} max={header.maxTilesY} input inputWidth="6ch"/>
+         <div className="sidebar-view-general-row-spanner">
+            <OptionbarInputSlider value={header.worldSurface} onChange={(value) => {setHeaderKey("worldSurface", value)}} min={0} max={header.maxTilesY} input inputWidth="6ch"/>
+            {
+               !mobile &&
+               <OptionbarInputLocation icon locationName="Cavern level" onLocation={(x,y) => {setHeaderKey("worldSurface", y)}}/>
+            }
+         </div>
          <span>Underground level</span>
-         <OptionbarInputSlider value={header.rockLayer} onChange={(value) => {setHeaderKey("rockLayer", value)}} min={0} max={header.maxTilesY} input inputWidth="6ch"/>
+         <div className="sidebar-view-general-row-spanner">
+            <OptionbarInputSlider value={header.rockLayer} onChange={(value) => {setHeaderKey("rockLayer", value)}} min={0} max={header.maxTilesY} input inputWidth="6ch"/>
+            {
+               !mobile &&
+               <OptionbarInputLocation icon locationName="Underground level" onLocation={(x,y) => {setHeaderKey("rockLayer", y)}}/>
+            }
+         </div>
 
          <div className="sidebar-view-general-row-divider"><span>Events:</span></div>
 
@@ -221,23 +163,23 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
                <div className="sidebar-view-general-row-divider"><span>Creative Powers:</span></div>
 
                <span>Time freeze</span>
-               <OptionbarInputCheckbox value={creativePowers.freezeTime} onChange={(value) => {setCreativePower("freezeTime", value)}} />
+               <OptionbarInputCheckbox value={creativePowers.freezeTime} onChange={(value) => {stateChange(["canvas", "worldObject", "creativePowers", "freezeTime"], value)}} />
                <span>Time speed</span>
                <div className="sidebar-view-general-row-spanner">
                   1x
-                  <OptionbarInputSlider value={creativePowers.modifyTimeRate} onChange={(value) => {setCreativePower("modifyTimeRate", value)}} min={0} max={1} float />
+                  <OptionbarInputSlider value={creativePowers.modifyTimeRate} onChange={(value) => {stateChange(["canvas", "worldObject", "creativePowers", "modifyTimeRate"], value)}} min={0} max={1} float />
                   24x
                </div>
                <span>Rain change</span>
-               <OptionbarInputCheckbox value={!creativePowers.freezeRainPower} onChange={(value) => {setCreativePower("freezeRainPower", !value)}} />
+               <OptionbarInputCheckbox value={!creativePowers.freezeRainPower} onChange={(value) => {stateChange(["canvas", "worldObject", "creativePowers", "freezeRainPower"], !value)}} />
                <span>Wind change</span>
-               <OptionbarInputCheckbox value={!creativePowers.freezeWindDirectionAndStrength} onChange={(value) => {setCreativePower("freezeWindDirectionAndStrength", !value)}} />
+               <OptionbarInputCheckbox value={!creativePowers.freezeWindDirectionAndStrength} onChange={(value) => {stateChange(["canvas", "worldObject", "creativePowers", "freezeWindDirectionAndStrength"], !value)}} />
                <span>Corruption spread</span>
-               <OptionbarInputCheckbox value={!creativePowers.stopBiomeSpreadPower} onChange={(value) => {setCreativePower("stopBiomeSpreadPower", !value)}} />
+               <OptionbarInputCheckbox value={!creativePowers.stopBiomeSpreadPower} onChange={(value) => {stateChange(["canvas", "worldObject", "creativePowers", "stopBiomeSpreadPower"], !value)}} />
                <span>Enemy Difficulty</span>
                <div className="sidebar-view-general-row-spanner">
                   0.5x
-                  <OptionbarInputSlider value={creativePowers.difficultySliderPower} onChange={(value) => {setCreativePower("difficultySliderPower", value)}} min={0} max={1} float />
+                  <OptionbarInputSlider value={creativePowers.difficultySliderPower} onChange={(value) => {stateChange(["canvas", "worldObject", "creativePowers", "difficultySliderPower"], value)}} min={0} max={1} float />
                   3x
                </div>
             </>
@@ -404,11 +346,29 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
          <div className="sidebar-view-general-row-divider"><span>Styles:</span></div>
 
          <span>Tree styles X 1</span>
-         <OptionbarInputSlider value={header.treeX[0]} onChange={(value) => {setHeaderKey("treeX", value, 0)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
+         <div className="sidebar-view-general-row-spanner">
+            <OptionbarInputSlider value={header.treeX[0]} onChange={(value) => {setHeaderKey("treeX", value, 0)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
+            {
+               !mobile &&
+               <OptionbarInputLocation icon locationName="Tree style X 1" onLocation={(x,y) => {setHeaderKey("treeX", x, 0)}}/>
+            }
+         </div>
          <span>Tree styles X 2</span>
-         <OptionbarInputSlider value={header.treeX[1]} onChange={(value) => {setHeaderKey("treeX", value, 1)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
+         <div className="sidebar-view-general-row-spanner">
+            <OptionbarInputSlider value={header.treeX[1]} onChange={(value) => {setHeaderKey("treeX", value, 1)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
+            {
+               !mobile &&
+               <OptionbarInputLocation icon locationName="Tree style X 2" onLocation={(x,y) => {setHeaderKey("treeX", x, 1)}}/>
+            }
+         </div>
          <span>Tree styles X 3</span>
-         <OptionbarInputSlider value={header.treeX[2]} onChange={(value) => {setHeaderKey("treeX", value, 2)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
+         <div className="sidebar-view-general-row-spanner">
+            <OptionbarInputSlider value={header.treeX[2]} onChange={(value) => {setHeaderKey("treeX", value, 2)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
+            {
+               !mobile &&
+               <OptionbarInputLocation icon locationName="Tree style X 3" onLocation={(x,y) => {setHeaderKey("treeX", x, 2)}}/>
+            }
+         </div>
          <span>Tree style</span>
          <div className="sidebar-view-general-row-spanner">
             <OptionbarInputSelect value={header.treeStyle[0]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5]} onChange={(value) => {setHeaderKey("treeStyle", value, 0)}}/>
@@ -458,11 +418,29 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
             </>
          }
          <span>Underground X 1</span>
-         <OptionbarInputSlider value={header.caveBackX[0]} onChange={(value) => {setHeaderKey("caveBackX", value, 0)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
+         <div className="sidebar-view-general-row-spanner">
+            <OptionbarInputSlider value={header.caveBackX[0]} onChange={(value) => {setHeaderKey("caveBackX", value, 0)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
+            {
+               !mobile &&
+               <OptionbarInputLocation icon locationName="Underground background X 1" onLocation={(x,y) => {setHeaderKey("caveBackX", x, 0)}}/>
+            }
+         </div>
          <span>Underground X 2</span>
-         <OptionbarInputSlider value={header.caveBackX[1]} onChange={(value) => {setHeaderKey("caveBackX", value, 1)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
+         <div className="sidebar-view-general-row-spanner">
+            <OptionbarInputSlider value={header.caveBackX[1]} onChange={(value) => {setHeaderKey("caveBackX", value, 1)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
+            {
+               !mobile &&
+               <OptionbarInputLocation icon locationName="Underground background X 1" onLocation={(x,y) => {setHeaderKey("caveBackX", x, 1)}}/>
+            }
+         </div>
          <span>Underground X 3</span>
-         <OptionbarInputSlider value={header.caveBackX[2]} onChange={(value) => {setHeaderKey("caveBackX", value, 2)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
+         <div className="sidebar-view-general-row-spanner">
+            <OptionbarInputSlider value={header.caveBackX[2]} onChange={(value) => {setHeaderKey("caveBackX", value, 2)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
+            {
+               !mobile &&
+               <OptionbarInputLocation icon locationName="Underground background X 1" onLocation={(x,y) => {setHeaderKey("caveBackX", x, 2)}}/>
+            }
+         </div>
          <span>Underground</span>
          <div className="sidebar-view-general-row-spanner">
             <OptionbarInputSelect value={header.caveBackStyle[0]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5, 6, 7]} onChange={(value) => {setHeaderKey("caveBackStyle", value, 0)}}/>
@@ -604,9 +582,10 @@ export default connect(
    state => {
       return {
          fileFormatHeader: state.canvas.worldObject.fileFormatHeader,
-         header: state.canvas.worldObject.header,
+         header: { ...state.canvas.worldObject.header },
          unsafeOnlyTiles: state.canvas.unsafeOnlyTiles,
-         creativePowers: state.canvas.worldObject.creativePowers
+         creativePowers: { ...state.canvas.worldObject.creativePowers },
+         mobile: state.mobile
       };
    },
    { stateChange }

@@ -42,7 +42,7 @@ let defaultState = {
         id: null,
         ordered: false,
         locked: true,
-        worldPoint: 0
+        worldPoint: "Spawn point"
     }),
     layersVisibility: {
         NPCs: true,

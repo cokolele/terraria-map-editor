@@ -7,11 +7,19 @@ import sprite, { NPCsSprites } from "/utils/dbs/sprites.js";
 import { FindIcon } from "/components/icon.jsx";
 import "/components/styles/sidebar/views/NPCs.css";
 
-const NPCTypeNames = [];
-NPCs.town.forEach(({id, typeName}) => { NPCTypeNames[id] = typeName });
-NPCs.pillars.forEach(({id, typeName}) => { NPCTypeNames[id] = typeName });
+import InputButton from "/components/inputs/input-button.jsx";
 
-function SidebarNPCs({ stateChange, NPCs }) {
+function SidebarNPCs({ stateChange, stateNPCs }) {
+   const onAddNpc = () => {
+      stateChange(["toolbar", "tool"], "worldPoint");
+      stateChange(["optionbar", "worldPoint"], { label: "cicek", onLocation: (x, y) => {console.log("cicek", x,y )}});
+   };
+
+   const onDeleteNpc = () => {
+      stateChange(["toolbar", "tool"], "worldPoint");
+      stateChange(["optionbar", "worldPoint"], { label: "cicka", onLocation: (x, y) => {console.log("cicka", x,y )}});
+   };
+
    return (
       <>
          <div className="sidebar-view-npcs-search">
@@ -22,13 +30,15 @@ function SidebarNPCs({ stateChange, NPCs }) {
             <FindIcon size={20}/>
          </div>
          {
-            NPCs.map(NPC => (
-               <div className="sidebar-view-npcs-row">
-                  <div className="sidebar-view-npcs-row-avatar">{NPCTypeNames[NPC.id]}</div>
-                  <div className="sidebar-view-npcs-row-type">{NPCTypeNames[NPC.id]}</div>
+            stateNPCs.map((stateNPC, i) => (
+               <div className="sidebar-view-npcs-row" key={i}>
+                  <div className="sidebar-view-npcs-row-avatar"></div>
+                  <div className="sidebar-view-npcs-row-type">{NPCs[stateNPC.id].typeName}</div>
                </div>
             ))
          }
+         <InputButton label="Add" onClick={onAddNpc}/>
+         <InputButton label="Delete" onClick={onDeleteNpc}/>
       </>
    );
 }
@@ -36,7 +46,7 @@ function SidebarNPCs({ stateChange, NPCs }) {
 export default connect(
    state => {
       return {
-         NPCs: state.canvas.worldObject.NPCs
+         stateNPCs: state.canvas.worldObject.NPCs
       };
    },
    { stateChange }
