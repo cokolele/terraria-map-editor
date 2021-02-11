@@ -4,6 +4,18 @@
     text-rendering: optimizeLegibility;
 }
 
+:root {
+    --color-1: #f0f0f0;
+    --color-2: #dddddd;
+    --color-3: #a9a9a9;
+    --color-4-light: #7d7d7d;
+    --color-4: #666666;
+    --color-5: #535353;
+    --color-6: #454545;
+    --color-7: #383838;
+    --color-8: #282828;
+}
+
 html, body, #app {
     height: 100%;
 }

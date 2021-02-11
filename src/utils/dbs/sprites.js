@@ -65,6 +65,8 @@ const NPCsSprites = {
     493: [116, 21, 13, 15],
     507: [103, 21, 13, 15],
     517: [77, 21, 13, 15],
+
+    unknown: [22, 37, 8, 12] //30
 };
 
 const WorldPointsSprites = {
@@ -74,6 +76,7 @@ const WorldPointsSprites = {
 
 export default sprite;
 export {
+    spriteUrl,
     NPCsSprites,
     WorldPointsSprites
 }

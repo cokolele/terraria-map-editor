@@ -114,7 +114,7 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
             }
          </div>
 
-         <div className="sidebar-view-general-row-divider"><span>Events:</span></div>
+         <div className="sidebar-view-general-row-divider"><span>Events</span></div>
 
          <span>Blood moon</span>
          <OptionbarInputCheckbox value={header.tempBloodMoon} onChange={(value) => {setHeaderKey("tempBloodMoon", value)}} />
@@ -160,7 +160,7 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
          {
             creativePowers &&
             <>
-               <div className="sidebar-view-general-row-divider"><span>Creative Powers:</span></div>
+               <div className="sidebar-view-general-row-divider"><span>Creative Powers</span></div>
 
                <span>Time freeze</span>
                <OptionbarInputCheckbox value={creativePowers.freezeTime} onChange={(value) => {stateChange(["canvas", "worldObject", "creativePowers", "freezeTime"], value)}} />
@@ -185,7 +185,7 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
             </>
          }
 
-         <div className="sidebar-view-general-row-divider"><span>Flags:</span></div>
+         <div className="sidebar-view-general-row-divider"><span>Flags</span></div>
          {
             version >= 225 ?
                <>
@@ -196,7 +196,7 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
                   {
                      version >= 227 &&
                      <>
-                        <span>Good world (seed)</span>
+                        <span>For the worthy world (seed)</span>
                         <OptionbarInputCheckbox value={header.getGoodWorld} onChange={(value) => {setHeaderKey("getGoodWorld", value)}} />
                      </>
                   }
@@ -295,7 +295,7 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
             </>
          }
 
-         <div className="sidebar-view-general-row-divider"><span>Weather:</span></div>
+         <div className="sidebar-view-general-row-divider"><span>Weather</span></div>
 
          <span>Day</span>
          <OptionbarInputCheckbox value={header.tempDayTime} onChange={(value) => {setHeaderKey("tempDayTime", value)}} />
@@ -321,7 +321,7 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
          <OptionbarInputSelect value={header.tempMoonPhase} options={[["Full moon", 0], ["Waning gibbous", 1], ["Third quarter", 2], ["Waning crescent", 3], ["New moon", 4], ["Waxing crescent", 5], ["First quarter", 6], ["Waxing gibbous", 7]]} onChange={(value) => {setHeaderKey("tempMoonPhase", value)}}/>
          <span>Raining</span>
          <OptionbarInputCheckbox value={header.tempRaining} onChange={(value) => {setHeaderKey("tempRaining", value)}} />
-         <span>Rain time</span>
+         <span>Rain time left</span>
          <OptionbarInputSlider value={header.tempRainTime} onChange={(value) => {setHeaderKey("tempRainTime", value)}} min={0} max={147600} input inputWidth="8ch"/>
          <span>Max rain</span>
          <OptionbarInputSlider value={header.tempMaxRain} onChange={(value) => {setHeaderKey("tempMaxRain", value)}} float roundTo={1} min={0} max={0.9} input inputWidth="4ch"/>
@@ -337,15 +337,15 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
          <span>Sandstorm</span>
          <OptionbarInputCheckbox value={header.Temp_Sandstorm_Happening} onChange={(value) => {setHeaderKey("Temp_Sandstorm_Happening", value)}} />
          <span>Sandstorm time left</span>
-         <OptionbarInput value={header.Temp_Sandstorm_TimeLeft} onChange={(value) => {/*header. = value*/}} />
+         <OptionbarInputSlider value={header.Temp_Sandstorm_TimeLeft} onChange={(value) => {setHeaderKey("Temp_Sandstorm_TimeLeft", value)}} min={0} max={86400} input inputWidth="7ch"/>
          <span>Sandstorm severity</span>
-         <OptionbarInput value={header.Temp_Sandstorm_Severity} onChange={(value) => {/*header. = value*/}} />
+         <OptionbarInputSlider value={header.Temp_Sandstorm_Severity} onChange={(value) => {setHeaderKey("Temp_Sandstorm_Severity", value)}} float min={0} max={1} input inputWidth="5ch"/>
          <span>Sandstorm intended severity</span>
-         <OptionbarInput value={header.Temp_Sandstorm_IntendedSeverity} onChange={(value) => {/*header. = value*/}} />
+         <OptionbarInputSlider value={header.Temp_Sandstorm_IntendedSeverity} onChange={(value) => {setHeaderKey("Temp_Sandstorm_IntendedSeverity", value)}} float min={0} max={1.4} input inputWidth="5ch"/>
 
-         <div className="sidebar-view-general-row-divider"><span>Styles:</span></div>
+         <div className="sidebar-view-general-row-divider"><span>Styles</span></div>
 
-         <span>Tree styles X 1</span>
+         <span>Trees X 1</span>
          <div className="sidebar-view-general-row-spanner">
             <OptionbarInputSlider value={header.treeX[0]} onChange={(value) => {setHeaderKey("treeX", value, 0)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
             {
@@ -353,7 +353,7 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
                <OptionbarInputLocation icon locationName="Tree style X 1" onLocation={(x,y) => {setHeaderKey("treeX", x, 0)}}/>
             }
          </div>
-         <span>Tree styles X 2</span>
+         <span>Trees X 2</span>
          <div className="sidebar-view-general-row-spanner">
             <OptionbarInputSlider value={header.treeX[1]} onChange={(value) => {setHeaderKey("treeX", value, 1)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
             {
@@ -361,7 +361,7 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
                <OptionbarInputLocation icon locationName="Tree style X 2" onLocation={(x,y) => {setHeaderKey("treeX", x, 1)}}/>
             }
          </div>
-         <span>Tree styles X 3</span>
+         <span>Trees X 3</span>
          <div className="sidebar-view-general-row-spanner">
             <OptionbarInputSlider value={header.treeX[2]} onChange={(value) => {setHeaderKey("treeX", value, 2)}} min={0} max={header.maxTilesX} input inputWidth="6ch"/>
             {
@@ -369,7 +369,7 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
                <OptionbarInputLocation icon locationName="Tree style X 3" onLocation={(x,y) => {setHeaderKey("treeX", x, 2)}}/>
             }
          </div>
-         <span>Tree style</span>
+         <span>Trees</span>
          <div className="sidebar-view-general-row-spanner">
             <OptionbarInputSelect value={header.treeStyle[0]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5]} onChange={(value) => {setHeaderKey("treeStyle", value, 0)}}/>
             <OptionbarInputSelect value={header.treeStyle[1]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5]} onChange={(value) => {setHeaderKey("treeStyle", value, 1)}}/>
@@ -377,7 +377,7 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
             <OptionbarInputSelect value={header.treeStyle[3]} className="sidebar-view-general-input-select" options={[0, 1, 2, 3, 4, 5]} onChange={(value) => {setHeaderKey("treeStyle", value, 3)}}/>
          </div>
 
-         <div className="sidebar-view-general-row-divider"><span>Backgrounds:</span></div>
+         <div className="sidebar-view-general-row-divider"><span>Backgrounds</span></div>
 
          <span>{version >= 225 ? "Forest 1" : "Forest"}</span>
          <OptionbarInputSelect value={header.setBG0} options={version >= 225 ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73] : [0, 1, 2, 3, 4, 5, 6, 7, 8, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBG0", value)}} width="6ch"/>
@@ -461,18 +461,18 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
          {
             version >= 225 &&
             <>
-               <div className="sidebar-view-general-row-divider"><span>{"Pets <3"}</span></div>
+               <div className="sidebar-view-general-row-divider"><span>Pets bought</span></div>
 
-               <span>Bought cat</span>
+               <span>Cat</span>
                <OptionbarInputCheckbox value={header.boughtCat} onChange={(value) => {setHeaderKey("boughtCat", value)}} />
-               <span>Bought dog</span>
+               <span>Dog</span>
                <OptionbarInputCheckbox value={header.boughtDog} onChange={(value) => {setHeaderKey("boughtDog", value)}} />
-               <span>Bought bunny</span>
+               <span>Bunny</span>
                <OptionbarInputCheckbox value={header.boughtBunny} onChange={(value) => {setHeaderKey("boughtBunny", value)}} />
             </>
          }
 
-         <div className="sidebar-view-general-row-divider"><span>NPCs saved:</span></div>
+         <div className="sidebar-view-general-row-divider"><span>NPCs saved</span></div>
 
          <span>Goblin</span>
          <OptionbarInputCheckbox value={header.savedGoblin} onChange={(value) => {setHeaderKey("savedGoblin", value)}} />
@@ -496,7 +496,7 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
          <span>Tavern Keep</span>
          <OptionbarInputCheckbox value={header.savedBartender} onChange={(value) => {setHeaderKey("savedBartender", value)}} />
 
-         <div className="sidebar-view-general-row-divider"><span>Bosses downed:</span></div>
+         <div className="sidebar-view-general-row-divider"><span>Bosses downed</span></div>
 
          <span>King Slime</span>
          <OptionbarInputCheckbox value={header.downedSlimeKing} onChange={(value) => {setHeaderKey("downedSlimeKing", value)}} />
@@ -541,7 +541,7 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
          <span>Moon Lord</span>
          <OptionbarInputCheckbox value={header.downedMoonlord} onChange={(value) => {setHeaderKey("downedMoonlord", value)}} />
 
-         <div className="sidebar-view-general-row-divider"><span>Invasion bosses downed:</span></div>
+         <div className="sidebar-view-general-row-divider"><span>Invasion bosses downed</span></div>
 
          <span>Clown</span>
          <OptionbarInputCheckbox value={header.downedClown} onChange={(value) => {setHeaderKey("downedClown", value)}} />
@@ -564,7 +564,7 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
          <span>Stardust Pillar</span>
          <OptionbarInputCheckbox value={header.downedTowerStardust} onChange={(value) => {setHeaderKey("downedTowerStardust", value)}} />
 
-         <div className="sidebar-view-general-row-divider"><span>Invasions downed:</span></div>
+         <div className="sidebar-view-general-row-divider"><span>Invasions downed</span></div>
 
          <span>Goblin army</span>
          <OptionbarInputCheckbox value={header.downedGoblins} onChange={(value) => {setHeaderKey("downedGoblins", value)}} />

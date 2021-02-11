@@ -2,7 +2,22 @@ import React from "react";
 
 import "/components/styles/input.css";
 
-function InputSlider({ label, value, onChange, float, min, max, roundTo = 2, sliderWidth, input, inputWidth, inputMin = min, inputMax = max, className }) {
+function InputSlider({
+      label,
+      value,
+      onChange,
+      float,
+      min,
+      max,
+      roundTo = 2,
+      sliderWidth,
+      input,
+      inputWidth,
+      inputMin = min,
+      inputMax = max,
+      className
+   }) {
+
    const shift = Math.pow(10, roundTo);
    let unshifted;
    if (float) {

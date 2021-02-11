@@ -5,7 +5,19 @@ import { stateChange } from "/state/state.js";
 import OptionbarInputButton from "/components/inputs/input-button.jsx";
 import { LocateIcon } from "/components/icon.jsx";
 
-function InputLocation({ stateChange, label, onClick, IconLeft, IconRight, icon, className, onLocation, locationName, worldPoint }) {
+function InputLocation({
+      stateChange,
+      label,
+      onClick,
+      IconLeft,
+      IconRight,
+      icon,
+      className,
+      onLocation,
+      locationName,
+      worldPoint
+   }) {
+
    const _onClick = () => {
       stateChange([
          [["toolbar", "tool"], "worldPoint"],

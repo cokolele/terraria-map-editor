@@ -48,7 +48,11 @@ function OptionbarOptionWorldPoint({ stateChange, state, setState, stateNPCs, he
             }
             //input point
             else {
-               state.worldPoint.onLocation(Main.mousePosImageX, Main.mousePosImageY);
+               try {
+                  state.worldPoint.onLocation(Main.mousePosImageX, Main.mousePosImageY);
+               } catch(e) {
+                  console.error("Idk weird worldPoint error");
+               }
             }
 
       }

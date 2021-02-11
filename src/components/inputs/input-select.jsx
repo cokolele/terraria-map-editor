@@ -3,7 +3,15 @@ import React from "react";
 import { ArrowDownIcon } from "/components/icon.jsx";
 import "/components/styles/input.css";
 
-function InputSelect({ label, options, value, onChange, className, width }) {
+function InputSelect({
+      label,
+      options,
+      value,
+      onChange,
+      className,
+      width
+   }) {
+
    let missingOption;
    if (value && value !== "null") {
       if (typeof options[0] == "object") {

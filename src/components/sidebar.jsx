@@ -19,15 +19,15 @@ const config = [
    {
       label: "Layers",
       View: SidebarViewLayers
-   },/*
-   {
+   },
+   /*{
       label: "Tile Info",
       View: SidebarViewTileInfo
-   }*/
-   /*{
+   },*/
+   {
       label: "NPCs",
       View: SidebarViewNPCs
-   }*/
+   }
 ];
 
 function Sidebar({ show, running, tool, drawer, mobile, stateChange }) {

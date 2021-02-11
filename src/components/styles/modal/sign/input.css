@@ -11,6 +11,11 @@
     color: inherit;
 }
 
+.modal-sign-input:focus {
+    outline: none;
+    border-color: #0078d7;
+}
+
 .modal-sign-input--errored {
     border-color: #ffe300;
 }

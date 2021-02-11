@@ -1,7 +1,16 @@
 {
-    "appVersion": "3.1.5",
+    "appVersion": "3.1.6",
     "ingameSupportedVersion": "1.4.1.2",
     "changelog": {
+        "3.1.6": {
+            "date": "February 11, 2021",
+            "changes": [
+                "Added basic NPCs tab (full NPCs data editing planned next update)",
+                "Improved sky colors and liquids layer",
+                "Added Discord link",
+                "Improved menu and overall accessibility"
+            ]
+        },
         "3.1.5": {
             "date": "January 28, 2021",
             "changes": [

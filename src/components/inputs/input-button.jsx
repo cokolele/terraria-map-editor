@@ -2,25 +2,43 @@ import React from "react";
 
 import "/components/styles/input.css";
 
-function InputButton({ label, onClick, IconLeft, IconRight, Icon, className }) {
+function InputButton({
+      label,
+      onClick,
+      className,
+      Icon,
+      IconLeft,
+      IconRight
+   }) {
+
    return (
-      <div className={"input-container input-container--no-grow" + (className ? " " + className : "")}>
-         <button type="button" className={"input-button"} onClick={onClick}>
+      <div className={`input-container --no-grow ${className ? className : ""}`}>
+         <button
+            type="button"
+            className="input-button"
+            onClick={onClick}
+         >
             {
                IconLeft &&
-               <IconLeft size={12} style={{marginRight: "0.15rem"}}/>
+               <div className="input-icon">
+                  <IconLeft size={12}/>
+               </div>
             }
             {
                label &&
-               <span className="input-label input-label--button">{label}</span>
+               <span className="input-label --emphasis">{label}</span>
             }
             {
                IconRight &&
-               <IconRight size={12} style={{marginLeft: "0.15rem"}}/>
+               <div className="input-icon">
+                  <IconRight size={12}/>
+               </div>
             }
             {
                Icon &&
-               <Icon size={12}/>
+               <div className="input-icon">
+                  <Icon size={12}/>
+               </div>
             }
          </button>
       </div>

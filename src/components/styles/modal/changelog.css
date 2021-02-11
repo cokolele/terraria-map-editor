@@ -32,7 +32,15 @@
         width: auto;
     }
 
+    .modal-changelog ul {
+        padding: 0 0 0 14px;
+    }
+
     .modal-changelog-changes-container {
-        margin: 0 0.5rem;
+        font-size: 0.83rem;
+    }
+
+    .modal-changelog-changes-container {
+        margin: 0;
     }
 }

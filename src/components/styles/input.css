@@ -1,3 +1,7 @@
+/*
+ * container
+ */
+
 .input-container {
     display: inline-flex;
     align-items: center;
@@ -5,9 +9,13 @@
     position: relative;
 }
 
-.input-container--no-grow {
+.input-container.--no-grow {
     flex-grow: 0 !important;
 }
+
+/*
+ * label
+ */
 
 .input-label {
     color: #d6d6d6;
@@ -18,10 +26,21 @@
     -moz-user-select: none;
 }
 
-.input-label--rightside {
+.input-label.--rightside {
     margin-right: 0;
     margin-left: 0.4rem;
 }
+
+.input-label.--emphasis {
+    line-height: 1.34rem;
+    margin: 0 0.2rem;
+    letter-spacing: 0.02rem;
+    color: var(--color-1);
+}
+
+/*
+ * base
+ */
 
 .input {
     height: 1.5rem;
@@ -123,6 +142,10 @@
     margin-left: 6px;
 }
 
+/*
+ * checkbox
+ */
+
 .input-checkbox {
     position: relative;
     height: 0.8rem;
@@ -137,7 +160,11 @@
     box-shadow: 0 0 0 2px #0078d7;
 }
 
-.input-checkbox--checked:after {
+.input-checkbox:active {
+    background-color: #f0f0f0;
+}
+
+.input-checkbox.--checked:after {
     position: absolute;
     top: 0;
     left: 0.07rem;
@@ -148,43 +175,45 @@
     line-height: 0.8rem;
 }
 
-.input-button {
+/*
+ * button, link (same)
+ */
+
+.input-button, .input-link {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    display: flex;
+    align-items: center;
     height: 1.5rem;
     padding: 0 0.25rem;
     box-sizing: border-box;
     border: 1px solid #666666;
     border-radius: 0.2rem;
+    text-decoration: none;
 
-    display: flex;
-    align-items: center;
-
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+    cursor: pointer;
+    -moz-cursor: pointer;
+    transition: box-shadow ease-out 0.1s, background-color ease 0.1s;
 }
 
-.input-button svg {
-    fill: #f1f1f1;
+.input-button:hover, .input-button:focus, .input-link:hover, .input-link:focus {
+    outline: none;
+    box-shadow: 1px 1px 3px rgba(0,0,0, 0.4);
 }
 
-.input-button:hover {
+.input-button:active, .input-link:active {
     outline: none;
     background-color: #454545;
+    box-shadow: none;
 }
 
-.input-button:active {
-    background-color: #383838;
-}
+/*
+ * icon
+ */
 
-.input-button:focus {
-    box-shadow: 1px 1px 2px rgba(0,0,0, 0.3);
-    outline: none;
-}
-
-.input-label--button {
-    line-height: 1.34rem;
-    margin: 0 0.2rem;
-    letter-spacing: 0.02rem;
-    color: #f0f0f0;
-    font-size: 0.84rem;
+.input-icon {
+    fill: #f1f1f1;
+    margin: 0 0.15rem;
 }

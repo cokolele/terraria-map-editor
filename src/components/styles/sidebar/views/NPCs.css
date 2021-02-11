@@ -1,3 +1,8 @@
+/*
+ * search
+ */
+
+/*
 .sidebar-view-npcs-search {
     fill: #b7b7b7;
     display: flex;
@@ -12,7 +17,7 @@
 }
 
 .sidebar-view-npcs-searchInput input {
-    width: 5rem;
+    flex-grow: 1;
     background-color: #535353;
     padding: 0.2rem 0.5rem;
     border: 0;
@@ -23,7 +28,6 @@
 }
 
 .sidebar-view-npcs-searchInput input:focus {
-    width: 19rem;
     outline: none;
     color: #f0f0f0;
 }
@@ -40,31 +44,75 @@
     border-radius: 1rem;
     background-color: #b7b7b7;
 }
+*/
+
+/*
+ * rows
+ */
 
 .sidebar-view-npcs-row {
     display: flex;
     align-items: center;
     padding: 0.8rem 1.6rem;
-    margin-bottom: 2px;
-
-    cursor: pointer;
-    transition: background-color 0.1s ease;
-    border-radius: 0.6rem;
     margin: 0 0.6rem 2px;
+    border-radius: 0.6rem;
+    /*
+    cursor: pointer;
+    -moz-cursor: pointer;
+    */
+    transition: background-color 0.1s ease;
 }
 
 .sidebar-view-npcs-row:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--color-4);
+}
+
+.sidebar-view-npcs-row:first-of-type:hover {
+    background-color: transparent;
+}
+
+.sidebar-view-npcs-row-avatar {
+    width: 2.2rem;
+    height: 2.2rem;
+    margin-right: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    filter: drop-shadow(5px 5px 5px #222);
+    -webkit-filter: drop-shadow(5px 5px 5px #222);
+}
+
+.sidebar-view-npcs-row-avatar > div {
+    flex-shrink: 0;
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -o-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: pixelated;
+    image-rendering: optimize-contrast;
+    -ms-interpolation-mode: nearest-neighbor;
 }
 
 .sidebar-view-npcs-row-type {
     font-size: 1rem;
     font-weight: 700;
-    color: #f0f0f0;
+    color: var(--color-1);
 }
 
 .sidebar-view-npcs-row-name {
-    margin-left: 1rem;
+    margin-left: 0.6rem;
     font-size: 1rem;
-    color: #dddddd;
+    color: var(--color-3);
 }
+
+/*
+ * edit menu
+ */
+
+/*
+.sidebar-view-npcs-row-details {
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+*/

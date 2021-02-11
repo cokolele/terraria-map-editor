@@ -203,7 +203,9 @@ let Main = new function() {
 
         if (this.state.canvas.worldObject.NPCs && this.state.layersVisibility.NPCs)
             this.state.canvas.worldObject.NPCs.forEach(npc => {
-                if (npc.variationIndex && typeof NPCsSprites[npc.id][npc.variationIndex] == "object")
+                if (!NPCsSprites[npc.id])
+                    temp0 = NPCsSprites.unknown;
+                else if (npc.variationIndex !== undefined && typeof NPCsSprites[npc.id][npc.variationIndex] == "object")
                     temp0 = NPCsSprites[npc.id][npc.variationIndex];
                 else
                     temp0 = NPCsSprites[npc.id];

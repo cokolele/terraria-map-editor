@@ -2,6 +2,8 @@
     background-color: #535353;
     width: 27rem;
 
+    z-index: 2000;
+
     box-sizing: border-box;
     max-height: calc(100vh - 2.2rem - 1.15rem - 2px);
     min-height: 400px;

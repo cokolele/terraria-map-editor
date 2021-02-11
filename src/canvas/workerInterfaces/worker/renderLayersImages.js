@@ -4,6 +4,8 @@ import "/utils/polyfills/polyfill-imageData.js";
 import colors, { getTileVariantIndex } from "/utils/dbs/colors.js";
 import LAYERS from "/utils/dbs/LAYERS.js";
 
+import { map } from "/utils/number.js";
+
 export default async function() {
     if (!Worker.worldObject) {
         throw new Error("worker error: render: no world loaded");
@@ -51,6 +53,8 @@ export default async function() {
             });
         }
 
+        let backgroundColumnCache = [];
+
         for (let x = 0; x < Worker.worldObject.header.maxTilesX; x++) {
             const tile = Worker.worldObject.tiles[x][y];
 
@@ -75,19 +79,25 @@ export default async function() {
             if (tile.wireYellow)
                 setPointColor(LAYERS.WIRES, colors[LAYERS.WIRES]["yellow"]);
 
-            let color;
-            if (y < bgLayers.space)
-                color = colors[LAYERS.BACKGROUND].space;
-            else if (y >= bgLayers.space && y < bgLayers.ground)
-                color = colors[LAYERS.BACKGROUND].sky;
-            else if (y >= bgLayers.ground && y < bgLayers.cavern)
-                color = colors[LAYERS.BACKGROUND].ground;
-            else if (y >= bgLayers.cavern && y < bgLayers.underworld)
-                color = colors[LAYERS.BACKGROUND].cavern;
-            else if (y >= bgLayers.underworld)
-                color = colors[LAYERS.BACKGROUND].underworld;
+            if (x == 0) {
+                if (y < bgLayers.ground) {
+                    const gradientPercent = map(y, 0, bgLayers.ground, 0, 1);
+                    backgroundColumnCache[y] = {
+                        r: colors[LAYERS.BACKGROUND].skyGradient[0].r + gradientPercent * (colors[LAYERS.BACKGROUND].skyGradient[1].r - colors[LAYERS.BACKGROUND].skyGradient[0].r),
+                        g: colors[LAYERS.BACKGROUND].skyGradient[0].g + gradientPercent * (colors[LAYERS.BACKGROUND].skyGradient[1].g - colors[LAYERS.BACKGROUND].skyGradient[0].g),
+                        b: colors[LAYERS.BACKGROUND].skyGradient[0].b + gradientPercent * (colors[LAYERS.BACKGROUND].skyGradient[1].b - colors[LAYERS.BACKGROUND].skyGradient[0].b),
+                        a: 255
+                    };
+                }
+                else if (y >= bgLayers.ground && y < bgLayers.cavern)
+                    backgroundColumnCache[y] = colors[LAYERS.BACKGROUND].ground;
+                else if (y >= bgLayers.cavern && y < bgLayers.underworld)
+                    backgroundColumnCache[y] = colors[LAYERS.BACKGROUND].cavern;
+                else if (y >= bgLayers.underworld)
+                    backgroundColumnCache[y] = colors[LAYERS.BACKGROUND].underworld;
+            }
 
-            setPointColor(LAYERS.BACKGROUND, color);
+            setPointColor(LAYERS.BACKGROUND, backgroundColumnCache[y]);
 
             position += 4;
         }

@@ -1250,14 +1250,16 @@ colors[LAYERS.WALLS_PAINTED] = {
 }*/
 
 colors[LAYERS.LIQUIDS] = {
-    "water": {r:51,g:133,b:255,a:215},
-    "lava": {r:253,g:32,b:3,a:215},
-    "honey": {r:255,g:255,b:0,a:200}
+    "water": {r:9,g:61,b:191,a:255},
+    "lava": {r:253,g:32,b:3,a:255},
+    "honey": {r:254,g:194,b:20,a:255}
 };
 
 colors[LAYERS.BACKGROUND] = {
-    "space": {r:51,g:102,b:153,a:255},
-    "sky": {r:155,g:209,b:255,a:255},
+    "skyGradient": [
+        {r:50,g:40,b:255,a:255},
+        {r:145,g:185,b:255,a:255}
+    ],
     "ground": {r:88,g:61,b:46,a:255},
     "cavern": {r:74,g:67,b:60,a:255},
     "underworld": {r:50,g:44,b:38,a:255}
