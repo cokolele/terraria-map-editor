@@ -27,7 +27,6 @@ Feel free to contribute 🌳
 <br>)
 <br>\#>git submodule init
 <br>\#>git submodule update
-<br>\#>npm install core-js@2.5.7 --save-dev
 <br>go to */node_modules/parcel-bundler/src/transforms/babel/env.js @line 54* and change the line to<br>
 ```javascript
 useBuiltIns: "usage",
