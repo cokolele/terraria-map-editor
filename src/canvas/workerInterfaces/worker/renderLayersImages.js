@@ -3,6 +3,7 @@ import Worker from "/canvas/worker.js";
 import "/utils/polyfills/polyfill-imageData.js";
 import colors, { getTileVariantIndex } from "/utils/dbs/colors.js";
 import LAYERS from "/utils/dbs/LAYERS.js";
+import paints from "/utils/dbs/paints.js";
 
 import { map } from "/utils/number.js";
 
@@ -18,19 +19,13 @@ export default async function() {
     })
 
     const bgLayers = {
-        space: 80, // below
-        // sky - betweens
-        ground: Worker.worldObject.header.worldSurface, //above
-        cavern: Worker.worldObject.header.rockLayer, //above
-        underworld: Worker.worldObject.header.maxTilesY - 192, //above
+        ground: Worker.worldObject.header.worldSurface,
+        cavern: Worker.worldObject.header.rockLayer,
+        underworld: Worker.worldObject.header.maxTilesY - 200
     };
 
-    postMessage({
-        action: "RETURN_RENDERING_PERCENT_INCOMING",
-    });
-
     let position = 0;
-    const setPointColor = (LAYER, color) => {
+    function setPointColor(LAYER, color) {
         if (!color)
             color = { r:0, g:0, b:0, a:0 };
 
@@ -39,6 +34,66 @@ export default async function() {
         layersImages[LAYER].data[position + 2] = color.b;
         layersImages[LAYER].data[position + 3] = color.a;
     }
+
+    function paintTile(tileLAYER, tileId, paintId) {
+        const baseColor = colors[tileLAYER][tileId] ?? {r:0,g:0,b:0,a:0};
+
+        if (paintId == 30) {
+            if (tileLAYER == LAYERS.TILES) {
+                return {
+                    r: 255 - baseColor.r,
+                    g: 255 - baseColor.g,
+                    b: 255 - baseColor.b,
+                    a: baseColor.a
+                }
+            } else {
+                return {
+                    r: Math.floor((255 - baseColor.r) * 0.5),
+                    g: Math.floor((255 - baseColor.g) * 0.5),
+                    b: Math.floor((255 - baseColor.b) * 0.5),
+                    a: baseColor.a
+                }
+            }
+        }
+
+        const baseColorNormalized = {
+            r: baseColor.r / 255,
+            g: baseColor.g / 255,
+            b: baseColor.b / 255
+        }
+
+        if (baseColorNormalized.g > baseColorNormalized.r)
+            [baseColorNormalized.r, baseColorNormalized.g] = [baseColorNormalized.g, baseColorNormalized.r];
+
+        if (baseColorNormalized.b > baseColorNormalized.r)
+            [baseColorNormalized.r, baseColorNormalized.b] = [baseColorNormalized.b, baseColorNormalized.r];
+
+        let finalColor;
+
+        if (paintId == 29) {
+            const blueModifier = baseColorNormalized.b * 0.3;
+            finalColor = {
+                r: Math.floor(paints[paintId].color.r * blueModifier),
+                g: Math.floor(paints[paintId].color.g * blueModifier),
+                b: Math.floor(paints[paintId].color.b * blueModifier),
+                a: baseColor.a
+            }
+        }
+
+        const redModifier = baseColorNormalized.r;
+        finalColor = {
+            r: Math.floor(paints[paintId].color.r * redModifier),
+            g: Math.floor(paints[paintId].color.g * redModifier),
+            b: Math.floor(paints[paintId].color.b * redModifier),
+            a: baseColor.a
+        }
+
+        return finalColor;
+    }
+
+    postMessage({
+        action: "RETURN_RENDERING_PERCENT_INCOMING",
+    });
 
     const drawOnePercent = Worker.worldObject.header.maxTilesY / 100;
     let drawPercentNext = 0;
@@ -59,16 +114,35 @@ export default async function() {
             const tile = Worker.worldObject.tiles[x][y];
 
             if (tile.blockId !== undefined)
-                if (colors[LAYERS.TILES][tile.blockId].r)
-                    setPointColor(LAYERS.TILES, colors[LAYERS.TILES][tile.blockId]);
+                if (tile.blockId == 160) //rainbow brick
+                    switch (y % 3) {
+                        case 0:
+                            setPointColor(LAYERS.TILES, {r:255,g:0,b:0,a:255});
+                            break;
+                        case 1:
+                            setPointColor(LAYERS.TILES, {r:0,g:255,b:0,a:255});
+                            break;
+                        case 2:
+                            setPointColor(LAYERS.TILES, {r:0,g:0,b:255,a:255});
+                            break;
+                    }
+                else if (colors[LAYERS.TILES][tile.blockId].r)
+                    if (tile.blockId != 51 || (x + y) % 2) //skip every second cobweb
+                        setPointColor(LAYERS.TILES, colors[LAYERS.TILES][tile.blockId]);
                 else
                     setPointColor(LAYERS.TILES, colors[LAYERS.TILES][tile.blockId][ getTileVariantIndex(tile.blockId, tile.frameX, tile.frameY) ]);
+
+            if (tile.blockColor !== undefined && tile.blockColor != 31)
+                setPointColor(LAYERS["Painted Tiles"], paintTile(LAYERS.TILES, tile.blockId, tile.blockColor));
 
             if (tile.liquidType)
                 setPointColor(LAYERS.LIQUIDS, colors[LAYERS.LIQUIDS][tile.liquidType]);
 
             if (tile.wallId !== undefined)
                 setPointColor(LAYERS.WALLS, colors[LAYERS.WALLS][tile.wallId]);
+
+            if (tile.wallColor !== undefined && tile.wallColor != 31)
+                setPointColor(LAYERS["Painted Walls"], paintTile(LAYERS.WALLS, tile.wallId, tile.wallColor));
 
             if (tile.wireRed)
                 setPointColor(LAYERS.WIRES, colors[LAYERS.WIRES]["red"]);

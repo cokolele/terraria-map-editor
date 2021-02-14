@@ -33,7 +33,7 @@ function Optionbar({ stateChange, show, running, selectedTool, optionbarState })
             {
                running && (selectedTool == "pencil" || selectedTool == "eraser" || selectedTool == "bucket") &&
                <>
-                  <OptionbarOptionLayer state={optionbarState} setState={setState} addAllOption={selectedTool == "eraser" ? true : false}/>
+                  <OptionbarOptionLayer state={optionbarState} setState={setState} addEraserOptions={selectedTool == "eraser" ? true : false}/>
                   {
                      selectedTool != "bucket" &&
                      <>

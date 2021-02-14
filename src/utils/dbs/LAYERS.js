@@ -1,10 +1,10 @@
 const LAYERS = {
     BACKGROUND: 0,
     WALLS: 1,
-    //WALLS_PAINTED: 5,
+    "Painted Walls": 5,
     LIQUIDS: 3,
     TILES: 2,
-    //TILES_PAINTED: 6,
+    "Painted Tiles": 6,
     WIRES: 4
 }
 

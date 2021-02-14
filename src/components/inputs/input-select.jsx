@@ -23,9 +23,8 @@ function InputSelect({
       }
    }
 
-
    return (
-      <div className={"input-container" + (className ? " " + className : "")}>
+      <div className={`input-container ${className ?? ""}`}>
          {
             label &&
             <span className="input-label">{label + ":"}</span>

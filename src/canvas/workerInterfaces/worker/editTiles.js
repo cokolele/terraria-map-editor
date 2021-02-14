@@ -39,6 +39,14 @@ function changeTile(LAYER, x, y, newId) {
                 delete Worker.worldObject.tiles[x][y].liquidType;
                 delete Worker.worldObject.tiles[x][y].liquidAmount;
                 break;
+
+            case LAYERS["Painted Tiles"]:
+                delete Worker.worldObject.tiles[x][y].blockColor;
+                break;
+
+            case LAYERS["Painted Walls"]:
+                delete Worker.worldObject.tiles[x][y].wallColor;
+                break;
         }
     } else {
         switch(LAYER) {
@@ -62,6 +70,14 @@ function changeTile(LAYER, x, y, newId) {
             case LAYERS.LIQUIDS:
                 Worker.worldObject.tiles[x][y].liquidType = newId;
                 Worker.worldObject.tiles[x][y].liquidAmount = 255;
+                break;
+
+            case LAYERS["Painted Tiles"]:
+                Worker.worldObject.tiles[x][y].blockColor = newId;
+                break;
+
+            case LAYERS["Painted Walls"]:
+                Worker.worldObject.tiles[x][y].wallColor = newId;
                 break;
         }
     }

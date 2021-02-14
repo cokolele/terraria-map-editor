@@ -294,7 +294,7 @@ function DropdownItem({ label, options, onClose, onBlur, mobile }) {
             type="button"
             className={`menu-dropdown-item ${options.type == "checkbox" ? "--checkbox" : ""} ${options.checked ? "--checked" : ""} ${options.enabled === false ? "--disabled" : ""}`}
             onMouseDown={_onClick}
-            onKeyPress={e => (e.key == "Enter" || e.key == " ") && options.enabled !== false && _onClick()}
+            onKeyPress={e => (e.key == "Enter" || e.key == " ") && _onClick()}
             onBlur={onBlur}
          >
          {label}
@@ -307,7 +307,7 @@ function DropdownItem({ label, options, onClose, onBlur, mobile }) {
             className={`menu-dropdown-item ${options.enabled === false ? "--disabled" : ""}`}
             onMouseDown={_onClick}
             tabIndex="0"
-            onKeyPress={e => (e.key == "Enter" || e.key == " ") && options.enabled !== false && _onClick()}
+            onKeyPress={e => (e.key == "Enter" || e.key == " ") && _onClick()}
             onBlur={onBlur}
          >
          {label}

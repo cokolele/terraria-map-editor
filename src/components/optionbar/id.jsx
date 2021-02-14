@@ -16,8 +16,6 @@ const liquids = ["water", "lava", "honey"];
 
 function OptionbarOptionId({ state, setState }) {
    const onChangeId = (id) => {
-      if (state.layer == LAYERS.TILES || state.layer == LAYERS.WALLS)
-         id = parseInt(id);
       setState({...state, id});
    }
 

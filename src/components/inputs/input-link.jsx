@@ -16,7 +16,7 @@ function InputLink({
    }) {
 
    return (
-      <div className={`input-container --link --no-grow ${className ? className : ""}`}>
+      <div className={`input-container --link --no-grow ${className ?? ""}`}>
          <a
             className="input-link"
             href={href}
