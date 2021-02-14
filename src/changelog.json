@@ -1,7 +1,13 @@
 {
-    "appVersion": "3.1.6",
+    "appVersion": "3.1.6.1",
     "ingameSupportedVersion": "1.4.1.2",
     "changelog": {
+        "3.1.6.1": {
+            "date": "February 14, 2021",
+            "changes": [
+                "Added paints rendering (paints tool planned next update)"
+            ]
+        },
         "3.1.6": {
             "date": "February 11, 2021",
             "changes": [
