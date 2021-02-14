@@ -68,11 +68,9 @@ export default async function() {
         if (baseColorNormalized.b > baseColorNormalized.r)
             [baseColorNormalized.r, baseColorNormalized.b] = [baseColorNormalized.b, baseColorNormalized.r];
 
-        let finalColor;
-
         if (paintId == 29) {
             const blueModifier = baseColorNormalized.b * 0.3;
-            finalColor = {
+            return {
                 r: Math.floor(paints[paintId].color.r * blueModifier),
                 g: Math.floor(paints[paintId].color.g * blueModifier),
                 b: Math.floor(paints[paintId].color.b * blueModifier),
@@ -81,14 +79,17 @@ export default async function() {
         }
 
         const redModifier = baseColorNormalized.r;
-        finalColor = {
+        return {
             r: Math.floor(paints[paintId].color.r * redModifier),
             g: Math.floor(paints[paintId].color.g * redModifier),
             b: Math.floor(paints[paintId].color.b * redModifier),
             a: baseColor.a
         }
+    }
 
-        return finalColor;
+    const snowTiles = [147, 161, 162, 163, 163, 200];
+    function checkSnowGradient(colorCache) {
+
     }
 
     postMessage({
@@ -172,6 +173,12 @@ export default async function() {
             }
 
             setPointColor(LAYERS.BACKGROUND, backgroundColumnCache[y]);
+            /*
+            if (y < bgLayers.ground || y >= bgLayers.underworld)
+
+            else
+                setPointColor(LAYERS.BACKGROUND, checkSnowGradient(backgroundColumnCache[y]));
+            */
 
             position += 4;
         }
