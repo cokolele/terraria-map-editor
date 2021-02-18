@@ -82,7 +82,10 @@ colors[LAYERS.TILES] = [
     {r:128,g:128,b:128,a:255},
     {r:89,g:201,b:255,a:255},
     {r:170,g:48,b:114,a:255},
-    {r:192,g:202,b:203,a:255},
+    [
+        {r:192,g:202,b:203,a:100},
+        {r:192,g:202,b:203,a:255}
+    ],
     {r:23,g:177,b:76,a:255},
     {r:186,g:168,b:84,a:255},
     {r:200,g:246,b:254,a:255},
@@ -238,6 +241,8 @@ colors[LAYERS.TILES] = [
     {r:148,g:133,b:98,a:255},
     [
         {r:200,g:0,b:0,a:255},
+        {r:0,g:200,b:0,a:255},
+        {r:0,g:0,b:200,a:255}
     ],
     {r:144,g:195,b:232,a:255},
     {r:184,g:219,b:240,a:255},
@@ -1238,17 +1243,6 @@ colors[LAYERS.WALLS] = [
     {r:181,g:230,b:29,a:255},
 ]
 
-/*
-colors[LAYERS.WALLS_PAINTED] = {
-    {r:210,g:144,b:45,a:125},
-    {r:255,g:30,b:30,a:125},
-    {r:255,g:30,b:30,a:175},
-    {r:255,g:102,b:0,a:125},
-    {r:255,g:102,b:0,a:175},
-    {r:255,g:255,b:0,a:125},
-    {r:255,g:255,b:0,a:175},
-}*/
-
 colors[LAYERS.LIQUIDS] = {
     "water": {r:9,g:61,b:191,a:255},
     "lava": {r:253,g:32,b:3,a:255},
@@ -1272,9 +1266,17 @@ colors[LAYERS.WIRES] = {
     "yellow": {r:255,g:255,b:0,a:100}
 };
 
-function getTileVariantIndex(id, frameX, frameY) {
+function getTileVariantIndex(id, frameX, frameY, x, y) {
     let temp;
     switch(id) {
+        //added for rainbow block
+        case 160:
+            return y % 3;
+
+        //added for cobweb
+        case 51:
+            return (x + y) % 2;
+
         case 4:
             return frameX < 66 ? 1 : 0;
         case 15:

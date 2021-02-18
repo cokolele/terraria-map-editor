@@ -114,24 +114,12 @@ export default async function() {
         for (let x = 0; x < Worker.worldObject.header.maxTilesX; x++) {
             const tile = Worker.worldObject.tiles[x][y];
 
-            if (tile.blockId !== undefined)
-                if (tile.blockId == 160) //rainbow brick
-                    switch (y % 3) {
-                        case 0:
-                            setPointColor(LAYERS.TILES, {r:255,g:0,b:0,a:255});
-                            break;
-                        case 1:
-                            setPointColor(LAYERS.TILES, {r:0,g:255,b:0,a:255});
-                            break;
-                        case 2:
-                            setPointColor(LAYERS.TILES, {r:0,g:0,b:255,a:255});
-                            break;
-                    }
-                else if (colors[LAYERS.TILES][tile.blockId].r)
-                    if (tile.blockId != 51 || (x + y) % 2) //skip every second cobweb
-                        setPointColor(LAYERS.TILES, colors[LAYERS.TILES][tile.blockId]);
+            if (tile.blockId !== undefined) {
+                if (colors[LAYERS.TILES][tile.blockId].r)
+                    setPointColor(LAYERS.TILES, colors[LAYERS.TILES][tile.blockId]);
                 else
-                    setPointColor(LAYERS.TILES, colors[LAYERS.TILES][tile.blockId][ getTileVariantIndex(tile.blockId, tile.frameX, tile.frameY) ]);
+                    setPointColor(LAYERS.TILES, colors[LAYERS.TILES][tile.blockId][ getTileVariantIndex(tile.blockId, tile.frameX, tile.frameY, x, y) ]);
+            }
 
             if (tile.blockColor !== undefined && tile.blockColor != 31)
                 setPointColor(LAYERS["Painted Tiles"], paintTile(LAYERS.TILES, tile.blockId, tile.blockColor));

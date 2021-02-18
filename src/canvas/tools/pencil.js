@@ -24,13 +24,38 @@ const onPencilClick = async (e) => {
                 tilesArray.push([x,y]);
 
     let offset, selectedColor = colors[Main.state.optionbar.layer][Main.state.optionbar.id] ?? {r:0,g:0,b:0,a:0};
-    tilesArray.forEach(([x, y]) => {
-        offset = (Main.state.canvas.worldObject.header.maxTilesX * y + x) * 4;
-        Main.layersImages[Main.state.optionbar.layer].data[offset] = selectedColor.r;
-        Main.layersImages[Main.state.optionbar.layer].data[offset+1] = selectedColor.g;
-        Main.layersImages[Main.state.optionbar.layer].data[offset+2] = selectedColor.b;
-        Main.layersImages[Main.state.optionbar.layer].data[offset+3] = selectedColor.a;
-    });
+
+    if (Main.state.optionbar.id == 160) {
+        let temp;
+        tilesArray.forEach(([x, y]) => {
+            temp = y % 3;
+            offset = (Main.state.canvas.worldObject.header.maxTilesX * y + x) * 4;
+            Main.layersImages[Main.state.optionbar.layer].data[offset] = selectedColor[temp].r;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+1] = selectedColor[temp].g;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+2] = selectedColor[temp].b;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+3] = selectedColor[temp].a;
+        });
+    }
+    else if (Main.state.optionbar.id == 51) {
+        let temp;
+        tilesArray.forEach(([x, y]) => {
+            temp = (x + y) % 2;
+            offset = (Main.state.canvas.worldObject.header.maxTilesX * y + x) * 4;
+            Main.layersImages[Main.state.optionbar.layer].data[offset] = selectedColor[temp].r;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+1] = selectedColor[temp].g;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+2] = selectedColor[temp].b;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+3] = selectedColor[temp].a;
+        });
+    }
+    else {
+        tilesArray.forEach(([x, y]) => {
+            offset = (Main.state.canvas.worldObject.header.maxTilesX * y + x) * 4;
+            Main.layersImages[Main.state.optionbar.layer].data[offset] = selectedColor.r;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+1] = selectedColor.g;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+2] = selectedColor.b;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+3] = selectedColor.a;
+        });
+    }
 
     Main.updateLayers(Main.state.optionbar.layer);
 
@@ -67,13 +92,38 @@ const onPencilDrag = async (e) => {
                 tilesArray.push([x,y]);
 
     let offset, selectedColor = colors[Main.state.optionbar.layer][Main.state.optionbar.id] ?? {r:0,g:0,b:0,a:0};
-    tilesArray.forEach(([x, y]) => {
-        offset = (Main.state.canvas.worldObject.header.maxTilesX * y + x) * 4;
-        Main.layersImages[Main.state.optionbar.layer].data[offset] = selectedColor.r;
-        Main.layersImages[Main.state.optionbar.layer].data[offset+1] = selectedColor.g;
-        Main.layersImages[Main.state.optionbar.layer].data[offset+2] = selectedColor.b;
-        Main.layersImages[Main.state.optionbar.layer].data[offset+3] = selectedColor.a;
-    });
+
+    if (Main.state.optionbar.id == 160) {
+        let temp;
+        tilesArray.forEach(([x, y]) => {
+            temp = y % 3;
+            offset = (Main.state.canvas.worldObject.header.maxTilesX * y + x) * 4;
+            Main.layersImages[Main.state.optionbar.layer].data[offset] = selectedColor[temp].r;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+1] = selectedColor[temp].g;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+2] = selectedColor[temp].b;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+3] = selectedColor[temp].a;
+        });
+    }
+    else if (Main.state.optionbar.id == 51) {
+        let temp;
+        tilesArray.forEach(([x, y]) => {
+            temp = (x + y) % 2;
+            offset = (Main.state.canvas.worldObject.header.maxTilesX * y + x) * 4;
+            Main.layersImages[Main.state.optionbar.layer].data[offset] = selectedColor[temp].r;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+1] = selectedColor[temp].g;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+2] = selectedColor[temp].b;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+3] = selectedColor[temp].a;
+        });
+    }
+    else {
+        tilesArray.forEach(([x, y]) => {
+            offset = (Main.state.canvas.worldObject.header.maxTilesX * y + x) * 4;
+            Main.layersImages[Main.state.optionbar.layer].data[offset] = selectedColor.r;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+1] = selectedColor.g;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+2] = selectedColor.b;
+            Main.layersImages[Main.state.optionbar.layer].data[offset+3] = selectedColor.a;
+        });
+    }
 
     Main.updateLayers(Main.state.optionbar.layer);
 
