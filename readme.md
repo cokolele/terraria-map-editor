@@ -27,11 +27,6 @@ Feel free to contribute 🌳
 <br>)
 <br>\#>git submodule init
 <br>\#>git submodule update
-<br>go to */node_modules/parcel-bundler/src/transforms/babel/env.js @line 54* and change the line to<br>
-```javascript
-useBuiltIns: "usage",
-```
-(changing getEnvPlugins options for babel to import only used polyfills)
 <br>\#>npm start
 
 #### [API](https://github.com/cokolele/terraria-map-editor-api "terraria-map-editor-api")

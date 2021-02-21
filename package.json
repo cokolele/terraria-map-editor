@@ -1,30 +1,50 @@
 {
   "name": "terraria-web-editor",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Terraria map editor, in a web browser",
   "dependencies": {
-    "@babel/polyfill": "^7.12.1",
+    "@reduxjs/toolkit": "^1.5.0",
+    "core-js": "^3.9.0",
     "normalize.css": "^8.0.1",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
-    "react-transition-group": "^4.4.1",
-    "redux": "^4.0.5"
+    "react-transition-group": "^4.4.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.10",
-    "@babel/preset-env": "^7.12.11",
-    "@babel/preset-react": "^7.12.10",
-    "core-js": "^2.6.12",
+    "@mischnic/parcel-resolver-root": "^0.2.1",
+    "@parcel/optimizer-cssnano": "^2.0.0-nightly.602",
+    "@parcel/optimizer-htmlnano": "^2.0.0-nightly.602",
+    "@parcel/packager-css": "^2.0.0-nightly.602",
+    "@parcel/packager-html": "^2.0.0-nightly.602",
+    "@parcel/transformer-css": "^2.0.0-nightly.602",
+    "@parcel/transformer-html": "^2.0.0-nightly.602",
+    "@parcel/transformer-image": "^2.0.0-nightly.2224",
+    "@parcel/transformer-postcss": "^2.0.0-nightly.602",
+    "@parcel/transformer-posthtml": "^2.0.0-nightly.602",
     "cross-env": "^6.0.3",
-    "parcel-bundler": "^1.12.4",
-    "parcel-plugin-clean-dist": "0.0.6",
-    "parcel-proxy-server": "^1.1.0"
+    "parcel": "^2.0.0-nightly.600",
+    "postcss": "^8.2.6"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=development node ./parcel-proxy-config.js",
-    "build": "cross-env NODE_ENV=production parcel build ./src/index.html"
+    "start": "cross-env NODE_ENV=development    parcel       ./src/index.html --port 80 --no-hmr",
+    "build": "cross-env NODE_ENV=production     parcel build ./src/index.html --dist-dir dist/"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 2 chrome version",
+      "last 2 firefox version",
+      "last 2 safari version"
+    ]
+  },
+  "@mischnic/parcel-resolver-root": {
+    "/": "./src",
+    "~": "./"
   },
   "repository": {
     "type": "git",
@@ -32,7 +52,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/cokolele/terraria-web-editor/issues"
   },

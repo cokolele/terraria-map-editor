@@ -1,4 +1,4 @@
-import spriteUrl from "/images/sprite.png";
+import spriteUrl from "url:/images/sprite.png";
 
 const sprite = new Image();
 sprite.src = spriteUrl;

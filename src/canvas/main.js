@@ -45,7 +45,7 @@ let Main = new function() {
     this.resetWorker = () => {
         if (this.worker)
             this.worker.terminate();
-        this.worker = new Worker("./worker.js");
+        this.worker = new Worker(new URL("./worker.js", import.meta.url));
     }
 
     this.init = (canvasEl) => {

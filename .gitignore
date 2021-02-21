@@ -3,6 +3,7 @@ logs
 npm-debug.log*
 node_modules/
 .cache/
+.parcel-cache/
 dist/
 logs/
 secrets.js

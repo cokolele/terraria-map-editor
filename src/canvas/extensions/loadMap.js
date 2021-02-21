@@ -8,6 +8,7 @@ export default async function() {
         Main.loop.stop();
 
     store.dispatch(stateChange([
+        [["status", "description"], "Loading data from file"],
         [["status", "error"], null],
         [["status", "loading"], true]
     ]));

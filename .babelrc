@@ -1,14 +1,14 @@
 {
-    "presets": [
+    presets: [
         ["@babel/preset-env", {
-            "useBuiltIns": "usage",
-            "corejs": "2.5.7"
+            useBuiltIns: "usage",
+            corejs: "3.9"
         }],
         "@babel/preset-react"
     ],
-    "plugins": [
+    plugins: [
         ["@babel/plugin-transform-react-jsx", {
-            "pragmaFrag": "React.Fragment"
-        }]
+            pragmaFrag: "React.Fragment"
+        }],
     ]
 }

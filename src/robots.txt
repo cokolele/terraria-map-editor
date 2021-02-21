@@ -1,4 +1,3 @@
-# http://www.robotstxt.org
-Allow: /
-Disallow:
+# https://www.robotstxt.org/robotstxt.html
 User-agent: *
+Disallow:
