@@ -1,7 +1,5 @@
-import React from "react";
-
-import { ErrorOutlineIcon } from "/components/icon.jsx";
-import "/components/styles/modal/sign/button.css";
+import { ErrorOutlineIcon } from "src/components/icon.jsx";
+import "src/components/styles/modal/sign/button.css";
 
 function ModalSignButton({ label, onClick, error }) {
    return (

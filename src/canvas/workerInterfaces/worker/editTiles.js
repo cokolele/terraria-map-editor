@@ -1,7 +1,7 @@
-import Worker from "/canvas/worker.js";
+import Worker from "src/canvas/worker.js";
 
-import colors, { getTileVariantIndex } from "/utils/dbs/colors.js";
-import LAYERS from "/utils/dbs/LAYERS.js";
+import colors, { getTileVariantIndex } from "src/utils/dbs/colors.js";
+import LAYERS from "src/utils/dbs/LAYERS.js";
 
 function changeTile(LAYER, x, y, newId) {
     //original 2d tiles array is full of references because of RLE, dont wanna change them too!

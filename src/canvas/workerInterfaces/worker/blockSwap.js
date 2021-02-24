@@ -1,7 +1,7 @@
-import Worker from "/canvas/worker.js";
+import Worker from "src/canvas/worker.js";
 
-import editableTiles from "/utils/dbs/editable-tiles.js";
-import editableWalls from "/utils/dbs/editable-walls.js";
+import editableTiles from "src/utils/dbs/editable-tiles.js";
+import editableWalls from "src/utils/dbs/editable-walls.js";
 
 const arrayShuffle = (array) => {
     for (let i = array.length - 1; i > 0; i--){

@@ -1,4 +1,4 @@
-import Main from "/canvas/main.js";
+import Main from "src/canvas/main.js";
 
 async function getTileData(x, y) {
     if (x === undefined)

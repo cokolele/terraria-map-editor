@@ -1,6 +1,4 @@
-import React from "react";
-
-import "/components/styles/toolbar/tool.css";
+import "src/components/styles/toolbar/tool.css";
 
 function Tool({ title, Icon, onClick, selected, name, stroke }) {
    const _onClick = () => {

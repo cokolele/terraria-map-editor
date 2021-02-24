@@ -1,6 +1,6 @@
-import Worker from "/canvas/worker.js";
+import Worker from "src/canvas/worker.js";
 
-import LAYERS from "/utils/dbs/LAYERS.js";
+import LAYERS from "src/utils/dbs/LAYERS.js";
 
 export default async function({ from, to, onProgress }) {
     let replacedBlocks = [];

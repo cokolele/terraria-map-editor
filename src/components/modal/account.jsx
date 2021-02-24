@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import api from "/utils/api/api.js";
+import api from "src/utils/api/api.js";
 
-import ModalAccountViewSettings from "/components/modal/account/views/settings.jsx";
-import ModalAccountViewMaps from "/components/modal/account/views/maps.jsx";
-import "/components/styles/modal/account.css";
+import ModalAccountViewSettings from "src/components/modal/account/views/settings.jsx";
+import ModalAccountViewMaps from "src/components/modal/account/views/maps.jsx";
+import "src/components/styles/modal/account.css";
 
 const config = [
    {

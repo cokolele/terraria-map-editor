@@ -1,6 +1,6 @@
-import store from "/state/store.js";
-import { stateChange } from "/state/state.js";
-import api from "/utils/api/api.js";
+import store from "src/state/store.js";
+import { stateChange } from "src/state/state.js";
+import api from "src/utils/api/api.js";
 
 export default function(_interface, e) {
     console.error("worker interface " + _interface + " error:", e);

@@ -2,12 +2,12 @@
     general namespace and controller for anything
 */
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { connect } from "react-redux";
-import auth from "/utils/api/auth.js";
-import { stateChange } from "/state/state.js";
+import auth from "src/utils/api/auth.js";
+import { stateChange } from "src/state/state.js";
 
-import Main from "/canvas/main.js";
+import Main from "src/canvas/main.js";
 
 function Controller(props) {
    //page load

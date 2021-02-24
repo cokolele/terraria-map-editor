@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
-import InputSelect from "/components/inputs/input-select.jsx";
-import InputCheckbox from "/components/inputs/input-checkbox.jsx";
+import InputSelect from "src/components/inputs/input-select.jsx";
+import InputCheckbox from "src/components/inputs/input-checkbox.jsx";
 
-import LAYERS from "/utils/dbs/LAYERS.js";
-import editableTiles from "/utils/dbs/editable-tiles.js";
-import editableWalls from "/utils/dbs/editable-walls.js";
+import LAYERS from "src/utils/dbs/LAYERS.js";
+import editableTiles from "src/utils/dbs/editable-tiles.js";
+import editableWalls from "src/utils/dbs/editable-walls.js";
 
 const tiles = Object.entries(editableTiles).map(([id, name]) => [name, parseInt(id)]);
 const walls = Object.entries(editableWalls).map(([id, name]) => [name, parseInt(id)]);

@@ -3,55 +3,63 @@
   "version": "1.0.0",
   "description": "Terraria map editor, in a web browser",
   "dependencies": {
-    "@reduxjs/toolkit": "^1.5.0",
-    "core-js": "^3.9.0",
     "normalize.css": "^8.0.1",
+    "core-js": "^3.9.0",
+    "regenerator-runtime": "^0.13.7",
+    "@reduxjs/toolkit": "^1.5.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
     "react-transition-group": "^4.4.1"
   },
   "devDependencies": {
-    "@mischnic/parcel-resolver-root": "^0.2.1",
-    "@parcel/optimizer-cssnano": "^2.0.0-nightly.602",
-    "@parcel/optimizer-htmlnano": "^2.0.0-nightly.602",
-    "@parcel/packager-css": "^2.0.0-nightly.602",
-    "@parcel/packager-html": "^2.0.0-nightly.602",
-    "@parcel/transformer-css": "^2.0.0-nightly.602",
-    "@parcel/transformer-html": "^2.0.0-nightly.602",
-    "@parcel/transformer-image": "^2.0.0-nightly.2224",
-    "@parcel/transformer-postcss": "^2.0.0-nightly.602",
-    "@parcel/transformer-posthtml": "^2.0.0-nightly.602",
-    "cross-env": "^6.0.3",
-    "parcel": "^2.0.0-nightly.600",
-    "postcss": "^8.2.6"
+    "@babel/core": "^7.12.17",
+    "@babel/preset-env": "^7.12.17",
+    "@babel/preset-react": "^7.12.13",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^5.0.2",
+    "html-webpack-plugin": "^5.2.0",
+    "mini-css-extract-plugin": "^1.3.8",
+    "react-refresh": "^0.9.0",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.23.0",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-nomodule-plugin": "^1.1.0",
+    "worker-loader": "^3.0.8"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=development    parcel       ./src/index.html --port 80 --no-hmr",
-    "build": "cross-env NODE_ENV=production     parcel build ./src/index.html --dist-dir dist/"
+    "start": "webpack serve --config-name dev",
+    "build": "webpack build --config-name prod --progress"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 2 chrome version",
-      "last 2 firefox version",
-      "last 2 safari version"
-    ]
-  },
-  "@mischnic/parcel-resolver-root": {
-    "/": "./src",
-    "~": "./"
-  },
+  "browserslist": [
+    "Edge >= 16",
+    "Firefox >= 60",
+    "Chrome >= 61",
+    "Safari >= 11",
+    "Opera >= 48"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cokolele/terraria-web-editor.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "terraria",
+    "world file",
+    "file dumper",
+    "parsing",
+    "parser",
+    "map viewer",
+    "editor",
+    "edit",
+    "tool",
+    "javascript",
+    "browser",
+    "saver",
+    "save"
+  ],
+  "author": "Cokolele",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/cokolele/terraria-web-editor/issues"

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { stateChange } from "/state/state.js";
-import auth from "/utils/api/auth.js";
+import { stateChange } from "src/state/state.js";
+import auth from "src/utils/api/auth.js";
 
-import ModalSignInput from "/components/modal/sign/input.jsx";
-import ModalSignButtonInlineText from "/components/modal/sign/button-inline-text.jsx";
-import ModalSignButton from "/components/modal/sign/button.jsx";
-import "/components/styles/modal/sign.css";
+import ModalSignInput from "src/components/modal/sign/input.jsx";
+import ModalSignButtonInlineText from "src/components/modal/sign/button-inline-text.jsx";
+import ModalSignButton from "src/components/modal/sign/button.jsx";
+import "src/components/styles/modal/sign.css";
 
 function ModalSignin({ close, stateChange }) {
    const [username, setUsername] = useState("");

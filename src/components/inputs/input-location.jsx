@@ -1,9 +1,8 @@
-import React from "react";
 import { connect } from "react-redux";
-import { stateChange } from "/state/state.js";
+import { stateChange } from "src/state/state.js";
 
-import OptionbarInputButton from "/components/inputs/input-button.jsx";
-import { LocateIcon } from "/components/icon.jsx";
+import OptionbarInputButton from "src/components/inputs/input-button.jsx";
+import { LocateIcon } from "src/components/icon.jsx";
 
 function InputLocation({
       stateChange,

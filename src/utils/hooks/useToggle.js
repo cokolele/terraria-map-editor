@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 export default function useToggle(state1, state2, proxy) {
     const [state, update] = useState(state1);

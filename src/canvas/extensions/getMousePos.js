@@ -1,5 +1,5 @@
-import Main from "/canvas/main.js";
-import { map } from "/utils/number.js";
+import Main from "src/canvas/main.js";
+import { map } from "src/utils/number.js";
 
 //returns mouse pos of canvas element
 function getMousePosElement(e) {

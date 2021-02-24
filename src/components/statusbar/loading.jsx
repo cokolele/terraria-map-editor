@@ -1,6 +1,4 @@
-import React from "react";
-
-import "/components/styles/statusbar/loading.css";
+import "src/components/styles/statusbar/loading.css";
 
 function StatusbarLoading({ visible }) {
    return (

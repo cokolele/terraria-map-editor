@@ -1,7 +1,5 @@
-import React from "react";
-
-import { ErrorOutlineIcon } from "/components/icon.jsx";
-import "/components/styles/modal/account/button.css";
+import { ErrorOutlineIcon } from "src/components/icon.jsx";
+import "src/components/styles/modal/account/button.css";
 
 function ModalAccountButton({ label, onClick, error, text, disabled, primary }) {
    return (

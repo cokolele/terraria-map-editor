@@ -1,6 +1,6 @@
-import Worker from "/canvas/worker.js";
+import Worker from "src/canvas/worker.js";
 
-import terrariaWorldSaver from "/../terraria-world-file-js/src/browser/terraria-world-saver.js";
+import terrariaWorldSaver from "src/../terraria-world-file-js/src/browser/terraria-world-saver.js";
 
 export default async function({ worldObject }) {
     if (!Worker.worldObject) {

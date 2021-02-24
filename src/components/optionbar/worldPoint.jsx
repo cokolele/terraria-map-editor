@@ -1,14 +1,14 @@
-import React, {  useEffect } from "react";
+import { useEffect } from "react";
 import { connect } from "react-redux";
-import { stateChange } from "/state/state.js";
-import { store } from "/state/store.js";
+import { stateChange } from "src/state/state.js";
+import { store } from "src/state/store.js";
 
-import NPCs from "/utils/dbs/NPCs.js";
-import InputSelect from "/components/inputs/input-select.jsx";
-import InputButton from "/components/inputs/input-button.jsx";
-import { LocateIcon } from "/components/icon.jsx";
-import useUpdateEffect from "/utils/hooks/useUpdateEffect.js";
-import Main from "/canvas/main.js";
+import NPCs from "src/utils/dbs/NPCs.js";
+import InputSelect from "src/components/inputs/input-select.jsx";
+import InputButton from "src/components/inputs/input-button.jsx";
+import { LocateIcon } from "src/components/icon.jsx";
+import useUpdateEffect from "src/utils/hooks/useUpdateEffect.js";
+import Main from "src/canvas/main.js";
 
 function OptionbarOptionWorldPoint({ stateChange, state, setState, stateNPCs, header, onCanvasClick }) {
    useUpdateEffect(() => {

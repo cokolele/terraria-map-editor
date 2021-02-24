@@ -1,5 +1,5 @@
-import localSettings from "/utils/localSettings.js";
-import LAYERS from "/utils/dbs/LAYERS.js";
+import localSettings from "src/utils/localSettings.js";
+import LAYERS from "src/utils/dbs/LAYERS.js";
 
 /*
     i know this way of use may defeat some purpose of the redux, but i found it to make the most sense for me in this app

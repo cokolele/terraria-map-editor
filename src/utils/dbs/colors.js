@@ -1,4 +1,4 @@
-import LAYERS from "/utils/dbs/LAYERS.js";
+import LAYERS from "src/utils/dbs/LAYERS.js";
 
 let colors = {};
 

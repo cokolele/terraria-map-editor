@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { stateChange } from "/state/state.js";
+import { stateChange } from "src/state/state.js";
 
-import NPCs from "/utils/dbs/NPCs.js";
-import sprite, { spriteUrl, NPCsSprites } from "/utils/dbs/sprites.js";
-import { FindIcon } from "/components/icon.jsx";
-import OptionbarInputSelect from "/components/inputs/input-select.jsx";
-import OptionbarInputButton from "/components/inputs/input-button.jsx";
-import OptionbarInput from "/components/inputs/input.jsx";
+import NPCs from "src/utils/dbs/NPCs.js";
+import sprite, { spriteUrl, NPCsSprites } from "src/utils/dbs/sprites.js";
+import { FindIcon } from "src/components/icon.jsx";
+import OptionbarInputSelect from "src/components/inputs/input-select.jsx";
+import OptionbarInputButton from "src/components/inputs/input-button.jsx";
+import OptionbarInput from "src/components/inputs/input.jsx";
 import { CSSTransition } from "react-transition-group";
-import "/components/styles/sidebar/views/NPCs.css";
+import "src/components/styles/sidebar/views/NPCs.css";
 
 function SidebarNPCs({ stateChange, stateNPCs, headerSpawnPoint }) {
    let addOptions = { ...NPCs };
@@ -109,7 +109,7 @@ function SidebarNPCs({ stateChange, stateNPCs, headerSpawnPoint }) {
          </div>
          {
             [...stateNPCs].reverse().map((stateNPC, i) => (
-               <React.Fragment key={stateNPCs.length - 1 - i}>
+               <Fragment key={stateNPCs.length - 1 - i}>
                   <div className="sidebar-view-npcs-row" onClick={() => { selectedEditNPC == stateNPCs.length - 1 - i ? setSelectedEditNPC(null) : setSelectedEditNPC(stateNPCs.length - 1 - i)}}>
                      <SidebarNPCAvatar id={stateNPC.id} variation={stateNPC.variationIndex}/>
                      <div className="sidebar-view-npcs-row-type">{NPCs[stateNPC.id].typeName}</div>
@@ -134,7 +134,7 @@ function SidebarNPCs({ stateChange, stateNPCs, headerSpawnPoint }) {
                         {JSON.stringify(stateNPCs[stateNPCs.length - 1 - i])}
                      </div>
                   </CSSTransition>
-               </React.Fragment>
+               </Fragment>
             ))
          }
       </>

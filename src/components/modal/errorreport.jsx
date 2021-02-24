@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { connect } from "react-redux";
-import api from "/utils/api/api.js";
+import api from "src/utils/api/api.js";
 
-import ModalAccountButton from "/components/modal/account/button.jsx";
+import ModalAccountButton from "src/components/modal/account/button.jsx";
 
 function ModalErrorReport({ close }) {
    const [text, setText] = useState("");

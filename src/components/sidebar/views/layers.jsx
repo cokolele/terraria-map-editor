@@ -1,12 +1,11 @@
-import React from "react";
-import useToggle from "/utils/hooks/useToggle.js";
+import useToggle from "src/utils/hooks/useToggle.js";
 import { connect } from "react-redux";
-import { stateToggle } from "/state/state.js";
+import { stateToggle } from "src/state/state.js";
 
-import { EyeIcon } from "/components/icon.jsx";
-import "/components/styles/sidebar/views/layers.css";
+import { EyeIcon } from "src/components/icon.jsx";
+import "src/components/styles/sidebar/views/layers.css";
 
-import LAYERS from "/utils/dbs/LAYERS.js";
+import LAYERS from "src/utils/dbs/LAYERS.js";
 
 function SidebarCategoryLayers({ layersVisibility, stateToggle }) {
    const onLayerClick = (LAYER) => {

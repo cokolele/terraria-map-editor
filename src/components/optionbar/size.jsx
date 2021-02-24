@@ -1,7 +1,5 @@
-import React from "react";
-
-import InputSlider from "/components/inputs/input-slider.jsx";
-import InputCheckbox from "/components/inputs/input-checkbox.jsx";
+import InputSlider from "src/components/inputs/input-slider.jsx";
+import InputCheckbox from "src/components/inputs/input-checkbox.jsx";
 
 function OptionbarOptionSize({ state, setState }) {
    const onChangeLocked = () => {

@@ -1,4 +1,4 @@
-import Main from "/canvas/main.js";
+import Main from "src/canvas/main.js";
 
 const center = (x, y) => {
     Main.posX = x - Main.viewWidthTiles/2;

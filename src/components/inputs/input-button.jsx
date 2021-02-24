@@ -1,6 +1,4 @@
-import React from "react";
-
-import "/components/styles/input.css";
+import "src/components/styles/input.css";
 
 function InputButton({
       label,

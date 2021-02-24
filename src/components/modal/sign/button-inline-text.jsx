@@ -1,6 +1,4 @@
-import React from "react";
-
-import "/components/styles/modal/sign/button-inline-text.css";
+import "src/components/styles/modal/sign/button-inline-text.css";
 
 function ModalSignButtonInlineText({ label, onClick }) {
    const _onClick = e => {

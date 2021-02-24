@@ -1,6 +1,4 @@
-import React from "react";
-
-import "/components/styles/appbar/button.css";
+import "src/components/styles/appbar/button.css";
 
 function AppbarButton({ Icon, onClick }) {
    return (

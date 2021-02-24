@@ -1,6 +1,6 @@
-import Worker from "/canvas/worker.js";
+import Worker from "src/canvas/worker.js";
 
-import terrariaWorldParser from "/../terraria-world-file-js/src/browser/terraria-world-parser.js";
+import terrariaWorldParser from "src/../terraria-world-file-js/src/browser/terraria-world-parser.js";
 
 export default async function({ worldFile, unsafe, unsafeOnlyTiles, ignoreBounds }) {
     postMessage({

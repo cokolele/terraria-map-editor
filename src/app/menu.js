@@ -1,10 +1,10 @@
-import localSettings from "/utils/localSettings.js";
-import store from "/state/store.js";
-import { stateChange, stateToggle } from "/state/state.js";
-import api from "/utils/api/api.js";
+import localSettings from "src/utils/localSettings.js";
+import store from "src/state/store.js";
+import { stateChange, stateToggle } from "src/state/state.js";
+import api from "src/utils/api/api.js";
 
-import Main from "/canvas/main.js";
-import completeBestiary from "/utils/dbs/completeBestiary.js";
+import Main from "src/canvas/main.js";
+import completeBestiary from "src/utils/dbs/completeBestiary.js";
 
 const onNewFile = (e, file) => {
     if (file == undefined) {

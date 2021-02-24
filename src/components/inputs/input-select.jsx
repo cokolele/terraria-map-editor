@@ -1,7 +1,5 @@
-import React from "react";
-
-import { ArrowDownIcon } from "/components/icon.jsx";
-import "/components/styles/input.css";
+import { ArrowDownIcon } from "src/components/icon.jsx";
+import "src/components/styles/input.css";
 
 function InputSelect({
       label,

@@ -1,4 +1,4 @@
-import { ToolMoveIcon, ToolTileInfo, ToolSelectIcon, ToolPencilIcon, ToolBucketIcon, ToolEraserIcon, ToolPointIcon } from "/components/icon.jsx";
+import { ToolMoveIcon, ToolTileInfo, ToolSelectIcon, ToolPencilIcon, ToolBucketIcon, ToolEraserIcon, ToolPointIcon } from "src/components/icon.jsx";
 
 export default {
     move: {

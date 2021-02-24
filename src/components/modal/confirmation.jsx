@@ -1,6 +1,4 @@
-import React from "react";
-
-import ModalAccountButton from "/components/modal/account/button.jsx";
+import ModalAccountButton from "src/components/modal/account/button.jsx";
 
 function ModalConfirmation({ close, text, textButton, onConfirm }) {
    return (

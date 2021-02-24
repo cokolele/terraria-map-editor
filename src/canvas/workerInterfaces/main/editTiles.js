@@ -1,6 +1,6 @@
-import Main from "/canvas/main.js";
+import Main from "src/canvas/main.js";
 
-import WorkerError from "/canvas/workerInterfaces/errors/WorkerError.js";
+import WorkerError from "src/canvas/workerInterfaces/errors/WorkerError.js";
 
 export default function(LAYER, editType, editArgs, newId) {
     return new Promise((resolve, reject) => {

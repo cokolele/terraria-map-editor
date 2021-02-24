@@ -1,4 +1,4 @@
-import Main from "/canvas/main.js";
+import Main from "src/canvas/main.js";
 
 const onMoveDrag = (e) => {
     Main.posX -= e.movementX / Main.tilePixelRatio;

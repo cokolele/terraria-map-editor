@@ -1,9 +1,9 @@
-import Main from "/canvas/main.js";
+import Main from "src/canvas/main.js";
 
-import store from "/state/store.js";
-import { stateChange } from "/state/state.js";
+import store from "src/state/store.js";
+import { stateChange } from "src/state/state.js";
 
-import colors from "/utils/dbs/colors.js";
+import colors from "src/utils/dbs/colors.js";
 
 const onBucketClick = async (e) => {
     store.dispatch(stateChange(["status", "loading"], true));

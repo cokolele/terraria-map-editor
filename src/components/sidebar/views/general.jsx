@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { stateChange } from "/state/state.js"
+import { stateChange } from "src/state/state.js"
 
-import OptionbarInput from "/components/inputs/input.jsx";
-import OptionbarInputSlider from "/components/inputs/input-slider.jsx";
-import OptionbarInputSelect from "/components/inputs/input-select.jsx";
-import OptionbarInputCheckbox from "/components/inputs/input-checkbox.jsx";
-import OptionbarInputLocation from "/components/inputs/input-location.jsx";
-import "/components/styles/sidebar/views/general.css";
+import OptionbarInput from "src/components/inputs/input.jsx";
+import OptionbarInputSlider from "src/components/inputs/input-slider.jsx";
+import OptionbarInputSelect from "src/components/inputs/input-select.jsx";
+import OptionbarInputCheckbox from "src/components/inputs/input-checkbox.jsx";
+import OptionbarInputLocation from "src/components/inputs/input-location.jsx";
+import "src/components/styles/sidebar/views/general.css";
 
-import LAYERS from "/utils/dbs/LAYERS.js";
-import { sharedRestrainedRangeChange } from "/utils/number.js";
+import LAYERS from "src/utils/dbs/LAYERS.js";
+import { sharedRestrainedRangeChange } from "src/utils/number.js";
 
 function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeOnlyTiles, creativePowers, mobile }) {
    const version = fileFormatHeader.version;

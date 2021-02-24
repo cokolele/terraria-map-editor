@@ -1,25 +1,25 @@
-import "/utils/polyfills/polyfill-requestAnimationFrame.js";
+import "src/utils/polyfills/polyfill-requestAnimationFrame.js";
 
-import store from "/state/store.js";
-import { stateChange } from "/state/state.js";
+import store from "src/state/store.js";
+import { stateChange } from "src/state/state.js";
 
-import LAYERS from "/utils/dbs/LAYERS.js";
-import sprite, { NPCsSprites, WorldPointsSprites } from "/utils/dbs/sprites.js";
+import LAYERS from "src/utils/dbs/LAYERS.js";
+import sprite, { NPCsSprites, WorldPointsSprites } from "src/utils/dbs/sprites.js";
 
-import extensions from "/canvas/extensions/index.js";
-import workerInterfaces from "/canvas/workerInterfaces/main/index.js";
+import extensions from "src/canvas/extensions/index.js";
+import workerInterfaces from "src/canvas/workerInterfaces/main/index.js";
 
-import listenerWrapper from "/canvas/listeners/listenerWrapper.js";
-import onCanvasClick from "/canvas/listeners/click.js";
-import onCanvasMouseMove from "/canvas/listeners/mousemove.js";
-import onCanvasTouchMove from "/canvas/listeners/touchmove.js";
-import onCanvasWheel from "/canvas/listeners/wheel.js";
-import onCanvasTouchStart from "/canvas/listeners/touchstart.js";
-import onCanvasTouchEnd from "/canvas/listeners/touchend.js";
-import onCanvasMouseDown from "/canvas/listeners/mousedown.js";
-import onCanvasMouseUp from "/canvas/listeners/mouseup.js";
-import onCanvasMouseOver from "/canvas/listeners/mouseover.js";
-import onCanvasMouseLeave from "/canvas/listeners/mouseleave.js";
+import listenerWrapper from "src/canvas/listeners/listenerWrapper.js";
+import onCanvasClick from "src/canvas/listeners/click.js";
+import onCanvasMouseMove from "src/canvas/listeners/mousemove.js";
+import onCanvasTouchMove from "src/canvas/listeners/touchmove.js";
+import onCanvasWheel from "src/canvas/listeners/wheel.js";
+import onCanvasTouchStart from "src/canvas/listeners/touchstart.js";
+import onCanvasTouchEnd from "src/canvas/listeners/touchend.js";
+import onCanvasMouseDown from "src/canvas/listeners/mousedown.js";
+import onCanvasMouseUp from "src/canvas/listeners/mouseup.js";
+import onCanvasMouseOver from "src/canvas/listeners/mouseover.js";
+import onCanvasMouseLeave from "src/canvas/listeners/mouseleave.js";
 
 let Main = new function() {
     this.state;

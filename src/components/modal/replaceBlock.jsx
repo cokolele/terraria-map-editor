@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { connect } from "react-redux";
 
-import LAYERS from "/utils/dbs/LAYERS.js";
-import extensionBlockReplace from "/canvas/extensions/blockReplace.js";
+import LAYERS from "src/utils/dbs/LAYERS.js";
+import extensionBlockReplace from "src/canvas/extensions/blockReplace.js";
 
-import OptionbarOptionLayer from "/components/optionbar/layer.jsx";
-import OptionbarOptionId from "/components/optionbar/id.jsx";
-import ModalAccountButton from "/components/modal/account/button.jsx";
+import OptionbarOptionLayer from "src/components/optionbar/layer.jsx";
+import OptionbarOptionId from "src/components/optionbar/id.jsx";
+import ModalAccountButton from "src/components/modal/account/button.jsx";
 
-import "/components/styles/modal/replaceBlock.css";
+import "src/components/styles/modal/replaceBlock.css";
 
 function ModalReplaceBlock({ close }) {
    const [from, setFrom] = useState({

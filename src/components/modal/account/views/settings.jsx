@@ -1,9 +1,8 @@
-import React from "react";
 import { connect } from "react-redux";
-import { stateChange } from "/state/state.js";
-import auth from "/utils/api/auth.js";
+import { stateChange } from "src/state/state.js";
+import auth from "src/utils/api/auth.js";
 
-import Button from "/components/modal/account/button.jsx";
+import Button from "src/components/modal/account/button.jsx";
 
 function ModalAccountViewSettings({ close, stateChange }) {
    const onLogOut = async () => {

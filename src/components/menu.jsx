@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { connect } from "react-redux";
-import menu from "/app/menu.js";
-import { stateChange, stateToggle } from "/state/state.js";
+import menu from "src/app/menu.js";
+import { stateChange, stateToggle } from "src/state/state.js";
 
 import { CSSTransition } from "react-transition-group";
-import InputLink from "/components/inputs/input-link.jsx";
-import { LogoIcon, AccountBoxIcon, GithubIcon, DiscordIcon } from "/components/icon.jsx";
-import "/components/styles/menu.css";
+import InputLink from "src/components/inputs/input-link.jsx";
+import { LogoIcon, AccountBoxIcon, GithubIcon, DiscordIcon } from "src/components/icon.jsx";
+import "src/components/styles/menu.css";
 
 /*
  * TODO: shortcuts
@@ -173,7 +173,7 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
             {
                Object.entries(config).map(([label, items], i) =>
                   (mobile && items.mobile === false) ? null :
-                  <React.Fragment key={i}>
+                  <Fragment key={i}>
                      <InputLink
                         className={`menu-link ${currentTab === i ? "--active" : ""}`}
                         label={label}
@@ -190,7 +190,7 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
                         onBlur={onDropdownBlur}
                         mobile={mobile}
                      />
-                  </React.Fragment>
+                  </Fragment>
                )
             }
 

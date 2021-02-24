@@ -1,4 +1,4 @@
-import workerInterfaces from "/canvas/workerInterfaces/worker/index.js";
+import workerInterfaces from "src/canvas/workerInterfaces/worker/index.js";
 
 let Worker = new function() {
     this.worldObject;

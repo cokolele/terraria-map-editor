@@ -1,16 +1,15 @@
 //css
 import "normalize.css";
-import "/main.css";
+import "src/main.css";
 
 //react
-import React from "react";
 import { render } from "react-dom";
 
 import { Provider } from "react-redux";
-import store from "/state/store.js";
+import store from "src/state/store.js";
 
-import Controller from "/components/__controller.jsx";
-import Editor from "/pages/editor.jsx";
+import Controller from "src/components/__controller.jsx";
+import Editor from "src/pages/editor.jsx";
 
 render(
     <Provider store={store}>

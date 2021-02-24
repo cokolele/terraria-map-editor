@@ -1,6 +1,6 @@
-import Main from "/canvas/main.js";
+import Main from "src/canvas/main.js";
 
-import { onMoveDragTouch } from "/canvas/tools/move.js";
+import { onMoveDragTouch } from "src/canvas/tools/move.js";
 
 export default function(e) {
     //[Main.mousePosImageX, Main.mousePosImageY, Main.mousePosElementX, Main.mousePosElementY] = Main.extensions.getMousePosImage(e, true);

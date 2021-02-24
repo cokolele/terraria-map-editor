@@ -1,7 +1,5 @@
-import React from "react";
-
-import LAYERS from "/utils/dbs/LAYERS.js";
-import InputSelect from "/components/inputs/input-select.jsx";
+import LAYERS from "src/utils/dbs/LAYERS.js";
+import InputSelect from "src/components/inputs/input-select.jsx";
 
 const options = [
    ["Tiles", LAYERS.TILES],
