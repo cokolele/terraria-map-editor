@@ -24,22 +24,16 @@
     "react-refresh": "^0.9.0",
     "style-loader": "^2.0.0",
     "webpack": "^5.23.0",
+    "webpack-bundle-analyzer": "^4.4.0",
     "webpack-cli": "^4.5.0",
     "webpack-dev-server": "^3.11.2",
     "webpack-nomodule-plugin": "^1.1.0",
     "worker-loader": "^3.0.8"
   },
   "scripts": {
-    "start": "webpack serve --config-name dev",
-    "build": "webpack build --config-name prod --progress"
+    "start": "webpack serve --config webpack.config.dev.js --mode development",
+    "build": "webpack build --config webpack.config.prod.js --mode production --progress"
   },
-  "browserslist": [
-    "Edge >= 16",
-    "Firefox >= 60",
-    "Chrome >= 61",
-    "Safari >= 11",
-    "Opera >= 48"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cokolele/terraria-web-editor.git"

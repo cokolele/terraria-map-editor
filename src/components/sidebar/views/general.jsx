@@ -46,10 +46,6 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
          stateChange(["canvas", "worldObject", "header", key], value);
    }
 
-   const setLocationKey = (key, x, y) => {
-
-   }
-
    if (unsafeOnlyTiles || header.length < 10)
       return (
          <div className="sidebar-view-general--disabled">
