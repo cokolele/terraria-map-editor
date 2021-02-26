@@ -9,10 +9,10 @@ export default async function({ from, to, onProgress }) {
 
     switch (to.layer) {
         case LAYERS.TILES:
-            newProperties.blockId = to.id;
+            newProperties.blockId = parseInt(to.id);
             break;
         case LAYERS.WALLS:
-            newProperties.wallId = to.id;
+            newProperties.wallId = parseInt(to.id);
             break;
         case LAYERS.WIRES:
             newProperties["wire" + to.id.charAt(0).toUpperCase() + to.id.slice(1)] = true;
@@ -41,7 +41,8 @@ export default async function({ from, to, onProgress }) {
             switch (from.layer) {
                 case LAYERS.TILES:
                     if (Worker.worldObject.tiles[x][y].blockId !== undefined && Worker.worldObject.tiles[x][y].blockId == from.id){
-                        Worker.worldObject.tiles[x][y] = { ...Worker.worldObject.tiles[x][y], blockId: undefined, ...newProperties };
+                        Worker.worldObject.tiles[x][y] = { ...Worker.worldObject.tiles[x][y], blockId: undefined };
+                        Worker.worldObject.tiles[x][y] = { ...Worker.worldObject.tiles[x][y], ...newProperties };
                         if (to.layer != LAYERS.TILES) {
                             delete Worker.worldObject.tiles[x][y].frameX;
                             delete Worker.worldObject.tiles[x][y].frameY;
@@ -53,7 +54,8 @@ export default async function({ from, to, onProgress }) {
                     break;
                 case LAYERS.WALLS:
                     if (Worker.worldObject.tiles[x][y].wallId !== undefined && Worker.worldObject.tiles[x][y].wallId == from.id) {
-                        Worker.worldObject.tiles[x][y] = { ...Worker.worldObject.tiles[x][y], wallId: undefined, ...newProperties };
+                        Worker.worldObject.tiles[x][y] = { ...Worker.worldObject.tiles[x][y], wallId: undefined };
+                        Worker.worldObject.tiles[x][y] = { ...Worker.worldObject.tiles[x][y], ...newProperties };
                         if (to.layer != LAYERS.WALLS)
                             delete Worker.worldObject.tiles[x][y].wallColor;
                         replacedBlocks.push([x,y]);
