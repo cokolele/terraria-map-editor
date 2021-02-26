@@ -16,6 +16,13 @@ import "/main.css";
 
     //    corejs: "2.5.7"
 */
+if (!String.prototype.replaceAll) {
+    String.prototype.replaceAll = function(str, newStr) {
+        if (Object.prototype.toString.call(str).toLowerCase() === '[object regexp]')
+            return this.replace(str, newStr);
+        return this.replace(new RegExp(str, 'g'), newStr);
+    };
+}
 
 //react
 import React from "react";
