@@ -58,7 +58,7 @@ function OptionbarOptionId({ state, setState }) {
             setIdInputByLayer(<InputSelect label="Liquid type" options={liquids} value={state.id} onChange={onChangeId}/>);
             break;
       }
-   }, [state.id, state.ordered, state.size])
+   }, [state.id, state.ordered, state.size, state.locked])
 
    return (
       <>

@@ -39,7 +39,29 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
             enabled: running,
             onClick: menu.onSaveFile
          },
-         DIVIDER,
+         /*DIVIDER,
+         "Open minimap...": {
+            type: "link",
+            //enabled: running,
+            //onClick: menu.onNewMiminapFile,
+            onClick: async (file) => {
+               if (!file) {
+                  const inputElHidden = document.createElement("input");
+                  inputElHidden.setAttribute("type", "file");
+                  inputElHidden.setAttribute("accept", ".map");
+                  inputElHidden.addEventListener("input", async () => {
+                     config["File"]["Open minimap..."].onClick(inputElHidden.files[0]);
+                  });
+                  inputElHidden.click();
+               }
+               else {
+                  let map = new tmp();
+                  map = await map.loadFile(file);
+                  map.parse();
+               }
+            }
+         },*/
+         DIVIDER2: DIVIDER,
          Close: {
             type: "button",
             enabled: running,

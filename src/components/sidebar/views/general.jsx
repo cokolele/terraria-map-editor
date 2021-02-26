@@ -67,6 +67,8 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
          <OptionbarInput value={header.mapName} onChange={(value) => {setHeaderKey("mapName", value)}} />
          <span>World ID</span>
          <div className="sidebar-view-general-row-value">{header.worldId}</div>
+         <span style={{flexBasis:"25%"}}>World GUID</span>
+         <div style={{flexBasis:"75%"}}className="sidebar-view-general-row-value">{header.guidString}</div>
          <span>Seed</span>
          <div className="sidebar-view-general-row-value">{header.seedText}</div>
          <span>Revision</span>

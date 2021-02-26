@@ -6,9 +6,9 @@ import InputCheckbox from "/components/inputs/input-checkbox.jsx";
 function OptionbarOptionSize({ state, setState }) {
    const onChangeLocked = () => {
       if (state.locked)
-         setState({...state, locked: !state.locked});
+         setState({...state, locked: false});
       else
-         setState({...state, locked: !state.locked, size:[state.size[0], state.size[0]]});
+         setState({...state, locked: true, size:[state.size[0], state.size[0]]});
    }
 
    const onChangeWidth = (x) => {
