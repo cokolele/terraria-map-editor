@@ -22,7 +22,7 @@ function InputLink({
             href={href}
             tabIndex="0"
             target={target || href && "_blank"}
-            onClick={onClick}
+            onMouseDown={onClick}
             onBlur={onBlur}
             onMouseEnter={onMouseEnter}
             onKeyPress={e => (e.key == "Enter" || e.key == " ") && onClick && onClick(e)}

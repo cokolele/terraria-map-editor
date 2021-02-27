@@ -85,6 +85,41 @@
  * top links
  */
 
+.menu-link.--support {
+    margin-right: 0.5rem;
+}
+
+.menu-link.--support .heart {
+    margin-right: 0.2rem;
+    font-size: 1.3rem;
+    position: relative;
+    bottom: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.7s ease-out, bottom 0.7s ease-out;
+}
+
+.menu-link.--support.--highlight .heart {
+    bottom: 0;
+    opacity: 1;
+}
+
+.menu-link.--support .input-link {
+    border: 1px solid #db61a2;
+    background-color: var(--color-6);
+}
+
+.menu-link.--support .input-link:hover, .menu-link.--support .input-link:focus {
+    border: 1px solid #db61a2;
+    background-color: var(--color-6);
+    box-shadow: 1px 1px pink;
+}
+
+.menu-link.--support .input-link:active {
+    box-shadow: 1px 1px #db61a2;
+}
+
+/* == */
+
 .menu-link .input-link {
     border: 1px solid transparent;
     border-radius: 0.3rem;

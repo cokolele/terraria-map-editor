@@ -219,6 +219,12 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
             <div className="flex-filler"></div>
 
             <InputLink
+               className="menu-link --support"
+               label="No Ads. Please consider a coffee tip ☕"
+               href="https://www.patreon.com/terraria_map_editor"
+               onClick={menu.onSupportLinkClick}
+            />
+            <InputLink
                className="menu-link"
                label="Changelog"
                onClick={() => stateChange("modal", "changelog")}

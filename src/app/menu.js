@@ -178,6 +178,49 @@ const onBestiaryFill = () => {
     }]));
 }
 
+const onSupportLinkClick = (running) => {
+    setTimeout(() => {
+        const heartAnimation = async (e) => {
+            if (e === undefined || document.hasFocus()) {
+                await new Promise(r => setTimeout(r, 1000));
+
+                window.removeEventListener("focus", heartAnimation);
+                const container = document.querySelector(".input-container.menu-link.--support");
+                const label = document.querySelector(".input-container.menu-link.--support .input-label");
+
+                await new Promise(r => {
+                    const removePlaceholer = setInterval(() => {
+                        label.innerHTML = label.innerHTML.slice(0, -1);
+                        if (label.innerHTML.length == 0) {
+                            clearInterval(removePlaceholer);
+                            r();
+                        }
+                    }, 54)
+                });
+
+                await new Promise(r => {
+                    const message = "Thank You.".split("");
+                    const addMessage = setInterval(() => {
+                        label.innerHTML += message.shift();
+                        if (message.length == 0) {
+                            clearInterval(addMessage);
+                            r();
+                        }
+                    }, 164)
+                });
+
+                container.innerHTML = "<span class=\"heart\">💖</span>" + container.innerHTML;
+                setTimeout(() => container.classList.add("--highlight"), 500);
+            }
+        }
+
+        if (!document.hasFocus())
+            window.addEventListener("focus", heartAnimation);
+        else
+            heartAnimation();
+    }, 1000);
+}
+
 export default {
     onNewFile,
     onExampleMap,
@@ -190,5 +233,6 @@ export default {
     onWebsiteZoom,
     onBestiaryExport,
     onBestiaryImport,
-    onBestiaryFill
+    onBestiaryFill,
+    onSupportLinkClick
 };
