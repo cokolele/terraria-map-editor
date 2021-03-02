@@ -221,7 +221,7 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
             <InputLink
                className="menu-link --support"
                label="No Ads. Please consider a coffee tip ☕"
-               href="https://www.patreon.com/terraria_map_editor"
+               href="https://www.buymeacoffee.com/cokolele"
                onClick={menu.onSupportLinkClick}
             />
             <InputLink
