@@ -202,6 +202,13 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
                         <OptionbarInputCheckbox value={header.getGoodWorld} onChange={(value) => {setHeaderKey("getGoodWorld", value)}} />
                      </>
                   }
+                  {
+                     version >= 238 &&
+                     <>
+                        <span>Celebration world (seed)</span>
+                        <OptionbarInputCheckbox value={header.getTenthAnniversaryWorld} onChange={(value) => {setHeaderKey("getTenthAnniversaryWorld", value)}} />
+                     </>
+                  }
                </>
             :
                <>

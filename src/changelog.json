@@ -1,7 +1,13 @@
 {
-    "appVersion": "3.1.6.1",
-    "ingameSupportedVersion": "1.4.1.2",
+    "appVersion": "3.1.6.2",
+    "ingameSupportedVersion": "1.4.2.3",
     "changelog": {
+        "3.1.6.2": {
+            "date": "May 15, 2021",
+            "changes": [
+                "Updated for the latest Terraria (1.4.2.3)"
+            ]
+        },
         "3.1.6.1": {
             "date": "February 14, 2021",
             "changes": [
