@@ -114,23 +114,23 @@ export default async function() {
         for (let x = 0; x < Worker.worldObject.header.maxTilesX; x++) {
             const tile = Worker.worldObject.tiles[x][y];
 
-            if (tile.blockId !== undefined) {
-                if (colors[LAYERS.TILES][tile.blockId].r)
+            if (tile.blockId !== undefined && colors[LAYERS.TILES][tile.blockId]) {
+                if (colors[LAYERS.TILES][tile.blockId].r !== undefined)
                     setPointColor(LAYERS.TILES, colors[LAYERS.TILES][tile.blockId]);
                 else
                     setPointColor(LAYERS.TILES, colors[LAYERS.TILES][tile.blockId][ getTileVariantIndex(tile.blockId, tile.frameX, tile.frameY, x, y) ]);
             }
 
-            if (tile.blockColor !== undefined && tile.blockColor != 31)
+            if (tile.blockColor !== undefined && tile.blockColor != 31 && colors[LAYERS.TILES][tile.blockId])
                 setPointColor(LAYERS["Painted Tiles"], paintTile(LAYERS.TILES, tile.blockId, tile.blockColor));
 
             if (tile.liquidType)
                 setPointColor(LAYERS.LIQUIDS, colors[LAYERS.LIQUIDS][tile.liquidType]);
 
-            if (tile.wallId !== undefined)
+            if (tile.wallId !== undefined && colors[LAYERS.WALLS][tile.wallId])
                 setPointColor(LAYERS.WALLS, colors[LAYERS.WALLS][tile.wallId]);
 
-            if (tile.wallColor !== undefined && tile.wallColor != 31)
+            if (tile.wallColor !== undefined && tile.wallColor != 31 && colors[LAYERS.WALLS][tile.wallId])
                 setPointColor(LAYERS["Painted Walls"], paintTile(LAYERS.WALLS, tile.wallId, tile.wallColor));
 
             if (tile.wireRed)
