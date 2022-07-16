@@ -247,7 +247,7 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
                className="menu-link"
                label="Github"
                Icon={<GithubIcon size={15}/>}
-               href="https://github.com/cokolele/terraria-map-editor"
+               href="https://github.com/TEdit/terraria-map-editor"
             />
          </div>
       </div>

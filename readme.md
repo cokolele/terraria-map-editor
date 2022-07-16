@@ -19,20 +19,16 @@ Feel free to contribute 🌳
 
 ## Installation
 
-\#>git clone https://github.com/cokolele/terraria-map-editor
-<br>\#>npm install
-<br>(if you can fix unexpected config errors yourself:
-<br>&nbsp;&nbsp;&nbsp;&nbsp;\#>npm audit fix
-<br>&nbsp;&nbsp;&nbsp;&nbsp;\#>npm update
-<br>)
-<br>\#>git submodule init
-<br>\#>git submodule update
-<br>go to */node_modules/parcel-bundler/src/transforms/babel/env.js @line 54* and change the line to<br>
-```javascript
-useBuiltIns: "usage",
 ```
-(changing getEnvPlugins options for babel to import only used polyfills)
-<br>\#>npm start
-
-#### [API](https://github.com/cokolele/terraria-map-editor-api "terraria-map-editor-api")
+\#>git clone https://github.com/TEdit/terraria-map-editor
+\#>npm install
+(if you can fix unexpected config errors yourself:
+&nbsp;&nbsp;&nbsp;&nbsp;\#>npm audit fix
+&nbsp;&nbsp;&nbsp;&nbsp;\#>npm update
+)
+\#>git submodule init
+\#>git submodule update
+\#>npm start
+```
+#### [API](https://github.com/TEdit/terraria-map-editor-api "terraria-map-editor-api")
 
