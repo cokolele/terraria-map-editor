@@ -31,4 +31,3 @@ Feel free to contribute 🌳
 \#>npm start
 ```
 #### [API](https://github.com/TEdit/terraria-map-editor-api "terraria-map-editor-api")
-
