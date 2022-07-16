@@ -1,7 +1,14 @@
 {
-    "appVersion": "3.1.6.2",
-    "ingameSupportedVersion": "1.4.2.3",
+    "appVersion": "3.1.7",
+    "ingameSupportedVersion": "1.4.3",
     "changelog": {
+        "3.1.7": {
+            "date": "May 15, 2022",
+            "changes": [
+                "BinaryConstruct fork",
+                "Updated for the latest Terraria (1.4.3)"
+            ]
+        },
         "3.1.6.2": {
             "date": "May 15, 2021",
             "changes": [

@@ -1,3 +1,4 @@
 [submodule "terraria-world-file-js"]
 	path = terraria-world-file-js
-	url = https://github.com/cokolele/terraria-world-file-js
+	url = https://github.com/TEdit/terraria-world-file-js
+	branch = master
