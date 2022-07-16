@@ -152,11 +152,11 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
       Report: {
          "Error": {
             type: "link",
-            onClick: () => { window.open("https://github.com/TEdit/terraria-map-editor-web/issues", '_blank') }
+            onClick: () => { window.open("https://github.com/TEdit/terraria-map-editor-web-web/issues", '_blank') }
          },
          "Suggestions or feature requests": {
             type: "link",
-            onClick: () => { window.open("https://github.com/TEdit/terraria-map-editor-web/issues", '_blank') }
+            onClick: () => { window.open("https://github.com/TEdit/terraria-map-editor-web-web/issues", '_blank') }
          }
       }
    };
@@ -247,7 +247,7 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
                className="menu-link"
                label="Github"
                Icon={<GithubIcon size={15}/>}
-               href="https://github.com/TEdit/terraria-map-editor"
+               href="https://github.com/TEdit/terraria-map-editor-web"
             />
          </div>
       </div>

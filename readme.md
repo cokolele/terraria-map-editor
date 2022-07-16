@@ -20,7 +20,7 @@ Feel free to contribute 🌳
 ## Installation
 
 ```
-\#>git clone https://github.com/TEdit/terraria-map-editor
+\#>git clone https://github.com/TEdit/terraria-map-editor-web
 \#>npm install
 (if you can fix unexpected config errors yourself:
 &nbsp;&nbsp;&nbsp;&nbsp;\#>npm audit fix
@@ -30,4 +30,4 @@ Feel free to contribute 🌳
 \#>git submodule update
 \#>npm start
 ```
-#### [API](https://github.com/TEdit/terraria-map-editor-api "terraria-map-editor-api")
+#### [API](https://github.com/TEdit/terraria-map-editor-web-api "terraria-map-editor-api")
