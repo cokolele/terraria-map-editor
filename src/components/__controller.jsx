@@ -13,9 +13,9 @@ function Controller(props) {
    //page load
    useEffect(() => {
       async function loadSession() {
-         //const getUser = await auth.get("/user");
-         //if (getUser.id)
-         //   props.stateChange("user", getUser);
+         const getUser = await auth.get("/user");
+         if (getUser.id)
+            props.stateChange("user", getUser);
       }
 
       function setHtmlFontSize() {

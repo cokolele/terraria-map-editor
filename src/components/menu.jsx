@@ -20,16 +20,15 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
             type: "link",
             onClick: menu.onNewFile,
          },
-         // TODO: Disabled for fork
-         // "Open example map": {
-         //    type: "menu",
-         //    items: {
-         //       "Normal world": () => { menu.onExampleMap("normal") },
-         //       "Drunk world (seed)": () => { menu.onExampleMap("drunk") },
-         //       "Bees world (seed)": () => { menu.onExampleMap("bees") },
-         //       "For the worthy world (seed)": () => { menu.onExampleMap("good") }
-         //    }
-         // },
+         "Open example map": {
+            type: "menu",
+            items: {
+               "Normal world": () => { menu.onExampleMap("normal") },
+               "Drunk world (seed)": () => { menu.onExampleMap("drunk") },
+               "Bees world (seed)": () => { menu.onExampleMap("bees") },
+               "For the worthy world (seed)": () => { menu.onExampleMap("good") }
+            }
+         },
          "Save map image": {
             type: "button",
             enabled: running,
@@ -152,11 +151,11 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
       Report: {
          "Error": {
             type: "link",
-            onClick: () => { window.open("https://github.com/TEdit/terraria-map-editor-web-web/issues", '_blank') }
+            onClick: () => { stateChange("modal", "errorreport") }
          },
          "Suggestions or feature requests": {
             type: "link",
-            onClick: () => { window.open("https://github.com/TEdit/terraria-map-editor-web-web/issues", '_blank') }
+            onClick: () => { stateChange("modal", "suggestionreport") }
          }
       }
    };
@@ -230,13 +229,12 @@ function Menu({ stateChange, stateToggle, view, running, user, unsafe, unsafeOnl
                label="Changelog"
                onClick={() => stateChange("modal", "changelog")}
             />
-            {/*
             <InputLink
                className="menu-link"
                label={user !== null ? user.username : "Account"}
                Icon={<AccountBoxIcon size={15}/>}
                onClick={() => stateChange("modal", user ? "account" : "signin")}
-            />*/}
+            />
             <InputLink
                className="menu-link"
                label="Discord"
