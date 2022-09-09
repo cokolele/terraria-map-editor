@@ -389,41 +389,41 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
          <div className="sidebar-view-general-row-divider"><span>Backgrounds</span></div>
 
          <span>{version >= 225 ? "Forest 1" : "Forest"}</span>
-         <OptionbarInputSelect value={header.setBG0} options={version >= 225 ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73] : [0, 1, 2, 3, 4, 5, 6, 7, 8, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBG0", value)}} width="6ch"/>
+         <OptionbarInputSelect value={header.setBGTree} options={version >= 225 ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73] : [0, 1, 2, 3, 4, 5, 6, 7, 8, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBGTree", value)}} width="6ch"/>
          {
             version >= 225 &&
             <>
                <span>Forest 2</span>
-               <OptionbarInputSelect value={header.setBG10} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBG0", value)}} width="6ch"/>
+               <OptionbarInputSelect value={header.setBGTree2} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBGTree", value)}} width="6ch"/>
                <span>Forest 3</span>
-               <OptionbarInputSelect value={header.setBG11} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBG0", value)}} width="6ch"/>
+               <OptionbarInputSelect value={header.setBGTree3} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBGTree", value)}} width="6ch"/>
                <span>Forest 4</span>
-               <OptionbarInputSelect value={header.setBG12} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBG0", value)}} width="6ch"/>
+               <OptionbarInputSelect value={header.setBGTree4} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 31, 51, 71, 72, 73]} onChange={(value) => {setHeaderKey("setBGTree", value)}} width="6ch"/>
             </>
          }
          <span>Corruption</span>
-         <OptionbarInputSelect value={header.setBG1} options={version >= 225 ? [0, 1, 2, 3, 4] : [0, 1]} onChange={(value) => {setHeaderKey("setBG1", value)}} width="6ch"/>
+         <OptionbarInputSelect value={header.setBGCorruption} options={version >= 225 ? [0, 1, 2, 3, 4] : [0, 1]} onChange={(value) => {setHeaderKey("setBGCorruption", value)}} width="6ch"/>
          <span>Jungle</span>
-         <OptionbarInputSelect value={header.setBG2} options={version >= 225 ? [0, 1, 2, 3, 4, 5] : [0, 1]} onChange={(value) => {setHeaderKey("setBG2", value)}} width="6ch"/>
+         <OptionbarInputSelect value={header.setBGJungle} options={version >= 225 ? [0, 1, 2, 3, 4, 5] : [0, 1]} onChange={(value) => {setHeaderKey("setBGJungle", value)}} width="6ch"/>
          <span>Deep jungle</span>
          <OptionbarInputSelect value={header.jungleBackStyle} options={[0, 1]} onChange={(value) => {setHeaderKey("jungleBackStyle", value)}} width="6ch"/>
          <span>Snow</span>
-         <OptionbarInputSelect value={header.setBG3} options={version >= 225 ? [0, 1, 2, 3, 4, 5, 6, 7, 21, 22, 31, 32, 41, 42] : [0, 1, 2, 3, 4, 21, 22, 31, 32, 41, 42]} onChange={(value) => {setHeaderKey("setBG3", value)}} width="6ch"/>
+         <OptionbarInputSelect value={header.setBGSnow} options={version >= 225 ? [0, 1, 2, 3, 4, 5, 6, 7, 21, 22, 31, 32, 41, 42] : [0, 1, 2, 3, 4, 21, 22, 31, 32, 41, 42]} onChange={(value) => {setHeaderKey("setBGSnow", value)}} width="6ch"/>
          <span>Deep snow</span>
          <OptionbarInputSelect value={header.iceBackStyle} options={[0, 1, 2, 3]} onChange={(value) => {setHeaderKey("iceBackStyle", value)}} width="6ch"/>
          <span>Hallow</span>
-         <OptionbarInputSelect value={header.setBG4} options={version >= 225 ? [0, 1, 2, 3, 4] : [0, 1]} onChange={(value) => {setHeaderKey("setBG4", value)}} width="6ch"/>
+         <OptionbarInputSelect value={header.setBGHallow} options={version >= 225 ? [0, 1, 2, 3, 4] : [0, 1]} onChange={(value) => {setHeaderKey("setBGHallow", value)}} width="6ch"/>
          <span>Crimson</span>
-         <OptionbarInputSelect value={header.setBG5} options={version >= 225 ? [0, 1, 2, 3, 4, 5] : [0, 1, 2]} onChange={(value) => {setHeaderKey("setBG5", value)}} width="6ch"/>
+         <OptionbarInputSelect value={header.setBGCrimson} options={version >= 225 ? [0, 1, 2, 3, 4, 5] : [0, 1, 2]} onChange={(value) => {setHeaderKey("setBGCrimson", value)}} width="6ch"/>
          <span>Desert</span>
-         <OptionbarInputSelect value={header.setBG6} options={version >= 225 ? [0, 1, 2, 3, 4] : [0, 1]} onChange={(value) => {setHeaderKey("setBG6", value)}} width="6ch"/>
+         <OptionbarInputSelect value={header.setBGDesert} options={version >= 225 ? [0, 1, 2, 3, 4] : [0, 1]} onChange={(value) => {setHeaderKey("setBGDesert", value)}} width="6ch"/>
          <span>Ocean</span>
-         <OptionbarInputSelect value={header.setBG7} options={version >= 225 ? [0, 1, 2, 3, 4, 5] : [0, 1, 2]} onChange={(value) => {setHeaderKey("setBG7", value)}} width="6ch"/>
+         <OptionbarInputSelect value={header.setBGOcean} options={version >= 225 ? [0, 1, 2, 3, 4, 5] : [0, 1, 2]} onChange={(value) => {setHeaderKey("setBGOcean", value)}} width="6ch"/>
          {
             version >= 225 &&
             <>
                <span>Mushroom</span>
-               <OptionbarInputSelect value={header.setBG8} options={[0, 1, 2, 3]} onChange={(value) => {setHeaderKey("setBG8", value)}} width="6ch"/>
+               <OptionbarInputSelect value={header.setBGMushroom} options={[0, 1, 2, 3]} onChange={(value) => {setHeaderKey("setBGMushroom", value)}} width="6ch"/>
             </>
          }
          <span>Underground X 1</span>
@@ -461,7 +461,7 @@ function SidebarCategoryGeneral({ stateChange, fileFormatHeader, header, unsafeO
             version >= 225 &&
             <>
                <span>Underworld</span>
-               <OptionbarInputSelect value={header.setBG9} options={[0, 1, 2]} onChange={(value) => {setHeaderKey("setBG9", value)}} width="6ch"/>
+               <OptionbarInputSelect value={header.setBGUnderworld} options={[0, 1, 2]} onChange={(value) => {setHeaderKey("setBGUnderworld", value)}} width="6ch"/>
             </>
          }
          <span>Underworld walls</span>

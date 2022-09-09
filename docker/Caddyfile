@@ -1,0 +1,17 @@
+{
+        http_port 8080
+        https_port 8443
+        #auto_https off|disable_redirects|ignore_loaded_certs|disable_certs
+        auto_https off
+}
+
+:8080 {
+        try_files {path} /
+        header /img/* Cache-Control max-age=31536000
+        header /js/* Cache-Control max-age=31536000
+        header /css/* Cache-Control max-age=31536000
+        header /fonts/* Cache-Control max-age=31536000
+        encode gzip
+        root * /usr/share/caddy
+        file_server
+}

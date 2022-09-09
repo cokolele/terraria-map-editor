@@ -8,7 +8,7 @@ import Sidebar from "/components/sidebar.jsx";
 import Statusbar from "/components/statusbar.jsx";
 import Modal from "/components/modal.jsx";
 import Appbar from "/components/appbar.jsx";
-import "./editor.css";
+import "./Editor.css";
 
 function Editor() {
    return (

@@ -32,7 +32,7 @@ import { Provider } from "react-redux";
 import store from "/state/store.js";
 
 import Controller from "/components/__controller.jsx";
-import Editor from "/pages/editor.jsx";
+import Editor from "/pages/Editor.jsx";
 
 render(
     <Provider store={store}>
