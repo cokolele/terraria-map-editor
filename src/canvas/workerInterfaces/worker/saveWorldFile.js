@@ -12,20 +12,20 @@ export default async function ({ worldObject }) {
     action: 'RETURN_SAVING_PERCENT_INCOMING',
   })
 
-  const newWorldFile = new TerrariaFileSaver().save({
-    world: {
+  const newWorldFile = new TerrariaFileSaver().save(
+    {
       ...worldObject,
       worldTiles: {
         tiles: Worker.worldObject.tiles,
       },
     },
-    progressCallback: (percent) => {
+    (percent) => {
       postMessage({
         action: 'RETURN_SAVING_PERCENT',
         percent,
       })
     },
-  })
+  )
 
   postMessage({
     action: 'RETURN_NEW_WORLD_FILE',
