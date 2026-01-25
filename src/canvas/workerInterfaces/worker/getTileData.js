@@ -1,8 +1,8 @@
-import Worker from "/canvas/worker.js";
+import Worker from '/canvas/worker.js'
 
-export default function({ x, y }) {
-    postMessage({
-        action: "RETURN_TILE_DATA",
-        tileData: Worker.worldObject.tiles[x][y]
-    });
+export default function ({ x, y }) {
+  postMessage({
+    action: 'RETURN_TILE_DATA',
+    tileData: Worker.worldObject.tiles[x][y],
+  })
 }

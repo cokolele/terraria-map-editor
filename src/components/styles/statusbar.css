@@ -1,91 +1,92 @@
-.statusbar-container, .statusbar, .statusbar > * {
-    height: 1.15rem;
+.statusbar-container,
+.statusbar,
+.statusbar > * {
+  height: 1.15rem;
 }
 
 .statusbar-container {
-    user-select: none;
-    -moz-user-select: none;
-    background-color: #4a4a4a;
-    box-sizing: border-box;
-    border: 0 solid #383838;
-    border-right-width: 1px;
+  user-select: none;
+  -moz-user-select: none;
+  background-color: #4a4a4a;
+  box-sizing: border-box;
+  border: 0 solid #383838;
+  border-right-width: 1px;
 }
 
 .statusbar {
-    display: flex;
+  display: flex;
 }
 
 .statusbar > * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 
-    color: white;
-    font-size: 0.7rem;
-    letter-spacing: 0.4px;
-    line-height: 1.05rem;
+  color: white;
+  font-size: 0.7rem;
+  letter-spacing: 0.4px;
+  line-height: 1.05rem;
 }
 
 .status-zoom {
-    width: 3.5rem;
-    background-color: #454545;
+  width: 3.5rem;
+  background-color: #454545;
 }
 
 .status-action {
-    border: 0 solid #424242;
-    border-width: 1px 1px 0 1px;
-    position: relative;
-    width: 14rem;
-    background-color: #535353;
-    text-align: center;
+  border: 0 solid #424242;
+  border-width: 1px 1px 0 1px;
+  position: relative;
+  width: 14rem;
+  background-color: #535353;
+  text-align: center;
 }
 
 .status-action > span {
-    position: relative;
-    z-index: 1000;
+  position: relative;
+  z-index: 1000;
 }
 
 .status-action-percent {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 900;
-    height: 100%;
-    background-color: #0f64d2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 900;
+  height: 100%;
+  background-color: #0f64d2;
 }
 
 .status-error {
-    padding-left: 8px;
-    font-size: 0.77rem;
-    border: none;
-    position: relative;
-    z-index: 1000;
+  padding-left: 8px;
+  font-size: 0.77rem;
+  border: none;
+  position: relative;
+  z-index: 1000;
 }
 
-@media (max-width: 960px)
-{
-    .statusbar-container {
-        border: 0 solid #383838;
-        border-top-width: 1px;
-    }
+@media (max-width: 960px) {
+  .statusbar-container {
+    border: 0 solid #383838;
+    border-top-width: 1px;
+  }
 
-    .status-zoom {
-        width: 0;
-    }
+  .status-zoom {
+    width: 0;
+  }
 
-    .status-action {
-        width: 40vw;
-        max-width: 14rem;
-        border-top-width: 0;
-    }
+  .status-action {
+    width: 40vw;
+    max-width: 14rem;
+    border-top-width: 0;
+  }
 
-    .statusbar-loading {
-        display: none;
-    }
+  .statusbar-loading {
+    display: none;
+  }
 
-    .status-error {
-        min-width: 59vw;
-        max-width: 59vw;
-        white-space: nowrap;
-        overflow-x: scroll;
-        font-size: 0.75rem;
-    }
+  .status-error {
+    min-width: 59vw;
+    max-width: 59vw;
+    white-space: nowrap;
+    overflow-x: scroll;
+    font-size: 0.75rem;
+  }
 }

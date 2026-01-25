@@ -1,46 +1,50 @@
 * {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 :root {
-    --color-1: #f0f0f0;
-    --color-2: #dddddd;
-    --color-3: #a9a9a9;
-    --color-4-light: #7d7d7d;
-    --color-4: #666666;
-    --color-5: #535353;
-    --color-6: #454545;
-    --color-7: #383838;
-    --color-8: #282828;
+  --color-1: #f0f0f0;
+  --color-2: #dddddd;
+  --color-3: #a9a9a9;
+  --color-4-light: #7d7d7d;
+  --color-4: #666666;
+  --color-5: #535353;
+  --color-6: #454545;
+  --color-7: #383838;
+  --color-8: #282828;
 }
 
-html, body, #app {
-    height: 100%;
+html,
+body,
+#app {
+  height: 100%;
 }
 
 svg {
-    display: block;
+  display: block;
 }
 
 .hidden {
-    display: none !important;
+  display: none !important;
 }
 
-button, input[type="submit"], input[type="reset"] {
-    display: block;
-    height: auto;
-    background: none;
-    color: inherit;
-    border: none;
-    padding: 0;
-    margin: 0;
-    font: inherit;
-    cursor: pointer;
-    outline: inherit;
+button,
+input[type='submit'],
+input[type='reset'] {
+  display: block;
+  height: auto;
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
 }
 
 .flex-filler {
-    flex-grow: 1;
+  flex-grow: 1;
 }

@@ -1,7 +1,7 @@
-import { createStore } from "redux";
+import { createStore } from 'redux'
 
-import appReducer from "/state/state.js";
+import appReducer from '/state/state.js'
 
-const store = createStore(appReducer);
+const store = createStore(appReducer)
 
-export default store;
+export default store

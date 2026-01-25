@@ -1,100 +1,102 @@
-import Worker from "/canvas/worker.js";
+import Worker from '/canvas/worker.js'
 
-import colors, { getTileVariantIndex } from "/utils/dbs/colors.js";
-import LAYERS from "/utils/dbs/LAYERS.js";
+import colors, { getTileVariantIndex } from '/utils/dbs/colors.js'
+import LAYERS from '/utils/dbs/LAYERS.js'
 
 function changeTile(LAYER, x, y, newId) {
-    //original 2d tiles array is full of references because of RLE, dont wanna change them too!
-    Worker.worldObject.tiles[x][y] = { ...Worker.worldObject.tiles[x][y] };
+  //original 2d tiles array is full of references because of RLE, dont wanna change them too!
+  Worker.worldObject.tiles[x][y] = { ...Worker.worldObject.tiles[x][y] }
 
-    if (newId == "delete") {
-        switch(LAYER) {
-            case 100: //all
-                Worker.worldObject.tiles[x][y] = {};
-                break;
+  if (newId == 'delete') {
+    switch (LAYER) {
+      case 100: //all
+        Worker.worldObject.tiles[x][y] = {}
+        break
 
-            case LAYERS.TILES:
-                delete Worker.worldObject.tiles[x][y].blockId;
-                delete Worker.worldObject.tiles[x][y].frameX;
-                delete Worker.worldObject.tiles[x][y].frameY;
-                delete Worker.worldObject.tiles[x][y].slope;
-                delete Worker.worldObject.tiles[x][y].blockColor;
-                break;
+      case LAYERS.TILES:
+        delete Worker.worldObject.tiles[x][y].blockId
+        delete Worker.worldObject.tiles[x][y].frameX
+        delete Worker.worldObject.tiles[x][y].frameY
+        delete Worker.worldObject.tiles[x][y].slope
+        delete Worker.worldObject.tiles[x][y].blockColor
+        break
 
-            case LAYERS.WALLS:
-                delete Worker.worldObject.tiles[x][y].wallId;
-                delete Worker.worldObject.tiles[x][y].wallColor;
-                break;
+      case LAYERS.WALLS:
+        delete Worker.worldObject.tiles[x][y].wallId
+        delete Worker.worldObject.tiles[x][y].wallColor
+        break
 
-            case LAYERS.WIRES:
-                delete Worker.worldObject.tiles[x][y].wireRed;
-                delete Worker.worldObject.tiles[x][y].wireGreen;
-                delete Worker.worldObject.tiles[x][y].wireBlue;
-                delete Worker.worldObject.tiles[x][y].wireYellow;
-                delete Worker.worldObject.tiles[x][y].actuator;
-                delete Worker.worldObject.tiles[x][y].actuated;
-                break;
+      case LAYERS.WIRES:
+        delete Worker.worldObject.tiles[x][y].wireRed
+        delete Worker.worldObject.tiles[x][y].wireGreen
+        delete Worker.worldObject.tiles[x][y].wireBlue
+        delete Worker.worldObject.tiles[x][y].wireYellow
+        delete Worker.worldObject.tiles[x][y].actuator
+        delete Worker.worldObject.tiles[x][y].actuated
+        break
 
-            case LAYERS.LIQUIDS:
-                delete Worker.worldObject.tiles[x][y].liquidType;
-                delete Worker.worldObject.tiles[x][y].liquidAmount;
-                break;
+      case LAYERS.LIQUIDS:
+        delete Worker.worldObject.tiles[x][y].liquidType
+        delete Worker.worldObject.tiles[x][y].liquidAmount
+        break
 
-            case LAYERS["Painted Tiles"]:
-                delete Worker.worldObject.tiles[x][y].blockColor;
-                break;
+      case LAYERS['Painted Tiles']:
+        delete Worker.worldObject.tiles[x][y].blockColor
+        break
 
-            case LAYERS["Painted Walls"]:
-                delete Worker.worldObject.tiles[x][y].wallColor;
-                break;
-        }
-    } else {
-        switch(LAYER) {
-            case LAYERS.TILES:
-                Worker.worldObject.tiles[x][y].blockId = parseInt(newId);
-                delete Worker.worldObject.tiles[x][y].frameX;
-                delete Worker.worldObject.tiles[x][y].frameY;
-                delete Worker.worldObject.tiles[x][y].slope;
-                delete Worker.worldObject.tiles[x][y].blockColor;
-                break;
-
-            case LAYERS.WALLS:
-                Worker.worldObject.tiles[x][y].wallId = parseInt(newId);
-                delete Worker.worldObject.tiles[x][y].wallColor;
-                break;
-
-            case LAYERS.WIRES:
-                Worker.worldObject.tiles[x][y]["wire" + newId.charAt(0).toUpperCase() + newId.slice(1)] = true;
-                break;
-
-            case LAYERS.LIQUIDS:
-                Worker.worldObject.tiles[x][y].liquidType = newId;
-                Worker.worldObject.tiles[x][y].liquidAmount = 255;
-                break;
-
-            case LAYERS["Painted Tiles"]:
-                Worker.worldObject.tiles[x][y].blockColor = newId;
-                break;
-
-            case LAYERS["Painted Walls"]:
-                Worker.worldObject.tiles[x][y].wallColor = newId;
-                break;
-        }
+      case LAYERS['Painted Walls']:
+        delete Worker.worldObject.tiles[x][y].wallColor
+        break
     }
+  } else {
+    switch (LAYER) {
+      case LAYERS.TILES:
+        Worker.worldObject.tiles[x][y].blockId = parseInt(newId)
+        delete Worker.worldObject.tiles[x][y].frameX
+        delete Worker.worldObject.tiles[x][y].frameY
+        delete Worker.worldObject.tiles[x][y].slope
+        delete Worker.worldObject.tiles[x][y].blockColor
+        break
+
+      case LAYERS.WALLS:
+        Worker.worldObject.tiles[x][y].wallId = parseInt(newId)
+        delete Worker.worldObject.tiles[x][y].wallColor
+        break
+
+      case LAYERS.WIRES:
+        Worker.worldObject.tiles[x][y][
+          'wire' + newId.charAt(0).toUpperCase() + newId.slice(1)
+        ] = true
+        break
+
+      case LAYERS.LIQUIDS:
+        Worker.worldObject.tiles[x][y].liquidType = newId
+        Worker.worldObject.tiles[x][y].liquidAmount = 255
+        break
+
+      case LAYERS['Painted Tiles']:
+        Worker.worldObject.tiles[x][y].blockColor = newId
+        break
+
+      case LAYERS['Painted Walls']:
+        Worker.worldObject.tiles[x][y].wallColor = newId
+        break
+    }
+  }
 }
 
-export default function({ LAYER, editType, editArgs, newId }) {
-    if (editType == "rectangle") {
-        for (let x = editArgs[0][0]; x <= editArgs[1][0]; x++)
-            for (let y = editArgs[0][1]; y <= editArgs[1][1]; y++)
-                changeTile(LAYER, x, y, newId);
+export default function ({ LAYER, editType, editArgs, newId }) {
+  if (editType == 'rectangle') {
+    for (let x = editArgs[0][0]; x <= editArgs[1][0]; x++)
+      for (let y = editArgs[0][1]; y <= editArgs[1][1]; y++)
+        changeTile(LAYER, x, y, newId)
 
-        postMessage({
-            action: "RETURN_EDIT_TILES"
-        });
-    }
+    postMessage({
+      action: 'RETURN_EDIT_TILES',
+    })
+  }
 
-    /*
+  /*
     else if (editType == "floodfill") {
         //fourway flood fill
         const x = editArgs[0],

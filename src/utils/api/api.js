@@ -1,107 +1,121 @@
 const fetchErrorDefault = (e) => {
-    console.error("API call error:", e);
-    return {
-        status: "error",
-        message: "Unexpected network error"
-    };
+  console.error('API call error:', e)
+  return {
+    status: 'error',
+    message: 'Unexpected network error',
+  }
 }
 
-const get = async (resource = "/", contentType = "application/json") => {
-    try {
-        const options = {
-            credentials: "include",
-        };
-
-        if (contentType) {
-            options.headers = {};
-            options.headers["Accept"] = contentType
-        }
-
-        const response = await fetch("/api" + resource, options);
-
-        return contentType == "application/json" ? await response.json() : await response.blob();
-    } catch (e) {
-        return fetchErrorDefault(e);
+const get = async (resource = '/', contentType = 'application/json') => {
+  try {
+    const options = {
+      credentials: 'include',
     }
-};
 
-const delete_ = async (resource = "/") => {
-    try {
-        const response = await fetch("/api" + resource, {
-            method: "DELETE",
-            credentials: "include"
-        });
-
-        return await response.json();
-    } catch (e) {
-        return fetchErrorDefault(e);
+    if (contentType) {
+      options.headers = {}
+      options.headers['Accept'] = contentType
     }
-};
 
-const post = async (resource = "/", body = {}, contentType = "application/json") => {
-    try {
-        const options = {
-            method: "POST",
-            credentials: "include",
-            body: contentType == "application/json" ? JSON.stringify(body) : body
-        };
+    const response = await fetch('/api' + resource, options)
 
-        if (contentType) {
-            options.headers = {};
-            options.headers["Content-Type"] = contentType
-        }
-
-        const response = await fetch("/api" + resource, options);
-        return await response.json();
-    } catch (e) {
-        return fetchErrorDefault(e);
-    }
+    return contentType == 'application/json'
+      ? await response.json()
+      : await response.blob()
+  } catch (e) {
+    return fetchErrorDefault(e)
+  }
 }
 
-const put = async (resource = "/", body = {}, contentType = "application/json") => {
-    try {
-        const options = {
-            method: "PUT",
-            credentials: "include",
-            body: contentType == "application/json" ? JSON.stringify(body) : body
-        };
+const delete_ = async (resource = '/') => {
+  try {
+    const response = await fetch('/api' + resource, {
+      method: 'DELETE',
+      credentials: 'include',
+    })
 
-        if (contentType) {
-            options.headers = {};
-            options.headers["Content-Type"] = contentType
-        }
-
-        const response = await fetch("/api" + resource, options);
-        return await response.json();
-    } catch (e) {
-        return fetchErrorDefault(e);
-    }
+    return await response.json()
+  } catch (e) {
+    return fetchErrorDefault(e)
+  }
 }
 
-const patch = async (resource = "/", body = {}, contentType = "application/json") => {
-    try {
-        const options = {
-            method: "PATCH",
-            credentials: "include",
-            body: contentType == "application/json" ? JSON.stringify(body) : body
-        };
-
-        if (contentType) {
-            options.headers = {};
-            options.headers["Content-Type"] = contentType
-        }
-
-        const response = await fetch("/api" + resource, options);
-        return await response.json();
-    } catch (e) {
-        return fetchErrorDefault(e);
+const post = async (
+  resource = '/',
+  body = {},
+  contentType = 'application/json',
+) => {
+  try {
+    const options = {
+      method: 'POST',
+      credentials: 'include',
+      body: contentType == 'application/json' ? JSON.stringify(body) : body,
     }
+
+    if (contentType) {
+      options.headers = {}
+      options.headers['Content-Type'] = contentType
+    }
+
+    const response = await fetch('/api' + resource, options)
+    return await response.json()
+  } catch (e) {
+    return fetchErrorDefault(e)
+  }
+}
+
+const put = async (
+  resource = '/',
+  body = {},
+  contentType = 'application/json',
+) => {
+  try {
+    const options = {
+      method: 'PUT',
+      credentials: 'include',
+      body: contentType == 'application/json' ? JSON.stringify(body) : body,
+    }
+
+    if (contentType) {
+      options.headers = {}
+      options.headers['Content-Type'] = contentType
+    }
+
+    const response = await fetch('/api' + resource, options)
+    return await response.json()
+  } catch (e) {
+    return fetchErrorDefault(e)
+  }
+}
+
+const patch = async (
+  resource = '/',
+  body = {},
+  contentType = 'application/json',
+) => {
+  try {
+    const options = {
+      method: 'PATCH',
+      credentials: 'include',
+      body: contentType == 'application/json' ? JSON.stringify(body) : body,
+    }
+
+    if (contentType) {
+      options.headers = {}
+      options.headers['Content-Type'] = contentType
+    }
+
+    const response = await fetch('/api' + resource, options)
+    return await response.json()
+  } catch (e) {
+    return fetchErrorDefault(e)
+  }
 }
 
 export default {
-    get,
-    delete: delete_,
-    post,
-    put,
-    patch
-};
+  get,
+  delete: delete_,
+  post,
+  put,
+  patch,
+}

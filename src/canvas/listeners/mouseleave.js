@@ -1,5 +1,5 @@
-import Main from "/canvas/main.js";
+import Main from '/canvas/main.js'
 
-export default function(e) {
-    Main.canvas.classList.remove("cursorCopy");
+export default function (e) {
+  Main.canvas.classList.remove('cursorCopy')
 }

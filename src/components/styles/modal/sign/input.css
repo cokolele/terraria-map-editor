@@ -1,28 +1,28 @@
 .modal-sign-input {
-    padding: 4px 14px;
-    margin-bottom: 2px;
-    background-color: #474747;
-    border: 1px solid #636363;
-    border-radius: 5px;
+  padding: 4px 14px;
+  margin-bottom: 2px;
+  background-color: #474747;
+  border: 1px solid #636363;
+  border-radius: 5px;
 
-    line-height: 1.8rem;
-    font-family: inherit;
-    font-size: 1rem;
-    color: inherit;
+  line-height: 1.8rem;
+  font-family: inherit;
+  font-size: 1rem;
+  color: inherit;
 }
 
 .modal-sign-input:focus {
-    outline: none;
-    border-color: #0078d7;
+  outline: none;
+  border-color: #0078d7;
 }
 
 .modal-sign-input--errored {
-    border-color: #ffe300;
+  border-color: #ffe300;
 }
 
 .modal-sign-input-error {
-    font-size: 0.9rem;
-    margin: 4px 5px 7px;
-    letter-spacing: 0.25px;
-    color: #ffe300;
+  font-size: 0.9rem;
+  margin: 4px 5px 7px;
+  letter-spacing: 0.25px;
+  color: #ffe300;
 }

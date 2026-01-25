@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react'
 
-import "/components/styles/appbar/button.css";
+import '/components/styles/appbar/button.css'
 
 function AppbarButton({ Icon, onClick }) {
    return (
       <button type="button" className="appbar-button" onClick={onClick}>
-         <Icon/>
+         <Icon />
       </button>
-   );
+   )
 }
 
-export default AppbarButton;
+export default AppbarButton

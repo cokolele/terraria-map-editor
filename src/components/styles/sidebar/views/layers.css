@@ -1,23 +1,23 @@
 .sidebar-tab-layers-layer {
-    height: 2rem;
-    line-height: 2rem;
-    border-bottom: 1px solid #454545;
-    display: flex;
+  height: 2rem;
+  line-height: 2rem;
+  border-bottom: 1px solid #454545;
+  display: flex;
 }
 
 .sidebar-tab-layers-layer-button {
-    border-right: 1px solid #454545;
-    fill: #f0f0f0;
-    width: 1rem;
-    padding: 0.5rem 0.6rem;
-    cursor: pointer;
-    display: flex;
+  border-right: 1px solid #454545;
+  fill: #f0f0f0;
+  width: 1rem;
+  padding: 0.5rem 0.6rem;
+  cursor: pointer;
+  display: flex;
 }
 
 .sidebar-tab-layers-layer-label {
-    padding-left: 10px;
-    font-family: "Lato", sans-serif;
-    color: #f0f0f0;
-    font-size: 0.8rem;
-    text-transform: capitalize;
+  padding-left: 10px;
+  font-family: 'Lato', sans-serif;
+  color: #f0f0f0;
+  font-size: 0.8rem;
+  text-transform: capitalize;
 }

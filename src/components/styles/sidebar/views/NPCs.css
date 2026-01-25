@@ -51,59 +51,59 @@
  */
 
 .sidebar-view-npcs-row {
-    display: flex;
-    align-items: center;
-    padding: 0.8rem 1.6rem;
-    margin: 0 0.6rem 2px;
-    border-radius: 0.6rem;
-    /*
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1.6rem;
+  margin: 0 0.6rem 2px;
+  border-radius: 0.6rem;
+  /*
     cursor: pointer;
     -moz-cursor: pointer;
     */
-    transition: background-color 0.1s ease;
+  transition: background-color 0.1s ease;
 }
 
 .sidebar-view-npcs-row:hover {
-    background-color: var(--color-4);
+  background-color: var(--color-4);
 }
 
 .sidebar-view-npcs-row:first-of-type:hover {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .sidebar-view-npcs-row-avatar {
-    width: 2.2rem;
-    height: 2.2rem;
-    margin-right: 1.2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    filter: drop-shadow(5px 5px 5px #222);
-    -webkit-filter: drop-shadow(5px 5px 5px #222);
+  width: 2.2rem;
+  height: 2.2rem;
+  margin-right: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  filter: drop-shadow(5px 5px 5px #222);
+  -webkit-filter: drop-shadow(5px 5px 5px #222);
 }
 
 .sidebar-view-npcs-row-avatar > div {
-    flex-shrink: 0;
-    image-rendering: optimizeSpeed;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: -o-crisp-edges;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: pixelated;
-    image-rendering: optimize-contrast;
-    -ms-interpolation-mode: nearest-neighbor;
+  flex-shrink: 0;
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: pixelated;
+  image-rendering: optimize-contrast;
+  -ms-interpolation-mode: nearest-neighbor;
 }
 
 .sidebar-view-npcs-row-type {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--color-1);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-1);
 }
 
 .sidebar-view-npcs-row-name {
-    margin-left: 0.6rem;
-    font-size: 1rem;
-    color: var(--color-3);
+  margin-left: 0.6rem;
+  font-size: 1rem;
+  color: var(--color-3);
 }
 
 /*

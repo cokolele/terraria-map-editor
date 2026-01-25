@@ -1,11 +1,11 @@
 .modal-sign-button-inline-text {
-    padding: 0 5px;
+  padding: 0 5px;
 
-    color: #96d2ff;
-    font-weight: 700;
-    cursor: pointer;
+  color: #96d2ff;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .modal-sign-button-inline-text:first-child {
-    padding-left: 0;
+  padding-left: 0;
 }

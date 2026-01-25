@@ -1,5 +1,3 @@
-import Worker from "/canvas/worker.js";
+import Worker from '/canvas/worker.js'
 
-export default function() {
-
-}
+export default function () {}

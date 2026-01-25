@@ -1,81 +1,81 @@
 .sidebar-view-general {
-    margin: 1rem;
+  margin: 1rem;
 
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .sidebar-view-general--disabled {
-    margin: 1rem;
-    color: #f0f0f0;
+  margin: 1rem;
+  color: #f0f0f0;
 }
 
 .sidebar-view-general input {
-    width: 90%;
-    margin: 0 5%;
+  width: 90%;
+  margin: 0 5%;
 }
 
 .sidebar-view-general .input-container {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .sidebar-view-general .input-slider {
-    width: 0;
-    flex: 1 1 0;
+  width: 0;
+  flex: 1 1 0;
 }
 
 .sidebar-view-general .optiobar-input-container {
-    display: block;
+  display: block;
 }
 
 .sidebar-view-general-row-break {
-    flex-basis: 100%;
+  flex-basis: 100%;
 }
 
 .sidebar-view-general {
-    color: #f0f0f0;
-    font-size: 0.85rem;
-    line-height: 1.8rem;
+  color: #f0f0f0;
+  font-size: 0.85rem;
+  line-height: 1.8rem;
 }
 
 .sidebar-view-general-row-value {
-    text-align: center;
+  text-align: center;
 }
 
 .sidebar-view-general > * {
-    flex-basis: 50%;
+  flex-basis: 50%;
 }
 
 .sidebar-view-general-row-spanner {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    white-space: nowrap;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
 }
 
 .sidebar-view-general .optionbar-input-slider + input {
-    margin-left: 0 !important;
+  margin-left: 0 !important;
 }
 
 .sidebar-view-general-input-select {
-    margin: 0 2%;
+  margin: 0 2%;
 }
 
 .sidebar-view-general-row-divider {
-    flex-basis: 100% !important;
-    height: 1px;
-    margin: 1rem 0;
-    background-color: #424242;
-    text-align: center;
+  flex-basis: 100% !important;
+  height: 1px;
+  margin: 1rem 0;
+  background-color: #424242;
+  text-align: center;
 }
 
 .sidebar-view-general-row-divider > span {
-    position: relative;
-    top: -0.95rem;
-    background-color: #535353;
-    padding: 0.4rem;
-    font-size: 0.8rem;
-    color: #f0f0f0;
-    text-transform: uppercase;
+  position: relative;
+  top: -0.95rem;
+  background-color: #535353;
+  padding: 0.4rem;
+  font-size: 0.8rem;
+  color: #f0f0f0;
+  text-transform: uppercase;
 }

@@ -1,21 +1,25 @@
-import Main from "/canvas/main.js";
+import Main from '/canvas/main.js'
 
-export default function(e) {
-    e.preventDefault();
+export default function (e) {
+  e.preventDefault()
 
-    const [prevViewHeightTiles, prevViewWidthTiles] = [Main.viewHeightTiles, Main.viewWidthTiles];
-    const xNormalized = Main.mousePosElementX / Main.canvas.width;
-    const yNormalized = Main.mousePosElementY / Main.canvas.height;
+  const [prevViewHeightTiles, prevViewWidthTiles] = [
+    Main.viewHeightTiles,
+    Main.viewWidthTiles,
+  ]
+  const xNormalized = Main.mousePosElementX / Main.canvas.width
+  const yNormalized = Main.mousePosElementY / Main.canvas.height
 
-    if (e.deltaY < 0 && Main.zoomLevel < Main.zoomFactors.length - 1)
-        Main.viewHeightTiles = Main.zoomFactors[++Main.zoomLevel];
-    else if (e.deltaY > 0 && Main.zoomLevel > 0)
-        Main.viewHeightTiles = Main.zoomFactors[--Main.zoomLevel];
-    else
-        return;
+  if (e.deltaY < 0 && Main.zoomLevel < Main.zoomFactors.length - 1)
+    Main.viewHeightTiles = Main.zoomFactors[++Main.zoomLevel]
+  else if (e.deltaY > 0 && Main.zoomLevel > 0)
+    Main.viewHeightTiles = Main.zoomFactors[--Main.zoomLevel]
+  else return
 
-    Main.loop.updateViewTiles();
+  Main.loop.updateViewTiles()
 
-    Main.posX += prevViewWidthTiles * xNormalized - Main.viewWidthTiles * xNormalized;
-    Main.posY += prevViewHeightTiles * yNormalized - Main.viewHeightTiles * yNormalized;
+  Main.posX +=
+    prevViewWidthTiles * xNormalized - Main.viewWidthTiles * xNormalized
+  Main.posY +=
+    prevViewHeightTiles * yNormalized - Main.viewHeightTiles * yNormalized
 }

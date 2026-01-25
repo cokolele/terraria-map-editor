@@ -7,3 +7,4 @@ dist/
 logs/
 secrets.js
 cdn/
+.idea/

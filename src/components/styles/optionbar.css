@@ -1,37 +1,37 @@
 .optionbar-container {
-    background-color: #535353;
-    border: 0 solid #383838;
-    border-width: 1px 0;
+  background-color: #535353;
+  border: 0 solid #383838;
+  border-width: 1px 0;
 }
 
 .optionbar {
-    height: 2.3rem;
-    display: inline-flex;
-    align-items: center;
+  height: 2.3rem;
+  display: inline-flex;
+  align-items: center;
 }
 
 .optionbar > * {
-    margin-right: 0.6rem;
+  margin-right: 0.6rem;
 }
 
 .optionbar-icon {
-    margin-left: 0.6rem;
-    display: flex;
-    justify-content: center;
-    fill: #dddddd;
+  margin-left: 0.6rem;
+  display: flex;
+  justify-content: center;
+  fill: #dddddd;
 }
 
 .optionbar-icon svg {
-    width: 1.4rem;
+  width: 1.4rem;
 }
 
 .optionbar-icon--stroke {
-    fill: none;
-    stroke: #dddddd;
+  fill: none;
+  stroke: #dddddd;
 }
 
 .optionbar-divider {
-    width: 1px;
-    height: 1.6rem;
-    background-color: #3e3e3e;
+  width: 1px;
+  height: 1.6rem;
+  background-color: #3e3e3e;
 }

@@ -1,118 +1,118 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
-import { store } from "/state/store.js";
-import { stateChange } from "/state/state.js";
+import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
+// import { store } from '/state/store.js'
+import { stateChange } from '/state/state.js'
 
-import { CrossIcon } from "/components/icon.jsx";
-import "/components/styles/modal.css";
+import { CrossIcon } from '/components/icon.jsx'
+import '/components/styles/modal.css'
 
-import ModalSignin from "/components/modal/signin.jsx";
-import ModalSignup from "/components/modal/signup.jsx";
-import ModalAccount from "/components/modal/account.jsx";
-import ErrorReport from "/components/modal/errorReport.jsx";
-import SuggestionReport from "/components/modal/suggestionReport.jsx";
-import SavingDisclaimer from "/components/modal/savingDisclaimer.jsx";
-import ReplaceBlock from "/components/modal/replaceBlock.jsx";
-import ModalConfirmation from "/components/modal/confirmation.jsx";
-import ModalChangelog from "/components/modal/changelog.jsx";
+import ModalSignin from '/components/modal/signin.jsx'
+import ModalSignup from '/components/modal/signup.jsx'
+import ModalAccount from '/components/modal/account.jsx'
+import ErrorReport from '/components/modal/errorreport.jsx'
+import SuggestionReport from '/components/modal/suggestionReport.jsx'
+import SavingDisclaimer from '/components/modal/savingDisclaimer.jsx'
+import ReplaceBlock from '/components/modal/replaceBlock.jsx'
+import ModalConfirmation from '/components/modal/confirmation.jsx'
+import ModalChangelog from '/components/modal/changelog.jsx'
 
 const config = {
    signin: {
-      label: "Sign In",
-      View: ModalSignin
+      label: 'Sign In',
+      View: ModalSignin,
    },
    signup: {
-      label: "Sign Up",
-      View: ModalSignup
+      label: 'Sign Up',
+      View: ModalSignup,
    },
    account: {
-      label: "Account",
-      View: ModalAccount
+      label: 'Account',
+      View: ModalAccount,
    },
    errorreport: {
-      label: "Error report",
-      View: ErrorReport
+      label: 'Error report',
+      View: ErrorReport,
    },
    suggestionreport: {
-      label: "Suggestions report",
-      View: SuggestionReport
+      label: 'Suggestions report',
+      View: SuggestionReport,
    },
    savingdisclaimer: {
-      label: "Please be careful",
-      View: SavingDisclaimer
+      label: 'Please be careful',
+      View: SavingDisclaimer,
    },
    replaceblock: {
-      label: "Replace block type",
-      View: ReplaceBlock
+      label: 'Replace block type',
+      View: ReplaceBlock,
    },
    confirmation: {
-      label: "Confirmation",
-      View: ModalConfirmation
+      label: 'Confirmation',
+      View: ModalConfirmation,
    },
    changelog: {
-      label: "Change Log",
-      View: ModalChangelog
-   }
-};
+      label: 'Change Log',
+      View: ModalChangelog,
+   },
+}
 
 const Modal = ({ modalState, stateChange }) => {
-   if (modalState === null)
-      return "";
+   if (modalState === null) return ''
 
-   let View, label, props;
+   let View, label, props
 
    if (config[modalState]) {
-      View = config[modalState].View;
-      label = config[modalState].label;
+      View = config[modalState].View
+      label = config[modalState].label
    } else if (config[modalState[0]]) {
-      View = config[modalState[0]].View;
-      label = config[modalState[0]].label;
-      props = modalState[1];
+      View = config[modalState[0]].View
+      label = config[modalState[0]].label
+      props = modalState[1]
    } else {
-      return "";
+      return ''
    }
 
    const onClose = () => {
-      stateChange("modal", null);
+      stateChange('modal', null)
    }
 
    const onModalClick = (e) => {
-      if (e.target.classList.contains("modal-background"))
-         onClose();
+      if (e.target.classList.contains('modal-background')) onClose()
    }
 
    useEffect(() => {
       const keyDownHandler = (e) => {
-         if (e.code == "Escape")
-            onClose();
-      };
+         if (e.code == 'Escape') onClose()
+      }
 
-      window.addEventListener("keydown", keyDownHandler);
+      window.addEventListener('keydown', keyDownHandler)
       return () => {
-         window.removeEventListener("keydown", keyDownHandler);
-      };
-   }, []);
+         window.removeEventListener('keydown', keyDownHandler)
+      }
+   }, [])
 
    return (
       <div className="modal-background" onClick={onModalClick}>
          <div className="modal-container">
             <div className="modal-header">
                <div className="modal-header-text">{label}</div>
-               <button className="modal-button-close" type="button" onClick={onClose}>
-                  <CrossIcon size={28}/>
+               <button
+                  className="modal-button-close"
+                  type="button"
+                  onClick={onClose}>
+                  <CrossIcon size={28} />
                </button>
             </div>
-            <View close={onClose} {...props}/>
+            <View close={onClose} {...props} />
          </div>
       </div>
-   );
+   )
 }
 
 export default connect(
-   state => {
+   (state) => {
       return {
-         modalState: state.modal
-      };
+         modalState: state.modal,
+      }
    },
-   { stateChange }
-)(Modal);
+   { stateChange },
+)(Modal)

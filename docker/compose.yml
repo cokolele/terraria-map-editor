@@ -1,0 +1,14 @@
+services:
+  frontend:
+    image: node:24.13-alpine
+    working_dir: /app
+    command: >
+      sh -c "
+      npm i && 
+      npm start -- --host 0.0.0.0
+      "
+#    env_file: ../.env
+    volumes:
+      - "../.:/app"
+    ports:
+      - "5173:5173"

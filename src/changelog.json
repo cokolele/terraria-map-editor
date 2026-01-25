@@ -1,64 +1,58 @@
 {
-    "appVersion": "3.1.6.2",
-    "ingameSupportedVersion": "1.4.2.3",
-    "changelog": {
-        "3.1.6.2": {
-            "date": "May 15, 2021",
-            "changes": [
-                "Updated for the latest Terraria (1.4.2.3)"
-            ]
-        },
-        "3.1.6.1": {
-            "date": "February 14, 2021",
-            "changes": [
-                "Added paints rendering (paints tool planned next update)"
-            ]
-        },
-        "3.1.6": {
-            "date": "February 11, 2021",
-            "changes": [
-                "Added basic NPCs tab (full NPCs data editing planned next update)",
-                "Improved sky colors and liquids layer",
-                "Added Discord link",
-                "Improved menu and overall accessibility"
-            ]
-        },
-        "3.1.5": {
-            "date": "January 28, 2021",
-            "changes": [
-                "Added world points tool for locating and moving points and NPCs",
-                "Fixed account name not allowing uppercase characters"
-            ]
-        },
-        "3.1.4": {
-            "date": "January 18, 2021",
-            "changes": [
-                "Added creative powers options to General tab (they work even on non-journey worlds)",
-                "Added changelog"
-            ]
-        },
-        "3.1.3": {
-            "date": "January 17, 2021",
-            "changes": [
-                "Added bestionary import, export, completion"
-            ]
-        },
-        "3.1": {
-            "date": "January 16, 2021",
-            "changes": [
-                "Added block replace plugin",
-                "Added website zoom (Menu > View)",
-                "Added all layers option for eraser tool",
-                "Fixed optionbar options being reset when tool changes"
-            ]
-        },
-        "3.0": {
-            "date": "October 23, 2020",
-            "changes": [
-                "Added mobile UI",
-                "Added new NPC sprite",
-                "Fixed menu crashes"
-            ]
-        }
+  "appVersion": "3.1.6.2",
+  "ingameSupportedVersion": "1.4.2.3",
+  "changelog": {
+    "3.1.6.2": {
+      "date": "May 15, 2021",
+      "changes": ["Updated for the latest Terraria (1.4.2.3)"]
+    },
+    "3.1.6.1": {
+      "date": "February 14, 2021",
+      "changes": ["Added paints rendering (paints tool planned next update)"]
+    },
+    "3.1.6": {
+      "date": "February 11, 2021",
+      "changes": [
+        "Added basic NPCs tab (full NPCs data editing planned next update)",
+        "Improved sky colors and liquids layer",
+        "Added Discord link",
+        "Improved menu and overall accessibility"
+      ]
+    },
+    "3.1.5": {
+      "date": "January 28, 2021",
+      "changes": [
+        "Added world points tool for locating and moving points and NPCs",
+        "Fixed account name not allowing uppercase characters"
+      ]
+    },
+    "3.1.4": {
+      "date": "January 18, 2021",
+      "changes": [
+        "Added creative powers options to General tab (they work even on non-journey worlds)",
+        "Added changelog"
+      ]
+    },
+    "3.1.3": {
+      "date": "January 17, 2021",
+      "changes": ["Added bestionary import, export, completion"]
+    },
+    "3.1": {
+      "date": "January 16, 2021",
+      "changes": [
+        "Added block replace plugin",
+        "Added website zoom (Menu > View)",
+        "Added all layers option for eraser tool",
+        "Fixed optionbar options being reset when tool changes"
+      ]
+    },
+    "3.0": {
+      "date": "October 23, 2020",
+      "changes": [
+        "Added mobile UI",
+        "Added new NPC sprite",
+        "Fixed menu crashes"
+      ]
     }
+  }
 }
