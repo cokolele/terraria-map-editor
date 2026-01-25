@@ -61,6 +61,11 @@ export default async function ({
         })
       },
     })
+
+    postMessage({
+      action: 'RETURN_PARSING_PERCENT',
+      percent: 100,
+    })
   }
 
   Worker.worldObject.tiles = Worker.worldObject.worldTiles.tiles
@@ -68,8 +73,17 @@ export default async function ({
   postMessage({
     action: 'RETURN_WORLD_OBJECT',
     worldObject: {
-      ...Worker.worldObject,
-      worldTiles: undefined,
+      fileFormatHeader: Worker.worldObject.fileFormatHeader,
+      header: Worker.worldObject.header,
+      chests: Worker.worldObject.chests,
+      signs: Worker.worldObject.signs,
+      NPCs: Worker.worldObject.NPCs,
+      tileEntities: Worker.worldObject.tileEntities,
+      weightedPressurePlates: Worker.worldObject.weightedPressurePlates,
+      townManager: Worker.worldObject.townManager,
+      bestiary: Worker.worldObject.bestiary,
+      creativePowers: Worker.worldObject.creativePowers,
+      footer: Worker.worldObject.footer,
     },
   })
 }

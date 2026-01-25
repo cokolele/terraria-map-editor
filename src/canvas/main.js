@@ -269,7 +269,10 @@ let Main = new (function () {
       )
     }
 
-    if (this.state.canvas.worldObject.NPCs && this.state.layersVisibility.NPCs)
+    if (
+      this.state.canvas.worldObject.NPCs.townNPCs &&
+      this.state.layersVisibility.NPCs
+    )
       this.state.canvas.worldObject.NPCs.townNPCs.forEach((npc) => {
         if (!NPCsSprites[npc.id]) temp0 = NPCsSprites.unknown
         else if (

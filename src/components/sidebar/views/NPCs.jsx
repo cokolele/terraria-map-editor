@@ -13,7 +13,7 @@ import '/components/styles/sidebar/views/NPCs.css'
 
 function SidebarNPCs({ stateChange, stateNPCs, headerSpawnPoint }) {
    let addOptions = { ...NPCs }
-   stateNPCs.forEach((stateNPC) => delete addOptions[stateNPC.id])
+   stateNPCs.townNPCs.forEach((stateNPC) => delete addOptions[stateNPC.id])
    addOptions = Object.entries(addOptions).map(([id, NPC]) => [
       NPC.typeName,
       id,
@@ -106,22 +106,31 @@ function SidebarNPCs({ stateChange, stateNPCs, headerSpawnPoint }) {
                   Math.floor(Math.random() * NPCs[selectedAddNPC].names.length)
                ]
 
-      stateChange(['canvas', 'worldObject', 'NPCs', stateNPCs.length], {
-         id: selectedAddNPC,
-         name,
-         position: {
-            x: headerSpawnPoint[0] * 16,
-            y: (headerSpawnPoint[1] - 3) * 16,
+      stateChange(
+         [
+            'canvas',
+            'worldObject',
+            'NPCs',
+            'townNPCs',
+            stateNPCs.townNPCs.length,
+         ],
+         {
+            id: selectedAddNPC,
+            name,
+            position: {
+               x: headerSpawnPoint[0] * 16,
+               y: (headerSpawnPoint[1] - 3) * 16,
+            },
+            homePosition: {
+               x: headerSpawnPoint[0],
+               y: headerSpawnPoint[1],
+            },
+            homeless: true,
+            variationIndex: 0,
+            townNPC: NPCs[selectedAddNPC]?.town,
+            pillar: NPCs[selectedAddNPC]?.pillar,
          },
-         homePosition: {
-            x: headerSpawnPoint[0],
-            y: headerSpawnPoint[1],
-         },
-         homeless: true,
-         variationIndex: 0,
-         townNPC: NPCs[selectedAddNPC]?.town,
-         pillar: NPCs[selectedAddNPC]?.pillar,
-      })
+      )
    }
 
    return (
@@ -136,14 +145,14 @@ function SidebarNPCs({ stateChange, stateNPCs, headerSpawnPoint }) {
             <div className="flex-filler"></div>
             <OptionbarInputButton label="+" onClick={onAddNPC} />
          </div>
-         {[...stateNPCs].reverse().map((stateNPC, i) => (
-            <React.Fragment key={stateNPCs.length - 1 - i}>
+         {[...stateNPCs.townNPCs].reverse().map((stateNPC, i) => (
+            <React.Fragment key={stateNPCs.townNPCs.length - 1 - i}>
                <div
                   className="sidebar-view-npcs-row"
                   onClick={() => {
-                     selectedEditNPC == stateNPCs.length - 1 - i
+                     selectedEditNPC == stateNPCs.townNPCs.length - 1 - i
                         ? setSelectedEditNPC(null)
-                        : setSelectedEditNPC(stateNPCs.length - 1 - i)
+                        : setSelectedEditNPC(stateNPCs.townNPCs.length - 1 - i)
                   }}>
                   <SidebarNPCAvatar
                      id={stateNPC.id}
@@ -172,7 +181,9 @@ function SidebarNPCs({ stateChange, stateNPCs, headerSpawnPoint }) {
                   onExiting={(el) => (el.style.maxHeight = '0px')}
                   unmountOnExit>
                   <div className="sidebar-view-npcs-row-details">
-                     {JSON.stringify(stateNPCs[stateNPCs.length - 1 - i])}
+                     {JSON.stringify(
+                        stateNPCs.townNPCs[stateNPCs.length - 1 - i],
+                     )}
                   </div>
                </CSSTransition>
             </React.Fragment>

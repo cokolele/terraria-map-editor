@@ -38,7 +38,7 @@ function OptionbarOptionWorldPoint({
                   if (state.worldPoint == NPC.typeName) selectedNPCId = id
 
                if (selectedNPCId) {
-                  const selectedStateNPC = stateNPCs.find(
+                  const selectedStateNPC = stateNPCs.townNPCs.find(
                      (stateNPC) => stateNPC.id == selectedNPCId,
                   )
                   selectedStateNPC.position = {
@@ -51,7 +51,10 @@ function OptionbarOptionWorldPoint({
                         y: Main.mousePosImageY,
                      }
                   }
-                  stateChange(['canvas', 'worldObject', 'NPCs'], [...stateNPCs])
+                  stateChange(
+                     ['canvas', 'worldObject', 'NPCs', 'townNPCs'],
+                     [...stateNPCs.townNPCs],
+                  )
                }
             }
             //input point
@@ -73,7 +76,7 @@ function OptionbarOptionWorldPoint({
       'Dungeon point': [header.dungeonX, header.dungeonY],
    }
 
-   stateNPCs.forEach(({ id, position, homePosition }) => {
+   stateNPCs.townNPCs.forEach(({ id, position, homePosition }) => {
       if (homePosition)
          worldPoints[NPCs[id].typeName] = [homePosition.x, homePosition.y]
       else worldPoints[NPCs[id].typeName] = [position.x / 16, position.y / 16]
