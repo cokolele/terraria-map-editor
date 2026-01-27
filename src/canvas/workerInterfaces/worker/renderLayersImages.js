@@ -145,8 +145,13 @@ export default async function () {
       if (tile.liquidType)
         setPointColor(LAYERS.LIQUIDS, colors[LAYERS.LIQUIDS][tile.liquidType])
 
-      if (tile.wallId !== undefined && colors[LAYERS.WALLS][tile.wallId])
-        setPointColor(LAYERS.WALLS, colors[LAYERS.WALLS][tile.wallId])
+      if (tile.wallId !== undefined && colors[LAYERS.WALLS][tile.wallId]) {
+        if (tile.wallId === 27) {
+          setPointColor(LAYERS.WALLS, colors[LAYERS.WALLS][tile.wallId][y % 2])
+        } else {
+          setPointColor(LAYERS.WALLS, colors[LAYERS.WALLS][tile.wallId])
+        }
+      }
 
       if (
         tile.wallColor !== undefined &&

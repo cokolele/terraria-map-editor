@@ -10,7 +10,7 @@
     "rootDirs": ["."],
     "baseUrl": ".",
     "paths": {
-      "/*": ["./src/*"]
+      "~/*": ["./src/*"]
     },
     "esModuleInterop": true,
     "verbatimModuleSyntax": true,
